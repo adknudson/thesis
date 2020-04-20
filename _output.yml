@@ -1,0 +1,9 @@
+bookdown::gitbook:
+  split_by: section
+  config:
+    toc:
+      collapse: none
+      sharing:
+        github: yes
+        facebook: no
+        twitter: no

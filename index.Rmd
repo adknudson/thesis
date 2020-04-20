@@ -1,12 +1,11 @@
 --- 
-title: "Bayesian Multilevel Modeling"
+title: "Thesis"
 author: "Alexander Knudson"
-date: "`r Sys.Date()`"
+date: "`r format(Sys.Date(), '%A, %B %d, %Y')`"
 site: bookdown::bookdown_site
-output: bookdown::gitbook
 documentclass: book
 link-citations: yes
-github-repo: rstudio/bookdown-demo
+github-repo: adkudson/thesis
 ---
 
 
@@ -16,18 +15,4 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Preface {-}
 
-In this collection, I will be building a narrative around general linear models as I take an experiment in psychometrics and perform a complete analysis from the ground up.
-
-## Thesis Related Stuff
-
-```{theorem, label="thm-label", name="Name of the Theorem"}
-If a model is hierarchical, then it is multilevel.
-```
-
-```{remark}
-This is really more of a tautology then a theorem.
-```
-
-```{corollary}
-If a model is multilevel, then it is hierarchical.
-```
+In this collection, I will be building a narrative around general linear models as I take an experiment in psychometrics and perform a complete analysis from the ground up. 
