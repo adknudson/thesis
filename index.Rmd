@@ -16,3 +16,23 @@ knitr::opts_chunk$set(echo = TRUE)
 # Preface {-}
 
 In this collection, I will be building a narrative around general linear models as I take an experiment in psychometrics and perform a complete analysis from the ground up. 
+
+## Ideas {-}
+
+- Introduce the data
+- classical regression
+- Bayesian regression
+- Choice of priors
+- Standardization
+- Multilevel modeling
+  - Robustness
+  - Flexibilty
+  - Performance
+- Pooling
+  - no pooling
+  - partial pooling
+  - complete pooling
+- Adaptive regularization
+- Residual analysis
+- Predictive inference
+

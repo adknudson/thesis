@@ -1,3 +1,4 @@
 [
-["index.html", "Thesis Preface", " Thesis Alexander Knudson Monday, April 20, 2020 Preface In this collection, I will be building a narrative around general linear models as I take an experiment in psychometrics and perform a complete analysis from the ground up. "]
+["index.html", "Thesis Preface", " Thesis Alexander Knudson Tuesday, April 21, 2020 Preface In this collection, I will be building a narrative around general linear models as I take an experiment in psychometrics and perform a complete analysis from the ground up. "],
+["ideas.html", "Ideas", " Ideas Introduce the data classical regression Bayesian regression Choice of priors Standardization Multilevel modeling Robustness Flexibilty Performance Pooling no pooling partial pooling complete pooling Adaptive regularization Residual analysis Predictive inference "]
 ]

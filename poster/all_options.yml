@@ -1,0 +1,43 @@
+---
+# Basics
+title: "A Title" # The title of the poster. If you wish to use markdown syntax within the title please use quotations.
+poster_height: "38in" # Height in inches of poster.
+poster_width: "45in" # Width in inches of poster.
+font_family: Palatino # Font family for the poster text. Standard HTML fonts or google fonts can be used. To change the font of the poster title see titletext_fontfamily.
+titletext_fontfamily: Palatino # Font family for the title of the poster, see font_family for more options.
+author: none # List of the authors. Contains sub options for a list of authors and their affiliation: name & affil
+affiliation: none # List of affiliations of the authors.
+# Main Colour Scheme
+primary_colour: "#008080" # Main colour used for poster design.
+secondary_colour: "#0b4545" # Secondary colour use for poster design.
+accent_colour: "#cc0000" # A third colour option for adding some "pop" to the poster colour palette.
+# Title Box
+titlebox_bordercol: "#0b4545" # Colour of the title box border.
+titlebox_borderwidth: "0cm" # Width of the title box border.
+title_textcol: "#ffffff" # Colour of title text
+author_textcol: "#0b4545" # Colour of author text.
+affiliation_textcol: "#FFFFFF" # Colour of affiliation text.
+title_textsize: "75pt" # Poster title fontsize.
+author_textsize: "50pt" # Author list font size.
+affiliation_textsize: "40pt" # Affiliation font size.
+logoleft_name: "Figures/posterdownlogo.png" # Location of the image to use.
+logoright_name: "Figures/posterdownlogo.png" # Location of the image to use.
+# Poster Body
+body_bgcol: "#ffffff" # Colour of the poster main background.
+body_textsize: "45px" # Size of the main poster body text.
+body_textcol: "#000000" # Colour of main text in the body of poster.
+column_numbers: 3 # Number of columns that the poster body has.
+column_margins: "0.5in" # Margin spacing for columns.
+columnline_col: "#008080" # Colour of the column line dividers.
+columnline_width: "1mm" # Width of line between each column.
+columnline_style: dashed # Style of the column line seperator.
+sectitle_textcol: "#ffffff" # Colour of the poster section titles.
+sectitle_textsize: "65pt" # Text size of the section titles (H1).
+sectitle2_textsize: "40pt" # Text size of the section titles (H2).
+sectitle_bgcol: "#0b4545" # Colour of the section title box.
+sectitle_bordercol: "#0b4545" # Colour of the border around the section title box.
+sectitle_borderwidth: "2mm" # Thicknes of the section title box border.
+sectitle_boxshape: "4mm 0mm" # Changes the shape of the section title box.
+sectitle2_textcol: "#0b4545" # Color of 2nd level header text.
+link_col: "#0b4545" # Colour of other links within the poster.
+---

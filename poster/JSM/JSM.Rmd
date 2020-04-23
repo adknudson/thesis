@@ -1,0 +1,101 @@
+---
+# Basics
+title: "A Modern Approach to Bayesian Multilevel Modeling of the Psychometric Function"
+poster_height: "48in" # Height in inches of poster.
+poster_width: "96in" # Width in inches of poster.
+author:
+  - name: Alex Knudson
+    affil: 1
+  - name: A.G. Schissler
+    affil: 1
+  - name: A. Scurry
+    affil: 2
+  - name: F. Jiang
+    affil: 2
+affiliation:
+  - num: 1
+    address: Department of Mathematics and Statistics, University of Nevada, Reno
+  - num: 2
+    address: Department of Psychology, University of Nevada, Reno
+# Main Colour Scheme
+primary_colour: "#113864"
+secondary_colour: "#9da9c9"
+accent_colour: "#3659b5"
+# Title Box
+title_textcol: "#ffffff" # Colour of title text
+author_textcol: "#ffffff" # Colour of author text.
+affiliation_textcol: "#ffffff" # Colour of affiliation text.
+title_textsize: "84pt" # Poster title fontsize.
+author_textsize: "60pt" # Author list font size.
+logoleft_name:  "unr_logos/University%20Logo%20RGB_vertical_blue_reversed.png"
+logoright_name: "unr_logos/University%20Logo%20RGB_vertical_blue_reversed.png"
+# Poster Body
+body_bgcol: "#ffffff" # Colour of the poster main background.
+body_textsize: "36pt" # Size of the main poster body text.
+body_textcol: "#000000" # Colour of main text in the body of poster.
+column_numbers: 4 # Number of columns that the poster body has.
+column_margins: "0.5in" # Margin spacing for columns.
+columnline_col: "#008080" # Colour of the column line dividers.
+columnline_width: "1mm" # Width of line between each column.
+columnline_style: none # Style of the column line seperator.
+sectitle_textcol: "#ffffff" # Colour of the poster section titles.
+sectitle_textsize: "65pt" # Text size of the section titles (H1).
+sectitle_bgcol: "#113864" # Colour of the section title box.
+sectitle_bordercol: "#113864" # Colour of the border around the section title box.
+sectitle_borderwidth: "2mm" # Thicknes of the section title box border.
+sectitle_boxshape: "4mm 0mm" # Changes the shape of the section title box.
+sectitle2_textcol: "#113864" # Color of 2nd level header text.
+sectitle2_textsize: "40pt" # Text size of the section titles (H2).
+link_col: "#0b4545" # Colour of other links within the poster.
+output: 
+  posterdown::posterdown_html:
+    self_contained: false
+bibliography: packages.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Introduction
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempor neque sit amet lacus tempus, eu tincidunt nibh vestibulum. Mauris vestibulum vestibulum diam, eu finibus justo viverra nec. Aliquam aliquet nibh diam, id interdum nibh eleifend quis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam condimentum augue sed ex vestibulum, et ornare orci commodo. Donec aliquam ac lectus ac pretium. Vivamus a dapibus enim. Integer blandit justo dolor, nec facilisis dolor euismod in. Praesent a turpis id eros pharetra maximus. Aenean facilisis aliquet quam, vitae eleifend urna facilisis ut.
+
+Phasellus eleifend enim eget facilisis posuere. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris tincidunt eleifend mi, ac tempor felis elementum vel. Nunc porttitor facilisis pretium. Sed luctus pharetra consequat. Integer posuere lorem ligula, at tempus eros hendrerit ac. Mauris porttitor felis a varius pulvinar. Sed accumsan tincidunt ligula, in fringilla nibh sodales a. Aenean sit amet est volutpat, pretium lectus sed, malesuada magna. Donec facilisis nisi fringilla justo lacinia ultricies. Etiam scelerisque est vel dignissim suscipit. Nulla facilisi. Aenean elit neque, pulvinar et consequat quis, cursus ac ante. Donec porta cursus eros, sit amet commodo nisl tincidunt sit amet.
+
+## Objectives
+
+Etiam id lacus convallis, efficitur eros ut, accumsan ipsum. Donec nisi mi, pretium a magna ut, porta sagittis arcu. Curabitur vehicula interdum metus, at suscipit libero consectetur consectetur. In dapibus scelerisque tellus, vitae fringilla ex posuere sed. In in libero in dui sodales facilisis elementum non nulla. Nulla lacus turpis, bibendum id augue ac, commodo faucibus lectus. Quisque imperdiet non nunc nec laoreet. Curabitur dictum faucibus interdum. Duis at turpis laoreet, suscipit nisl quis, laoreet nisi.
+
+Maecenas sagittis velit elit, id cursus mauris condimentum in. Sed tempor, felis quis lacinia egestas, tellus eros gravida arcu, in tempus ex diam eu enim. Morbi scelerisque quam in lacinia rutrum. Vestibulum in dignissim turpis. Mauris imperdiet urna purus, pellentesque faucibus dui pharetra vel. Aliquam magna libero, aliquam a diam non, vulputate blandit ex. Phasellus egestas dolor nec velit commodo, in ullamcorper erat laoreet. Suspendisse et sapien a tellus hendrerit lobortis. Nullam sit amet ante vel enim suscipit gravida vitae ac eros. Phasellus eleifend nisi in sem eleifend mattis.
+
+# Methods
+
+Vivamus nec dolor vitae odio tempor efficitur nec a ipsum. Etiam posuere justo tellus, nec mollis libero molestie ut. Aliquam turpis orci, fringilla pretium diam ac, porta bibendum erat. Vivamus scelerisque orci ut lacus cursus commodo. In at tempor arcu. Vivamus sit amet nisl vitae nibh auctor vehicula. Nullam ullamcorper ex ante, eu facilisis tortor porta ullamcorper. Proin purus dui, efficitur quis pharetra non, fringilla sed dolor. Fusce ac bibendum orci. Praesent facilisis metus at porta rhoncus. Donec semper tellus quis dolor mollis, ut varius ante feugiat.
+
+Curabitur quis scelerisque ipsum. Nunc et luctus dui. Cras dignissim orci blandit massa dictum, eget ultricies nibh sodales. Sed bibendum turpis et purus aliquet, in aliquet lacus condimentum. Sed ullamcorper, ante nec vestibulum pharetra, dolor leo lobortis massa, vel mollis lacus turpis sed velit. Integer eget varius eros. Mauris tincidunt diam non dui pretium convallis. Aliquam enim est, condimentum in blandit quis, posuere eget justo. Curabitur ornare in arcu at convallis. Aliquam erat volutpat. Pellentesque dui est, tempor vel nunc id, congue dictum nisl. Suspendisse vitae dolor et nisi accumsan imperdiet. Donec ornare elit eget tortor sodales tristique.
+
+# Results
+
+Sed pharetra dui lacus, at dapibus turpis cursus vel. Sed porta mollis velit, ac imperdiet dui vulputate a. Proin accumsan, nibh iaculis accumsan ullamcorper, ante ex rhoncus risus, pulvinar congue arcu mi in massa. Aenean id metus at purus faucibus rhoncus a sed erat. Suspendisse ultrices elit id tellus cursus, eu rutrum diam luctus. Cras tristique hendrerit quam dictum cursus. Proin rutrum, nunc nec tempor lobortis, ligula nulla interdum libero, vitae commodo lorem diam vitae diam. Suspendisse potenti. Sed bibendum neque sed elit fringilla viverra. Proin malesuada vitae nisi ac ornare. Fusce gravida nulla sit amet mi dignissim, in rutrum augue dignissim. Sed vel rhoncus sem.
+
+Sed quis bibendum diam. Morbi nibh elit, auctor non turpis id, imperdiet dictum augue. Quisque sed nisl lectus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In posuere feugiat sem, nec vehicula mauris. Curabitur augue sapien, varius eget lectus et, imperdiet ullamcorper urna. Aliquam lorem odio, dapibus dictum sem ut, gravida porta libero. Nunc rutrum a velit quis viverra. Praesent pulvinar finibus nisl, ullamcorper elementum magna viverra et. Mauris vestibulum augue felis, non sodales mauris tristique quis. Quisque eget est vitae ex commodo malesuada vitae sit amet mauris.
+
+# Next Steps
+
+Sed faucibus diam vel arcu sodales, sed maximus libero pellentesque. Praesent maximus condimentum lacinia. Nullam viverra metus ut diam posuere viverra. Integer in orci volutpat, porttitor sapien non, fermentum libero. Sed ante leo, bibendum vel tortor in, sollicitudin fringilla ante. Morbi vitae ornare felis. In quis sapien placerat, sagittis ex quis, consectetur leo. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Integer in volutpat ex. Nullam consectetur nisl at tortor tincidunt hendrerit. Nulla nisl elit, tincidunt ut odio ac, interdum dictum metus. Nullam tempor elit sed tellus pharetra malesuada.
+
+Aenean molestie, neque pharetra mattis pulvinar, risus ante vehicula sem, ut consequat mauris tortor lobortis magna. Fusce molestie rutrum luctus. Curabitur eget quam quis ante lacinia finibus et eget felis. Fusce et gravida magna, vitae rhoncus dolor. Proin vitae sollicitudin risus. Curabitur eget viverra nulla. Ut molestie volutpat lorem, vel tempor enim euismod vel. Nullam sollicitudin, ante at viverra placerat, enim libero sagittis nisi, non aliquet tellus risus non justo. Etiam suscipit sed mauris id mattis. Nam turpis tellus, convallis sed ipsum eget, viverra aliquam libero.
+
+# Conclusion
+
+Donec commodo ullamcorper magna. In aliquam nisl ac nisi rutrum viverra sed vitae urna. Donec ex lectus, malesuada vel eleifend in, pretium in enim. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla turpis erat, vulputate in imperdiet in, viverra vitae libero. Integer sodales sed velit et luctus. Duis commodo tincidunt orci, sit amet volutpat velit consequat nec. Vestibulum euismod consectetur risus porta egestas.
+
+Fusce a nibh a augue scelerisque ornare. Nulla laoreet ultricies quam, interdum tincidunt velit aliquam eu. Ut ullamcorper enim leo, id placerat tortor interdum ac. Duis scelerisque tincidunt sodales. Aenean mollis turpis dolor, non maximus justo consequat et. Donec velit turpis, vestibulum imperdiet tellus et, scelerisque feugiat ipsum. Aenean in risus molestie, commodo nisi eget, eleifend diam.
+
+```{r, include=FALSE}
+knitr::write_bib(x = c('knitr','rmarkdown','posterdown','pagedown'), 
+                 file = 'packages.bib')
+```
+
+# References
