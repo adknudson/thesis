@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>1 Chapter 1 | Thesis</title>
   <meta name="description" content="1 Chapter 1 | Thesis" />
-  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
   <meta property="og:title" content="1 Chapter 1 | Thesis" />
   <meta property="og:type" content="book" />
@@ -31,7 +31,17 @@
   
   
 <link rel="prev" href="index.html"/>
-<link rel="next" href="sub-heading.html"/>
+
+<style type="text/css">
+p.abstract{
+  text-align: center;
+  font-weight: bold;
+}
+div.abstract{
+  margin: auto;
+  width: 90%;
+}
+</style>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -64,13 +74,15 @@
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="chapter-1.html"><a href="chapter-1.html"><i class="fa fa-check"></i><b>1</b> Chapter 1</a><ul>
-<li class="chapter" data-level="1.1" data-path="sub-heading.html"><a href="sub-heading.html"><i class="fa fa-check"></i><b>1.1</b> Sub heading</a><ul>
-<li class="chapter" data-level="1.1.1" data-path="sub-heading.html"><a href="sub-heading.html#sub-sub-heading-1"><i class="fa fa-check"></i><b>1.1.1</b> sub-sub heading 1</a></li>
-<li class="chapter" data-level="1.1.2" data-path="sub-heading.html"><a href="sub-heading.html#sub-sub-heading-2"><i class="fa fa-check"></i><b>1.1.2</b> sub-sub heading 2</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#ideas"><i class="fa fa-check"></i>Ideas</a></li>
 </ul></li>
-<li class="chapter" data-level="1.2" data-path="sub-heading-2.html"><a href="sub-heading-2.html"><i class="fa fa-check"></i><b>1.2</b> sub heading 2</a></li>
+<li class="chapter" data-level="1" data-path="chapter-1.html"><a href="chapter-1.html"><i class="fa fa-check"></i><b>1</b> Chapter 1</a><ul>
+<li class="chapter" data-level="1.1" data-path="chapter-1.html"><a href="chapter-1.html#sub-heading"><i class="fa fa-check"></i><b>1.1</b> Sub heading</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="chapter-1.html"><a href="chapter-1.html#sub-sub-heading-1"><i class="fa fa-check"></i><b>1.1.1</b> sub-sub heading 1</a></li>
+<li class="chapter" data-level="1.1.2" data-path="chapter-1.html"><a href="chapter-1.html#sub-sub-heading-2"><i class="fa fa-check"></i><b>1.1.2</b> sub-sub heading 2</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="chapter-1.html"><a href="chapter-1.html#sub-heading-2"><i class="fa fa-check"></i><b>1.2</b> sub heading 2</a></li>
 </ul></li>
 </ul>
 
@@ -95,14 +107,28 @@
 <p><span class="math display">\[
 \frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
 \]</span></p>
+<div id="sub-heading" class="section level2">
+<h2><span class="header-section-number">1.1</span> Sub heading</h2>
+<p>askdjfhalskdjfhalksdjhalksdjhf</p>
+<div id="sub-sub-heading-1" class="section level3">
+<h3><span class="header-section-number">1.1.1</span> sub-sub heading 1</h3>
+</div>
+<div id="sub-sub-heading-2" class="section level3">
+<h3><span class="header-section-number">1.1.2</span> sub-sub heading 2</h3>
+</div>
+</div>
+<div id="sub-heading-2" class="section level2">
+<h2><span class="header-section-number">1.2</span> sub heading 2</h2>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sub-heading.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -119,8 +145,8 @@ gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
 "github": false,
-"facebook": true,
-"twitter": true,
+"facebook": false,
+"twitter": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
@@ -132,10 +158,7 @@ gitbook.start({
 "family": "sans",
 "size": 2
 },
-"edit": {
-"link": null,
-"text": null
-},
+"edit": null,
 "history": {
 "link": null,
 "text": null
@@ -144,15 +167,17 @@ gitbook.start({
 "link": "https://github.com/adknudson/thesis/blob/master/01-chapter1.Rmd",
 "text": null
 },
-"download": null,
+"download": ["adknudson-thesis.pdf"],
 "toc": {
-"collapse": "none",
-"sharing": {
-"github": true,
-"facebook": false,
-"twitter": false
-}
-}
+"collapse": "section",
+"toc_depth": 2,
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "fixed"
+},
+"search": true,
+"info": true
 });
 });
 </script>

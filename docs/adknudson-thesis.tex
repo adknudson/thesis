@@ -1,0 +1,164 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Thesis},
+  pdfauthor={Alexander Knudson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{longtable,booktabs}
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\usepackage[]{natbib}
+\bibliographystyle{plainnat}
+
+\title{Thesis}
+\author{Alexander Knudson}
+\date{Wednesday, May 27, 2020}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pretium metus aliquam iaculis feugiat. Integer tellus arcu, accumsan vitae odio sit amet, tempor fringilla nisl. Nunc consequat tincidunt leo, ut iaculis risus vulputate quis. In cursus purus in pretium tempor. Mauris vitae ipsum vitae est lacinia hendrerit. Vestibulum sit amet aliquet erat. Suspendisse venenatis ullamcorper leo quis tincidunt. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum a odio rhoncus, fringilla massa non, mattis velit. Etiam fringilla diam vitae risus facilisis ultricies. Etiam efficitur mauris quis feugiat dignissim. Ut eleifend in ligula hendrerit finibus. Mauris ut suscipit velit. Praesent quis porttitor enim. Proin eget gravida mauris, eget feugiat risus. Fusce a volutpat nulla, vel auctor tellus. Etiam imperdiet libero nec ultrices maximus. Sed imperdiet pretium lacus eget convallis. Mauris ac pretium lorem, id laoreet dui. Cras id malesuada elit, pharetra sagittis sem. Mauris eget faucibus leo, sit amet condimentum mauris. Donec consequat ut eros quis volutpat. Praesent molestie, mi vitae finibus bibendum, dui ligula mattis leo, eget bibendum leo turpis quis turpis. Proin non aliquam libero. Donec finibus tellus sit amet arcu placerat tristique. Sed sodales nibh id risus tempor, vitae mattis massa malesuada. Phasellus luctus, odio eget maximus pharetra, magna mauris gravida diam, quis sagittis eros nulla in erat. Quisque nunc dolor, tristique vel quam in, commodo tristique tortor. Nunc consequat dolor eu eros rhoncus, ac interdum nibh porta. Ut vitae porttitor ipsum, quis vestibulum sem. Etiam congue nisl nec interdum condimentum. Nulla at est urna. Aenean.
+\end{abstract}
+
+{
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+\hypertarget{preface}{%
+\section*{Preface}\label{preface}}
+
+
+In this collection, I will be building a narrative around general linear models as I take an experiment in psychometrics and perform a complete analysis from the ground up.
+
+\hypertarget{ideas}{%
+\subsection*{Ideas}\label{ideas}}
+
+
+\begin{itemize}
+\tightlist
+\item
+  Introduce the data
+\item
+  classical regression
+\item
+  Bayesian regression
+\item
+  Choice of priors
+\item
+  Standardization
+\item
+  Multilevel modeling
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Robustness
+  \item
+    Flexibility
+  \item
+    Performance
+  \end{itemize}
+\item
+  Pooling
+
+  \begin{itemize}
+  \tightlist
+  \item
+    no pooling
+  \item
+    partial pooling
+  \item
+    complete pooling
+  \end{itemize}
+\item
+  Adaptive regularization
+\item
+  Residual analysis
+\item
+  Predictive inference
+\end{itemize}
+
+\hypertarget{chapter-1}{%
+\section{Chapter 1}\label{chapter-1}}
+
+Really just placeholder stuff for now.
+
+\[
+\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
+\]
+
+\hypertarget{sub-heading}{%
+\subsection{Sub heading}\label{sub-heading}}
+
+askdjfhalskdjfhalksdjhalksdjhf
+
+\hypertarget{sub-sub-heading-1}{%
+\subsubsection{sub-sub heading 1}\label{sub-sub-heading-1}}
+
+\hypertarget{sub-sub-heading-2}{%
+\subsubsection{sub-sub heading 2}\label{sub-sub-heading-2}}
+
+\hypertarget{sub-heading-2}{%
+\subsection{sub heading 2}\label{sub-heading-2}}
+
+\end{document}

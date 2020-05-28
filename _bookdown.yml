@@ -1,7 +1,11 @@
-book_filename: adknudson-thesis
-repo: https://github.com/adknudson/thesis/
+book_filename: "adknudson-thesis"
 delete_merged_file: yes
-output_dir: docs
+repo: https://github.com/adknudson/thesis/
 before_chapter_script: [_common.R]
 after_chapter_script: [_outgoing.R]
 view: https://github.com/adknudson/thesis/blob/master/%s
+rmd_files: [
+  "index.Rmd",
+  "01-chapter1.Rmd"
+]
+output_dir: "docs"

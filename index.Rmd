@@ -3,15 +3,10 @@ title: "Thesis"
 author: "Alexander Knudson"
 date: "`r format(Sys.Date(), '%A, %B %d, %Y')`"
 site: bookdown::bookdown_site
-documentclass: book
+documentclass: article
 link-citations: yes
 github-repo: adkudson/thesis
 ---
-
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 # Preface {-}
 
@@ -26,7 +21,7 @@ In this collection, I will be building a narrative around general linear models 
 - Standardization
 - Multilevel modeling
   - Robustness
-  - Flexibilty
+  - Flexibility
   - Performance
 - Pooling
   - no pooling
@@ -36,3 +31,4 @@ In this collection, I will be building a narrative around general linear models 
 - Residual analysis
 - Predictive inference
 
+# Introduction
