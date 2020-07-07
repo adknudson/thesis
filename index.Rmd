@@ -30,5 +30,52 @@ In this collection, I will be building a narrative around general linear models 
 - Adaptive regularization
 - Residual analysis
 - Predictive inference
+- Using bigsimr to simulate data sets
 
-# Introduction
+
+# Introduction {-}
+
+TRAMM/bigsimr 70/30 split
+
+**Big Idea:** _making contributions to & gaining mastery of state of the art statistical computing tools and Bayesian modeling/probabilistic programming._
+
+- Bayesian Modeling
+  - Intuitive ideas
+  - MCMC sampling
+    - HMC
+    - Model fitting diagnostics
+      - $\hat{R}$
+      - divergences
+      -
+    - Stan / BRMS / 
+    - Greta (Tensorflow)
+    - Pyro / NumPyro (Jax)
+- Multilevel Models
+  - Types of Pooling
+    - No pooling
+    - Complete Pooling
+    - Partial Pooling
+- Motivating Data
+  - Pyschometrics
+  - Theory and background
+  - Research questions
+- Classical approaches
+- Modeling Considerations
+  - Standardizing Predictors
+  - Choice of Priors
+  - Choice of Link Function
+- Residual analysis (What?)
+- Predictive Inference
+- Synthetic Data (Using `bigsimr` to generate new data sets)
+  - The problem of simulating multivariate data with arbitrary marginal distributions
+  - Copula approach
+    - Nonlinear transformation that invalidates the correlation structure
+  - Kendall and Spearman matching
+    - Nearest Positive Semidefinite correlation matrix
+      - Semidefinte Programming (ProxSDP.jl)
+        - https://arxiv.org/abs/1810.05231
+      - Qi and Sun 2006 (quadratically convergent method)
+  - Pearson matching
+    - Chen 2001 (NORTARA)
+    - Xiao, Zhou 2019 (Numeric Approximation)
+  
