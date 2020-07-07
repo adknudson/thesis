@@ -1,0 +1,18 @@
+# Motivating Data
+
+Really just placeholder stuff for now.
+
+$$
+\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
+$$
+
+## Sub heading 
+
+askdjfhalskdjfhalksdjhalksdjhf
+
+### sub-sub heading 1
+
+### sub-sub heading 2
+
+## sub heading 2
+

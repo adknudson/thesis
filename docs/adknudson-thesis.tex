@@ -72,13 +72,10 @@
 
 \title{Thesis}
 \author{Alexander Knudson}
-\date{Wednesday, May 27, 2020}
+\date{Tuesday, July 07, 2020}
 
 \begin{document}
 \maketitle
-\begin{abstract}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pretium metus aliquam iaculis feugiat. Integer tellus arcu, accumsan vitae odio sit amet, tempor fringilla nisl. Nunc consequat tincidunt leo, ut iaculis risus vulputate quis. In cursus purus in pretium tempor. Mauris vitae ipsum vitae est lacinia hendrerit. Vestibulum sit amet aliquet erat. Suspendisse venenatis ullamcorper leo quis tincidunt. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum a odio rhoncus, fringilla massa non, mattis velit. Etiam fringilla diam vitae risus facilisis ultricies. Etiam efficitur mauris quis feugiat dignissim. Ut eleifend in ligula hendrerit finibus. Mauris ut suscipit velit. Praesent quis porttitor enim. Proin eget gravida mauris, eget feugiat risus. Fusce a volutpat nulla, vel auctor tellus. Etiam imperdiet libero nec ultrices maximus. Sed imperdiet pretium lacus eget convallis. Mauris ac pretium lorem, id laoreet dui. Cras id malesuada elit, pharetra sagittis sem. Mauris eget faucibus leo, sit amet condimentum mauris. Donec consequat ut eros quis volutpat. Praesent molestie, mi vitae finibus bibendum, dui ligula mattis leo, eget bibendum leo turpis quis turpis. Proin non aliquam libero. Donec finibus tellus sit amet arcu placerat tristique. Sed sodales nibh id risus tempor, vitae mattis massa malesuada. Phasellus luctus, odio eget maximus pharetra, magna mauris gravida diam, quis sagittis eros nulla in erat. Quisque nunc dolor, tristique vel quam in, commodo tristique tortor. Nunc consequat dolor eu eros rhoncus, ac interdum nibh porta. Ut vitae porttitor ipsum, quis vestibulum sem. Etiam congue nisl nec interdum condimentum. Nulla at est urna. Aenean.
-\end{abstract}
 
 {
 \setcounter{tocdepth}{3}
@@ -136,10 +133,250 @@ In this collection, I will be building a narrative around general linear models 
   Residual analysis
 \item
   Predictive inference
+\item
+  Using bigsimr to simulate data sets
 \end{itemize}
 
-\hypertarget{chapter-1}{%
-\section{Chapter 1}\label{chapter-1}}
+\hypertarget{introduction}{%
+\section*{Introduction}\label{introduction}}
+
+
+TRAMM/bigsimr 70/30 split
+
+\textbf{Big Idea:} \emph{making contributions to \& gaining mastery of state of the art statistical computing tools and Bayesian modeling/probabilistic programming.}
+
+\begin{itemize}
+\tightlist
+\item
+  Bayesian Modeling
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Intuitive ideas
+  \item
+    MCMC sampling
+
+    \begin{itemize}
+    \tightlist
+    \item
+      HMC
+    \item
+      Model fitting diagnostics
+
+      \begin{itemize}
+      \tightlist
+      \item
+        \(\hat{R}\)
+      \item
+        divergences
+      \end{itemize}
+    \item
+      Stan / BRMS /
+    \item
+      Greta (Tensorflow)
+    \item
+      Pyro / NumPyro (Jax)
+    \end{itemize}
+  \end{itemize}
+\item
+  Multilevel Models
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Types of Pooling
+
+    \begin{itemize}
+    \tightlist
+    \item
+      No pooling
+    \item
+      Complete Pooling
+    \item
+      Partial Pooling
+    \end{itemize}
+  \end{itemize}
+\item
+  Motivating Data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Pyschometrics
+  \item
+    Theory and background
+  \item
+    Research questions
+  \end{itemize}
+\item
+  Classical approaches
+\item
+  Modeling Considerations
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Standardizing Predictors
+  \item
+    Choice of Priors
+  \item
+    Choice of Link Function
+  \end{itemize}
+\item
+  Residual analysis (What?)
+\item
+  Predictive Inference
+\item
+  Synthetic Data (Using \texttt{bigsimr} to generate new data sets)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The problem of simulating multivariate data with arbitrary marginal distributions
+  \item
+    Copula approach
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Nonlinear transformation that invalidates the correlation structure
+    \end{itemize}
+  \item
+    Kendall and Spearman matching
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Nearest Positive Semidefinite correlation matrix
+
+      \begin{itemize}
+      \tightlist
+      \item
+        Semidefinte Programming (ProxSDP.jl)
+      \item
+        \url{https://arxiv.org/abs/1810.05231}
+      \item
+        Qi and Sun 2006 (quadratically convergent method)
+      \end{itemize}
+    \end{itemize}
+  \item
+    Pearson matching
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Chen 2001 (NORTARA)
+    \item
+      Xiao, Zhou 2019 (Numeric Approximation)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{overview-of-bayesian-statistics}{%
+\section{Overview of Bayesian Statistics}\label{overview-of-bayesian-statistics}}
+
+PASS
+
+\hypertarget{multilevel-modeling}{%
+\section{Multilevel Modeling}\label{multilevel-modeling}}
+
+PASS
+
+\hypertarget{motivating-data}{%
+\section{Motivating Data}\label{motivating-data}}
+
+Really just placeholder stuff for now.
+
+\[
+\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
+\]
+
+\hypertarget{sub-heading}{%
+\subsection{Sub heading}\label{sub-heading}}
+
+askdjfhalskdjfhalksdjhalksdjhf
+
+\hypertarget{sub-sub-heading-1}{%
+\subsubsection{sub-sub heading 1}\label{sub-sub-heading-1}}
+
+\hypertarget{sub-sub-heading-2}{%
+\subsubsection{sub-sub heading 2}\label{sub-sub-heading-2}}
+
+\hypertarget{sub-heading-2}{%
+\subsection{sub heading 2}\label{sub-heading-2}}
+
+\hypertarget{survey-of-methods}{%
+\section{Survey of Methods}\label{survey-of-methods}}
+
+Really just placeholder stuff for now.
+
+\[
+\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
+\]
+
+\hypertarget{sub-heading}{%
+\subsection{Sub heading}\label{sub-heading}}
+
+askdjfhalskdjfhalksdjhalksdjhf
+
+\hypertarget{sub-sub-heading-1}{%
+\subsubsection{sub-sub heading 1}\label{sub-sub-heading-1}}
+
+\hypertarget{sub-sub-heading-2}{%
+\subsubsection{sub-sub heading 2}\label{sub-sub-heading-2}}
+
+\hypertarget{sub-heading-2}{%
+\subsection{sub heading 2}\label{sub-heading-2}}
+
+\hypertarget{bayesian-modeling-considerations}{%
+\section{Bayesian Modeling Considerations}\label{bayesian-modeling-considerations}}
+
+Really just placeholder stuff for now.
+
+\[
+\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
+\]
+
+\hypertarget{sub-heading}{%
+\subsection{Sub heading}\label{sub-heading}}
+
+askdjfhalskdjfhalksdjhalksdjhf
+
+\hypertarget{sub-sub-heading-1}{%
+\subsubsection{sub-sub heading 1}\label{sub-sub-heading-1}}
+
+\hypertarget{sub-sub-heading-2}{%
+\subsubsection{sub-sub heading 2}\label{sub-sub-heading-2}}
+
+\hypertarget{sub-heading-2}{%
+\subsection{sub heading 2}\label{sub-heading-2}}
+
+\hypertarget{predictive-inference}{%
+\section{Predictive Inference}\label{predictive-inference}}
+
+Really just placeholder stuff for now.
+
+\[
+\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
+\]
+
+\hypertarget{sub-heading}{%
+\subsection{Sub heading}\label{sub-heading}}
+
+askdjfhalskdjfhalksdjhalksdjhf
+
+\hypertarget{sub-sub-heading-1}{%
+\subsubsection{sub-sub heading 1}\label{sub-sub-heading-1}}
+
+\hypertarget{sub-sub-heading-2}{%
+\subsubsection{sub-sub heading 2}\label{sub-sub-heading-2}}
+
+\hypertarget{sub-heading-2}{%
+\subsection{sub heading 2}\label{sub-heading-2}}
+
+\hypertarget{synthetic-data}{%
+\section{Synthetic Data}\label{synthetic-data}}
 
 Really just placeholder stuff for now.
 

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Thesis</title>
-  <meta name="description" content="Thesis" />
+  <title>Introduction | Thesis</title>
+  <meta name="description" content="Introduction | Thesis" />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Thesis" />
+  <meta property="og:title" content="Introduction | Thesis" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="adkudson/thesis" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Thesis" />
+  <meta name="twitter:title" content="Introduction | Thesis" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="introduction.html"/>
+<link rel="prev" href="index.html"/>
+<link rel="next" href="overview-of-bayesian-statistics.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -123,48 +123,138 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Thesis</h1>
-<p class="author"><em>Alexander Knudson</em></p>
-<p class="date"><em>Tuesday July 07, 2020</em></p>
-</div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>In this collection, I will be building a narrative around general linear models as I take an experiment in psychometrics and perform a complete analysis from the ground up.</p>
-<div id="ideas" class="section level2 unnumbered">
-<h2>Ideas</h2>
+<div id="introduction" class="section level1 unnumbered">
+<h1>Introduction</h1>
+<p>TRAMM/bigsimr 70/30 split</p>
+<p><strong>Big Idea:</strong> <em>making contributions to &amp; gaining mastery of state of the art statistical computing tools and Bayesian modeling/probabilistic programming.</em></p>
 <ul>
-<li>Introduce the data</li>
-<li>classical regression</li>
-<li>Bayesian regression</li>
-<li>Choice of priors</li>
-<li>Standardization</li>
-<li>Multilevel modeling
+<li><p>Acknowledgments</p></li>
+<li><p>Motivating Data</p>
 <ul>
-<li>Robustness</li>
-<li>Flexibility</li>
-<li>Performance</li>
+<li>Pyschometrics</li>
+<li>Theory and background</li>
+<li>Research questions</li>
 </ul></li>
-<li>Pooling
+<li><p>Classical approaches</p>
 <ul>
-<li>no pooling</li>
-<li>partial pooling</li>
-<li>complete pooling</li>
+<li>shortcomings</li>
+<li>why abandon them</li>
 </ul></li>
-<li>Adaptive regularization</li>
-<li>Residual analysis</li>
-<li>Predictive inference</li>
-<li>Using bigsimr to simulate data sets</li>
+<li><p>Bayesian Modeling</p>
+<ul>
+<li>Mathematical foundations
+<ul>
+<li>Bayes rule in regression setting</li>
+</ul></li>
+<li>Easy in theory, difficult in practice
+<ul>
+<li>Example of a conjugate priors</li>
+<li>need more complexity -&gt; computer methods</li>
+</ul></li>
+<li>Computer methods needed</li>
+</ul></li>
+<li><p>Multilevel Models</p>
+<ul>
+<li>Types of Pooling
+<ul>
+<li>No pooling</li>
+<li>Complete Pooling</li>
+<li>Partial Pooling</li>
+</ul></li>
+<li>Statistical inference</li>
+<li>Possibility of conjugacy for sigmoid model</li>
+<li>Sampling
+<ul>
+<li>Fitting and Diagnostics</li>
+<li>Incorporate paper <em>Statistical Software</em></li>
+<li>Stan / BRMS / rstanarm / rethinking</li>
+<li>Greta (TensorFlow)</li>
+<li>Pyro / NumPyro (Jax)</li>
+<li>Model fitting diagnostics
+<ul>
+<li><span class="math inline">\(\hat{R}\)</span></li>
+<li>divergences</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>Feature Engineering and Prior Specification</p>
+<ul>
+<li>Standardizing Predictors</li>
+<li>Parameterization of the linear predictor
+<ul>
+<li>Choice of Link Function</li>
+<li>Choice of Priors</li>
+<li>lapse rates</li>
+</ul></li>
+</ul></li>
+<li><p>Residual analysis (Goodness of fit and model selection)</p>
+<ul>
+<li>difference between observed and fitted value (errors)</li>
+<li>should be normally distributed</li>
+<li>Heteroskedacity</li>
+<li>contrast these classic analyses to Bayesian techniques
+<ul>
+<li>prior and posterior checks</li>
+<li>LOO</li>
+<li>cross validation</li>
+</ul></li>
+</ul></li>
+<li><p>Model Checking and Experimental Design Through Synthetic Data</p>
+<ul>
+<li>The problem of simulating multivariate data with arbitrary marginal distributions</li>
+<li>Copula approach
+<ul>
+<li>Nonlinear transformation that invalidates the correlation structure</li>
+</ul></li>
+<li>Kendall and Spearman matching
+<ul>
+<li>Nearest Positive Semidefinite correlation matrix
+<ul>
+<li>Semidefinte Programming (ProxSDP.jl)</li>
+<li><a href="https://arxiv.org/abs/1810.05231" class="uri">https://arxiv.org/abs/1810.05231</a></li>
+<li>Qi and Sun 2006 (quadratically convergent method)</li>
+</ul></li>
+</ul></li>
+<li>Pearson matching
+<ul>
+<li>Chen 2001 (NORTARA)</li>
+<li>Xiao, Zhou 2019 (Numeric Approximation)</li>
+</ul></li>
+<li>Using synthetic data to design experiments
+<ul>
+<li>Bayesian p-value</li>
+<li>How much data to notice an effect</li>
+<li>Bayesian hypothesis testing via predictive performance</li>
+</ul></li>
+</ul></li>
+<li><p>Predictive Inference</p>
+<ul>
+<li>Compare to conjugate model</li>
+<li>Prior predictive distributions</li>
+<li>Posterior predictive distributions</li>
+<li>Calibrating the model</li>
+<li>Use of synthetic data to assess model properties</li>
+</ul></li>
+<li><p>Discussion</p></li>
+<li><p>Conclusion and Future Directions</p></li>
+<li><p>References</p></li>
+<li><p>Appendix A (Notation)</p></li>
+<li><p>Appendix B (Proofs) maybe?</p></li>
+<li><p>Orphaned thoughts</p>
+<ul>
+<li>statistical workflows and reproducible analyses</li>
+<li>using conda and git</li>
+</ul></li>
 </ul>
-</div>
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="overview-of-bayesian-statistics.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
