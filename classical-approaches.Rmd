@@ -1,4 +1,4 @@
-# Predictive Inference
+# Classical Approaches
 
 Really just placeholder stuff for now.
 

@@ -1,4 +1,4 @@
-# Predictive Inference
+# Residual Analysis
 
 Really just placeholder stuff for now.
 

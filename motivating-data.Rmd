@@ -1,0 +1,42 @@
+# Motivating Data
+
+```{r, motivating-data-setup}
+library(FangPsychometric)
+```
+
+- Psychometric Experiments
+  - "The psychometric function relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task" [@Wichmann2001a]
+  - Perceptual Synchrony
+    - Our experiences in life as we age shape the mechanisms of processing multisensory signals
+    - Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis
+    - This gives rise to an idea of the temporal binding window, or the temporal differences for which sensory signals are integrated into a global percept
+    - Perceptual synchrony has been previously studied through the point of subjective simultaneity, the physical temporal delay between two signals at which an observer is unsure about their temporal order [@stone2001]
+  - Temporal Sensitivity
+    - The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept
+    - A deficit in temporal sensitivity may lead to a widening of the temporal binding window and cause reduce the ability to segregate unrelated sensory signals
+    - In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the just noticeable difference
+    - The just noticeable difference is the smallest lapse in time so that a temporal order can just be determined
+  - Temporal Recalibration
+
+- Current Techniques
+  - Maximum likelihood estimation
+  - Bootstrapping for confidence intervals
+  - Non-parametric
+
+- Data Collection
+  - Order of trials
+  - The manuscript provided by Ally will really be the main source of content for this section
+  - She describes the data collection for three of the sensory tasks
+
+## Notation
+
+We adopt the notation put forth in the book *Data Analysis using Regression and Multilevel/Hierarchical Models* [@gelman2006data], specifically
+
+- Units $i = 1, \ldots, n$, where *units* are the smallest items of measurements (a single record)
+- Outcome measurements $y = (y_1, \ldots, y_n)$ are the unit-level data being modeled
+- Groups $j = 1, \ldots, J$ for the age level of grouping
+- Subjects $k = 1, \ldots, K$ for the subject level of grouping (since subjects will have multiple units of measurement)
+- Index variables $j[i]$ and $k[i]$ to code the group and subject membership. For example, if $j[35]=3$, then the $35^{th}$ unit in the data belongs to the third age group.
+- Coefficients are written with $\alpha$, $\beta$, and sometimes $\gamma$
+- We make our code more readable by typing $\alpha$, $\beta$, $\gamma$ as `a`, `b`, `g`
+- Standard deviation is $\sigma_y$ for data-level errors and $\sigma_\alpha$, $\sigma_\beta$, and so forth, for group-level errors

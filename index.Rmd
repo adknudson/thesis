@@ -1,43 +1,24 @@
 --- 
-title: "Thesis"
+title: "Contributions to Modern Bayesian Multilevel Modeling"
 author: "Alexander Knudson"
 date: "`r format(Sys.Date(), '%A %B %d, %Y')`"
 site: bookdown::bookdown_site
+bibliography: [bibliography.bib]
+biblio-style: agsm
 documentclass: article
 link-citations: yes
 github-repo: adkudson/thesis
 ---
 
+# Abstract {-}
+
+**Big Idea:** _making contributions to & gaining mastery of state of the art statistical computing tools and Bayesian modeling/probabilistic programming._
+
 # Preface {-}
 
 In this collection, I will be building a narrative around general linear models as I take an experiment in psychometrics and perform a complete analysis from the ground up.
 
-## Ideas {-}
-
-- Introduce the data
-- classical regression
-- Bayesian regression
-- Choice of priors
-- Standardization
-- Multilevel modeling
-  - Robustness
-  - Flexibility
-  - Performance
-- Pooling
-  - no pooling
-  - partial pooling
-  - complete pooling
-- Adaptive regularization
-- Residual analysis
-- Predictive inference
-- Using bigsimr to simulate data sets
-
-
-# Introduction {-}
-
-TRAMM/bigsimr 70/30 split
-
-**Big Idea:** _making contributions to & gaining mastery of state of the art statistical computing tools and Bayesian modeling/probabilistic programming._
+# Introduction
 
 - Acknowledgments
 - Motivating Data

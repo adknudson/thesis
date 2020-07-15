@@ -1,4 +1,4 @@
-# Predictive Inference
+# Feature Engineering and Prior Specification
 
 Really just placeholder stuff for now.
 

@@ -36,7 +36,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-  pdftitle={Thesis},
+  pdftitle={Contributions to Modern Bayesian Multilevel Modeling},
   pdfauthor={Alexander Knudson},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
@@ -68,11 +68,11 @@
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{5}
 \usepackage[]{natbib}
-\bibliographystyle{plainnat}
+\bibliographystyle{agsm}
 
-\title{Thesis}
+\title{Contributions to Modern Bayesian Multilevel Modeling}
 \author{Alexander Knudson}
-\date{Tuesday, July 07, 2020}
+\date{Wednesday July 15, 2020}
 
 \begin{document}
 \maketitle
@@ -81,103 +81,71 @@
 \setcounter{tocdepth}{3}
 \tableofcontents
 }
+\hypertarget{abstract}{%
+\section*{Abstract}\label{abstract}}
+
+
+\textbf{Big Idea:} \emph{making contributions to \& gaining mastery of state of the art statistical computing tools and Bayesian modeling/probabilistic programming.}
+
 \hypertarget{preface}{%
 \section*{Preface}\label{preface}}
 
 
 In this collection, I will be building a narrative around general linear models as I take an experiment in psychometrics and perform a complete analysis from the ground up.
 
-\hypertarget{ideas}{%
-\subsection*{Ideas}\label{ideas}}
-
-
-\begin{itemize}
-\tightlist
-\item
-  Introduce the data
-\item
-  classical regression
-\item
-  Bayesian regression
-\item
-  Choice of priors
-\item
-  Standardization
-\item
-  Multilevel modeling
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Robustness
-  \item
-    Flexibility
-  \item
-    Performance
-  \end{itemize}
-\item
-  Pooling
-
-  \begin{itemize}
-  \tightlist
-  \item
-    no pooling
-  \item
-    partial pooling
-  \item
-    complete pooling
-  \end{itemize}
-\item
-  Adaptive regularization
-\item
-  Residual analysis
-\item
-  Predictive inference
-\item
-  Using bigsimr to simulate data sets
-\end{itemize}
-
 \hypertarget{introduction}{%
-\section*{Introduction}\label{introduction}}
-
-
-TRAMM/bigsimr 70/30 split
-
-\textbf{Big Idea:} \emph{making contributions to \& gaining mastery of state of the art statistical computing tools and Bayesian modeling/probabilistic programming.}
+\section{Introduction}\label{introduction}}
 
 \begin{itemize}
-\tightlist
+\item
+  Acknowledgments
+\item
+  Motivating Data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Pyschometrics
+  \item
+    Theory and background
+  \item
+    Research questions
+  \end{itemize}
+\item
+  Classical approaches
+
+  \begin{itemize}
+  \tightlist
+  \item
+    shortcomings
+  \item
+    why abandon them
+  \end{itemize}
 \item
   Bayesian Modeling
 
   \begin{itemize}
   \tightlist
   \item
-    Intuitive ideas
-  \item
-    MCMC sampling
+    Mathematical foundations
 
     \begin{itemize}
     \tightlist
     \item
-      HMC
-    \item
-      Model fitting diagnostics
-
-      \begin{itemize}
-      \tightlist
-      \item
-        \(\hat{R}\)
-      \item
-        divergences
-      \end{itemize}
-    \item
-      Stan / BRMS /
-    \item
-      Greta (Tensorflow)
-    \item
-      Pyro / NumPyro (Jax)
+      Bayes rule in regression setting
     \end{itemize}
+  \item
+    Easy in theory, difficult in practice
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Example of a conjugate priors
+    \item
+      need more complexity -\textgreater{} computer methods
+    \end{itemize}
+  \item
+    Computer methods needed
   \end{itemize}
 \item
   Multilevel Models
@@ -196,39 +164,83 @@ TRAMM/bigsimr 70/30 split
     \item
       Partial Pooling
     \end{itemize}
-  \end{itemize}
-\item
-  Motivating Data
+  \item
+    Statistical inference
+  \item
+    Possibility of conjugacy for sigmoid model
+  \item
+    Sampling
 
-  \begin{itemize}
-  \tightlist
-  \item
-    Pyschometrics
-  \item
-    Theory and background
-  \item
-    Research questions
+    \begin{itemize}
+    \tightlist
+    \item
+      Fitting and Diagnostics
+    \item
+      Incorporate paper \emph{Statistical Software}
+    \item
+      Stan / BRMS / rstanarm / rethinking
+    \item
+      Greta (TensorFlow)
+    \item
+      Pyro / NumPyro (Jax)
+    \item
+      Model fitting diagnostics
+
+      \begin{itemize}
+      \tightlist
+      \item
+        \(\hat{R}\)
+      \item
+        divergences
+      \end{itemize}
+    \end{itemize}
   \end{itemize}
 \item
-  Classical approaches
-\item
-  Modeling Considerations
+  Feature Engineering and Prior Specification
 
   \begin{itemize}
   \tightlist
   \item
     Standardizing Predictors
   \item
-    Choice of Priors
-  \item
-    Choice of Link Function
+    Parameterization of the linear predictor
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Choice of Link Function
+    \item
+      Choice of Priors
+    \item
+      lapse rates
+    \end{itemize}
   \end{itemize}
 \item
-  Residual analysis (What?)
+  Residual analysis (Goodness of fit and model selection)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    difference between observed and fitted value (errors)
+  \item
+    should be normally distributed
+  \item
+    Heteroskedacity
+  \item
+    contrast these classic analyses to Bayesian techniques
+
+    \begin{itemize}
+    \tightlist
+    \item
+      prior and posterior checks
+    \item
+      LOO
+    \item
+      cross validation
+    \end{itemize}
+  \end{itemize}
 \item
-  Predictive Inference
-\item
-  Synthetic Data (Using \texttt{bigsimr} to generate new data sets)
+  Model Checking and Experimental Design Through Synthetic Data
 
   \begin{itemize}
   \tightlist
@@ -270,44 +282,162 @@ TRAMM/bigsimr 70/30 split
     \item
       Xiao, Zhou 2019 (Numeric Approximation)
     \end{itemize}
+  \item
+    Using synthetic data to design experiments
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Bayesian p-value
+    \item
+      How much data to notice an effect
+    \item
+      Bayesian hypothesis testing via predictive performance
+    \end{itemize}
+  \end{itemize}
+\item
+  Predictive Inference
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Compare to conjugate model
+  \item
+    Prior predictive distributions
+  \item
+    Posterior predictive distributions
+  \item
+    Calibrating the model
+  \item
+    Use of synthetic data to assess model properties
+  \end{itemize}
+\item
+  Discussion
+\item
+  Conclusion and Future Directions
+\item
+  References
+\item
+  Appendix A (Notation)
+\item
+  Appendix B (Proofs) maybe?
+\item
+  Orphaned thoughts
+
+  \begin{itemize}
+  \tightlist
+  \item
+    statistical workflows and reproducible analyses
+  \item
+    using conda and git
   \end{itemize}
 \end{itemize}
-
-\hypertarget{overview-of-bayesian-statistics}{%
-\section{Overview of Bayesian Statistics}\label{overview-of-bayesian-statistics}}
-
-PASS
-
-\hypertarget{multilevel-modeling}{%
-\section{Multilevel Modeling}\label{multilevel-modeling}}
-
-PASS
 
 \hypertarget{motivating-data}{%
 \section{Motivating Data}\label{motivating-data}}
 
+\begin{itemize}
+\tightlist
+\item
+  Psychometric Experiments
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ``The psychometric function relates an observer's performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task'' \citep{Wichmann2001a}
+  \item
+    Perceptual Synchrony
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Our experiences in life as we age shape the mechanisms of processing multisensory signals
+    \item
+      Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis
+    \item
+      This gives rise to an idea of the temporal binding window, or the temporal differences for which sensory signals are integrated into a global percept
+    \item
+      Perceptual synchrony has been previously studied through the point of subjective simultaneity, the physical temporal delay between two signals at which an observer is unsure about their temporal order \citep{stone2001}
+    \end{itemize}
+  \item
+    Temporal Sensitivity
+
+    \begin{itemize}
+    \tightlist
+    \item
+      The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept
+    \item
+      A deficit in temporal sensitivity may lead to a widening of the temporal binding window and cause reduce the ability to segregate unrelated sensory signals
+    \item
+      In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the just noticeable difference
+    \item
+      The just noticeable difference is the smallest lapse in time so that a temporal order can just be determined
+    \end{itemize}
+  \item
+    Temporal Recalibration
+  \end{itemize}
+\item
+  Current Techniques
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Maximum likelihood estimation
+  \item
+    Bootstrapping for confidence intervals
+  \item
+    Non-parametric
+  \end{itemize}
+\item
+  Data Collection
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Order of trials
+  \item
+    The manuscript provided by Ally will really be the main source of content for this section
+  \item
+    She describes the data collection for three of the sensory tasks
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{notation}{%
+\subsection{Notation}\label{notation}}
+
+We adopt the notation put forth in the book \emph{Data Analysis using Regression and Multilevel/Hierarchical Models} \citep{gelman2006data}, specifically
+
+\begin{itemize}
+\tightlist
+\item
+  Units \(i = 1, \ldots, n\), where \emph{units} are the smallest items of measurements (a single record)
+\item
+  Outcome measurements \(y = (y_1, \ldots, y_n)\) are the unit-level data being modeled
+\item
+  Groups \(j = 1, \ldots, J\) for the age level of grouping
+\item
+  Subjects \(k = 1, \ldots, K\) for the subject level of grouping (since subjects will have multiple units of measurement)
+\item
+  Index variables \(j[i]\) and \(k[i]\) to code the group and subject membership. For example, if \(j[35]=3\), then the \(35^{th}\) unit in the data belongs to the third age group.
+\item
+  Coefficients are written with \(\alpha\), \(\beta\), and sometimes \(\gamma\)
+\item
+  We make our code more readable by typing \(\alpha\), \(\beta\), \(\gamma\) as \texttt{a}, \texttt{b}, \texttt{g}
+\item
+  Standard deviation is \(\sigma_y\) for data-level errors and \(\sigma_\alpha\), \(\sigma_\beta\), and so forth, for group-level errors
+\end{itemize}
+
+\hypertarget{classical-approaches}{%
+\section{Classical Approaches}\label{classical-approaches}}
+
 Really just placeholder stuff for now.
 
 \[
 \frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
 \]
 
-\hypertarget{sub-heading}{%
-\subsection{Sub heading}\label{sub-heading}}
-
-askdjfhalskdjfhalksdjhalksdjhf
-
-\hypertarget{sub-sub-heading-1}{%
-\subsubsection{sub-sub heading 1}\label{sub-sub-heading-1}}
-
-\hypertarget{sub-sub-heading-2}{%
-\subsubsection{sub-sub heading 2}\label{sub-sub-heading-2}}
-
-\hypertarget{sub-heading-2}{%
-\subsection{sub heading 2}\label{sub-heading-2}}
-
-\hypertarget{survey-of-methods}{%
-\section{Survey of Methods}\label{survey-of-methods}}
+\hypertarget{bayesian-modeling}{%
+\section{Bayesian Modeling}\label{bayesian-modeling}}
 
 Really just placeholder stuff for now.
 
@@ -315,22 +445,8 @@ Really just placeholder stuff for now.
 \frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
 \]
 
-\hypertarget{sub-heading}{%
-\subsection{Sub heading}\label{sub-heading}}
-
-askdjfhalskdjfhalksdjhalksdjhf
-
-\hypertarget{sub-sub-heading-1}{%
-\subsubsection{sub-sub heading 1}\label{sub-sub-heading-1}}
-
-\hypertarget{sub-sub-heading-2}{%
-\subsubsection{sub-sub heading 2}\label{sub-sub-heading-2}}
-
-\hypertarget{sub-heading-2}{%
-\subsection{sub heading 2}\label{sub-heading-2}}
-
-\hypertarget{bayesian-modeling-considerations}{%
-\section{Bayesian Modeling Considerations}\label{bayesian-modeling-considerations}}
+\hypertarget{multilevel-models}{%
+\section{Multilevel Models}\label{multilevel-models}}
 
 Really just placeholder stuff for now.
 
@@ -338,19 +454,32 @@ Really just placeholder stuff for now.
 \frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
 \]
 
-\hypertarget{sub-heading}{%
-\subsection{Sub heading}\label{sub-heading}}
+\hypertarget{feature-engineering-and-prior-specification}{%
+\section{Feature Engineering and Prior Specification}\label{feature-engineering-and-prior-specification}}
 
-askdjfhalskdjfhalksdjhalksdjhf
+Really just placeholder stuff for now.
 
-\hypertarget{sub-sub-heading-1}{%
-\subsubsection{sub-sub heading 1}\label{sub-sub-heading-1}}
+\[
+\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
+\]
 
-\hypertarget{sub-sub-heading-2}{%
-\subsubsection{sub-sub heading 2}\label{sub-sub-heading-2}}
+\hypertarget{residual-analysis}{%
+\section{Residual Analysis}\label{residual-analysis}}
 
-\hypertarget{sub-heading-2}{%
-\subsection{sub heading 2}\label{sub-heading-2}}
+Really just placeholder stuff for now.
+
+\[
+\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
+\]
+
+\hypertarget{model-checking}{%
+\section{Model Checking}\label{model-checking}}
+
+Really just placeholder stuff for now.
+
+\[
+\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
+\]
 
 \hypertarget{predictive-inference}{%
 \section{Predictive Inference}\label{predictive-inference}}
@@ -361,22 +490,8 @@ Really just placeholder stuff for now.
 \frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
 \]
 
-\hypertarget{sub-heading}{%
-\subsection{Sub heading}\label{sub-heading}}
-
-askdjfhalskdjfhalksdjhalksdjhf
-
-\hypertarget{sub-sub-heading-1}{%
-\subsubsection{sub-sub heading 1}\label{sub-sub-heading-1}}
-
-\hypertarget{sub-sub-heading-2}{%
-\subsubsection{sub-sub heading 2}\label{sub-sub-heading-2}}
-
-\hypertarget{sub-heading-2}{%
-\subsection{sub heading 2}\label{sub-heading-2}}
-
-\hypertarget{synthetic-data}{%
-\section{Synthetic Data}\label{synthetic-data}}
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
 
 Really just placeholder stuff for now.
 
@@ -384,18 +499,23 @@ Really just placeholder stuff for now.
 \frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
 \]
 
-\hypertarget{sub-heading}{%
-\subsection{Sub heading}\label{sub-heading}}
+\hypertarget{conclusion}{%
+\section{Conclusion}\label{conclusion}}
 
-askdjfhalskdjfhalksdjhalksdjhf
+Really just placeholder stuff for now.
 
-\hypertarget{sub-sub-heading-1}{%
-\subsubsection{sub-sub heading 1}\label{sub-sub-heading-1}}
+\[
+\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
+\]
 
-\hypertarget{sub-sub-heading-2}{%
-\subsubsection{sub-sub heading 2}\label{sub-sub-heading-2}}
+\hypertarget{appendix-a}{%
+\section*{Appendix A}\label{appendix-a}}
 
-\hypertarget{sub-heading-2}{%
-\subsection{sub heading 2}\label{sub-heading-2}}
+
+\hypertarget{appendix-b}{%
+\section*{Appendix B}\label{appendix-b}}
+
+
+  \bibliography{bibliography.bib}
 
 \end{document}

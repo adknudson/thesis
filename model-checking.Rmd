@@ -1,4 +1,4 @@
-# Predictive Inference
+# Model Checking
 
 Really just placeholder stuff for now.
 

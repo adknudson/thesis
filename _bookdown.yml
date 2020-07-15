@@ -6,12 +6,17 @@ after_chapter_script: [_outgoing.R]
 view: https://github.com/adknudson/thesis/blob/master/%s
 rmd_files: [
   "index.Rmd",
-  "bayesian-stats.Rmd",
-  "multilevel-models.Rmd",
-  "fang-data.Rmd",
-  "survey-of-methods.Rmd",
-  "modeling-considerations.Rmd",
+  "motivating-data.Rmd",
+  "classical-approaches.Rmd",
+  "bayesian-modeling.Rmd",
+  "multilevel-modeling.Rmd",
+  "feature-engineering.Rmd",
+  "residual-analysis.Rmd",
+  "model-checking.Rmd",
   "predictive-inference.Rmd",
-  "synthetic-data.Rmd"
+  "discussion.Rmd",
+  "conclusion.Rmd",
+  "appendix.Rmd",
+  "references.Rmd"
 ]
 output_dir: "docs"
