@@ -1,4 +1,4 @@
-# Motivating Data {#ch2}
+# Motivating Data {#motivating-data}
 
 - Pyschometrics
 - Theory and background

@@ -1,4 +1,4 @@
-# Classical Approaches {#ch3}
+# Classical Approaches {#classical-approaches}
 
 - shortcomings
 - why abandon them

@@ -213,15 +213,15 @@ With the advances in computational power and high-level programming languages li
     \item
       The denominator acts as a scaling value that forces \(P(\theta|X)\) to be a probability distribution (i.e.~area under PDF is equal to 1)
     \item
-      There are simulation-based techniques that let one approximate the posterior distribution without needing to known the analytical solution to the denominator
+      There are simulation-based techniques that let one approximate the posterior distribution without needing to know the analytic solution to the denominator
     \end{itemize}
   \end{itemize}
 \end{itemize}
 
-I have organized this thesis as follows. In \protect\hyperlink{ch2}{Chapter 2} I introduce the data set that drives the narrative and that motivates the adoption of Bayesian multilevel modeling. In \protect\hyperlink{ch3}{Chapter 3} there is a review of classical approaches to modeling with psychometric data, and the benefits and drawbacks of such techniques. \protect\hyperlink{ch4}{Chapter 4} introduces Bayesian modeling and programming frameworks for Bayesian inference. In Chapters \protect\hyperlink{ch5}{5} and \protect\hyperlink{ch6}{6} I describe and work through a principled Bayesian workflow for multilevel modeling. Chapters \protect\hyperlink{ch7}{7} and \protect\hyperlink{ch8}{8} go into more depth on checking the model goodness of fit and model diagnostics in a Bayesian setting. Finally in \protect\hyperlink{ch9}{Chapter 9} I demonstrate how to use the Bayesian model from the principled workflow for predictive inference, and generate multivariate synthetic data via Gaussian copulas.
+I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{Chapter 2} I introduce the data set that drives the narrative and that motivates the adoption of Bayesian multilevel modeling. In \protect\hyperlink{classical-approaches}{Chapter 3} there is a review of classical approaches to modeling with psychometric data, and the benefits and drawbacks of such techniques. \protect\hyperlink{bayesian-modeling}{Chapter 4} introduces Bayesian modeling and programming frameworks for Bayesian inference. In Chapters \protect\hyperlink{multilevel-models}{5} and \protect\hyperlink{feature-engineering}{6} I describe and work through a principled Bayesian workflow for multilevel modeling. Chapters \protect\hyperlink{residual-analysis}{7} and \protect\hyperlink{model-checking}{8} go into more depth on checking the model goodness of fit and model diagnostics in a Bayesian setting. Finally in \protect\hyperlink{predictive-inference}{Chapter 9} I demonstrate how to use the Bayesian model from the principled workflow for predictive inference, and generate multivariate synthetic data via Gaussian copulas.
 
-\hypertarget{ch2}{%
-\section{Motivating Data}\label{ch2}}
+\hypertarget{motivating-data}{%
+\section{Motivating Data}\label{motivating-data}}
 
 \begin{itemize}
 \item
@@ -319,8 +319,8 @@ We adopt the notation put forth in the book \emph{Data Analysis using Regression
   Standard deviation is \(\sigma_y\) for data-level errors and \(\sigma_\alpha\), \(\sigma_\beta\), and so forth, for group-level errors
 \end{itemize}
 
-\hypertarget{ch3}{%
-\section{Classical Approaches}\label{ch3}}
+\hypertarget{classical-approaches}{%
+\section{Classical Approaches}\label{classical-approaches}}
 
 \begin{itemize}
 \tightlist
@@ -330,8 +330,8 @@ We adopt the notation put forth in the book \emph{Data Analysis using Regression
   why abandon them
 \end{itemize}
 
-\hypertarget{ch4}{%
-\section{Bayesian Modeling}\label{ch4}}
+\hypertarget{bayesian-modeling}{%
+\section{Bayesian Modeling}\label{bayesian-modeling}}
 
 \begin{itemize}
 \tightlist
@@ -357,8 +357,8 @@ We adopt the notation put forth in the book \emph{Data Analysis using Regression
   Computer methods needed
 \end{itemize}
 
-\hypertarget{ch5}{%
-\section{Multilevel Models}\label{ch5}}
+\hypertarget{multilevel-models}{%
+\section{Multilevel Models}\label{multilevel-models}}
 
 \begin{itemize}
 \tightlist
@@ -406,8 +406,8 @@ We adopt the notation put forth in the book \emph{Data Analysis using Regression
   \end{itemize}
 \end{itemize}
 
-\hypertarget{ch6}{%
-\section{Feature Engineering and Prior Specification}\label{ch6}}
+\hypertarget{feature-engineering}{%
+\section{Feature Engineering and Prior Specification}\label{feature-engineering}}
 
 \begin{itemize}
 \tightlist
@@ -427,8 +427,8 @@ We adopt the notation put forth in the book \emph{Data Analysis using Regression
   \end{itemize}
 \end{itemize}
 
-\hypertarget{ch7}{%
-\section{Residual Analysis}\label{ch7}}
+\hypertarget{residual-analysis}{%
+\section{Residual Analysis}\label{residual-analysis}}
 
 \begin{itemize}
 \tightlist
@@ -452,8 +452,8 @@ We adopt the notation put forth in the book \emph{Data Analysis using Regression
   \end{itemize}
 \end{itemize}
 
-\hypertarget{ch8}{%
-\section{Model Checking}\label{ch8}}
+\hypertarget{model-checking}{%
+\section{Model Checking}\label{model-checking}}
 
 \begin{itemize}
 \tightlist
@@ -509,8 +509,8 @@ We adopt the notation put forth in the book \emph{Data Analysis using Regression
   \end{itemize}
 \end{itemize}
 
-\hypertarget{ch9}{%
-\section{Predictive Inference}\label{ch9}}
+\hypertarget{predictive-inference}{%
+\section{Predictive Inference}\label{predictive-inference}}
 
 \begin{itemize}
 \tightlist

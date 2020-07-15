@@ -1,4 +1,4 @@
-# Predictive Inference {#ch9}
+# Predictive Inference {#predictive-inference}
 
 - Compare to conjugate model
 - Prior predictive distributions

@@ -1,4 +1,4 @@
-# Feature Engineering and Prior Specification {#ch6}
+# Feature Engineering and Prior Specification {#feature-engineering}
 
 - Standardizing Predictors
 - Parameterization of the linear predictor

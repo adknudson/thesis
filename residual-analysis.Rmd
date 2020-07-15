@@ -1,4 +1,4 @@
-# Residual Analysis {#ch7}
+# Residual Analysis {#residual-analysis}
 
 - difference between observed and fitted value (errors)
 - should be normally distributed

@@ -1,4 +1,4 @@
-# Bayesian Modeling {#ch4}
+# Bayesian Modeling {#bayesian-modeling}
 
 - Mathematical foundations
   - Bayes rule in regression setting
