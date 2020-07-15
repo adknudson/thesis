@@ -1,8 +1,8 @@
-# Bayesian Modeling
+# Bayesian Modeling {#ch4}
 
-Really just placeholder stuff for now.
-
-$$
-\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
-$$
-
+- Mathematical foundations
+  - Bayes rule in regression setting
+- Easy in theory, difficult in practice
+  - Example of a conjugate priors
+  - need more complexity -> computer methods
+- Computer methods needed

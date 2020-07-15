@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Appendix B | Contributions to Modern Bayesian Multilevel Modeling</title>
-  <meta name="description" content="Appendix B | Contributions to Modern Bayesian Multilevel Modeling" />
+  <title>2 Motivating Data | Contributions to Modern Bayesian Multilevel Modeling</title>
+  <meta name="description" content="2 Motivating Data | Contributions to Modern Bayesian Multilevel Modeling" />
   <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Appendix B | Contributions to Modern Bayesian Multilevel Modeling" />
+  <meta property="og:title" content="2 Motivating Data | Contributions to Modern Bayesian Multilevel Modeling" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="adkudson/thesis" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Appendix B | Contributions to Modern Bayesian Multilevel Modeling" />
+  <meta name="twitter:title" content="2 Motivating Data | Contributions to Modern Bayesian Multilevel Modeling" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="appendix-a.html"/>
-<link rel="next" href="references.html"/>
+<link rel="prev" href="introduction.html"/>
+<link rel="next" href="ch3.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -101,17 +101,79 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="appendix-b" class="section level1 unnumbered">
-<h1>Appendix B</h1>
+<div id="ch2" class="section level1">
+<h1><span class="header-section-number">2</span> Motivating Data</h1>
+<ul>
+<li><p>Pyschometrics</p></li>
+<li><p>Theory and background</p></li>
+<li><p>Research questions</p></li>
+<li><p>Psychometric Experiments</p>
+<ul>
+<li>“The psychometric function relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task” <span class="citation">(Wichmann and Hill <a href="#ref-wichmann2001a" role="doc-biblioref">2001</a>)</span></li>
+<li>Perceptual Synchrony
+<ul>
+<li>Our experiences in life as we age shape the mechanisms of processing multisensory signals</li>
+<li>Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis</li>
+<li>This gives rise to an idea of the temporal binding window, or the temporal differences for which sensory signals are integrated into a global percept</li>
+<li>Perceptual synchrony has been previously studied through the point of subjective simultaneity, the physical temporal delay between two signals at which an observer is unsure about their temporal order <span class="citation">(Stone et al. <a href="#ref-stone2001now" role="doc-biblioref">2001</a>)</span></li>
+</ul></li>
+<li>Temporal Sensitivity
+<ul>
+<li>The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept</li>
+<li>A deficit in temporal sensitivity may lead to a widening of the temporal binding window and cause reduce the ability to segregate unrelated sensory signals</li>
+<li>In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the just noticeable difference</li>
+<li>The just noticeable difference is the smallest lapse in time so that a temporal order can just be determined</li>
+</ul></li>
+<li>Temporal Recalibration</li>
+</ul></li>
+<li><p>Current Techniques</p>
+<ul>
+<li>Maximum likelihood estimation</li>
+<li>Bootstrapping for confidence intervals</li>
+<li>Non-parametric</li>
+</ul></li>
+<li><p>Data Collection</p>
+<ul>
+<li>Order of trials</li>
+<li>The manuscript provided by Ally will really be the main source of content for this section</li>
+<li>She describes the data collection for three of the sensory tasks</li>
+</ul></li>
+</ul>
+<div id="notation" class="section level2">
+<h2><span class="header-section-number">2.1</span> Notation</h2>
+<p>We adopt the notation put forth in the book <em>Data Analysis using Regression and Multilevel/Hierarchical Models</em> <span class="citation">(Gelman and Hill <a href="#ref-gelman2006data" role="doc-biblioref">2006</a>)</span>, specifically</p>
+<ul>
+<li>Units <span class="math inline">\(i = 1, \ldots, n\)</span>, where <em>units</em> are the smallest items of measurements (a single record)</li>
+<li>Outcome measurements <span class="math inline">\(y = (y_1, \ldots, y_n)\)</span> are the unit-level data being modeled</li>
+<li>Groups <span class="math inline">\(j = 1, \ldots, J\)</span> for the age level of grouping</li>
+<li>Subjects <span class="math inline">\(k = 1, \ldots, K\)</span> for the subject level of grouping (since subjects will have multiple units of measurement)</li>
+<li>Index variables <span class="math inline">\(j[i]\)</span> and <span class="math inline">\(k[i]\)</span> to code the group and subject membership. For example, if <span class="math inline">\(j[35]=3\)</span>, then the <span class="math inline">\(35^{th}\)</span> unit in the data belongs to the third age group.</li>
+<li>Coefficients are written with <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, and sometimes <span class="math inline">\(\gamma\)</span></li>
+<li>We make our code more readable by typing <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, <span class="math inline">\(\gamma\)</span> as <code>a</code>, <code>b</code>, <code>g</code></li>
+<li>Standard deviation is <span class="math inline">\(\sigma_y\)</span> for data-level errors and <span class="math inline">\(\sigma_\alpha\)</span>, <span class="math inline">\(\sigma_\beta\)</span>, and so forth, for group-level errors</li>
+</ul>
 
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-gelman2006data">
+<p>Gelman, Andrew, and Jennifer Hill. 2006. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. Cambridge university press.</p>
+</div>
+<div id="ref-stone2001now">
+<p>Stone, JV, NM Hunkin, J Porrill, R Wood, V Keeler, M Beanland, M Port, and NR Porter. 2001. “When Is Now? Perception of Simultaneity.” <em>Proceedings of the Royal Society of London. Series B: Biological Sciences</em> 268 (1462): 31–38.</p>
+</div>
+<div id="ref-wichmann2001a">
+<p>Wichmann, Felix A, and N Jeremy Hill. 2001. “The Psychometric Function: I. Fitting, Sampling, and Goodness of Fit.” <em>Perception &amp; Psychophysics</em> 63 (8): 1293–1313.</p>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="appendix-a.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ch3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -147,7 +209,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/adknudson/thesis/blob/master/appendix.Rmd",
+"link": "https://github.com/adknudson/thesis/blob/master/motivating-data.Rmd",
 "text": null
 },
 "download": ["adknudson-thesis.pdf"],

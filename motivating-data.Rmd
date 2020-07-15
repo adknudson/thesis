@@ -1,16 +1,20 @@
-# Motivating Data
+# Motivating Data {#ch2}
+
+- Pyschometrics
+- Theory and background
+- Research questions
 
 ```{r, motivating-data-setup}
 library(FangPsychometric)
 ```
 
 - Psychometric Experiments
-  - "The psychometric function relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task" [@Wichmann2001a]
+  - "The psychometric function relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task" [@wichmann2001a]
   - Perceptual Synchrony
     - Our experiences in life as we age shape the mechanisms of processing multisensory signals
     - Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis
     - This gives rise to an idea of the temporal binding window, or the temporal differences for which sensory signals are integrated into a global percept
-    - Perceptual synchrony has been previously studied through the point of subjective simultaneity, the physical temporal delay between two signals at which an observer is unsure about their temporal order [@stone2001]
+    - Perceptual synchrony has been previously studied through the point of subjective simultaneity, the physical temporal delay between two signals at which an observer is unsure about their temporal order [@stone2001now]
   - Temporal Sensitivity
     - The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept
     - A deficit in temporal sensitivity may lead to a widening of the temporal binding window and cause reduce the ability to segregate unrelated sensory signals

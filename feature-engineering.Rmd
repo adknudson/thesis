@@ -1,8 +1,7 @@
-# Feature Engineering and Prior Specification
+# Feature Engineering and Prior Specification {#ch6}
 
-Really just placeholder stuff for now.
-
-$$
-\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
-$$
-
+- Standardizing Predictors
+- Parameterization of the linear predictor
+  - Choice of Link Function
+  - Choice of Priors
+  - lapse rates

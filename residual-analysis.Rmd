@@ -1,8 +1,9 @@
-# Residual Analysis
+# Residual Analysis {#ch7}
 
-Really just placeholder stuff for now.
-
-$$
-\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
-$$
-
+- difference between observed and fitted value (errors)
+- should be normally distributed
+- Heteroskedacity
+- contrast these classic analyses to Bayesian techniques
+  - prior and posterior checks
+  - LOO
+  - cross validation

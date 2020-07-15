@@ -87,264 +87,156 @@
 
 \textbf{Big Idea:} \emph{making contributions to \& gaining mastery of state of the art statistical computing tools and Bayesian modeling/probabilistic programming.}
 
-\hypertarget{preface}{%
-\section*{Preface}\label{preface}}
+\hypertarget{acknowledgments}{%
+\section*{Acknowledgments}\label{acknowledgments}}
 
 
-In this collection, I will be building a narrative around general linear models as I take an experiment in psychometrics and perform a complete analysis from the ground up.
+\hypertarget{list-of-tables}{%
+\section*{List of Tables}\label{list-of-tables}}
+
+
+\hypertarget{list-of-figures}{%
+\section*{List of Figures}\label{list-of-figures}}
+
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
 \begin{itemize}
+\tightlist
 \item
-  Acknowledgments
-\item
-  Motivating Data
+  Soft intro to modern computing, analysis
 
   \begin{itemize}
   \tightlist
   \item
-    Pyschometrics
-  \item
-    Theory and background
-  \item
-    Research questions
-  \end{itemize}
-\item
-  Classical approaches
-
-  \begin{itemize}
-  \tightlist
-  \item
-    shortcomings
-  \item
-    why abandon them
-  \end{itemize}
-\item
-  Bayesian Modeling
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Mathematical foundations
+    advance in CPU+programming leads to evolved statistical methods
 
     \begin{itemize}
     \tightlist
     \item
-      Bayes rule in regression setting
+      ML/DL, high dimensional analysis, big data, Bayesian techniques
     \end{itemize}
   \item
-    Easy in theory, difficult in practice
+    multidisciplinary techniques; numerical methods, probability theory, statistics, computer science, visualizations, etc
 
     \begin{itemize}
     \tightlist
     \item
-      Example of a conjugate priors
-    \item
-      need more complexity -\textgreater{} computer methods
+      root finding, change of variables, Gaussian quadrature, Hermite polynomials, Monte Carlo simulation, floating point arithmetic
     \end{itemize}
   \item
-    Computer methods needed
-  \end{itemize}
-\item
-  Multilevel Models
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Types of Pooling
+    Organization and reproducibility are crucial in a data analysis setting
 
     \begin{itemize}
     \tightlist
     \item
-      No pooling
-    \item
-      Complete Pooling
-    \item
-      Partial Pooling
+      pre-planning, modularity, workflows, versioning, virtual environments, DRY programming, code that is easy to read
     \end{itemize}
   \item
-    Statistical inference
-  \item
-    Possibility of conjugacy for sigmoid model
-  \item
-    Sampling
+    Clean data is important for good modeling
 
     \begin{itemize}
     \tightlist
     \item
-      Fitting and Diagnostics
-    \item
-      Incorporate paper \emph{Statistical Software}
-    \item
-      Stan / BRMS / rstanarm / rethinking
-    \item
-      Greta (TensorFlow)
-    \item
-      Pyro / NumPyro (Jax)
-    \item
-      Model fitting diagnostics
-
-      \begin{itemize}
-      \tightlist
-      \item
-        \(\hat{R}\)
-      \item
-        divergences
-      \end{itemize}
+      garbage in leads to garbage out
     \end{itemize}
-  \end{itemize}
-\item
-  Feature Engineering and Prior Specification
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Standardizing Predictors
-  \item
-    Parameterization of the linear predictor
-
-    \begin{itemize}
-    \tightlist
-    \item
-      Choice of Link Function
-    \item
-      Choice of Priors
-    \item
-      lapse rates
-    \end{itemize}
-  \end{itemize}
-\item
-  Residual analysis (Goodness of fit and model selection)
-
-  \begin{itemize}
-  \tightlist
-  \item
-    difference between observed and fitted value (errors)
-  \item
-    should be normally distributed
-  \item
-    Heteroskedacity
-  \item
-    contrast these classic analyses to Bayesian techniques
-
-    \begin{itemize}
-    \tightlist
-    \item
-      prior and posterior checks
-    \item
-      LOO
-    \item
-      cross validation
-    \end{itemize}
-  \end{itemize}
-\item
-  Model Checking and Experimental Design Through Synthetic Data
-
-  \begin{itemize}
-  \tightlist
-  \item
-    The problem of simulating multivariate data with arbitrary marginal distributions
-  \item
-    Copula approach
-
-    \begin{itemize}
-    \tightlist
-    \item
-      Nonlinear transformation that invalidates the correlation structure
-    \end{itemize}
-  \item
-    Kendall and Spearman matching
-
-    \begin{itemize}
-    \tightlist
-    \item
-      Nearest Positive Semidefinite correlation matrix
-
-      \begin{itemize}
-      \tightlist
-      \item
-        Semidefinte Programming (ProxSDP.jl)
-      \item
-        \url{https://arxiv.org/abs/1810.05231}
-      \item
-        Qi and Sun 2006 (quadratically convergent method)
-      \end{itemize}
-    \end{itemize}
-  \item
-    Pearson matching
-
-    \begin{itemize}
-    \tightlist
-    \item
-      Chen 2001 (NORTARA)
-    \item
-      Xiao, Zhou 2019 (Numeric Approximation)
-    \end{itemize}
-  \item
-    Using synthetic data to design experiments
-
-    \begin{itemize}
-    \tightlist
-    \item
-      Bayesian p-value
-    \item
-      How much data to notice an effect
-    \item
-      Bayesian hypothesis testing via predictive performance
-    \end{itemize}
-  \end{itemize}
-\item
-  Predictive Inference
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Compare to conjugate model
-  \item
-    Prior predictive distributions
-  \item
-    Posterior predictive distributions
-  \item
-    Calibrating the model
-  \item
-    Use of synthetic data to assess model properties
-  \end{itemize}
-\item
-  Discussion
-\item
-  Conclusion and Future Directions
-\item
-  References
-\item
-  Appendix A (Notation)
-\item
-  Appendix B (Proofs) maybe?
-\item
-  Orphaned thoughts
-
-  \begin{itemize}
-  \tightlist
-  \item
-    statistical workflows and reproducible analyses
-  \item
-    using conda and git
   \end{itemize}
 \end{itemize}
 
-\hypertarget{motivating-data}{%
-\section{Motivating Data}\label{motivating-data}}
+With the advances in computational power and high-level programming languages like Python, R, and Julia, statistical methods have evolved to be more flexible and expressive.
 
 \begin{itemize}
 \tightlist
+\item
+  Overview of classical modeling methods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    classical approaches to data analysis usually adhere to the flexibility-interpretability trade-off
+  \item
+    generally inflexible (parametric) to be more interpretable and computationally easier
+  \item
+    sometimes a model is too flexible (non-parametric) and loses crucial inferential power
+  \item
+    sometimes our assumptions about the data are invalid
+
+    \begin{itemize}
+    \tightlist
+    \item
+      normality, independence, heteroskedacity, etc.
+    \end{itemize}
+  \item
+    often limited when it comes to statistical summaries and confidence intervals
+  \end{itemize}
+\item
+  Solutions or alternatives when classical models fail
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Bayesian inference is a powerful, descriptive, and flexible modeling framework
+  \item
+    Bayes theorem is a simple model of incorporating prior information and data to produce a posterior probability or distribution
+  \item
+    \(P(\theta | X) \propto P(X | \theta) * P(\theta)\) or \(posterior \propto prior \times likelihood\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      The prior is some distribution over the parameter space
+    \item
+      The likelihood is the probability of an outcome in the sample space given a value in the parameter space
+    \item
+      The posterior is the likelihood of values in the parameter space after observing values from the sample space
+    \end{itemize}
+  \item
+    Bayesian statistics, when described without math, actually feels natural to most people
+
+    \begin{itemize}
+    \tightlist
+    \item
+      you hear hoof beats, you think horses, not zebras {[}unless you're in Africa, but that's prior information ;){]}
+    \end{itemize}
+  \item
+    The catch is that the model is not complete as written above
+  \item
+    There is actually a denominator in Bayes' Theorem
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(P(\theta | X) = \frac{P(X | \theta)\cdot P(\theta)}{\sum_i P(X | \theta_i)} = \frac{P(X | \theta)\cdot P(\theta)}{\int_\Omega P(X | \theta)d\theta}\)
+    \item
+      In general, the denominator is not known, or is not not easy (or possible) to calculate, but it always evaluates to a constant (hence the ``proportional to'')
+    \item
+      The denominator acts as a scaling value that forces \(P(\theta|X)\) to be a probability distribution (i.e.~area under PDF is equal to 1)
+    \item
+      There are simulation-based techniques that let one approximate the posterior distribution without needing to known the analytical solution to the denominator
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+I have organized this thesis as follows. In \protect\hyperlink{ch2}{Chapter 2} I introduce the data set that drives the narrative and that motivates the adoption of Bayesian multilevel modeling. In \protect\hyperlink{ch3}{Chapter 3} there is a review of classical approaches to modeling with psychometric data, and the benefits and drawbacks of such techniques. \protect\hyperlink{ch4}{Chapter 4} introduces Bayesian modeling and programming frameworks for Bayesian inference. In Chapters \protect\hyperlink{ch5}{5} and \protect\hyperlink{ch6}{6} I describe and work through a principled Bayesian workflow for multilevel modeling. Chapters \protect\hyperlink{ch7}{7} and \protect\hyperlink{ch8}{8} go into more depth on checking the model goodness of fit and model diagnostics in a Bayesian setting. Finally in \protect\hyperlink{ch9}{Chapter 9} I demonstrate how to use the Bayesian model from the principled workflow for predictive inference, and generate multivariate synthetic data via Gaussian copulas.
+
+\hypertarget{ch2}{%
+\section{Motivating Data}\label{ch2}}
+
+\begin{itemize}
+\item
+  Pyschometrics
+\item
+  Theory and background
+\item
+  Research questions
 \item
   Psychometric Experiments
 
   \begin{itemize}
   \tightlist
   \item
-    ``The psychometric function relates an observer's performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task'' \citep{Wichmann2001a}
+    ``The psychometric function relates an observer's performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task'' \citep{wichmann2001a}
   \item
     Perceptual Synchrony
 
@@ -357,7 +249,7 @@ In this collection, I will be building a narrative around general linear models 
     \item
       This gives rise to an idea of the temporal binding window, or the temporal differences for which sensory signals are integrated into a global percept
     \item
-      Perceptual synchrony has been previously studied through the point of subjective simultaneity, the physical temporal delay between two signals at which an observer is unsure about their temporal order \citep{stone2001}
+      Perceptual synchrony has been previously studied through the point of subjective simultaneity, the physical temporal delay between two signals at which an observer is unsure about their temporal order \citep{stone2001now}
     \end{itemize}
   \item
     Temporal Sensitivity
@@ -427,68 +319,212 @@ We adopt the notation put forth in the book \emph{Data Analysis using Regression
   Standard deviation is \(\sigma_y\) for data-level errors and \(\sigma_\alpha\), \(\sigma_\beta\), and so forth, for group-level errors
 \end{itemize}
 
-\hypertarget{classical-approaches}{%
-\section{Classical Approaches}\label{classical-approaches}}
+\hypertarget{ch3}{%
+\section{Classical Approaches}\label{ch3}}
 
-Really just placeholder stuff for now.
+\begin{itemize}
+\tightlist
+\item
+  shortcomings
+\item
+  why abandon them
+\end{itemize}
 
-\[
-\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
-\]
+\hypertarget{ch4}{%
+\section{Bayesian Modeling}\label{ch4}}
 
-\hypertarget{bayesian-modeling}{%
-\section{Bayesian Modeling}\label{bayesian-modeling}}
+\begin{itemize}
+\tightlist
+\item
+  Mathematical foundations
 
-Really just placeholder stuff for now.
+  \begin{itemize}
+  \tightlist
+  \item
+    Bayes rule in regression setting
+  \end{itemize}
+\item
+  Easy in theory, difficult in practice
 
-\[
-\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
-\]
+  \begin{itemize}
+  \tightlist
+  \item
+    Example of a conjugate priors
+  \item
+    need more complexity -\textgreater{} computer methods
+  \end{itemize}
+\item
+  Computer methods needed
+\end{itemize}
 
-\hypertarget{multilevel-models}{%
-\section{Multilevel Models}\label{multilevel-models}}
+\hypertarget{ch5}{%
+\section{Multilevel Models}\label{ch5}}
 
-Really just placeholder stuff for now.
+\begin{itemize}
+\tightlist
+\item
+  Types of Pooling
 
-\[
-\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
-\]
+  \begin{itemize}
+  \tightlist
+  \item
+    No pooling
+  \item
+    Complete Pooling
+  \item
+    Partial Pooling
+  \end{itemize}
+\item
+  Statistical inference
+\item
+  Possibility of conjugacy for sigmoid model
+\item
+  Sampling
 
-\hypertarget{feature-engineering-and-prior-specification}{%
-\section{Feature Engineering and Prior Specification}\label{feature-engineering-and-prior-specification}}
+  \begin{itemize}
+  \tightlist
+  \item
+    Fitting and Diagnostics
+  \item
+    Incorporate paper \emph{Statistical Software}
+  \item
+    Stan / BRMS / rstanarm / rethinking
+  \item
+    Greta (TensorFlow)
+  \item
+    Pyro / NumPyro (Jax)
+  \item
+    Model fitting diagnostics
 
-Really just placeholder stuff for now.
+    \begin{itemize}
+    \tightlist
+    \item
+      \(\hat{R}\)
+    \item
+      divergences
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
 
-\[
-\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
-\]
+\hypertarget{ch6}{%
+\section{Feature Engineering and Prior Specification}\label{ch6}}
 
-\hypertarget{residual-analysis}{%
-\section{Residual Analysis}\label{residual-analysis}}
+\begin{itemize}
+\tightlist
+\item
+  Standardizing Predictors
+\item
+  Parameterization of the linear predictor
 
-Really just placeholder stuff for now.
+  \begin{itemize}
+  \tightlist
+  \item
+    Choice of Link Function
+  \item
+    Choice of Priors
+  \item
+    lapse rates
+  \end{itemize}
+\end{itemize}
 
-\[
-\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
-\]
+\hypertarget{ch7}{%
+\section{Residual Analysis}\label{ch7}}
 
-\hypertarget{model-checking}{%
-\section{Model Checking}\label{model-checking}}
+\begin{itemize}
+\tightlist
+\item
+  difference between observed and fitted value (errors)
+\item
+  should be normally distributed
+\item
+  Heteroskedacity
+\item
+  contrast these classic analyses to Bayesian techniques
 
-Really just placeholder stuff for now.
+  \begin{itemize}
+  \tightlist
+  \item
+    prior and posterior checks
+  \item
+    LOO
+  \item
+    cross validation
+  \end{itemize}
+\end{itemize}
 
-\[
-\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
-\]
+\hypertarget{ch8}{%
+\section{Model Checking}\label{ch8}}
 
-\hypertarget{predictive-inference}{%
-\section{Predictive Inference}\label{predictive-inference}}
+\begin{itemize}
+\tightlist
+\item
+  The problem of simulating multivariate data with arbitrary marginal distributions
+\item
+  Copula approach
 
-Really just placeholder stuff for now.
+  \begin{itemize}
+  \tightlist
+  \item
+    Nonlinear transformation that invalidates the correlation structure
+  \end{itemize}
+\item
+  Kendall and Spearman matching
 
-\[
-\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
-\]
+  \begin{itemize}
+  \tightlist
+  \item
+    Nearest Positive Semidefinite correlation matrix
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Semidefinte Programming (ProxSDP.jl)
+    \item
+      \url{https://arxiv.org/abs/1810.05231}
+    \item
+      Qi and Sun 2006 (quadratically convergent method)
+    \end{itemize}
+  \end{itemize}
+\item
+  Pearson matching
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Chen 2001 (NORTARA)
+  \item
+    Xiao, Zhou 2019 (Numeric Approximation)
+  \end{itemize}
+\item
+  Using synthetic data to design experiments
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Bayesian p-value
+  \item
+    How much data to notice an effect
+  \item
+    Bayesian hypothesis testing via predictive performance
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{ch9}{%
+\section{Predictive Inference}\label{ch9}}
+
+\begin{itemize}
+\tightlist
+\item
+  Compare to conjugate model
+\item
+  Prior predictive distributions
+\item
+  Posterior predictive distributions
+\item
+  Calibrating the model
+\item
+  Use of synthetic data to assess model properties
+\end{itemize}
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Appendix B | Contributions to Modern Bayesian Multilevel Modeling</title>
-  <meta name="description" content="Appendix B | Contributions to Modern Bayesian Multilevel Modeling" />
+  <title>8 Model Checking | Contributions to Modern Bayesian Multilevel Modeling</title>
+  <meta name="description" content="8 Model Checking | Contributions to Modern Bayesian Multilevel Modeling" />
   <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Appendix B | Contributions to Modern Bayesian Multilevel Modeling" />
+  <meta property="og:title" content="8 Model Checking | Contributions to Modern Bayesian Multilevel Modeling" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="adkudson/thesis" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Appendix B | Contributions to Modern Bayesian Multilevel Modeling" />
+  <meta name="twitter:title" content="8 Model Checking | Contributions to Modern Bayesian Multilevel Modeling" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="appendix-a.html"/>
-<link rel="next" href="references.html"/>
+<link rel="prev" href="ch7.html"/>
+<link rel="next" href="ch9.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -101,8 +101,35 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="appendix-b" class="section level1 unnumbered">
-<h1>Appendix B</h1>
+<div id="ch8" class="section level1">
+<h1><span class="header-section-number">8</span> Model Checking</h1>
+<ul>
+<li>The problem of simulating multivariate data with arbitrary marginal distributions</li>
+<li>Copula approach
+<ul>
+<li>Nonlinear transformation that invalidates the correlation structure</li>
+</ul></li>
+<li>Kendall and Spearman matching
+<ul>
+<li>Nearest Positive Semidefinite correlation matrix
+<ul>
+<li>Semidefinte Programming (ProxSDP.jl)</li>
+<li><a href="https://arxiv.org/abs/1810.05231" class="uri">https://arxiv.org/abs/1810.05231</a></li>
+<li>Qi and Sun 2006 (quadratically convergent method)</li>
+</ul></li>
+</ul></li>
+<li>Pearson matching
+<ul>
+<li>Chen 2001 (NORTARA)</li>
+<li>Xiao, Zhou 2019 (Numeric Approximation)</li>
+</ul></li>
+<li>Using synthetic data to design experiments
+<ul>
+<li>Bayesian p-value</li>
+<li>How much data to notice an effect</li>
+<li>Bayesian hypothesis testing via predictive performance</li>
+</ul></li>
+</ul>
 
 </div>
             </section>
@@ -110,8 +137,8 @@
           </div>
         </div>
       </div>
-<a href="appendix-a.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="ch7.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ch9.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -147,7 +174,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/adknudson/thesis/blob/master/appendix.Rmd",
+"link": "https://github.com/adknudson/thesis/blob/master/model-checking.Rmd",
 "text": null
 },
 "download": ["adknudson-thesis.pdf"],
