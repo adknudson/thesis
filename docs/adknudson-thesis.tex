@@ -72,7 +72,7 @@
 
 \title{Contributions to Modern Bayesian Multilevel Modeling}
 \author{Alexander Knudson}
-\date{Wednesday July 15, 2020}
+\date{Tuesday July 21, 2020}
 
 \begin{document}
 \maketitle
@@ -218,18 +218,37 @@ With the advances in computational power and high-level programming languages li
   \end{itemize}
 \end{itemize}
 
-I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{Chapter 2} I introduce the data set that drives the narrative and that motivates the adoption of Bayesian multilevel modeling. In \protect\hyperlink{classical-approaches}{Chapter 3} there is a review of classical approaches to modeling with psychometric data, and the benefits and drawbacks of such techniques. \protect\hyperlink{bayesian-modeling}{Chapter 4} introduces Bayesian modeling and programming frameworks for Bayesian inference. In Chapters \protect\hyperlink{multilevel-models}{5} and \protect\hyperlink{feature-engineering}{6} I describe and work through a principled Bayesian workflow for multilevel modeling. Chapters \protect\hyperlink{residual-analysis}{7} and \protect\hyperlink{model-checking}{8} go into more depth on checking the model goodness of fit and model diagnostics in a Bayesian setting. Finally in \protect\hyperlink{predictive-inference}{Chapter 9} I demonstrate how to use the Bayesian model from the principled workflow for predictive inference, and generate multivariate synthetic data via Gaussian copulas.
+I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{Chapter 2} I introduce the data set that drives the narrative and that motivates the adoption of Bayesian multilevel modeling. In \protect\hyperlink{background}{Chapter 3} there is a review of common approaches approaches to modeling with psychometric data, and the benefits and drawbacks of such techniques. \protect\hyperlink{bayesian-modeling}{Chapter 4} introduces Bayesian hierarchical modeling and programming frameworks for Bayesian inference. In \protect\hyperlink{workflow}{Chapter 5} I describe and work through a principled Bayesian workflow for multilevel modeling. \protect\hyperlink{model-checking}{Chapter 6} goes into more depth on checking the model goodness of fit and model diagnostics in a Bayesian setting. Finally in \protect\hyperlink{predictive-inference}{Chapter 7} I demonstrate how to use the Bayesian model from the principled workflow for predictive inference, and use posterior predictive distributions to plot and compare models.
 
 \hypertarget{motivating-data}{%
 \section{Motivating Data}\label{motivating-data}}
 
 \begin{itemize}
+\tightlist
 \item
-  Pyschometrics
-\item
-  Theory and background
-\item
-  Research questions
+  Background of psychometrics
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Charles Darwin at the core, with the ideas that living organisms adapt to their environment
+  \item
+    Sir Francis Galton lead the creation of psychometrics
+
+    \begin{itemize}
+    \tightlist
+    \item
+      ``This idea stimulated Galton's interest in the study of human beings and how they differ one from another and, more importantly, how to measure those differences''
+    \item
+      Galton devised and conducted ``mental'' tests
+    \end{itemize}
+  \item
+    ``Herbart was responsible for creating mathematical models of the mind, which were influential in educational practices in years to come.''
+  \item
+    ``E.H. Weber built upon Herbart's work and tried to prove the existence of a psychological threshold, saying that a minimum stimulus was necessary to activate a sensory system''
+  \item
+    ``G.T. Fechner \ldots{} devise{[}d{]} the law that the strength of a sensation grows as the logarithm of the stimulus intensity''
+  \end{itemize}
 \item
   Psychometric Experiments
 
@@ -237,6 +256,10 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
   \tightlist
   \item
     ``The psychometric function relates an observer's performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task'' \citep{wichmann2001a}
+  \item
+    Studied as early as the late 1800's
+  \item
+    \citep{boring1917chart}
   \item
     Perceptual Synchrony
 
@@ -267,71 +290,135 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
     \end{itemize}
   \item
     Temporal Recalibration
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Our perceptual synchrony can be modified through a baseline understanding
+    \end{itemize}
   \end{itemize}
 \item
-  Current Techniques
+  Temporal Order Judgment Psychometric Experiment
 
   \begin{itemize}
   \tightlist
   \item
-    Maximum likelihood estimation
+    Setup and Methods
   \item
-    Bootstrapping for confidence intervals
-  \item
-    Non-parametric
-  \end{itemize}
-\item
-  Data Collection
-
-  \begin{itemize}
-  \tightlist
+    Data collection
   \item
     Order of trials
   \item
     The manuscript provided by Ally will really be the main source of content for this section
   \item
     She describes the data collection for three of the sensory tasks
+  \item
+    Data cleaning and loading
+  \item
+    Research questions
+  \end{itemize}
+\item
+  Observations about the data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Outliers and failed experiments
+  \item
+    balance of classes (male v female, young v middle v older, etc.)
+  \item
+    Tasks
+  \item
+    In the workflow section, I will look for and point out any visual trends in the data
   \end{itemize}
 \end{itemize}
 
-\hypertarget{notation}{%
-\subsection{Notation}\label{notation}}
-
-We adopt the notation put forth in the book \emph{Data Analysis using Regression and Multilevel/Hierarchical Models} \citep{gelman2006data}, specifically
+\hypertarget{background}{%
+\section{Background to Modeling}\label{background}}
 
 \begin{itemize}
-\tightlist
 \item
-  Units \(i = 1, \ldots, n\), where \emph{units} are the smallest items of measurements (a single record)
-\item
-  Outcome measurements \(y = (y_1, \ldots, y_n)\) are the unit-level data being modeled
-\item
-  Groups \(j = 1, \ldots, J\) for the age level of grouping
-\item
-  Subjects \(k = 1, \ldots, K\) for the subject level of grouping (since subjects will have multiple units of measurement)
-\item
-  Index variables \(j[i]\) and \(k[i]\) to code the group and subject membership. For example, if \(j[35]=3\), then the \(35^{th}\) unit in the data belongs to the third age group.
-\item
-  Coefficients are written with \(\alpha\), \(\beta\), and sometimes \(\gamma\)
-\item
-  We make our code more readable by typing \(\alpha\), \(\beta\), \(\gamma\) as \texttt{a}, \texttt{b}, \texttt{g}
-\item
-  Standard deviation is \(\sigma_y\) for data-level errors and \(\sigma_\alpha\), \(\sigma_\beta\), and so forth, for group-level errors
-\end{itemize}
+  Generalized Linear Models
 
-\hypertarget{classical-approaches}{%
-\section{Classical Approaches}\label{classical-approaches}}
+  \begin{itemize}
+  \tightlist
+  \item
+    classical approaches to fitting/estimation
 
-\begin{itemize}
-\tightlist
+    \begin{itemize}
+    \tightlist
+    \item
+      Maximum likelihood estimation
+
+      \begin{itemize}
+      \tightlist
+      \item
+        Simple and almost every piece of statistical software will have an implementation
+      \end{itemize}
+    \end{itemize}
+  \item
+    Expectation Maximization
+  \item
+    Random effects (Gelmen and Hill)
+  \item
+    Bayesian GLMs
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Completely reliant on MCMC
+    \end{itemize}
+  \end{itemize}
+\item
+  Model-free estimations (footnote? remark?)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    non-parametric models
+  \item
+    \citep{zchaluk2009model}
+  \end{itemize}
+\item
+  So what's the answer?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The last two options (bayes + multilevel) when on their own do well, but are not robust to
+  \end{itemize}
 \item
   shortcomings
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Convergence failure in the presence of complete separation
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \citep{prins2019too}, \citep{ghosh2018use}
+    \end{itemize}
+  \end{itemize}
 \item
   why abandon them
+\item
+  Bayesian logistic regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \citet{gelman2008weakly}
+  \item
+    Can't completely express the structure (hierarchy) of the data
+  \end{itemize}
+\item
+  Residual Analysis
 \end{itemize}
 
 \hypertarget{bayesian-modeling}{%
-\section{Bayesian Modeling}\label{bayesian-modeling}}
+\section{Bayesian Multilevel Modeling}\label{bayesian-modeling}}
 
 \begin{itemize}
 \tightlist
@@ -357,57 +444,14 @@ We adopt the notation put forth in the book \emph{Data Analysis using Regression
   Computer methods needed
 \end{itemize}
 
-\hypertarget{multilevel-models}{%
-\section{Multilevel Models}\label{multilevel-models}}
+\hypertarget{bayesian-stuff}{%
+\subsection{Bayesian Stuff}\label{bayesian-stuff}}
 
-\begin{itemize}
-\tightlist
-\item
-  Types of Pooling
+\hypertarget{multilevel-modeling-stuff}{%
+\subsection{Multilevel Modeling Stuff}\label{multilevel-modeling-stuff}}
 
-  \begin{itemize}
-  \tightlist
-  \item
-    No pooling
-  \item
-    Complete Pooling
-  \item
-    Partial Pooling
-  \end{itemize}
-\item
-  Statistical inference
-\item
-  Possibility of conjugacy for sigmoid model
-\item
-  Sampling
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Fitting and Diagnostics
-  \item
-    Incorporate paper \emph{Statistical Software}
-  \item
-    Stan / BRMS / rstanarm / rethinking
-  \item
-    Greta (TensorFlow)
-  \item
-    Pyro / NumPyro (Jax)
-  \item
-    Model fitting diagnostics
-
-    \begin{itemize}
-    \tightlist
-    \item
-      \(\hat{R}\)
-    \item
-      divergences
-    \end{itemize}
-  \end{itemize}
-\end{itemize}
-
-\hypertarget{feature-engineering}{%
-\section{Feature Engineering and Prior Specification}\label{feature-engineering}}
+\hypertarget{workflow}{%
+\section{Principaled Bayesian Workflow}\label{workflow}}
 
 \begin{itemize}
 \tightlist
@@ -427,30 +471,11 @@ We adopt the notation put forth in the book \emph{Data Analysis using Regression
   \end{itemize}
 \end{itemize}
 
-\hypertarget{residual-analysis}{%
-\section{Residual Analysis}\label{residual-analysis}}
+\hypertarget{feature-engineering}{%
+\subsection{Feature Engineering}\label{feature-engineering}}
 
-\begin{itemize}
-\tightlist
-\item
-  difference between observed and fitted value (errors)
-\item
-  should be normally distributed
-\item
-  Heteroskedacity
-\item
-  contrast these classic analyses to Bayesian techniques
-
-  \begin{itemize}
-  \tightlist
-  \item
-    prior and posterior checks
-  \item
-    LOO
-  \item
-    cross validation
-  \end{itemize}
-\end{itemize}
+\hypertarget{prior-specification}{%
+\subsection{Prior Specification}\label{prior-specification}}
 
 \hypertarget{model-checking}{%
 \section{Model Checking}\label{model-checking}}
@@ -526,14 +551,15 @@ We adopt the notation put forth in the book \emph{Data Analysis using Regression
   Use of synthetic data to assess model properties
 \end{itemize}
 
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+Objective conclusions
+
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
 
-Really just placeholder stuff for now.
-
-\[
-\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
-\]
+Subjective conclusions
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}

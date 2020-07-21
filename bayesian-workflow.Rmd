@@ -1,7 +1,12 @@
-# Feature Engineering and Prior Specification {#feature-engineering}
+# Principaled Bayesian Workflow {#workflow}
 
 - Standardizing Predictors
 - Parameterization of the linear predictor
   - Choice of Link Function
   - Choice of Priors
   - lapse rates
+
+## Feature Engineering
+
+## Prior Specification
+

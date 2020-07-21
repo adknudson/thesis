@@ -1,0 +1,28 @@
+# Background to Modeling {#background}
+
+- Generalized Linear Models
+  - classical approaches to fitting/estimation
+    - Maximum likelihood estimation
+      - Simple and almost every piece of statistical software will have an implementation
+  - Expectation Maximization
+  - Random effects (Gelmen and Hill)
+  - Bayesian GLMs
+    - Completely reliant on MCMC
+
+- Model-free estimations (footnote? remark?)
+  - non-parametric models
+  - [@zchaluk2009model]
+
+- So what's the answer?
+  - The last two options (bayes + multilevel) when on their own do well, but are not robust to 
+ 
+- shortcomings
+  - Convergence failure in the presence of complete separation
+    - [@prins2019too], [@ghosh2018use]
+- why abandon them
+
+- Bayesian logistic regression
+  - @gelman2008weakly
+  - Can't completely express the structure (hierarchy) of the data
+
+- Residual Analysis

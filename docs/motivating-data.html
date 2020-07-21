@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="introduction.html"/>
-<link rel="next" href="classical-approaches.html"/>
+<link rel="next" href="background.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -70,18 +70,21 @@
 <li class="chapter" data-level="" data-path="list-of-tables.html"><a href="list-of-tables.html"><i class="fa fa-check"></i>List of Tables</a></li>
 <li class="chapter" data-level="" data-path="list-of-figures.html"><a href="list-of-figures.html"><i class="fa fa-check"></i>List of Figures</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="motivating-data.html"><a href="motivating-data.html"><i class="fa fa-check"></i><b>2</b> Motivating Data</a><ul>
-<li class="chapter" data-level="2.1" data-path="motivating-data.html"><a href="motivating-data.html#notation"><i class="fa fa-check"></i><b>2.1</b> Notation</a></li>
+<li class="chapter" data-level="2" data-path="motivating-data.html"><a href="motivating-data.html"><i class="fa fa-check"></i><b>2</b> Motivating Data</a></li>
+<li class="chapter" data-level="3" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>3</b> Background to Modeling</a></li>
+<li class="chapter" data-level="4" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html"><i class="fa fa-check"></i><b>4</b> Bayesian Multilevel Modeling</a><ul>
+<li class="chapter" data-level="4.1" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html#bayesian-stuff"><i class="fa fa-check"></i><b>4.1</b> Bayesian Stuff</a></li>
+<li class="chapter" data-level="4.2" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html#multilevel-modeling-stuff"><i class="fa fa-check"></i><b>4.2</b> Multilevel Modeling Stuff</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="classical-approaches.html"><a href="classical-approaches.html"><i class="fa fa-check"></i><b>3</b> Classical Approaches</a></li>
-<li class="chapter" data-level="4" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html"><i class="fa fa-check"></i><b>4</b> Bayesian Modeling</a></li>
-<li class="chapter" data-level="5" data-path="multilevel-models.html"><a href="multilevel-models.html"><i class="fa fa-check"></i><b>5</b> Multilevel Models</a></li>
-<li class="chapter" data-level="6" data-path="feature-engineering.html"><a href="feature-engineering.html"><i class="fa fa-check"></i><b>6</b> Feature Engineering and Prior Specification</a></li>
-<li class="chapter" data-level="7" data-path="residual-analysis.html"><a href="residual-analysis.html"><i class="fa fa-check"></i><b>7</b> Residual Analysis</a></li>
-<li class="chapter" data-level="8" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>8</b> Model Checking</a></li>
-<li class="chapter" data-level="9" data-path="predictive-inference.html"><a href="predictive-inference.html"><i class="fa fa-check"></i><b>9</b> Predictive Inference</a></li>
-<li class="chapter" data-level="10" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>10</b> Discussion</a></li>
-<li class="chapter" data-level="11" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>11</b> Conclusion</a></li>
+<li class="chapter" data-level="5" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>5</b> Principaled Bayesian Workflow</a><ul>
+<li class="chapter" data-level="5.1" data-path="workflow.html"><a href="workflow.html#feature-engineering"><i class="fa fa-check"></i><b>5.1</b> Feature Engineering</a></li>
+<li class="chapter" data-level="5.2" data-path="workflow.html"><a href="workflow.html#prior-specification"><i class="fa fa-check"></i><b>5.2</b> Prior Specification</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>6</b> Model Checking</a></li>
+<li class="chapter" data-level="7" data-path="predictive-inference.html"><a href="predictive-inference.html"><i class="fa fa-check"></i><b>7</b> Predictive Inference</a></li>
+<li class="chapter" data-level="8" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>8</b> Results</a></li>
+<li class="chapter" data-level="9" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>9</b> Discussion</a></li>
+<li class="chapter" data-level="10" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>10</b> Conclusion</a></li>
 <li class="chapter" data-level="" data-path="appendix-a.html"><a href="appendix-a.html"><i class="fa fa-check"></i>Appendix A</a></li>
 <li class="chapter" data-level="" data-path="appendix-b.html"><a href="appendix-b.html"><i class="fa fa-check"></i>Appendix B</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -105,12 +108,23 @@
 <div id="motivating-data" class="section level1">
 <h1><span class="header-section-number">2</span> Motivating Data</h1>
 <ul>
-<li><p>Pyschometrics</p></li>
-<li><p>Theory and background</p></li>
-<li><p>Research questions</p></li>
-<li><p>Psychometric Experiments</p>
+<li>Background of psychometrics
+<ul>
+<li>Charles Darwin at the core, with the ideas that living organisms adapt to their environment</li>
+<li>Sir Francis Galton lead the creation of psychometrics
+<ul>
+<li>“This idea stimulated Galton’s interest in the study of human beings and how they differ one from another and, more importantly, how to measure those differences”</li>
+<li>Galton devised and conducted “mental” tests</li>
+</ul></li>
+<li>“Herbart was responsible for creating mathematical models of the mind, which were influential in educational practices in years to come.”</li>
+<li>“E.H. Weber built upon Herbart’s work and tried to prove the existence of a psychological threshold, saying that a minimum stimulus was necessary to activate a sensory system”</li>
+<li>“G.T. Fechner … devise[d] the law that the strength of a sensation grows as the logarithm of the stimulus intensity”</li>
+</ul></li>
+<li>Psychometric Experiments
 <ul>
 <li>“The psychometric function relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task” <span class="citation">(Wichmann and Hill <a href="#ref-wichmann2001a" role="doc-biblioref">2001</a>)</span></li>
+<li>Studied as early as the late 1800’s</li>
+<li><span class="citation">(Boring <a href="#ref-boring1917chart" role="doc-biblioref">1917</a>)</span></li>
 <li>Perceptual Synchrony
 <ul>
 <li>Our experiences in life as we age shape the mechanisms of processing multisensory signals</li>
@@ -125,41 +139,35 @@
 <li>In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the just noticeable difference</li>
 <li>The just noticeable difference is the smallest lapse in time so that a temporal order can just be determined</li>
 </ul></li>
-<li>Temporal Recalibration</li>
-</ul></li>
-<li><p>Current Techniques</p>
+<li>Temporal Recalibration
 <ul>
-<li>Maximum likelihood estimation</li>
-<li>Bootstrapping for confidence intervals</li>
-<li>Non-parametric</li>
+<li>Our perceptual synchrony can be modified through a baseline understanding</li>
 </ul></li>
-<li><p>Data Collection</p>
+</ul></li>
+<li>Temporal Order Judgment Psychometric Experiment
 <ul>
+<li>Setup and Methods</li>
+<li>Data collection</li>
 <li>Order of trials</li>
 <li>The manuscript provided by Ally will really be the main source of content for this section</li>
 <li>She describes the data collection for three of the sensory tasks</li>
+<li>Data cleaning and loading</li>
+<li>Research questions</li>
 </ul></li>
-</ul>
-<div id="notation" class="section level2">
-<h2><span class="header-section-number">2.1</span> Notation</h2>
-<p>We adopt the notation put forth in the book <em>Data Analysis using Regression and Multilevel/Hierarchical Models</em> <span class="citation">(Gelman and Hill <a href="#ref-gelman2006data" role="doc-biblioref">2006</a>)</span>, specifically</p>
+<li>Observations about the data
 <ul>
-<li>Units <span class="math inline">\(i = 1, \ldots, n\)</span>, where <em>units</em> are the smallest items of measurements (a single record)</li>
-<li>Outcome measurements <span class="math inline">\(y = (y_1, \ldots, y_n)\)</span> are the unit-level data being modeled</li>
-<li>Groups <span class="math inline">\(j = 1, \ldots, J\)</span> for the age level of grouping</li>
-<li>Subjects <span class="math inline">\(k = 1, \ldots, K\)</span> for the subject level of grouping (since subjects will have multiple units of measurement)</li>
-<li>Index variables <span class="math inline">\(j[i]\)</span> and <span class="math inline">\(k[i]\)</span> to code the group and subject membership. For example, if <span class="math inline">\(j[35]=3\)</span>, then the <span class="math inline">\(35^{th}\)</span> unit in the data belongs to the third age group.</li>
-<li>Coefficients are written with <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, and sometimes <span class="math inline">\(\gamma\)</span></li>
-<li>We make our code more readable by typing <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, <span class="math inline">\(\gamma\)</span> as <code>a</code>, <code>b</code>, <code>g</code></li>
-<li>Standard deviation is <span class="math inline">\(\sigma_y\)</span> for data-level errors and <span class="math inline">\(\sigma_\alpha\)</span>, <span class="math inline">\(\sigma_\beta\)</span>, and so forth, for group-level errors</li>
+<li>Outliers and failed experiments</li>
+<li>balance of classes (male v female, young v middle v older, etc.)</li>
+<li>Tasks</li>
+<li>In the workflow section, I will look for and point out any visual trends in the data</li>
+</ul></li>
 </ul>
 
 </div>
-</div>
 <h3>References</h3>
 <div id="refs" class="references">
-<div id="ref-gelman2006data">
-<p>Gelman, Andrew, and Jennifer Hill. 2006. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. Cambridge university press.</p>
+<div id="ref-boring1917chart">
+<p>Boring, Edwin G. 1917. “A Chart of the Psychometric Function.” <em>The American Journal of Psychology</em> 28 (4): 465–70.</p>
 </div>
 <div id="ref-stone2001now">
 <p>Stone, JV, NM Hunkin, J Porrill, R Wood, V Keeler, M Beanland, M Port, and NR Porter. 2001. “When Is Now? Perception of Simultaneity.” <em>Proceedings of the Royal Society of London. Series B: Biological Sciences</em> 268 (1462): 31–38.</p>
@@ -174,7 +182,7 @@
         </div>
       </div>
 <a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="classical-approaches.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="background.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

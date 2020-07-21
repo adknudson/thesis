@@ -1,4 +1,4 @@
-# Bayesian Modeling {#bayesian-modeling}
+# Bayesian Multilevel Modeling {#bayesian-modeling}
 
 - Mathematical foundations
   - Bayes rule in regression setting
@@ -6,3 +6,7 @@
   - Example of a conjugate priors
   - need more complexity -> computer methods
 - Computer methods needed
+
+## Bayesian Stuff
+
+## Multilevel Modeling Stuff
