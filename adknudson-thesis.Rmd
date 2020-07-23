@@ -1,0 +1,788 @@
+--- 
+title: "Contributions to Modern Bayesian Multilevel Modeling"
+author: "Alexander Knudson"
+date: "`r format(Sys.Date(), '%A %B %d, %Y')`"
+site: bookdown::bookdown_site
+bibliography: [bibliography.bib]
+biblio-style: agsm
+documentclass: article
+link-citations: yes
+github-repo: adkudson/thesis
+---
+```{r include=FALSE, cache=FALSE}
+set.seed(12)
+options(digits = 4)
+
+knitr::opts_chunk$set(
+  # Text Results
+  eval = TRUE,
+  echo = FALSE,
+  results = 'markup',
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  # Code Decoration
+  comment = "#>",
+  background = '#F7F7F7',
+  # Cache
+  cache = TRUE,
+  # Plots
+  fig.show = "hold",
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  out.width = "70%",
+  fig.align = 'center'
+)
+
+# options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+
+# Abstract {-}
+
+**Big Idea:** _making contributions to & gaining mastery of state of the art statistical computing tools and Bayesian modeling/probabilistic programming._
+
+# Acknowledgments {-}
+
+
+# List of Tables {-}
+
+# List of Figures {-}
+```{r include=FALSE, cache=FALSE}
+# Remove all objects
+rm(list = ls(all.names = TRUE))
+
+# Unload all packages
+pacman::p_unload(pacman::p_loaded(), character.only = TRUE)
+```
+
+<!--chapter:end:index.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+set.seed(12)
+options(digits = 4)
+
+knitr::opts_chunk$set(
+  # Text Results
+  eval = TRUE,
+  echo = FALSE,
+  results = 'markup',
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  # Code Decoration
+  comment = "#>",
+  background = '#F7F7F7',
+  # Cache
+  cache = TRUE,
+  # Plots
+  fig.show = "hold",
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  out.width = "70%",
+  fig.align = 'center'
+)
+
+# options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+# Introduction
+
+- Soft intro to modern computing, analysis
+  - advance in CPU+programming leads to evolved statistical methods
+    - ML/DL, high dimensional analysis, big data, Bayesian techniques
+  - multidisciplinary techniques; numerical methods, probability theory, statistics, computer science, visualizations, etc
+    - root finding, change of variables, Gaussian quadrature, Hermite polynomials, Monte Carlo simulation, floating point arithmetic
+  - Organization and reproducibility are crucial in a data analysis setting
+    - pre-planning, modularity, workflows, versioning, virtual environments, DRY programming, code that is easy to read
+  - Clean data is important for good modeling
+    - garbage in leads to garbage out
+
+
+
+With the advances in computational power and high-level programming languages like Python, R, and Julia, statistical methods have evolved to be more flexible and expressive. 
+
+
+
+- Overview of classical modeling methods
+  - classical approaches to data analysis usually adhere to the flexibility-interpretability trade-off
+  - generally inflexible (parametric) to be more interpretable and computationally easier
+  - sometimes a model is too flexible (non-parametric) and loses crucial inferential power
+  - sometimes our assumptions about the data are invalid
+    - normality, independence, heteroskedacity, etc.
+  - often limited when it comes to statistical summaries and confidence intervals
+
+
+
+- Solutions or alternatives when classical models fail
+  - Bayesian inference is a powerful, descriptive, and flexible modeling framework
+  - Bayes theorem is a simple model of incorporating prior information and data to produce a posterior probability or distribution
+  - $P(\theta | X) \propto P(X | \theta) * P(\theta)$ or $posterior \propto prior \times likelihood$
+    - The prior is some distribution over the parameter space
+    - The likelihood is the probability of an outcome in the sample space given a value in the parameter space
+    - The posterior is the likelihood of values in the parameter space after observing values from the sample space
+  - Bayesian statistics, when described without math, actually feels natural to most people
+    - you hear hoof beats, you think horses, not zebras [unless you're in Africa, but that's prior information ;)]
+  - The catch is that the model is not complete as written above
+  - There is actually a denominator in Bayes' Theorem
+    - $P(\theta | X) = \frac{P(X | \theta)\cdot P(\theta)}{\sum_i P(X | \theta_i)} = \frac{P(X | \theta)\cdot P(\theta)}{\int_\Omega P(X | \theta)d\theta}$
+    - In general, the denominator is not known, or is not not easy (or possible) to calculate, but it always evaluates to a constant (hence the "proportional to")
+    - The denominator acts as a scaling value that forces $P(\theta|X)$ to be a probability distribution (i.e. area under PDF is equal to 1)
+    - There are simulation-based techniques that let one approximate the posterior distribution without needing to know the analytic solution to the denominator
+
+
+
+I have organized this thesis as follows. In [Chapter 2](#motivating-data) I introduce the data set that drives the narrative and that motivates the adoption of Bayesian multilevel modeling. In [Chapter 3](#background) there is a review of common approaches approaches to modeling with psychometric data, and the benefits and drawbacks of such techniques. [Chapter 4](#bayesian-modeling) introduces Bayesian hierarchical modeling and programming frameworks for Bayesian inference. In [Chapter 5](#workflow) I describe and work through a principled Bayesian workflow for multilevel modeling. [Chapter 6](#model-checking) goes into more depth on checking the model goodness of fit and model diagnostics in a Bayesian setting. Finally in [Chapter 7](#predictive-inference) I demonstrate how to use the Bayesian model from the principled workflow for predictive inference, and use posterior predictive distributions to plot and compare models.
+```{r include=FALSE, cache=FALSE}
+# Remove all objects
+rm(list = ls(all.names = TRUE))
+
+# Unload all packages
+pacman::p_unload(pacman::p_loaded(), character.only = TRUE)
+```
+
+<!--chapter:end:010-introduction.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+set.seed(12)
+options(digits = 4)
+
+knitr::opts_chunk$set(
+  # Text Results
+  eval = TRUE,
+  echo = FALSE,
+  results = 'markup',
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  # Code Decoration
+  comment = "#>",
+  background = '#F7F7F7',
+  # Cache
+  cache = TRUE,
+  # Plots
+  fig.show = "hold",
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  out.width = "70%",
+  fig.align = 'center'
+)
+
+# options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+# Motivating Data {#motivating-data}
+
+```{r, motivating-data-setup}
+library(FangPsychometric)
+```
+
+- Background of psychometrics
+  - Charles Darwin at the core, with the ideas that living organisms adapt to their environment
+  - Sir Francis Galton lead the creation of psychometrics
+    - "This idea stimulated Galton's interest in the study of human beings and how they differ one from another and, more importantly, how to measure those differences"
+    - Galton devised and conducted "mental" tests
+  - "Herbart was responsible for creating mathematical models of the mind, which were influential in educational practices in years to come."
+  - "E.H. Weber built upon Herbart's work and tried to prove the existence of a psychological threshold, saying that a minimum stimulus was necessary to activate a sensory system"
+  - "G.T. Fechner ... devise[d] the law that the strength of a sensation grows as the logarithm of the stimulus intensity"
+
+- Psychometric Experiments
+  - "The psychometric function relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task" [@wichmann2001a]
+  - Studied as early as the late 1800's
+  - [@boring1917chart]
+  - Perceptual Synchrony
+    - Our experiences in life as we age shape the mechanisms of processing multisensory signals
+    - Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis
+    - This gives rise to an idea of the temporal binding window, or the temporal differences for which sensory signals are integrated into a global percept
+    - Perceptual synchrony has been previously studied through the point of subjective simultaneity, the physical temporal delay between two signals at which an observer is unsure about their temporal order [@stone2001now]
+  - Temporal Sensitivity
+    - The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept
+    - A deficit in temporal sensitivity may lead to a widening of the temporal binding window and cause reduce the ability to segregate unrelated sensory signals
+    - In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the just noticeable difference
+    - The just noticeable difference is the smallest lapse in time so that a temporal order can just be determined
+  - Temporal Recalibration
+    - Our perceptual synchrony can be modified through a baseline understanding
+
+- Temporal Order Judgment Psychometric Experiment
+  - Setup and Methods
+  - Data collection
+  - Order of trials
+  - The manuscript provided by Ally will really be the main source of content for this section
+  - She describes the data collection for three of the sensory tasks
+  - Data cleaning and loading
+  - Research questions
+  
+- Observations about the data
+  - Outliers and failed experiments
+  - balance of classes (male v female, young v middle v older, etc.)
+  - Tasks
+  - In the workflow section, I will look for and point out any visual trends in the data
+```{r include=FALSE, cache=FALSE}
+# Remove all objects
+rm(list = ls(all.names = TRUE))
+
+# Unload all packages
+pacman::p_unload(pacman::p_loaded(), character.only = TRUE)
+```
+
+<!--chapter:end:020-motivating-data.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+set.seed(12)
+options(digits = 4)
+
+knitr::opts_chunk$set(
+  # Text Results
+  eval = TRUE,
+  echo = FALSE,
+  results = 'markup',
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  # Code Decoration
+  comment = "#>",
+  background = '#F7F7F7',
+  # Cache
+  cache = TRUE,
+  # Plots
+  fig.show = "hold",
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  out.width = "70%",
+  fig.align = 'center'
+)
+
+# options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+# Background to Modeling {#background}
+
+- Generalized Linear Models
+  - classical approaches to fitting/estimation
+    - Maximum likelihood estimation
+      - Simple and almost every piece of statistical software will have an implementation
+  - Expectation Maximization
+  - Random effects (Gelmen and Hill)
+  - Bayesian GLMs
+    - Completely reliant on MCMC
+
+- Model-free estimations (footnote? remark?)
+  - non-parametric models
+  - [@zchaluk2009model]
+
+- Bayesian logistic regression
+  - @gelman2008weakly
+  - Can't completely express the structure (hierarchy) of the data
+
+- Residual Analysis
+  - using the fitted values vs. the observed values to evaluate goodness of fit
+  - 
+
+- So what's the answer?
+  - The last two options (bayes + multilevel) when on their own do well, but are not robust to 
+ 
+- shortcomings
+  - Convergence failure in the presence of complete separation
+    - [@prins2019too], [@ghosh2018use]
+  - 
+```{r include=FALSE, cache=FALSE}
+# Remove all objects
+rm(list = ls(all.names = TRUE))
+
+# Unload all packages
+pacman::p_unload(pacman::p_loaded(), character.only = TRUE)
+```
+
+<!--chapter:end:030-background.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+set.seed(12)
+options(digits = 4)
+
+knitr::opts_chunk$set(
+  # Text Results
+  eval = TRUE,
+  echo = FALSE,
+  results = 'markup',
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  # Code Decoration
+  comment = "#>",
+  background = '#F7F7F7',
+  # Cache
+  cache = TRUE,
+  # Plots
+  fig.show = "hold",
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  out.width = "70%",
+  fig.align = 'center'
+)
+
+# options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+# Bayesian Multilevel Modeling {#bayesian-modeling}
+
+- short intro
+  - sentence 1
+  - sentence 2
+  - sentence 3
+
+## Bayesian Stuff
+
+- Mathematical foundations
+  - Bayes rule in regression setting
+  
+- Easy in theory, difficult in practice
+  - Example of a conjugate priors
+  - need more complexity -> computer methods
+  - Computer methods needed
+-
+
+## Multilevel Modeling Stuff
+
+- Estimating the variance at different levels in the model
+- 
+
+```{r include=FALSE, cache=FALSE}
+# Remove all objects
+rm(list = ls(all.names = TRUE))
+
+# Unload all packages
+pacman::p_unload(pacman::p_loaded(), character.only = TRUE)
+```
+
+<!--chapter:end:040-bayesian-modeling.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+set.seed(12)
+options(digits = 4)
+
+knitr::opts_chunk$set(
+  # Text Results
+  eval = TRUE,
+  echo = FALSE,
+  results = 'markup',
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  # Code Decoration
+  comment = "#>",
+  background = '#F7F7F7',
+  # Cache
+  cache = TRUE,
+  # Plots
+  fig.show = "hold",
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  out.width = "70%",
+  fig.align = 'center'
+)
+
+# options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+# Principaled Bayesian Workflow {#workflow}
+
+- Standardizing Predictors
+- Parameterization of the linear predictor
+  - Choice of Link Function
+  - Choice of Priors
+  - lapse rates
+
+## Feature Engineering
+
+## Prior Specification
+
+```{r include=FALSE, cache=FALSE}
+# Remove all objects
+rm(list = ls(all.names = TRUE))
+
+# Unload all packages
+pacman::p_unload(pacman::p_loaded(), character.only = TRUE)
+```
+
+<!--chapter:end:050-bayesian-workflow.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+set.seed(12)
+options(digits = 4)
+
+knitr::opts_chunk$set(
+  # Text Results
+  eval = TRUE,
+  echo = FALSE,
+  results = 'markup',
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  # Code Decoration
+  comment = "#>",
+  background = '#F7F7F7',
+  # Cache
+  cache = TRUE,
+  # Plots
+  fig.show = "hold",
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  out.width = "70%",
+  fig.align = 'center'
+)
+
+# options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+# Model Checking {#model-checking}
+
+- The problem of simulating multivariate data with arbitrary marginal distributions
+- Copula approach
+  - Nonlinear transformation that invalidates the correlation structure
+- Kendall and Spearman matching
+  - Nearest Positive Semidefinite correlation matrix
+    - Semidefinte Programming (ProxSDP.jl)
+    - https://arxiv.org/abs/1810.05231
+    - Qi and Sun 2006 (quadratically convergent method)
+- Pearson matching
+  - Chen 2001 (NORTARA)
+  - Xiao, Zhou 2019 (Numeric Approximation)
+- Using synthetic data to design experiments
+  - Bayesian p-value
+  - How much data to notice an effect
+  - Bayesian hypothesis testing via predictive performance
+```{r include=FALSE, cache=FALSE}
+# Remove all objects
+rm(list = ls(all.names = TRUE))
+
+# Unload all packages
+pacman::p_unload(pacman::p_loaded(), character.only = TRUE)
+```
+
+<!--chapter:end:060-model-checking.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+set.seed(12)
+options(digits = 4)
+
+knitr::opts_chunk$set(
+  # Text Results
+  eval = TRUE,
+  echo = FALSE,
+  results = 'markup',
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  # Code Decoration
+  comment = "#>",
+  background = '#F7F7F7',
+  # Cache
+  cache = TRUE,
+  # Plots
+  fig.show = "hold",
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  out.width = "70%",
+  fig.align = 'center'
+)
+
+# options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+# Predictive Inference {#predictive-inference}
+
+- Compare to conjugate model
+- Prior predictive distributions
+- Posterior predictive distributions
+- Calibrating the model
+- Use of synthetic data to assess model properties
+```{r include=FALSE, cache=FALSE}
+# Remove all objects
+rm(list = ls(all.names = TRUE))
+
+# Unload all packages
+pacman::p_unload(pacman::p_loaded(), character.only = TRUE)
+```
+
+<!--chapter:end:070-predictive-inference.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+set.seed(12)
+options(digits = 4)
+
+knitr::opts_chunk$set(
+  # Text Results
+  eval = TRUE,
+  echo = FALSE,
+  results = 'markup',
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  # Code Decoration
+  comment = "#>",
+  background = '#F7F7F7',
+  # Cache
+  cache = TRUE,
+  # Plots
+  fig.show = "hold",
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  out.width = "70%",
+  fig.align = 'center'
+)
+
+# options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+# Results
+
+Objective conclusions
+```{r include=FALSE, cache=FALSE}
+# Remove all objects
+rm(list = ls(all.names = TRUE))
+
+# Unload all packages
+pacman::p_unload(pacman::p_loaded(), character.only = TRUE)
+```
+
+<!--chapter:end:080-results.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+set.seed(12)
+options(digits = 4)
+
+knitr::opts_chunk$set(
+  # Text Results
+  eval = TRUE,
+  echo = FALSE,
+  results = 'markup',
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  # Code Decoration
+  comment = "#>",
+  background = '#F7F7F7',
+  # Cache
+  cache = TRUE,
+  # Plots
+  fig.show = "hold",
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  out.width = "70%",
+  fig.align = 'center'
+)
+
+# options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+# Discussion
+
+Subjective conclusions
+```{r include=FALSE, cache=FALSE}
+# Remove all objects
+rm(list = ls(all.names = TRUE))
+
+# Unload all packages
+pacman::p_unload(pacman::p_loaded(), character.only = TRUE)
+```
+
+<!--chapter:end:090-discussion.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+set.seed(12)
+options(digits = 4)
+
+knitr::opts_chunk$set(
+  # Text Results
+  eval = TRUE,
+  echo = FALSE,
+  results = 'markup',
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  # Code Decoration
+  comment = "#>",
+  background = '#F7F7F7',
+  # Cache
+  cache = TRUE,
+  # Plots
+  fig.show = "hold",
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  out.width = "70%",
+  fig.align = 'center'
+)
+
+# options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+# Conclusion
+
+Really just placeholder stuff for now.
+
+$$
+\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
+$$
+
+```{r include=FALSE, cache=FALSE}
+# Remove all objects
+rm(list = ls(all.names = TRUE))
+
+# Unload all packages
+pacman::p_unload(pacman::p_loaded(), character.only = TRUE)
+```
+
+<!--chapter:end:100-conclusion.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+set.seed(12)
+options(digits = 4)
+
+knitr::opts_chunk$set(
+  # Text Results
+  eval = TRUE,
+  echo = FALSE,
+  results = 'markup',
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  # Code Decoration
+  comment = "#>",
+  background = '#F7F7F7',
+  # Cache
+  cache = TRUE,
+  # Plots
+  fig.show = "hold",
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  out.width = "70%",
+  fig.align = 'center'
+)
+
+# options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+```{r 200-appendix-setup}
+```
+
+# Appendix A {-}
+
+## One model, Three Implementations
+
+Novice
+
+```{r, eval=FALSE}
+library(rstanarm)
+stan_glmer(cbind(k, n-k) ~ 1 + x + (1 + x | G1) + (1 + x | G2), 
+           family = binomial(link = "logit"),
+           data = dat)
+```
+
+Intermediate
+
+```{r, eval=FALSE}
+library(rethinking)
+ulam(alist(
+  k ~ binomial(n, pi)
+  logit(pi) <- (a + aG1[G1] + aG2[G2]) + (b + bG1[G1] + bG2[G2]) * x,
+  
+  a ~ normal(0, 10),
+  aG1[G1] ~ normal(0, sd_aG1),
+  aG2[G2] ~ normal(0, sd_aG2),
+  c(sd_aG1, sd_aG2) ~ half_cauchy(0, 10),
+
+  b ~ normal(0, 10),
+  bG1[G1] ~ normal(0, sd_bG1),
+  bG2[G2] ~ normal(0, sd_bG2),
+  c(sd_bG1, sd_bG2) ~ half_cauchy(0, 10)
+), data = dat, log_lik = TRUE)
+```
+
+Advanced
+
+```{r, eval=FALSE}
+library(rstan)
+```
+
+
+```{stan, output.var="stan_model"}
+data {
+  int<lower=0> N;
+  int<lower=0> k[N];
+  int<lower=0> n[N];
+  real x[N];
+  int G1[N];
+  int G2[N];
+}
+parameters {
+  real mu;                // population treatment effect
+  real<lower=0> tau;      // standard deviation in treatment effects
+  vector[J] eta;          // unscaled deviation from mu by school
+}
+transformed parameters {
+  vector[J] theta = mu + tau * eta;        // school treatment effects
+}
+model {
+  target += normal_lpdf(eta | 0, 1);       // prior log-density
+  target += normal_lpdf(y | theta, sigma); // log-likelihood
+}
+```
+
+
+```{r, eval=FALSE}
+stan(stan_model)
+```
+
+
+# Appendix B {-}
+```{r include=FALSE, cache=FALSE}
+# Remove all objects
+rm(list = ls(all.names = TRUE))
+
+# Unload all packages
+pacman::p_unload(pacman::p_loaded(), character.only = TRUE)
+```
+
+<!--chapter:end:200-appendix.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+set.seed(12)
+options(digits = 4)
+
+knitr::opts_chunk$set(
+  # Text Results
+  eval = TRUE,
+  echo = FALSE,
+  results = 'markup',
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  # Code Decoration
+  comment = "#>",
+  background = '#F7F7F7',
+  # Cache
+  cache = TRUE,
+  # Plots
+  fig.show = "hold",
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  out.width = "70%",
+  fig.align = 'center'
+)
+
+# options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+`r if (knitr:::is_html_output()) '
+# References {-}
+'`
+```{r include=FALSE, cache=FALSE}
+# Remove all objects
+rm(list = ls(all.names = TRUE))
+
+# Unload all packages
+pacman::p_unload(pacman::p_loaded(), character.only = TRUE)
+```
+
+<!--chapter:end:300-references.Rmd-->
+

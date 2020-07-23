@@ -13,16 +13,18 @@
   - non-parametric models
   - [@zchaluk2009model]
 
+- Bayesian logistic regression
+  - @gelman2008weakly
+  - Can't completely express the structure (hierarchy) of the data
+
+- Residual Analysis
+  - using the fitted values vs. the observed values to evaluate goodness of fit
+  - 
+
 - So what's the answer?
   - The last two options (bayes + multilevel) when on their own do well, but are not robust to 
  
 - shortcomings
   - Convergence failure in the presence of complete separation
     - [@prins2019too], [@ghosh2018use]
-- why abandon them
-
-- Bayesian logistic regression
-  - @gelman2008weakly
-  - Can't completely express the structure (hierarchy) of the data
-
-- Residual Analysis
+  - 

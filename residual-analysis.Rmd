@@ -1,9 +1,0 @@
-# Residual Analysis {#residual-analysis}
-
-- difference between observed and fitted value (errors)
-- should be normally distributed
-- Heteroskedacity
-- contrast these classic analyses to Bayesian techniques
-  - prior and posterior checks
-  - LOO
-  - cross validation

@@ -1,0 +1,87 @@
+```{r 200-appendix-setup}
+```
+
+# Appendix A {-}
+
+## One model, Three Implementations
+
+Novice
+
+```{r, eval=FALSE}
+library(rstanarm)
+stan_glmer(cbind(k, n-k) ~ 1 + x + (1 + x | G1) + (1 + x | G2), 
+           family = binomial(link = "logit"),
+           data = dat)
+```
+
+Intermediate
+
+```{r, eval=FALSE}
+library(rethinking)
+ulam(alist(
+  k ~ binomial(n, pi)
+  logit(pi) <- (a + aG1[G1] + aG2[G2]) + (b + bG1[G1] + bG2[G2]) * x,
+  
+  a ~ normal(0, 10),
+  aG1[G1] ~ normal(0, sd_aG1),
+  aG2[G2] ~ normal(0, sd_aG2),
+  c(sd_aG1, sd_aG2) ~ half_cauchy(0, 10),
+
+  b ~ normal(0, 10),
+  bG1[G1] ~ normal(0, sd_bG1),
+  bG2[G2] ~ normal(0, sd_bG2),
+  c(sd_bG1, sd_bG2) ~ half_cauchy(0, 10)
+), data = dat, log_lik = TRUE)
+```
+
+Advanced
+
+```{r, eval=FALSE}
+library(rstan)
+```
+
+
+```{stan, output.var="stan_model"}
+data {
+  int<lower=0> N;
+  int<lower=0> N_G1;
+  int<lower=0> N_G2;
+  
+  int<lower=0> k[N];
+  int<lower=0> n[N];
+  
+  real x[N];
+  int G1[N];
+  int G2[N];
+}
+parameters {
+  real a;
+  vector aG1[N_G1];
+  vector aG2[N_G2];
+  
+  real b;
+  vector bG1[N_G1];
+  vector bG2[N_G2];
+  
+  real sd_aG1;
+  real sd_aG2;
+  real sd_bG1;
+  real sd_bG2;
+}
+model {
+  vector pi[N];
+  
+  for (i = 1:N)
+    logit(pi[i]) = (a + aG1[G1[i]] + aG2[G1[i]]) + (b + bG1[G1[i]] + bG2[G1[i]]) * x;
+  
+  y ~ binomial_logit(n, pi);
+}
+```
+
+
+```{r, eval=FALSE}
+stan(stan_model)
+```
+
+
+# Appendix B {-}

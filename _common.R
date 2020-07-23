@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
   error = FALSE,
   message = FALSE,
   # Code Decoration
-  comment = NA,
+  comment = "#>",
   background = '#F7F7F7',
   # Cache
   cache = TRUE,
