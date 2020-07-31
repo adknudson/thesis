@@ -3,11 +3,11 @@
 
 # Appendix A {-}
 
-## One model, Three Implementations
+## One model, Three Implementations {-}
 
 Novice
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo=TRUE}
 library(rstanarm)
 stan_glmer(cbind(k, n-k) ~ 1 + x + (1 + x | G1) + (1 + x | G2), 
            family = binomial(link = "logit"),
@@ -16,7 +16,7 @@ stan_glmer(cbind(k, n-k) ~ 1 + x + (1 + x | G1) + (1 + x | G2),
 
 Intermediate
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo=TRUE}
 library(rethinking)
 ulam(alist(
   k ~ binomial(n, pi)
@@ -36,51 +36,47 @@ ulam(alist(
 
 Advanced
 
-```{r, eval=FALSE}
-library(rstan)
 ```
-
-
-```{stan, output.var="stan_model"}
-data {
-  int<lower=0> N;
-  int<lower=0> N_G1;
-  int<lower=0> N_G2;
-  
-  int<lower=0> k[N];
-  int<lower=0> n[N];
-  
-  real x[N];
-  int G1[N];
-  int G2[N];
+data{
+    int<lower=0> N;
+    int<lower=0> N_G1;
+    int<lower=0> N_G2;
+    int n[N];
+    int k[N];
+    int G1[N];
+    int G2[N];
+    int trt[N];
+    vector[N] x;
 }
-parameters {
-  real a;
-  vector aG1[N_G1];
-  vector aG2[N_G2];
-  
-  real b;
-  vector bG1[N_G1];
-  vector bG2[N_G2];
-  
-  real sd_aG1;
-  real sd_aG2;
-  real sd_bG1;
-  real sd_bG2;
+parameters{
+    real a;
+    vector[N_G1] aG1;
+    vector[N_G2] aG2;
+    real b;
+    vector[N_G1] bG1;
+    vector[N_G2] bG2;
+    real<lower=0> sd_aG1;
+    real<lower=0> sd_aG2;
+    real<lower=0> sd_bG1;
+    real<lower=0> sd_bG2;
 }
-model {
-  vector pi[N];
-  
-  for (i = 1:N)
-    logit(pi[i]) = (a + aG1[G1[i]] + aG2[G1[i]]) + (b + bG1[G1[i]] + bG2[G1[i]]) * x;
-  
-  y ~ binomial_logit(n, pi);
+model{
+    vector[N] p;
+    a   ~ normal(0, 10);
+    aG1 ~ normal(0, sd_aG1);
+    aG2 ~ normal(0, sd_aG2);
+    b   ~ normal(0, 10);
+    bG1 ~ normal(0, sd_bG1);
+    bG2 ~ normal(0, sd_bG2);
+    sd_aG1 ~ cauchy(0, 10);
+    sd_aG2 ~ cauchy(0, 10);
+    sd_bG1 ~ cauchy(0, 10);
+    sd_bG2 ~ cauchy(0, 10);
+    for ( i in 1:N ) {
+        p[i] = (a + aG1[G1[i]] + aG2[G2[i]]) + (b + bG1[G1[i]] + bG2[G2[i]]) * x[i];
+    }
+    k ~ binomial_logit(n , p);
 }
-```
-
-
-```{r, eval=FALSE}
-stan(stan_model)
 ```
 
 

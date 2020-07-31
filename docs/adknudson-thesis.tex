@@ -41,6 +41,46 @@
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{longtable,booktabs}
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -72,7 +112,7 @@
 
 \title{Contributions to Modern Bayesian Multilevel Modeling}
 \author{Alexander Knudson}
-\date{Wednesday July 22, 2020}
+\date{Friday July 31, 2020}
 
 \begin{document}
 \maketitle
@@ -337,6 +377,7 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
 \section{Background to Modeling}\label{background}}
 
 \begin{itemize}
+\tightlist
 \item
   Generalized Linear Models
 
@@ -380,30 +421,6 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
     \citep{zchaluk2009model}
   \end{itemize}
 \item
-  So what's the answer?
-
-  \begin{itemize}
-  \tightlist
-  \item
-    The last two options (bayes + multilevel) when on their own do well, but are not robust to
-  \end{itemize}
-\item
-  shortcomings
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Convergence failure in the presence of complete separation
-
-    \begin{itemize}
-    \tightlist
-    \item
-      \citep{prins2019too}, \citep{ghosh2018use}
-    \end{itemize}
-  \end{itemize}
-\item
-  why abandon them
-\item
   Bayesian logistic regression
 
   \begin{itemize}
@@ -415,6 +432,34 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
   \end{itemize}
 \item
   Residual Analysis
+
+  \begin{itemize}
+  \item
+    using the fitted values vs.~the observed values to evaluate goodness of fit
+  \item
+  \end{itemize}
+\item
+  So what's the answer?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The last two options (bayes + multilevel) when on their own do well, but are not robust to
+  \end{itemize}
+\item
+  shortcomings
+
+  \begin{itemize}
+  \item
+    Convergence failure in the presence of complete separation
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \citep{prins2019too}, \citep{ghosh2018use}
+    \end{itemize}
+  \item
+  \end{itemize}
 \end{itemize}
 
 \hypertarget{bayesian-modeling}{%
@@ -422,6 +467,24 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
 
 \begin{itemize}
 \tightlist
+\item
+  short intro
+
+  \begin{itemize}
+  \tightlist
+  \item
+    sentence 1
+  \item
+    sentence 2
+  \item
+    sentence 3
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{bayesian-stuff}{%
+\subsection{Bayesian Stuff}\label{bayesian-stuff}}
+
+\begin{itemize}
 \item
   Mathematical foundations
 
@@ -439,16 +502,20 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
     Example of a conjugate priors
   \item
     need more complexity -\textgreater{} computer methods
+  \item
+    Computer methods needed
   \end{itemize}
 \item
-  Computer methods needed
 \end{itemize}
-
-\hypertarget{bayesian-stuff}{%
-\subsection{Bayesian Stuff}\label{bayesian-stuff}}
 
 \hypertarget{multilevel-modeling-stuff}{%
 \subsection{Multilevel Modeling Stuff}\label{multilevel-modeling-stuff}}
+
+\begin{itemize}
+\item
+  Estimating the variance at different levels in the model
+\item
+\end{itemize}
 
 \hypertarget{workflow}{%
 \section{Principaled Bayesian Workflow}\label{workflow}}
@@ -573,6 +640,87 @@ Really just placeholder stuff for now.
 \hypertarget{appendix-a}{%
 \section*{Appendix A}\label{appendix-a}}
 
+
+\hypertarget{one-model-three-implementations}{%
+\subsection{One model, Three Implementations}\label{one-model-three-implementations}}
+
+Novice
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(rstanarm)}
+\KeywordTok{stan_glmer}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(k, n}\OperatorTok{-}\NormalTok{k) }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{x }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{x }\OperatorTok{|}\StringTok{ }\NormalTok{G1) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{x }\OperatorTok{|}\StringTok{ }\NormalTok{G2), }
+           \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link =} \StringTok{"logit"}\NormalTok{),}
+           \DataTypeTok{data =}\NormalTok{ dat)}
+\end{Highlighting}
+\end{Shaded}
+
+Intermediate
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(rethinking)}
+\KeywordTok{ulam}\NormalTok{(}\KeywordTok{alist}\NormalTok{(}
+\NormalTok{  k }\OperatorTok{~}\StringTok{ }\KeywordTok{binomial}\NormalTok{(n, pi)}
+  \KeywordTok{logit}\NormalTok{(pi) <-}\StringTok{ }\NormalTok{(a }\OperatorTok{+}\StringTok{ }\NormalTok{aG1[G1] }\OperatorTok{+}\StringTok{ }\NormalTok{aG2[G2]) }\OperatorTok{+}\StringTok{ }\NormalTok{(b }\OperatorTok{+}\StringTok{ }\NormalTok{bG1[G1] }\OperatorTok{+}\StringTok{ }\NormalTok{bG2[G2]) }\OperatorTok{*}\StringTok{ }\NormalTok{x,}
+  
+\NormalTok{  a }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{10}\NormalTok{),}
+\NormalTok{  aG1[G1] }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, sd_aG1),}
+\NormalTok{  aG2[G2] }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, sd_aG2),}
+  \KeywordTok{c}\NormalTok{(sd_aG1, sd_aG2) }\OperatorTok{~}\StringTok{ }\KeywordTok{half_cauchy}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{10}\NormalTok{),}
+
+\NormalTok{  b }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{10}\NormalTok{),}
+\NormalTok{  bG1[G1] }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, sd_bG1),}
+\NormalTok{  bG2[G2] }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, sd_bG2),}
+  \KeywordTok{c}\NormalTok{(sd_bG1, sd_bG2) }\OperatorTok{~}\StringTok{ }\KeywordTok{half_cauchy}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{10}\NormalTok{)}
+\NormalTok{), }\DataTypeTok{data =}\NormalTok{ dat, }\DataTypeTok{log_lik =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Advanced
+
+\begin{verbatim}
+data{
+    int<lower=0> N;
+    int<lower=0> N_G1;
+    int<lower=0> N_G2;
+    int n[N];
+    int k[N];
+    int G1[N];
+    int G2[N];
+    int trt[N];
+    vector[N] x;
+}
+parameters{
+    real a;
+    vector[N_G1] aG1;
+    vector[N_G2] aG2;
+    real b;
+    vector[N_G1] bG1;
+    vector[N_G2] bG2;
+    real<lower=0> sd_aG1;
+    real<lower=0> sd_aG2;
+    real<lower=0> sd_bG1;
+    real<lower=0> sd_bG2;
+}
+model{
+    vector[N] p;
+    a   ~ normal(0, 1);
+    aG1 ~ normal(0, sd_aG1);
+    aG2 ~ normal(0, sd_aG2);
+    b   ~ normal(0, 1);
+    bG1 ~ normal(0, sd_bG1);
+    bG2 ~ normal(0, sd_bG2);
+    sd_aG1 ~ cauchy(0, 5);
+    sd_aG2 ~ cauchy(0, 5);
+    sd_bG1 ~ cauchy(0, 5);
+    sd_bG2 ~ cauchy(0, 5);
+    for ( i in 1:N ) {
+        p[i] = (a + aG1[G1[i]] + aG2[G2[i]]) + (b + bG1[G1[i]] + bG2[G2[i]]) * x[i];
+    }
+    k ~ binomial_logit(n , p);
+}
+\end{verbatim}
 
 \hypertarget{appendix-b}{%
 \section*{Appendix B}\label{appendix-b}}

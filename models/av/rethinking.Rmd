@@ -1,0 +1,55 @@
+---
+title: "Audiovisual - Rethinking"
+author: "Alex Knudson"
+date: "7/31/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(FangPsychometric)
+library(tidyverse)
+library(rethinking)
+
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+```
+
+# Data
+
+```{r}
+dat <- audiovisual_binomial %>%
+  filter(rid != "av-post1-O-f-CE", trial %in% c("pre", "post1")) %>%
+  mutate_at(vars("rid", "sid", "trial"), fct_drop) %>%
+  mutate(soa = soa / 1000, trt = trial == "post1") %>%
+  select(soa, n, k, rid, sid, age_group, trt, age) %>%
+  rename(G = age_group)
+```
+
+
+```{r, echo=FALSE}
+dat %>% slice_sample(n = 10) %>%
+  knitr::kable("html")
+```
+
+
+## Complete Pooling
+
+```{r}
+aPbx_notrt_noage_nosub_nolapse <- ulam(alist(
+  k ~ binomial_logit(n, p),
+  p <- a + b*soa,
+  a ~ normal(0, 10),
+  b ~ normal(0, 10)
+), data=dat, log_lik=TRUE, chains=4, cores=4, iter=2500, refresh=2500)
+```
+
+```{r}
+bxMa_notrt_noage_nosub_nolapse <- ulam(alist(
+  k ~ binomial_logit(n, p),
+  p <- b*(soa - a),
+  a ~ normal(0, 1),
+  b ~ normal(0, 30)
+), data=dat, log_lik=TRUE, chains=4, cores=4, iter=2500, refresh=2500)
+```
