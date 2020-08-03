@@ -214,8 +214,7 @@ Figure 2.2: The PSS is defined as the point where an observer can do no better a
 <h2><span class="header-section-number">2.2</span> Temporal Order Judgment Data</h2>
 <p>The data set that I am using in this paper comes from experiments done by A.N. Scurry and Dr. Fang Jiang in the Department of Psychology at the University of Nevada. Reduced temporal sensitivity in the aging population manifests in an impaired ability to perceive synchronous events as simultaneous, and similarly more difficulty in segregating asynchronous sensory signals that belong to different sources. The consequences of a widening of the temporal binding window is considered in <span class="citation">Scurry et al. (<a href="#ref-scurry2019aging" role="doc-biblioref">2019</a>)</span>, as well as a complete detailing of the experimental setup and recording process. I provide a shortened summary of the methods.</p>
 <p>There are four different tasks in the experiment: audio-visual, visual-visual, visuo-motor, and duration, and I will refer to each task respectively as audiovisual, visual, sensorimotor, and duration. The participants consist of 15 young adults (age 20-27), 15 middle age adults (age 39-50), and 15 older adults (age 65-75), all recruited from the University of Nevada, Reno. Additionally all subjects are right handed and were reported to have normal or corrected to normal hearing and vision.</p>
-<!--
-All subjects completed each of the four tasks except for one young subject that did not complete the audiovisual temporal order judgment (TOJ) task, and one young subject who did not complete the duration TOJ task.
+<!-- Count the number of unique subjects by age group and task
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>(\#tab:unnamed-chunk-6)Number of subjects in each task.</caption>
  <thead>
@@ -302,9 +301,6 @@ soa
 response
 </th>
 <th style="text-align:left;">
-rid
-</th>
-<th style="text-align:left;">
 sid
 </th>
 <th style="text-align:left;">
@@ -333,9 +329,6 @@ sex
 1
 </td>
 <td style="text-align:left;">
-av-post2-O-f-BB
-</td>
-<td style="text-align:left;">
 O-f-BB
 </td>
 <td style="text-align:left;">
@@ -360,9 +353,6 @@ F
 </td>
 <td style="text-align:right;">
 0
-</td>
-<td style="text-align:left;">
-dur-post1-M-m-WW
 </td>
 <td style="text-align:left;">
 M-m-WW
@@ -391,9 +381,6 @@ M
 1
 </td>
 <td style="text-align:left;">
-sm-pre-O-f-MW
-</td>
-<td style="text-align:left;">
 O-f-MW
 </td>
 <td style="text-align:left;">
@@ -420,9 +407,6 @@ F
 0
 </td>
 <td style="text-align:left;">
-vis-pre-M-f-CC
-</td>
-<td style="text-align:left;">
 M-f-CC
 </td>
 <td style="text-align:left;">
@@ -439,6 +423,73 @@ middle_age
 </td>
 <td style="text-align:left;">
 F
+</td>
+</tr>
+</tbody>
+</table>
+<p>In the audiovisual TOJ task, participants were asked to determine the temporal order between an auditory and visual stimulus. Stimulus onset asynchrony values were selected uniformly between -500 to +500 ms with 50 ms steps, where negative SOAs indicated that the visual stimulus was leading, and positive values indicated that the auditory stimulus was leading. Each SOA value was presented 5 times in random order in the initial block. At the end of each trial the subject was asked to report if the auditory stimulus came before the visual, where a <span class="math inline">\(1\)</span> indicates that they perceived the sound first, and a <span class="math inline">\(0\)</span> indicates that they perceived the visual stimulus first.</p>
+<p>A similar setup is repeated for the visual, sensorimotor, and duration tasks. The visual task presented two visual stimuli on the left and right side of a display with temporal asynchronies that varied between -300 ms to +300 ms with 25 ms steps. Negative SOAs indicated that the left stimulus was first, and positive that the right came first. A positive response indicates that the subject perceived the right stimulus first. The sensorimotor task has subjects focus on a black cross on a screen. When it disappears, they respond by pressing a button. Additionally, when the cross disappears, a visual stimulus was flashed on the screen, and subjects were asked if they perceived the visual stimulus before or after their button press. The latency of the visual stimulus was partially determined by individual subject’s average response time, so SOA values are not fixed between subjects and trials. A positive response indicates that the visual stimulus was perceived after the button press.</p>
+<p>The duration task presents two vertically stacked circles on a screen with one appearing right after the other. The top stimulus appeared for a fixed amount of time of 300 ms, and the bottom was displayed for anywhere between +100 ms to +500 ms in 50 ms steps corresponding to SOA values between -200 ms to +200 ms. The subject then responds to if they perceived the bottom circle as appearing longer than the top circle.</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:toj-summary">Table 2.2: </span>Summary of TOJ Tasks
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Task
+</th>
+<th style="text-align:left;">
+Positive Response
+</th>
+<th style="text-align:left;">
+Positive SOA Truth
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Audiovisual
+</td>
+<td style="text-align:left;">
+Perceived audio first
+</td>
+<td style="text-align:left;">
+Audio came before visual
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Visual
+</td>
+<td style="text-align:left;">
+Perceived right first
+</td>
+<td style="text-align:left;">
+Right came before left
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sensorimotor
+</td>
+<td style="text-align:left;">
+Perceived visual first
+</td>
+<td style="text-align:left;">
+Visual came before tactile
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Duration
+</td>
+<td style="text-align:left;">
+Perceived bottom as longer
+</td>
+<td style="text-align:left;">
+Bottom lasted longer than top
 </td>
 </tr>
 </tbody>

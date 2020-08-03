@@ -90,8 +90,7 @@ The data set that I am using in this paper comes from experiments done by A.N. S
 
 There are four different tasks in the experiment: audio-visual, visual-visual, visuo-motor, and duration, and I will refer to each task respectively as audiovisual, visual, sensorimotor, and duration. The participants consist of 15 young adults (age 20-27), 15 middle age adults (age 39-50), and 15 older adults (age 65-75), all recruited from the University of Nevada, Reno. Additionally all subjects are right handed and were reported to have normal or corrected to normal hearing and vision.
 
-<!--
-All subjects completed each of the four tasks except for one young subject that did not complete the audiovisual temporal order judgment (TOJ) task, and one young subject who did not complete the duration TOJ task.
+<!-- Count the number of unique subjects by age group and task
 ```{r}
 multitask %>% 
   drop_na() %>% 
@@ -110,6 +109,7 @@ multitask %>%
 ```{r, multitask-data}
 set.seed(3)
 multitask %>%
+  select(-rid) %>%
   group_by(task) %>%
   slice_sample(n = 1) %>%
     ungroup() %>%
@@ -117,22 +117,25 @@ multitask %>%
   kable_styling(latex_options = c("hold_position"))
 ```
 
+In the audiovisual TOJ task, participants were asked to determine the temporal order between an auditory and visual stimulus. Stimulus onset asynchrony values were selected uniformly between -500 to +500 ms with 50 ms steps, where negative SOAs indicated that the visual stimulus was leading, and positive values indicated that the auditory stimulus was leading. Each SOA value was presented 5 times in random order in the initial block. At the end of each trial the subject was asked to report if the auditory stimulus came before the visual, where a $1$ indicates that they perceived the sound first, and a $0$ indicates that they perceived the visual stimulus first.
 
-<!--
-- Temporal Order Judgment Psychometric Experiment
-  - Setup and Methods
-  - Data collection
-  - Order of trials
-  - The manuscript provided by Ally will really be the main source of content for this section
-  - She describes the data collection for three of the sensory tasks
-  - Data cleaning and loading
-  - Research questions
--->
+A similar setup is repeated for the visual, sensorimotor, and duration tasks. The visual task presented two visual stimuli on the left and right side of a display with temporal asynchronies that varied between -300 ms to +300 ms with 25 ms steps. Negative SOAs indicated that the left stimulus was first, and positive that the right came first. A positive response indicates that the subject perceived the right stimulus first. The sensorimotor task has subjects focus on a black cross on a screen. When it disappears, they respond by pressing a button. Additionally, when the cross disappears, a visual stimulus was flashed on the screen, and subjects were asked if they perceived the visual stimulus before or after their button press. The latency of the visual stimulus was partially determined by individual subject's average response time, so SOA values are not fixed between subjects and trials. A positive response indicates that the visual stimulus was perceived after the button press.
 
-<!--
-- Observations about the data
-  - Outliers and failed experiments
-  - balance of classes (male v female, young v middle v older, etc.)
-  - Tasks
-  - In the workflow section, I will look for and point out any visual trends in the data
--->
+The duration task presents two vertically stacked circles on a screen with one appearing right after the other. The top stimulus appeared for a fixed amount of time of 300 ms, and the bottom was displayed for anywhere between +100 ms to +500 ms in 50 ms steps corresponding to SOA values between -200 ms to +200 ms. The subject then responds to if they perceived the bottom circle as appearing longer than the top circle.
+
+```{r, toj-summary}
+tibble(
+  Task = c("Audiovisual", "Visual", "Sensorimotor", "Duration"),
+  `Positive Response` = c("Perceived audio first", 
+                          "Perceived right first", 
+                          "Perceived visual first",
+                          "Perceived bottom as longer"),
+  `Positive SOA Truth` = c("Audio came before visual",
+                           "Right came before left",
+                           "Visual came before tactile",
+                           "Bottom lasted longer than top")
+) %>%
+  kable(caption = "Summary of TOJ Tasks", booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position"))
+```
+
