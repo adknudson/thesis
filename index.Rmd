@@ -4,7 +4,7 @@ author: "Alexander Knudson"
 date: "`r format(Sys.Date(), '%A %B %d, %Y')`"
 site: bookdown::bookdown_site
 bibliography: [bibliography.bib]
-biblio-style: agsm
+biblio-style: apalike
 documentclass: report
 geometry:
 - top=1.0in
@@ -24,3 +24,4 @@ lot: True
 
 # Acknowledgments {-}
 
+I would like to first and foremost thank my sister Heather for always being a constant source of sarcasm and teasing. Without her skepticism I would not have had enough motivation to finish this degree out of spite, and instead would have had to rely on self-discipline and encouragement from my peers and mentors.

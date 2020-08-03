@@ -1,23 +1,25 @@
 ```{r 200-appendix-setup}
 ```
 
-\setstretch{1.0}
+# (APPENDIX) Appendix {-}
 
-# Appendix A {-}
+# Supplementary Code
 
-## One model, Three Implementations {-}
+One model, Three Implementations. There are a few ways to specify a hierarchical model in R. Below I describe three common frameworks that require varying levels of mathematical and programmatic competence. Frameworks with lower barriers for entry are great for researchers in many fields, but they lack fine control over the parameters in a model. As the framework complexity increases, so too does the ability to generate complex models that are typically not possible. 
 
 Novice
-
+\setstretch{1.0}
 ```{r, eval=FALSE, echo=TRUE}
 library(rstanarm)
 stan_glmer(cbind(k, n-k) ~ 1 + x + (1 + x | G1) + (1 + x | G2), 
            family = binomial(link = "logit"),
            data = dat)
 ```
+\setstretch{2.0}
 
 Intermediate
 
+\setstretch{1.0}
 ```{r, eval=FALSE, echo=TRUE}
 library(rethinking)
 ulam(alist(
@@ -35,9 +37,11 @@ ulam(alist(
   c(sd_bG1, sd_bG2) ~ half_cauchy(0, 10)
 ), data = dat, log_lik = TRUE)
 ```
+\setstretch{2.0}
 
 Advanced
 
+\setstretch{1.0}
 ```
 data{
     int<lower=0> N;
@@ -80,6 +84,4 @@ model{
     k ~ binomial_logit(n , p);
 }
 ```
-
-
-# Appendix B {-}
+\setstretch{2.0}

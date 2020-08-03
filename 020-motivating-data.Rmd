@@ -1,9 +1,10 @@
 # Background and Motivating Data {#motivating-data}
 
-```{r, motivating-data-setup}
+```{r, motivating-data-setup, include=FALSE}
 library(FangPsychometric)
 library(tidyverse)
 library(patchwork)
+library(kableExtra)
 ```
 
 It was Charles Darwin who in his book _On the Origin of Species_ developed the idea that living organisms adapt to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Though the dark side of statistics and hubris lead Galton to become a pioneer of eugenics, his works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
@@ -44,8 +45,7 @@ Figure \@ref(fig:chart-of-pf) displays the key aspects of the psychometric funct
 
 This leads me to talk about the type of psychometric experiment that this paper deals with called a **temporal order judgment** (TOJ) experiment. The concept is that if there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept -- perceive them as happening simultaneously. Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events. The temporal asynchrony between stimuli is called the **stimulus onset asynchrony** (SOA), and the range of SOAs for which sensory signals are integrated into a global percept is called the **temporal binding window**. When the SOA grows too large then the brain segregates the two signals and the temporal order can be determined.
 
-Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the **point of subjective simultaneity** (PSS) -- the temporal delay between two signals at which an observer is unsure about their temporal order [@stone2001now]. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the **just noticeable difference** (JND) -- the smallest lapse in time so that a temporal order can just be determined. Figure \@ref(fig:plot-ref-pf) highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e. the response probability is 50%). The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84% level and the PSS, though the upper level depends on domain expertise.
-
+Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the **point of subjective simultaneity** (PSS) -- the temporal delay between two signals at which an observer is unsure about their temporal order [@stone2001now]. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the **just noticeable difference** (JND) -- the smallest lapse in time so that a temporal order can just be determined. Figure \@ref(fig:plot-ref-pf) highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e. the response probability is 50%). The JND is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84% level and the PSS, though the upper level depends on domain expertise.
 
 ```{r plot-ref-pf, fig.cap="The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise."}
 ggplot(tibble(x = c(-4, 4), y = c(0, 1)), aes(x, y)) +
@@ -80,10 +80,42 @@ ggplot(tibble(x = c(-4, 4), y = c(0, 1)), aes(x, y)) +
        title = "Components of the Psychometric Function, F")
 ```
 
+Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing [@fujisaki2004recalibration]. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer [@vroomen2004recalibration]. This repetition of presenting the adapter stimulus is called **temporal recalibration**.
 
-Perceptual synchrony can be modified through a baseline understanding. 
+The data set that I introduce in the next section concerns temporal order judgment across various sensory modalities with a temporal recalibration component.
+
+## Temporal Order Judgment Data
+
+The data set that I am using in this paper comes from experiments done by A.N. Scurry and Dr. Fang Jiang in the Department of Psychology at the University of Nevada. Reduced temporal sensitivity in the aging population manifests in an impaired ability to perceive synchronous events as simultaneous, and similarly more difficulty in segregating asynchronous sensory signals that belong to different sources. The consequences of a widening of the temporal binding window is considered in @scurry2019aging, as well as a complete detailing of the experimental setup and recording process. I provide a shortened summary of the methods.
+
+There are four different tasks in the experiment: audio-visual, visual-visual, visuo-motor, and duration, and I will refer to each task respectively as audiovisual, visual, sensorimotor, and duration. The participants consist of 15 young adults (age 20-27), 15 middle age adults (age 39-50), and 15 older adults (age 65-75), all recruited from the University of Nevada, Reno. Additionally all subjects are right handed and were reported to have normal or corrected to normal hearing and vision.
+
+<!--
+All subjects completed each of the four tasks except for one young subject that did not complete the audiovisual temporal order judgment (TOJ) task, and one young subject who did not complete the duration TOJ task.
+```{r}
+multitask %>% 
+  drop_na() %>% 
+  group_by(age_group, task) %>% 
+  select(sid) %>% 
+  unique() %>% 
+  count() %>%
+  ungroup() %>%
+  kable(caption = "Number of subjects in each task.", booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "striped")) %>%
+  collapse_rows(columns = c(1), valign = "top")
+```
+-->
 
 
+```{r, multitask-data}
+set.seed(3)
+multitask %>%
+  group_by(task) %>%
+  slice_sample(n = 1) %>%
+    ungroup() %>%
+  kable(caption = "Sample of motivating data", booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position"))
+```
 
 
 <!--

@@ -50,6 +50,7 @@
 
 
 <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
 
 
 <style type="text/css">
@@ -134,6 +135,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="motivating-data.html"><a href="motivating-data.html"><i class="fa fa-check"></i><b>2</b> Background and Motivating Data</a><ul>
 <li class="chapter" data-level="2.1" data-path="motivating-data.html"><a href="motivating-data.html#psychometric-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
+<li class="chapter" data-level="2.2" data-path="motivating-data.html"><a href="motivating-data.html#temporal-order-judgment-data"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Data</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>3</b> Background to Modeling</a></li>
 <li class="chapter" data-level="4" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html"><i class="fa fa-check"></i><b>4</b> Bayesian Multilevel Modeling</a><ul>
@@ -149,10 +151,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>8</b> Results</a></li>
 <li class="chapter" data-level="9" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>9</b> Discussion</a></li>
 <li class="chapter" data-level="10" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>10</b> Conclusion</a></li>
-<li class="chapter" data-level="" data-path="appendix-a.html"><a href="appendix-a.html"><i class="fa fa-check"></i>Appendix A</a><ul>
-<li class="chapter" data-level="" data-path="appendix-a.html"><a href="appendix-a.html#one-model-three-implementations"><i class="fa fa-check"></i>One model, Three Implementations</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="appendix-b.html"><a href="appendix-b.html"><i class="fa fa-check"></i>Appendix B</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="supplementary-code.html"><a href="supplementary-code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -200,14 +200,249 @@ Figure 2.1: A chart of the psychometric function. The experiment in this paper p
 </div>
 <p>Figure <a href="motivating-data.html#fig:chart-of-pf">2.1</a> displays the key aspects of the psychometric function. The most crucial part is the sigmoid function, the S-like non-decreasing curve, which in this case is represented by the Normal CDF, <span class="math inline">\(\Phi(\gamma)\)</span>. The horizontal axis represents the stimulus stimulus intensity, the separation of two points in centimeters. The vertical axis represents the probability that a subject has the impression of two points. With only experimental data, the response proportion becomes an approximation for the probability.</p>
 <p>This leads me to talk about the type of psychometric experiment that this paper deals with called a <strong>temporal order judgment</strong> (TOJ) experiment. The concept is that if there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept – perceive them as happening simultaneously. Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events. The temporal asynchrony between stimuli is called the <strong>stimulus onset asynchrony</strong> (SOA), and the range of SOAs for which sensory signals are integrated into a global percept is called the <strong>temporal binding window</strong>. When the SOA grows too large then the brain segregates the two signals and the temporal order can be determined.</p>
-<p>Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the <strong>point of subjective simultaneity</strong> (PSS) – the temporal delay between two signals at which an observer is unsure about their temporal order <span class="citation">(Stone et al. <a href="#ref-stone2001now" role="doc-biblioref">2001</a>)</span>. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the <strong>just noticeable difference</strong> (JND) – the smallest lapse in time so that a temporal order can just be determined. Figure <a href="motivating-data.html#fig:plot-ref-pf">2.2</a> highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e. the response probability is 50%). The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84% level and the PSS, though the upper level depends on domain expertise.</p>
+<p>Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the <strong>point of subjective simultaneity</strong> (PSS) – the temporal delay between two signals at which an observer is unsure about their temporal order <span class="citation">(Stone et al. <a href="#ref-stone2001now" role="doc-biblioref">2001</a>)</span>. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the <strong>just noticeable difference</strong> (JND) – the smallest lapse in time so that a temporal order can just be determined. Figure <a href="motivating-data.html#fig:plot-ref-pf">2.2</a> highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e. the response probability is 50%). The JND is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84% level and the PSS, though the upper level depends on domain expertise.</p>
 <div class="figure" style="text-align: center"><span id="fig:plot-ref-pf"></span>
 <img src="adknudson-thesis_files/figure-html/plot-ref-pf-1.png" alt="The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise." width="70%" />
 <p class="caption">
 Figure 2.2: The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise.
 </p>
 </div>
-<p>Perceptual synchrony can be modified through a baseline understanding.</p>
+<p>Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing <span class="citation">(Fujisaki et al. <a href="#ref-fujisaki2004recalibration" role="doc-biblioref">2004</a>)</span>. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer <span class="citation">(Vroomen et al. <a href="#ref-vroomen2004recalibration" role="doc-biblioref">2004</a>)</span>. This repetition of presenting the adapter stimulus is called <strong>temporal recalibration</strong>.</p>
+<p>The data set that I introduce in the next section concerns temporal order judgment across various sensory modalities with a temporal recalibration component.</p>
+</div>
+<div id="temporal-order-judgment-data" class="section level2">
+<h2><span class="header-section-number">2.2</span> Temporal Order Judgment Data</h2>
+<p>The data set that I am using in this paper comes from experiments done by A.N. Scurry and Dr. Fang Jiang in the Department of Psychology at the University of Nevada. Reduced temporal sensitivity in the aging population manifests in an impaired ability to perceive synchronous events as simultaneous, and similarly more difficulty in segregating asynchronous sensory signals that belong to different sources. The consequences of a widening of the temporal binding window is considered in <span class="citation">Scurry et al. (<a href="#ref-scurry2019aging" role="doc-biblioref">2019</a>)</span>, as well as a complete detailing of the experimental setup and recording process. I provide a shortened summary of the methods.</p>
+<p>There are four different tasks in the experiment: audio-visual, visual-visual, visuo-motor, and duration, and I will refer to each task respectively as audiovisual, visual, sensorimotor, and duration. The participants consist of 15 young adults (age 20-27), 15 middle age adults (age 39-50), and 15 older adults (age 65-75), all recruited from the University of Nevada, Reno. Additionally all subjects are right handed and were reported to have normal or corrected to normal hearing and vision.</p>
+<!--
+All subjects completed each of the four tasks except for one young subject that did not complete the audiovisual temporal order judgment (TOJ) task, and one young subject who did not complete the duration TOJ task.
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>(\#tab:unnamed-chunk-6)Number of subjects in each task.</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> age_group </th>
+   <th style="text-align:left;"> task </th>
+   <th style="text-align:right;"> n </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> young_adult </td>
+   <td style="text-align:left;"> audiovisual </td>
+   <td style="text-align:right;"> 14 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> duration </td>
+   <td style="text-align:right;"> 14 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> sensorimotor </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> visual </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> middle_age </td>
+   <td style="text-align:left;"> audiovisual </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> duration </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> sensorimotor </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> visual </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> older_adult </td>
+   <td style="text-align:left;"> audiovisual </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> duration </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> sensorimotor </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> visual </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+</tbody>
+</table>
+-->
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:multitask-data">Table 2.1: </span>Sample of motivating data
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+soa
+</th>
+<th style="text-align:right;">
+response
+</th>
+<th style="text-align:left;">
+rid
+</th>
+<th style="text-align:left;">
+sid
+</th>
+<th style="text-align:left;">
+task
+</th>
+<th style="text-align:left;">
+trial
+</th>
+<th style="text-align:left;">
+age_group
+</th>
+<th style="text-align:right;">
+age
+</th>
+<th style="text-align:left;">
+sex
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+350
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+av-post2-O-f-BB
+</td>
+<td style="text-align:left;">
+O-f-BB
+</td>
+<td style="text-align:left;">
+audiovisual
+</td>
+<td style="text-align:left;">
+post2
+</td>
+<td style="text-align:left;">
+older_adult
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:left;">
+F
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+dur-post1-M-m-WW
+</td>
+<td style="text-align:left;">
+M-m-WW
+</td>
+<td style="text-align:left;">
+duration
+</td>
+<td style="text-align:left;">
+post1
+</td>
+<td style="text-align:left;">
+middle_age
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:left;">
+M
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+sm-pre-O-f-MW
+</td>
+<td style="text-align:left;">
+O-f-MW
+</td>
+<td style="text-align:left;">
+sensorimotor
+</td>
+<td style="text-align:left;">
+pre
+</td>
+<td style="text-align:left;">
+older_adult
+</td>
+<td style="text-align:right;">
+69
+</td>
+<td style="text-align:left;">
+F
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-225
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+vis-pre-M-f-CC
+</td>
+<td style="text-align:left;">
+M-f-CC
+</td>
+<td style="text-align:left;">
+visual
+</td>
+<td style="text-align:left;">
+pre
+</td>
+<td style="text-align:left;">
+middle_age
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:left;">
+F
+</td>
+</tr>
+</tbody>
+</table>
 <!--
 - Temporal Order Judgment Psychometric Experiment
   - Setup and Methods
@@ -236,8 +471,17 @@ Figure 2.2: The PSS is defined as the point where an observer can do no better a
 <div id="ref-britannica2014editors">
 <p>Britannica, Encyclopaedia. 2014. “The Editors of Encyclopaedia Britannica.” Dispersion.</p>
 </div>
+<div id="ref-fujisaki2004recalibration">
+<p>Fujisaki, Waka, Shinsuke Shimojo, Makio Kashino, and Shin’ya Nishida. 2004. “Recalibration of Audiovisual Simultaneity.” <em>Nature Neuroscience</em> 7 (7): 773–78.</p>
+</div>
+<div id="ref-scurry2019aging">
+<p>Scurry, Alexandra N, Tiziana Vercillo, Alexis Nicholson, Michael Webster, and Fang Jiang. 2019. “Aging Impairs Temporal Sensitivity, but Not Perceptual Synchrony, Across Modalities.” <em>Multisensory Research</em> 32 (8): 671–92.</p>
+</div>
 <div id="ref-stone2001now">
 <p>Stone, JV, NM Hunkin, J Porrill, R Wood, V Keeler, M Beanland, M Port, and NR Porter. 2001. “When Is Now? Perception of Simultaneity.” <em>Proceedings of the Royal Society of London. Series B: Biological Sciences</em> 268 (1462): 31–38.</p>
+</div>
+<div id="ref-vroomen2004recalibration">
+<p>Vroomen, Jean, Mirjam Keetels, Beatrice De Gelder, and Paul Bertelson. 2004. “Recalibration of Temporal Order Perception by Exposure to Audio-Visual Asynchrony.” <em>Cognitive Brain Research</em> 22 (1): 32–35.</p>
 </div>
 <div id="ref-wichmann2001a">
 <p>Wichmann, Felix A, and N Jeremy Hill. 2001. “The Psychometric Function: I. Fitting, Sampling, and Goodness of Fit.” <em>Perception &amp; Psychophysics</em> 63 (8): 1293–1313.</p>

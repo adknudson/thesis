@@ -110,11 +110,11 @@
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{5}
 \usepackage[]{natbib}
-\bibliographystyle{agsm}
+\bibliographystyle{apalike}
 
 \title{Contributions to Modern Bayesian Multilevel Modeling}
 \author{Alexander Knudson}
-\date{Sunday August 02, 2020}
+\date{Monday August 03, 2020}
 
 \begin{document}
 \maketitle
@@ -135,6 +135,8 @@
 \hypertarget{acknowledgments}{%
 \chapter*{Acknowledgments}\label{acknowledgments}}
 
+
+I would like to first and foremost thank my sister Heather for always being a constant source of sarcasm and teasing. Without her skepticism I would not have had enough motivation to finish this degree out of spite, and instead would have had to rely on self-discipline and encouragement from my peers and mentors.
 
 \hypertarget{introduction}{%
 \chapter{Introduction}\label{introduction}}
@@ -304,7 +306,7 @@ Figure \ref{fig:chart-of-pf} displays the key aspects of the psychometric functi
 
 This leads me to talk about the type of psychometric experiment that this paper deals with called a \textbf{temporal order judgment} (TOJ) experiment. The concept is that if there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept -- perceive them as happening simultaneously. Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events. The temporal asynchrony between stimuli is called the \textbf{stimulus onset asynchrony} (SOA), and the range of SOAs for which sensory signals are integrated into a global percept is called the \textbf{temporal binding window}. When the SOA grows too large then the brain segregates the two signals and the temporal order can be determined.
 
-Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the \textbf{point of subjective simultaneity} (PSS) -- the temporal delay between two signals at which an observer is unsure about their temporal order \citep{stone2001now}. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the \textbf{just noticeable difference} (JND) -- the smallest lapse in time so that a temporal order can just be determined. Figure \ref{fig:plot-ref-pf} highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e.~the response probability is 50\%). The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84\% level and the PSS, though the upper level depends on domain expertise.
+Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the \textbf{point of subjective simultaneity} (PSS) -- the temporal delay between two signals at which an observer is unsure about their temporal order \citep{stone2001now}. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the \textbf{just noticeable difference} (JND) -- the smallest lapse in time so that a temporal order can just be determined. Figure \ref{fig:plot-ref-pf} highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e.~the response probability is 50\%). The JND is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84\% level and the PSS, though the upper level depends on domain expertise.
 
 \begin{figure}
 
@@ -315,7 +317,32 @@ Our experiences in life as we age shape the mechanisms of processing multisensor
 \caption{The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise.}\label{fig:plot-ref-pf}
 \end{figure}
 
-Perceptual synchrony can be modified through a baseline understanding.
+Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing \citep{fujisaki2004recalibration}. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer \citep{vroomen2004recalibration}. This repetition of presenting the adapter stimulus is called \textbf{temporal recalibration}.
+
+The data set that I introduce in the next section concerns temporal order judgment across various sensory modalities with a temporal recalibration component.
+
+\hypertarget{temporal-order-judgment-data}{%
+\section{Temporal Order Judgment Data}\label{temporal-order-judgment-data}}
+
+The data set that I am using in this paper comes from experiments done by A.N. Scurry and Dr.~Fang Jiang in the Department of Psychology at the University of Nevada. Reduced temporal sensitivity in the aging population manifests in an impaired ability to perceive synchronous events as simultaneous, and similarly more difficulty in segregating asynchronous sensory signals that belong to different sources. The consequences of a widening of the temporal binding window is considered in \citet{scurry2019aging}, as well as a complete detailing of the experimental setup and recording process. I provide a shortened summary of the methods.
+
+There are four different tasks in the experiment: audio-visual, visual-visual, visuo-motor, and duration, and I will refer to each task respectively as audiovisual, visual, sensorimotor, and duration. The participants consist of 15 young adults (age 20-27), 15 middle age adults (age 39-50), and 15 older adults (age 65-75), all recruited from the University of Nevada, Reno. Additionally all subjects are right handed and were reported to have normal or corrected to normal hearing and vision.
+
+\begin{table}[!h]
+
+\caption{\label{tab:multitask-data}Sample of motivating data}
+\centering
+\begin{tabular}[t]{rrlllllrl}
+\toprule
+soa & response & rid & sid & task & trial & age\_group & age & sex\\
+\midrule
+350 & 1 & av-post2-O-f-BB & O-f-BB & audiovisual & post2 & older\_adult & 68 & F\\
+0 & 0 & dur-post1-M-m-WW & M-m-WW & duration & post1 & middle\_age & 50 & M\\
+-1 & 1 & sm-pre-O-f-MW & O-f-MW & sensorimotor & pre & older\_adult & 69 & F\\
+-225 & 0 & vis-pre-M-f-CC & M-f-CC & visual & pre & middle\_age & 39 & F\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \hypertarget{background}{%
 \chapter{Background to Modeling}\label{background}}
@@ -581,17 +608,17 @@ Really just placeholder stuff for now.
 \frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
 \]
 
-\setstretch{1.0}
-
-\hypertarget{appendix-a}{%
-\chapter*{Appendix A}\label{appendix-a}}
+\hypertarget{appendix-appendix}{%
+\appendix \addcontentsline{toc}{chapter}{\appendixname}}
 
 
-\hypertarget{one-model-three-implementations}{%
-\section*{One model, Three Implementations}\label{one-model-three-implementations}}
+\hypertarget{supplementary-code}{%
+\chapter{Supplementary Code}\label{supplementary-code}}
 
+One model, Three Implementations. There are a few ways to specify a hierarchical model in R. Below I describe three common frameworks that require varying levels of mathematical and programmatic competence. Frameworks with lower barriers for entry are great for researchers in many fields, but they lack fine control over the parameters in a model. As the framework complexity increases, so too does the ability to generate complex models that are typically not possible.
 
 Novice
+\setstretch{1.0}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -602,7 +629,11 @@ Novice
 \end{Highlighting}
 \end{Shaded}
 
+\setstretch{2.0}
+
 Intermediate
+
+\setstretch{1.0}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -624,7 +655,11 @@ Intermediate
 \end{Highlighting}
 \end{Shaded}
 
+\setstretch{2.0}
+
 Advanced
+
+\setstretch{1.0}
 
 \begin{verbatim}
 data{
@@ -669,9 +704,7 @@ model{
 }
 \end{verbatim}
 
-\hypertarget{appendix-b}{%
-\chapter*{Appendix B}\label{appendix-b}}
-
+\setstretch{2.0}
 
 \setstretch{1.0}
 

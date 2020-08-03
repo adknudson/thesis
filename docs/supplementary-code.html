@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>10 Conclusion | Contributions to Modern Bayesian Multilevel Modeling</title>
-  <meta name="description" content="10 Conclusion | Contributions to Modern Bayesian Multilevel Modeling" />
+  <title>A Supplementary Code | Contributions to Modern Bayesian Multilevel Modeling</title>
+  <meta name="description" content="A Supplementary Code | Contributions to Modern Bayesian Multilevel Modeling" />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="10 Conclusion | Contributions to Modern Bayesian Multilevel Modeling" />
+  <meta property="og:title" content="A Supplementary Code | Contributions to Modern Bayesian Multilevel Modeling" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="adkudson/thesis" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="10 Conclusion | Contributions to Modern Bayesian Multilevel Modeling" />
+  <meta name="twitter:title" content="A Supplementary Code | Contributions to Modern Bayesian Multilevel Modeling" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="discussion.html"/>
-<link rel="next" href="supplementary-code.html"/>
+<link rel="prev" href="conclusion.html"/>
+<link rel="next" href="references.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -171,24 +171,86 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="conclusion" class="section level1">
-<h1><span class="header-section-number">10</span> Conclusion</h1>
-<p>Really just placeholder stuff for now.</p>
-<p><span class="math display">\[
-\frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
-\]</span></p>
+<div id="supplementary-code" class="section level1">
+<h1><span class="header-section-number">A</span> Supplementary Code</h1>
+<p>One model, Three Implementations. There are a few ways to specify a hierarchical model in R. Below I describe three common frameworks that require varying levels of mathematical and programmatic competence. Frameworks with lower barriers for entry are great for researchers in many fields, but they lack fine control over the parameters in a model. As the framework complexity increases, so too does the ability to generate complex models that are typically not possible.</p>
+<p>Novice
+</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="supplementary-code.html#cb1-1"></a><span class="kw">library</span>(rstanarm)</span>
+<span id="cb1-2"><a href="supplementary-code.html#cb1-2"></a><span class="kw">stan_glmer</span>(<span class="kw">cbind</span>(k, n<span class="op">-</span>k) <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>x <span class="op">|</span><span class="st"> </span>G1) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>x <span class="op">|</span><span class="st"> </span>G2), </span>
+<span id="cb1-3"><a href="supplementary-code.html#cb1-3"></a>           <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</span>
+<span id="cb1-4"><a href="supplementary-code.html#cb1-4"></a>           <span class="dt">data =</span> dat)</span></code></pre></div>
+
+<p>Intermediate</p>
+
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="supplementary-code.html#cb2-1"></a><span class="kw">library</span>(rethinking)</span>
+<span id="cb2-2"><a href="supplementary-code.html#cb2-2"></a><span class="kw">ulam</span>(<span class="kw">alist</span>(</span>
+<span id="cb2-3"><a href="supplementary-code.html#cb2-3"></a>  k <span class="op">~</span><span class="st"> </span><span class="kw">binomial</span>(n, pi)</span>
+<span id="cb2-4"><a href="supplementary-code.html#cb2-4"></a>  <span class="kw">logit</span>(pi) &lt;-<span class="st"> </span>(a <span class="op">+</span><span class="st"> </span>aG1[G1] <span class="op">+</span><span class="st"> </span>aG2[G2]) <span class="op">+</span><span class="st"> </span>(b <span class="op">+</span><span class="st"> </span>bG1[G1] <span class="op">+</span><span class="st"> </span>bG2[G2]) <span class="op">*</span><span class="st"> </span>x,</span>
+<span id="cb2-5"><a href="supplementary-code.html#cb2-5"></a>  </span>
+<span id="cb2-6"><a href="supplementary-code.html#cb2-6"></a>  a <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, <span class="dv">10</span>),</span>
+<span id="cb2-7"><a href="supplementary-code.html#cb2-7"></a>  aG1[G1] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_aG1),</span>
+<span id="cb2-8"><a href="supplementary-code.html#cb2-8"></a>  aG2[G2] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_aG2),</span>
+<span id="cb2-9"><a href="supplementary-code.html#cb2-9"></a>  <span class="kw">c</span>(sd_aG1, sd_aG2) <span class="op">~</span><span class="st"> </span><span class="kw">half_cauchy</span>(<span class="dv">0</span>, <span class="dv">10</span>),</span>
+<span id="cb2-10"><a href="supplementary-code.html#cb2-10"></a></span>
+<span id="cb2-11"><a href="supplementary-code.html#cb2-11"></a>  b <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, <span class="dv">10</span>),</span>
+<span id="cb2-12"><a href="supplementary-code.html#cb2-12"></a>  bG1[G1] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_bG1),</span>
+<span id="cb2-13"><a href="supplementary-code.html#cb2-13"></a>  bG2[G2] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_bG2),</span>
+<span id="cb2-14"><a href="supplementary-code.html#cb2-14"></a>  <span class="kw">c</span>(sd_bG1, sd_bG2) <span class="op">~</span><span class="st"> </span><span class="kw">half_cauchy</span>(<span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb2-15"><a href="supplementary-code.html#cb2-15"></a>), <span class="dt">data =</span> dat, <span class="dt">log_lik =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+
+<p>Advanced</p>
+
+<pre><code>data{
+    int&lt;lower=0&gt; N;
+    int&lt;lower=0&gt; N_G1;
+    int&lt;lower=0&gt; N_G2;
+    int n[N];
+    int k[N];
+    int G1[N];
+    int G2[N];
+    int trt[N];
+    vector[N] x;
+}
+parameters{
+    real a;
+    vector[N_G1] aG1;
+    vector[N_G2] aG2;
+    real b;
+    vector[N_G1] bG1;
+    vector[N_G2] bG2;
+    real&lt;lower=0&gt; sd_aG1;
+    real&lt;lower=0&gt; sd_aG2;
+    real&lt;lower=0&gt; sd_bG1;
+    real&lt;lower=0&gt; sd_bG2;
+}
+model{
+    vector[N] p;
+    a   ~ normal(0, 10);
+    aG1 ~ normal(0, sd_aG1);
+    aG2 ~ normal(0, sd_aG2);
+    b   ~ normal(0, 10);
+    bG1 ~ normal(0, sd_bG1);
+    bG2 ~ normal(0, sd_bG2);
+    sd_aG1 ~ cauchy(0, 10);
+    sd_aG2 ~ cauchy(0, 10);
+    sd_bG1 ~ cauchy(0, 10);
+    sd_bG2 ~ cauchy(0, 10);
+    for ( i in 1:N ) {
+        p[i] = (a + aG1[G1[i]] + aG2[G2[i]]) + (b + bG1[G1[i]] + bG2[G2[i]]) * x[i];
+    }
+    k ~ binomial_logit(n , p);
+}</code></pre>
+
 
 </div>
-
-
-
             </section>
 
           </div>
         </div>
       </div>
-<a href="discussion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="supplementary-code.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="conclusion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -224,7 +286,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/adknudson/thesis/blob/master/100-conclusion.Rmd",
+"link": "https://github.com/adknudson/thesis/blob/master/200-appendix.Rmd",
 "text": null
 },
 "download": ["adknudson-thesis.pdf"],
