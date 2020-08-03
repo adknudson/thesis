@@ -1,6 +1,8 @@
 ```{r 200-appendix-setup}
 ```
 
+\setstretch{1.0}
+
 # Appendix A {-}
 
 ## One model, Three Implementations {-}

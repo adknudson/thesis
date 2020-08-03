@@ -26,6 +26,7 @@ bookdown::gitbook:
       all: ['facebook', 'twitter', 'linkedin', 'weibo', 'instapaper']
     info: yes
 bookdown::pdf_book:
+  pandoc_args: --top-level-division=chapter
   keep_tex: yes
   toc_depth: 3
   toc_unnumbered: no

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2 Motivating Data | Contributions to Modern Bayesian Multilevel Modeling</title>
-  <meta name="description" content="2 Motivating Data | Contributions to Modern Bayesian Multilevel Modeling" />
+  <title>2 Background and Motivating Data | Contributions to Modern Bayesian Multilevel Modeling</title>
+  <meta name="description" content="2 Background and Motivating Data | Contributions to Modern Bayesian Multilevel Modeling" />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 Motivating Data | Contributions to Modern Bayesian Multilevel Modeling" />
+  <meta property="og:title" content="2 Background and Motivating Data | Contributions to Modern Bayesian Multilevel Modeling" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="adkudson/thesis" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Motivating Data | Contributions to Modern Bayesian Multilevel Modeling" />
+  <meta name="twitter:title" content="2 Background and Motivating Data | Contributions to Modern Bayesian Multilevel Modeling" />
   
   
   
@@ -131,10 +131,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul class="summary">
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Abstract</a></li>
 <li class="chapter" data-level="" data-path="acknowledgments.html"><a href="acknowledgments.html"><i class="fa fa-check"></i>Acknowledgments</a></li>
-<li class="chapter" data-level="" data-path="list-of-tables.html"><a href="list-of-tables.html"><i class="fa fa-check"></i>List of Tables</a></li>
-<li class="chapter" data-level="" data-path="list-of-figures.html"><a href="list-of-figures.html"><i class="fa fa-check"></i>List of Figures</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="motivating-data.html"><a href="motivating-data.html"><i class="fa fa-check"></i><b>2</b> Motivating Data</a></li>
+<li class="chapter" data-level="2" data-path="motivating-data.html"><a href="motivating-data.html"><i class="fa fa-check"></i><b>2</b> Background and Motivating Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="motivating-data.html"><a href="motivating-data.html#psychometric-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
+</ul></li>
 <li class="chapter" data-level="3" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>3</b> Background to Modeling</a></li>
 <li class="chapter" data-level="4" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html"><i class="fa fa-check"></i><b>4</b> Bayesian Multilevel Modeling</a><ul>
 <li class="chapter" data-level="4.1" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html#bayesian-stuff"><i class="fa fa-check"></i><b>4.1</b> Bayesian Stuff</a></li>
@@ -150,7 +150,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>9</b> Discussion</a></li>
 <li class="chapter" data-level="10" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>10</b> Conclusion</a></li>
 <li class="chapter" data-level="" data-path="appendix-a.html"><a href="appendix-a.html"><i class="fa fa-check"></i>Appendix A</a><ul>
-<li class="chapter" data-level="10.1" data-path="appendix-a.html"><a href="appendix-a.html#one-model-three-implementations"><i class="fa fa-check"></i><b>10.1</b> One model, Three Implementations</a></li>
+<li class="chapter" data-level="" data-path="appendix-a.html"><a href="appendix-a.html#one-model-three-implementations"><i class="fa fa-check"></i>One model, Three Implementations</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="appendix-b.html"><a href="appendix-b.html"><i class="fa fa-check"></i>Appendix B</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -172,68 +172,69 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="motivating-data" class="section level1">
-<h1><span class="header-section-number">2</span> Motivating Data</h1>
-<ul>
-<li>Background of psychometrics
-<ul>
-<li>Charles Darwin at the core, with the ideas that living organisms adapt to their environment</li>
-<li>Sir Francis Galton lead the creation of psychometrics
-<ul>
-<li>“This idea stimulated Galton’s interest in the study of human beings and how they differ one from another and, more importantly, how to measure those differences”</li>
-<li>Galton devised and conducted “mental” tests</li>
-</ul></li>
-<li>“Herbart was responsible for creating mathematical models of the mind, which were influential in educational practices in years to come.”</li>
-<li>“E.H. Weber built upon Herbart’s work and tried to prove the existence of a psychological threshold, saying that a minimum stimulus was necessary to activate a sensory system”</li>
-<li>“G.T. Fechner … devise[d] the law that the strength of a sensation grows as the logarithm of the stimulus intensity”</li>
-</ul></li>
-<li>Psychometric Experiments
-<ul>
-<li>“The psychometric function relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task” <span class="citation">(Wichmann and Hill <a href="#ref-wichmann2001a" role="doc-biblioref">2001</a>)</span></li>
-<li>Studied as early as the late 1800’s</li>
-<li><span class="citation">(Boring <a href="#ref-boring1917chart" role="doc-biblioref">1917</a>)</span></li>
-<li>Perceptual Synchrony
-<ul>
-<li>Our experiences in life as we age shape the mechanisms of processing multisensory signals</li>
-<li>Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis</li>
-<li>This gives rise to an idea of the temporal binding window, or the temporal differences for which sensory signals are integrated into a global percept</li>
-<li>Perceptual synchrony has been previously studied through the point of subjective simultaneity, the physical temporal delay between two signals at which an observer is unsure about their temporal order <span class="citation">(Stone et al. <a href="#ref-stone2001now" role="doc-biblioref">2001</a>)</span></li>
-</ul></li>
-<li>Temporal Sensitivity
-<ul>
-<li>The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept</li>
-<li>A deficit in temporal sensitivity may lead to a widening of the temporal binding window and cause reduce the ability to segregate unrelated sensory signals</li>
-<li>In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the just noticeable difference</li>
-<li>The just noticeable difference is the smallest lapse in time so that a temporal order can just be determined</li>
-</ul></li>
-<li>Temporal Recalibration
-<ul>
-<li>Our perceptual synchrony can be modified through a baseline understanding</li>
-</ul></li>
-</ul></li>
-<li>Temporal Order Judgment Psychometric Experiment
-<ul>
-<li>Setup and Methods</li>
-<li>Data collection</li>
-<li>Order of trials</li>
-<li>The manuscript provided by Ally will really be the main source of content for this section</li>
-<li>She describes the data collection for three of the sensory tasks</li>
-<li>Data cleaning and loading</li>
-<li>Research questions</li>
-</ul></li>
-<li>Observations about the data
-<ul>
-<li>Outliers and failed experiments</li>
-<li>balance of classes (male v female, young v middle v older, etc.)</li>
-<li>Tasks</li>
-<li>In the workflow section, I will look for and point out any visual trends in the data</li>
-</ul></li>
-</ul>
+<h1><span class="header-section-number">2</span> Background and Motivating Data</h1>
+<p>It was Charles Darwin who in his book <em>On the Origin of Species</em> developed the idea that living organisms adapt to better survive in their environment. Sir Francis Galton, inspired by Darwin’s ideas, became interested in the differences in human beings and in how to measure those differences. Though the dark side of statistics and hubris lead Galton to become a pioneer of eugenics, his works on studying and measuring human differences lead to the creation of psychometrics – the science of measuring mental faculties. Around the same time that was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.</p>
+<p>E.H. Weber built upon Herbart’s work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system – a <em>liminal</em> stimulus. He paved the way for experimental psychology and is the namesake of <em>Weber’s Law</em> – the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus <span class="citation">(Britannica <a href="#ref-britannica2014editors" role="doc-biblioref">2014</a>)</span>.</p>
+<p><span class="math display">\[
+\frac{\Delta I}{I} = k
+\]</span></p>
+<p>To put this law into practice, consider holding a 1 kg weight (<span class="math inline">\(I = 1\)</span>), and further suppose that we can <em>just</em> detect the difference between a 1 kg weight and a 1.2 kg weight (<span class="math inline">\(\Delta I = 0.2\)</span>). Then the constant just noticeable ratio is</p>
+<p><span class="math display">\[
+k = \frac{0.2}{1} = 0.2
+\]</span></p>
+<p>So now if we pick up a 10 kg weight, we should be able to determine how much more mass is required to just detect a difference:</p>
+<p><span class="math display">\[
+\frac{\Delta I}{10} = 0.2 \Rightarrow \Delta I = 2
+\]</span></p>
+<p>The difference between a 10 kg and a 12 kg weight should be just barely perceptible. Notice that the difference in the first set of weights is 0.2 and in the second set it is 2. Our perception of the difference in stimulus intensities is not absolute, but relative. G.T. Fechner devised the law (Weber-Fechner Law) that the strength of a sensation grows as the logarithm of the stimulus intensity.</p>
+<p><span class="math display">\[S = K \ln I\]</span></p>
+<p>An example to this law is to consider two light sources, one that is 100 lumens (<span class="math inline">\(S_1 = K \ln 100\)</span>) and another that is 200 lumens (<span class="math inline">\(S_2 = K \ln 200\)</span>). The intensity of the second light is not perceived as twice as bright, but only about 1.15 times as bright according to the Weber-Fechner law: <span class="math inline">\(\theta = S_2 / S_1 \approx 1.15\)</span>. Notice that the value <span class="math inline">\(K\)</span> cancels out when calculating the relative intensity, but knowing <span class="math inline">\(K\)</span> can lead to important psychological insights; insights about differences between persons or groups of people! What biological and contextual factors affect how people perceive different stimuli? How do we measure their perception in a meaningful way? As one might expect, we can collect data from psychometric experiments, fit a model to the data from a family of functions called <em>psychometric functions</em>, and inspect key operating characteristics of those functions.</p>
+<div id="psychometric-experiments" class="section level2">
+<h2><span class="header-section-number">2.1</span> Psychometric Experiments</h2>
+<p>Psychometric experiments are devised in a way to examine psychophysical processes, or the response between the world around us and our inward perceptions. A <strong>psychometric function</strong> relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task <span class="citation">(Wichmann and Hill <a href="#ref-wichmann2001a" role="doc-biblioref">2001</a>)</span>. Psychometric functions were studied as early as the late 1800’s, and Edwin Boring published a chart of the psychometric function in The American Journal of Psychology in 1917 <span class="citation">(Boring <a href="#ref-boring1917chart" role="doc-biblioref">1917</a>)</span>.</p>
+<div class="figure" style="text-align: center"><span id="fig:chart-of-pf"></span>
+<img src="figures/chart_of_pf.png" alt="A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or 'two', recorded as either 'two' or 'not two'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their response of 'two'. So at what separation is the impression of two points liminal?" width="70%" />
+<p class="caption">
+Figure 2.1: A chart of the psychometric function. The experiment in this paper places two points on a subject’s skin separated by some distance, and has them answer their impression of whether there is one point or ‘two’, recorded as either ‘two’ or ‘not two’. As the separation of aesthesiometer points increases, so too does the subject’s confidence in their response of ‘two’. So at what separation is the impression of two points liminal?
+</p>
+</div>
+<p>Figure <a href="motivating-data.html#fig:chart-of-pf">2.1</a> displays the key aspects of the psychometric function. The most crucial part is the sigmoid function, the S-like non-decreasing curve, which in this case is represented by the Normal CDF, <span class="math inline">\(\Phi(\gamma)\)</span>. The horizontal axis represents the stimulus stimulus intensity, the separation of two points in centimeters. The vertical axis represents the probability that a subject has the impression of two points. With only experimental data, the response proportion becomes an approximation for the probability.</p>
+<p>This leads me to talk about the type of psychometric experiment that this paper deals with called a <strong>temporal order judgment</strong> (TOJ) experiment. The concept is that if there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept – perceive them as happening simultaneously. Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events. The temporal asynchrony between stimuli is called the <strong>stimulus onset asynchrony</strong> (SOA), and the range of SOAs for which sensory signals are integrated into a global percept is called the <strong>temporal binding window</strong>. When the SOA grows too large then the brain segregates the two signals and the temporal order can be determined.</p>
+<p>Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the <strong>point of subjective simultaneity</strong> (PSS) – the temporal delay between two signals at which an observer is unsure about their temporal order <span class="citation">(Stone et al. <a href="#ref-stone2001now" role="doc-biblioref">2001</a>)</span>. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the <strong>just noticeable difference</strong> (JND) – the smallest lapse in time so that a temporal order can just be determined. Figure <a href="motivating-data.html#fig:plot-ref-pf">2.2</a> highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e. the response probability is 50%). The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84% level and the PSS, though the upper level depends on domain expertise.</p>
+<div class="figure" style="text-align: center"><span id="fig:plot-ref-pf"></span>
+<img src="adknudson-thesis_files/figure-html/plot-ref-pf-1.png" alt="The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise." width="70%" />
+<p class="caption">
+Figure 2.2: The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise.
+</p>
+</div>
+<p>Perceptual synchrony can be modified through a baseline understanding.</p>
+<!--
+- Temporal Order Judgment Psychometric Experiment
+  - Setup and Methods
+  - Data collection
+  - Order of trials
+  - The manuscript provided by Ally will really be the main source of content for this section
+  - She describes the data collection for three of the sensory tasks
+  - Data cleaning and loading
+  - Research questions
+-->
+<!--
+- Observations about the data
+  - Outliers and failed experiments
+  - balance of classes (male v female, young v middle v older, etc.)
+  - Tasks
+  - In the workflow section, I will look for and point out any visual trends in the data
+-->
 
+</div>
 </div>
 <h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-boring1917chart">
 <p>Boring, Edwin G. 1917. “A Chart of the Psychometric Function.” <em>The American Journal of Psychology</em> 28 (4): 465–70.</p>
+</div>
+<div id="ref-britannica2014editors">
+<p>Britannica, Encyclopaedia. 2014. “The Editors of Encyclopaedia Britannica.” Dispersion.</p>
 </div>
 <div id="ref-stone2001now">
 <p>Stone, JV, NM Hunkin, J Porrill, R Wood, V Keeler, M Beanland, M Port, and NR Porter. 2001. “When Is Now? Perception of Simultaneity.” <em>Proceedings of the Royal Society of London. Series B: Biological Sciences</em> 268 (1462): 31–38.</p>

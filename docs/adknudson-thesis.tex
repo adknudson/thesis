@@ -3,8 +3,9 @@
 \PassOptionsToPackage{hyphens}{url}
 %
 \documentclass[
-]{article}
+]{report}
 \usepackage{lmodern}
+\usepackage{setspace}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
@@ -41,6 +42,7 @@
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
+\usepackage[top=1.0in,left=1.5in,bottom=1.25in,right=1.5in]{geometry}
 \usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
@@ -112,35 +114,30 @@
 
 \title{Contributions to Modern Bayesian Multilevel Modeling}
 \author{Alexander Knudson}
-\date{Friday July 31, 2020}
+\date{Sunday August 02, 2020}
 
 \begin{document}
 \maketitle
 
 {
-\setcounter{tocdepth}{3}
+\setcounter{tocdepth}{2}
 \tableofcontents
 }
+\listoftables
+\listoffigures
+\setstretch{2}
 \hypertarget{abstract}{%
-\section*{Abstract}\label{abstract}}
+\chapter*{Abstract}\label{abstract}}
 
 
 \textbf{Big Idea:} \emph{making contributions to \& gaining mastery of state of the art statistical computing tools and Bayesian modeling/probabilistic programming.}
 
 \hypertarget{acknowledgments}{%
-\section*{Acknowledgments}\label{acknowledgments}}
-
-
-\hypertarget{list-of-tables}{%
-\section*{List of Tables}\label{list-of-tables}}
-
-
-\hypertarget{list-of-figures}{%
-\section*{List of Figures}\label{list-of-figures}}
+\chapter*{Acknowledgments}\label{acknowledgments}}
 
 
 \hypertarget{introduction}{%
-\section{Introduction}\label{introduction}}
+\chapter{Introduction}\label{introduction}}
 
 \begin{itemize}
 \tightlist
@@ -261,120 +258,67 @@ With the advances in computational power and high-level programming languages li
 I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{Chapter 2} I introduce the data set that drives the narrative and that motivates the adoption of Bayesian multilevel modeling. In \protect\hyperlink{background}{Chapter 3} there is a review of common approaches approaches to modeling with psychometric data, and the benefits and drawbacks of such techniques. \protect\hyperlink{bayesian-modeling}{Chapter 4} introduces Bayesian hierarchical modeling and programming frameworks for Bayesian inference. In \protect\hyperlink{workflow}{Chapter 5} I describe and work through a principled Bayesian workflow for multilevel modeling. \protect\hyperlink{model-checking}{Chapter 6} goes into more depth on checking the model goodness of fit and model diagnostics in a Bayesian setting. Finally in \protect\hyperlink{predictive-inference}{Chapter 7} I demonstrate how to use the Bayesian model from the principled workflow for predictive inference, and use posterior predictive distributions to plot and compare models.
 
 \hypertarget{motivating-data}{%
-\section{Motivating Data}\label{motivating-data}}
+\chapter{Background and Motivating Data}\label{motivating-data}}
 
-\begin{itemize}
-\tightlist
-\item
-  Background of psychometrics
+It was Charles Darwin who in his book \emph{On the Origin of Species} developed the idea that living organisms adapt to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Though the dark side of statistics and hubris lead Galton to become a pioneer of eugenics, his works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
 
-  \begin{itemize}
-  \tightlist
-  \item
-    Charles Darwin at the core, with the ideas that living organisms adapt to their environment
-  \item
-    Sir Francis Galton lead the creation of psychometrics
+E.H. Weber built upon Herbart's work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a \emph{liminal} stimulus. He paved the way for experimental psychology and is the namesake of \emph{Weber's Law} -- the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus \citep{britannica2014editors}.
 
-    \begin{itemize}
-    \tightlist
-    \item
-      ``This idea stimulated Galton's interest in the study of human beings and how they differ one from another and, more importantly, how to measure those differences''
-    \item
-      Galton devised and conducted ``mental'' tests
-    \end{itemize}
-  \item
-    ``Herbart was responsible for creating mathematical models of the mind, which were influential in educational practices in years to come.''
-  \item
-    ``E.H. Weber built upon Herbart's work and tried to prove the existence of a psychological threshold, saying that a minimum stimulus was necessary to activate a sensory system''
-  \item
-    ``G.T. Fechner \ldots{} devise{[}d{]} the law that the strength of a sensation grows as the logarithm of the stimulus intensity''
-  \end{itemize}
-\item
-  Psychometric Experiments
+\[
+\frac{\Delta I}{I} = k
+\]
 
-  \begin{itemize}
-  \tightlist
-  \item
-    ``The psychometric function relates an observer's performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task'' \citep{wichmann2001a}
-  \item
-    Studied as early as the late 1800's
-  \item
-    \citep{boring1917chart}
-  \item
-    Perceptual Synchrony
+To put this law into practice, consider holding a 1 kg weight (\(I = 1\)), and further suppose that we can \emph{just} detect the difference between a 1 kg weight and a 1.2 kg weight (\(\Delta I = 0.2\)). Then the constant just noticeable ratio is
 
-    \begin{itemize}
-    \tightlist
-    \item
-      Our experiences in life as we age shape the mechanisms of processing multisensory signals
-    \item
-      Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis
-    \item
-      This gives rise to an idea of the temporal binding window, or the temporal differences for which sensory signals are integrated into a global percept
-    \item
-      Perceptual synchrony has been previously studied through the point of subjective simultaneity, the physical temporal delay between two signals at which an observer is unsure about their temporal order \citep{stone2001now}
-    \end{itemize}
-  \item
-    Temporal Sensitivity
+\[
+k = \frac{0.2}{1} = 0.2
+\]
 
-    \begin{itemize}
-    \tightlist
-    \item
-      The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept
-    \item
-      A deficit in temporal sensitivity may lead to a widening of the temporal binding window and cause reduce the ability to segregate unrelated sensory signals
-    \item
-      In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the just noticeable difference
-    \item
-      The just noticeable difference is the smallest lapse in time so that a temporal order can just be determined
-    \end{itemize}
-  \item
-    Temporal Recalibration
+So now if we pick up a 10 kg weight, we should be able to determine how much more mass is required to just detect a difference:
 
-    \begin{itemize}
-    \tightlist
-    \item
-      Our perceptual synchrony can be modified through a baseline understanding
-    \end{itemize}
-  \end{itemize}
-\item
-  Temporal Order Judgment Psychometric Experiment
+\[
+\frac{\Delta I}{10} = 0.2 \Rightarrow \Delta I = 2
+\]
 
-  \begin{itemize}
-  \tightlist
-  \item
-    Setup and Methods
-  \item
-    Data collection
-  \item
-    Order of trials
-  \item
-    The manuscript provided by Ally will really be the main source of content for this section
-  \item
-    She describes the data collection for three of the sensory tasks
-  \item
-    Data cleaning and loading
-  \item
-    Research questions
-  \end{itemize}
-\item
-  Observations about the data
+The difference between a 10 kg and a 12 kg weight should be just barely perceptible. Notice that the difference in the first set of weights is 0.2 and in the second set it is 2. Our perception of the difference in stimulus intensities is not absolute, but relative. G.T. Fechner devised the law (Weber-Fechner Law) that the strength of a sensation grows as the logarithm of the stimulus intensity.
 
-  \begin{itemize}
-  \tightlist
-  \item
-    Outliers and failed experiments
-  \item
-    balance of classes (male v female, young v middle v older, etc.)
-  \item
-    Tasks
-  \item
-    In the workflow section, I will look for and point out any visual trends in the data
-  \end{itemize}
-\end{itemize}
+\[S = K \ln I\]
+
+An example to this law is to consider two light sources, one that is 100 lumens (\(S_1 = K \ln 100\)) and another that is 200 lumens (\(S_2 = K \ln 200\)). The intensity of the second light is not perceived as twice as bright, but only about 1.15 times as bright according to the Weber-Fechner law: \(\theta = S_2 / S_1 \approx 1.15\). Notice that the value \(K\) cancels out when calculating the relative intensity, but knowing \(K\) can lead to important psychological insights; insights about differences between persons or groups of people! What biological and contextual factors affect how people perceive different stimuli? How do we measure their perception in a meaningful way? As one might expect, we can collect data from psychometric experiments, fit a model to the data from a family of functions called \emph{psychometric functions}, and inspect key operating characteristics of those functions.
+
+\hypertarget{psychometric-experiments}{%
+\section{Psychometric Experiments}\label{psychometric-experiments}}
+
+Psychometric experiments are devised in a way to examine psychophysical processes, or the response between the world around us and our inward perceptions. A \textbf{psychometric function} relates an observer's performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task \citep{wichmann2001a}. Psychometric functions were studied as early as the late 1800's, and Edwin Boring published a chart of the psychometric function in The American Journal of Psychology in 1917 \citep{boring1917chart}.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{figures/chart_of_pf} 
+
+}
+
+\caption{A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or 'two', recorded as either 'two' or 'not two'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their response of 'two'. So at what separation is the impression of two points liminal?}\label{fig:chart-of-pf}
+\end{figure}
+
+Figure \ref{fig:chart-of-pf} displays the key aspects of the psychometric function. The most crucial part is the sigmoid function, the S-like non-decreasing curve, which in this case is represented by the Normal CDF, \(\Phi(\gamma)\). The horizontal axis represents the stimulus stimulus intensity, the separation of two points in centimeters. The vertical axis represents the probability that a subject has the impression of two points. With only experimental data, the response proportion becomes an approximation for the probability.
+
+This leads me to talk about the type of psychometric experiment that this paper deals with called a \textbf{temporal order judgment} (TOJ) experiment. The concept is that if there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept -- perceive them as happening simultaneously. Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events. The temporal asynchrony between stimuli is called the \textbf{stimulus onset asynchrony} (SOA), and the range of SOAs for which sensory signals are integrated into a global percept is called the \textbf{temporal binding window}. When the SOA grows too large then the brain segregates the two signals and the temporal order can be determined.
+
+Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the \textbf{point of subjective simultaneity} (PSS) -- the temporal delay between two signals at which an observer is unsure about their temporal order \citep{stone2001now}. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the \textbf{just noticeable difference} (JND) -- the smallest lapse in time so that a temporal order can just be determined. Figure \ref{fig:plot-ref-pf} highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e.~the response probability is 50\%). The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84\% level and the PSS, though the upper level depends on domain expertise.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{adknudson-thesis_files/figure-latex/plot-ref-pf-1} 
+
+}
+
+\caption{The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise.}\label{fig:plot-ref-pf}
+\end{figure}
+
+Perceptual synchrony can be modified through a baseline understanding.
 
 \hypertarget{background}{%
-\section{Background to Modeling}\label{background}}
+\chapter{Background to Modeling}\label{background}}
 
 \begin{itemize}
 \tightlist
@@ -463,7 +407,7 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
 \end{itemize}
 
 \hypertarget{bayesian-modeling}{%
-\section{Bayesian Multilevel Modeling}\label{bayesian-modeling}}
+\chapter{Bayesian Multilevel Modeling}\label{bayesian-modeling}}
 
 \begin{itemize}
 \tightlist
@@ -482,7 +426,7 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
 \end{itemize}
 
 \hypertarget{bayesian-stuff}{%
-\subsection{Bayesian Stuff}\label{bayesian-stuff}}
+\section{Bayesian Stuff}\label{bayesian-stuff}}
 
 \begin{itemize}
 \item
@@ -509,7 +453,7 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
 \end{itemize}
 
 \hypertarget{multilevel-modeling-stuff}{%
-\subsection{Multilevel Modeling Stuff}\label{multilevel-modeling-stuff}}
+\section{Multilevel Modeling Stuff}\label{multilevel-modeling-stuff}}
 
 \begin{itemize}
 \item
@@ -518,7 +462,7 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
 \end{itemize}
 
 \hypertarget{workflow}{%
-\section{Principaled Bayesian Workflow}\label{workflow}}
+\chapter{Principaled Bayesian Workflow}\label{workflow}}
 
 \begin{itemize}
 \tightlist
@@ -539,13 +483,13 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
 \end{itemize}
 
 \hypertarget{feature-engineering}{%
-\subsection{Feature Engineering}\label{feature-engineering}}
+\section{Feature Engineering}\label{feature-engineering}}
 
 \hypertarget{prior-specification}{%
-\subsection{Prior Specification}\label{prior-specification}}
+\section{Prior Specification}\label{prior-specification}}
 
 \hypertarget{model-checking}{%
-\section{Model Checking}\label{model-checking}}
+\chapter{Model Checking}\label{model-checking}}
 
 \begin{itemize}
 \tightlist
@@ -602,7 +546,7 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
 \end{itemize}
 
 \hypertarget{predictive-inference}{%
-\section{Predictive Inference}\label{predictive-inference}}
+\chapter{Predictive Inference}\label{predictive-inference}}
 
 \begin{itemize}
 \tightlist
@@ -619,17 +563,17 @@ I have organized this thesis as follows. In \protect\hyperlink{motivating-data}{
 \end{itemize}
 
 \hypertarget{results}{%
-\section{Results}\label{results}}
+\chapter{Results}\label{results}}
 
 Objective conclusions
 
 \hypertarget{discussion}{%
-\section{Discussion}\label{discussion}}
+\chapter{Discussion}\label{discussion}}
 
 Subjective conclusions
 
 \hypertarget{conclusion}{%
-\section{Conclusion}\label{conclusion}}
+\chapter{Conclusion}\label{conclusion}}
 
 Really just placeholder stuff for now.
 
@@ -637,12 +581,15 @@ Really just placeholder stuff for now.
 \frac{1}{\sqrt{2\pi\sigma}} \exp{\left\lbrace \frac{(x-\mu)^2}{\sigma^2} \right\rbrace}
 \]
 
+\setstretch{1.0}
+
 \hypertarget{appendix-a}{%
-\section*{Appendix A}\label{appendix-a}}
+\chapter*{Appendix A}\label{appendix-a}}
 
 
 \hypertarget{one-model-three-implementations}{%
-\subsection{One model, Three Implementations}\label{one-model-three-implementations}}
+\section*{One model, Three Implementations}\label{one-model-three-implementations}}
+
 
 Novice
 
@@ -705,16 +652,16 @@ parameters{
 }
 model{
     vector[N] p;
-    a   ~ normal(0, 1);
+    a   ~ normal(0, 10);
     aG1 ~ normal(0, sd_aG1);
     aG2 ~ normal(0, sd_aG2);
-    b   ~ normal(0, 1);
+    b   ~ normal(0, 10);
     bG1 ~ normal(0, sd_bG1);
     bG2 ~ normal(0, sd_bG2);
-    sd_aG1 ~ cauchy(0, 5);
-    sd_aG2 ~ cauchy(0, 5);
-    sd_bG1 ~ cauchy(0, 5);
-    sd_bG2 ~ cauchy(0, 5);
+    sd_aG1 ~ cauchy(0, 10);
+    sd_aG2 ~ cauchy(0, 10);
+    sd_bG1 ~ cauchy(0, 10);
+    sd_bG2 ~ cauchy(0, 10);
     for ( i in 1:N ) {
         p[i] = (a + aG1[G1[i]] + aG2[G2[i]]) + (b + bG1[G1[i]] + bG2[G2[i]]) * x[i];
     }
@@ -723,8 +670,10 @@ model{
 \end{verbatim}
 
 \hypertarget{appendix-b}{%
-\section*{Appendix B}\label{appendix-b}}
+\chapter*{Appendix B}\label{appendix-b}}
 
+
+\setstretch{1.0}
 
   \bibliography{bibliography.bib}
 

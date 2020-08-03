@@ -5,9 +5,17 @@ date: "`r format(Sys.Date(), '%A %B %d, %Y')`"
 site: bookdown::bookdown_site
 bibliography: [bibliography.bib]
 biblio-style: agsm
-documentclass: article
+documentclass: report
+geometry:
+- top=1.0in
+- left=1.5in
+- bottom=1.25in
+- right=1.5in
+linestretch: 2
 link-citations: yes
 github-repo: adkudson/thesis
+lof: True
+lot: True
 ---
 
 # Abstract {-}
@@ -16,7 +24,3 @@ github-repo: adkudson/thesis
 
 # Acknowledgments {-}
 
-
-# List of Tables {-}
-
-# List of Figures {-}
