@@ -525,6 +525,9 @@ n
 <th style="text-align:right;">
 k
 </th>
+<th style="text-align:right;">
+proportion
+</th>
 </tr>
 </thead>
 <tbody>
@@ -541,6 +544,9 @@ pre
 <td style="text-align:right;">
 4
 </td>
+<td style="text-align:right;">
+0.80
+</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -552,6 +558,9 @@ pre
 <td style="text-align:right;">
 5
 </td>
+<td style="text-align:right;">
+1.00
+</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -562,6 +571,9 @@ pre
 </td>
 <td style="text-align:right;">
 0
+</td>
+<td style="text-align:right;">
+0.00
 </td>
 </tr>
 <tr>
@@ -577,6 +589,9 @@ post1
 <td style="text-align:right;">
 3
 </td>
+<td style="text-align:right;">
+1.00
+</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -587,6 +602,9 @@ post1
 </td>
 <td style="text-align:right;">
 1
+</td>
+<td style="text-align:right;">
+0.33
 </td>
 </tr>
 <tr>
@@ -599,6 +617,9 @@ post1
 <td style="text-align:right;">
 0
 </td>
+<td style="text-align:right;">
+0.00
+</td>
 </tr>
 </tbody>
 </table>
@@ -609,6 +630,21 @@ post1
 Figure 2.4: Post-adaptation response data for O-f-CE
 </p>
 </div>
+<p>It is unreasonable because, of all the negative SOAs, there were only two correct responses<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. If a ssubject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject’s proportion of correct responses is above 0.5, then they are doing better than random guessing. In figure <a href="motivating-data.html#fig:av-post-neg-trials">2.5</a> it is seen that subject O-f-CE is the only one who’s proportion is below 0.5 (and by a considerable amount).</p>
+<div class="figure" style="text-align: center"><span id="fig:av-post-neg-trials"></span>
+<img src="adknudson-thesis_files/figure-html/av-post-neg-trials-1.png" alt="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment." width="70%" />
+<p class="caption">
+Figure 2.5: Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment.
+</p>
+</div>
+<p>The consequences of leaving in this experimental block in the data is considered in the <a href="workflow.html#workflow">Chapter 5</a>, but it is a clear outlier that must be noted. When this method of detecting outliers is repeated for all tasks and blocks, then I end up with 17 records in total (see figure <a href="motivating-data.html#fig:naive-prop-outliers">2.6</a>), one of which is the aforementioned subject.</p>
+<div class="figure" style="text-align: center"><span id="fig:naive-prop-outliers"></span>
+<img src="adknudson-thesis_files/figure-html/naive-prop-outliers-1.png" alt="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs." width="70%" />
+<p class="caption">
+Figure 2.6: Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs.
+</p>
+</div>
+<p>Most of the records that are flagged by this method of outlier detection are from the sensorimotor task, and none are from the visual task. This may be caused by the perceived difficulty of the task. One consequence of higher temporal sensitivity is that it is easier to determine temporal order. It may also be that determining temporal order is inherently easier for certain multisensory tasks than others. Since the sensorimotor task does not have fixed SOA values like the other tasks, it may be perceived as more difficult. Or perhaps the mechanisms that process touch and visual signals are not as well coupled as those that process audio and visual signals. I’ll consider how to handle the sensorimotor outliers in the model fitting process.</p>
 
 </div>
 </div>
@@ -640,6 +676,7 @@ Figure 2.4: Post-adaptation response data for O-f-CE
 <hr />
 <ol start="1">
 <li id="fn1"><p>By unreasonable, I mean that it is extremely unlikely that the data represents genuine responses.<a href="motivating-data.html#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Correct in the sense that the perceived order matches the actual order.<a href="motivating-data.html#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

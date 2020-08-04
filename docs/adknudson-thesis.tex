@@ -128,7 +128,7 @@
 
 \title{Contributions to Modern Bayesian Multilevel Modeling}
 \author{Alexander Knudson}
-\date{Monday August 03, 2020}
+\date{Tuesday August 04, 2020}
 
 \begin{document}
 \maketitle
@@ -402,21 +402,21 @@ Subjectively the right plot in figure \ref{fig:simple-response-soa-plot} is the 
 
 \caption{\label{tab:av-bin-sample}Audiovisual task with aggregated responses.}
 \centering
-\begin{tabular}[t]{lrrr}
+\begin{tabular}[t]{lrrrr}
 \toprule
-trial & soa & n & k\\
+trial & soa & n & k & proportion\\
 \midrule
- & 200 & 5 & 4\\
-\cmidrule{2-4}
- & 150 & 5 & 5\\
-\cmidrule{2-4}
-\multirow[t]{-3}{*}{\raggedright\arraybackslash pre} & -350 & 5 & 0\\
-\cmidrule{1-4}
- & 350 & 3 & 3\\
-\cmidrule{2-4}
- & -500 & 3 & 1\\
-\cmidrule{2-4}
-\multirow[t]{-3}{*}{\raggedright\arraybackslash post1} & -200 & 3 & 0\\
+ & 200 & 5 & 4 & 0.80\\
+\cmidrule{2-5}
+ & 150 & 5 & 5 & 1.00\\
+\cmidrule{2-5}
+\multirow[t]{-3}{*}{\raggedright\arraybackslash pre} & -350 & 5 & 0 & 0.00\\
+\cmidrule{1-5}
+ & 350 & 3 & 3 & 1.00\\
+\cmidrule{2-5}
+ & -500 & 3 & 1 & 0.33\\
+\cmidrule{2-5}
+\multirow[t]{-3}{*}{\raggedright\arraybackslash post1} & -200 & 3 & 0 & 0.00\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -431,6 +431,30 @@ Other quirks about the data pertain to the subjects. There is one younger subjec
 
 \caption{Post-adaptation response data for O-f-CE}\label{fig:av-post1-O-f-CE-plot}
 \end{figure}
+
+It is unreasonable because, of all the negative SOAs, there were only two correct responses\footnote{Correct in the sense that the perceived order matches the actual order.}. If a ssubject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject's proportion of correct responses is above 0.5, then they are doing better than random guessing. In figure \ref{fig:av-post-neg-trials} it is seen that subject O-f-CE is the only one who's proportion is below 0.5 (and by a considerable amount).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{adknudson-thesis_files/figure-latex/av-post-neg-trials-1} 
+
+}
+
+\caption{Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment.}\label{fig:av-post-neg-trials}
+\end{figure}
+
+The consequences of leaving in this experimental block in the data is considered in the \protect\hyperlink{workflow}{Chapter 5}, but it is a clear outlier that must be noted. When this method of detecting outliers is repeated for all tasks and blocks, then I end up with 17 records in total (see figure \ref{fig:naive-prop-outliers}), one of which is the aforementioned subject.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{adknudson-thesis_files/figure-latex/naive-prop-outliers-1} 
+
+}
+
+\caption{Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs.}\label{fig:naive-prop-outliers}
+\end{figure}
+
+Most of the records that are flagged by this method of outlier detection are from the sensorimotor task, and none are from the visual task. This may be caused by the perceived difficulty of the task. One consequence of higher temporal sensitivity is that it is easier to determine temporal order. It may also be that determining temporal order is inherently easier for certain multisensory tasks than others. Since the sensorimotor task does not have fixed SOA values like the other tasks, it may be perceived as more difficult. Or perhaps the mechanisms that process touch and visual signals are not as well coupled as those that process audio and visual signals. I'll consider how to handle the sensorimotor outliers in the model fitting process.
 
 \hypertarget{background}{%
 \chapter{Background to Modeling}\label{background}}
