@@ -344,7 +344,7 @@ There are four different tasks in the experiment: audio-visual, visual-visual, v
 
 \begin{table}[!h]
 
-\caption{\label{tab:multitask-data}Sample of motivating data}
+\caption{\label{tab:multitask-data}Sample of motivating data.}
 \centering
 \begin{tabular}[t]{rrllllrl}
 \toprule
@@ -379,6 +379,58 @@ Duration & Perceived bottom as longer & Bottom lasted longer than top\\
 \bottomrule
 \end{tabular}
 \end{table}
+
+Finally, after the first block of each task was completed, the participants went through an adaptation period where they were presented with the respective stimuli from each task repeatedly at fixed temporal delays, then they repeated the task. To ensure that the adaptation affect persisted, the subject were presented with the adapter stimulus at regular intervals throughout the second block. The blocks are designated as \texttt{pre} and \texttt{post1}, \texttt{post2}, etc. in the data set. In this paper I will only be focusing on the \texttt{pre} and \texttt{post1} blocks.
+
+\hypertarget{data-visualizations-and-quirks}{%
+\section{Data Visualizations and Quirks}\label{data-visualizations-and-quirks}}
+
+The dependent variable in these experiments is the perceived response which is encoded as a 0 or a 1, and the independent variable is the SOA value. If the response is plotted against the SOA values, then it is difficult to determine any relationship (see figure \ref{fig:simple-response-soa-plot}). Transparency can be used to better visualize the relationships between SOA value and responses. The center plot in figure \ref{fig:simple-response-soa-plot} uses the same data as the left plot, except that the transparency is set to 0.05. As a result, one can see that there is a higher density of ``0'' responses towards more negative SOAs, and a higher density of ``1'' responses for more positive SOAs. Taking it a step further, I can compute and plot the proportion of responses for a given SOA. This is displayed in the right plot. Now the relationship between SOA value and responses is clear -- as the SOA value goes from more negative to more positive, the proportion of positive responses increases from near 0 to near 1.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{adknudson-thesis_files/figure-latex/simple-response-soa-plot-1} 
+
+}
+
+\caption{Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency.}\label{fig:simple-response-soa-plot}
+\end{figure}
+
+Subjectively the right plot in figure \ref{fig:simple-response-soa-plot} is the easiest to interpret. Because of this, I will often present the observed and predicted data using the proportion of responses rather than the actual response. Proportional data also has the advantage of being bounded on the same interval as the response. For the audiovisual task, the responses can be aggregated into binomial data -- the number of positive responses for given SOA value -- which is sometimes more efficient to work with than the Bernoulli data (see table \ref{tab:av-bin-sample}). However the number of times an SOA is presented varies between the pre-adaptation and post-adaptation blocks; 5 and 3 times per SOA respectively.
+
+\begin{table}[!h]
+
+\caption{\label{tab:av-bin-sample}Audiovisual task with aggregated responses.}
+\centering
+\begin{tabular}[t]{lrrr}
+\toprule
+trial & soa & n & k\\
+\midrule
+ & 200 & 5 & 4\\
+\cmidrule{2-4}
+ & 150 & 5 & 5\\
+\cmidrule{2-4}
+\multirow[t]{-3}{*}{\raggedright\arraybackslash pre} & -350 & 5 & 0\\
+\cmidrule{1-4}
+ & 350 & 3 & 3\\
+\cmidrule{2-4}
+ & -500 & 3 & 1\\
+\cmidrule{2-4}
+\multirow[t]{-3}{*}{\raggedright\arraybackslash post1} & -200 & 3 & 0\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Other quirks about the data pertain to the subjects. There is one younger subject that did not complete the audiovisual task, and one younger subject that did not complete the duration task. Additionally there is one older subject who's response data for the post-adaptation audiovisual task is unreasonable\footnote{By unreasonable, I mean that it is extremely unlikely that the data represents genuine responses.} (see figure \ref{fig:av-post1-O-f-CE-plot}).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{adknudson-thesis_files/figure-latex/av-post1-O-f-CE-plot-1} 
+
+}
+
+\caption{Post-adaptation response data for O-f-CE}\label{fig:av-post1-O-f-CE-plot}
+\end{figure}
 
 \hypertarget{background}{%
 \chapter{Background to Modeling}\label{background}}

@@ -136,6 +136,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2" data-path="motivating-data.html"><a href="motivating-data.html"><i class="fa fa-check"></i><b>2</b> Background and Motivating Data</a><ul>
 <li class="chapter" data-level="2.1" data-path="motivating-data.html"><a href="motivating-data.html#psychometric-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
 <li class="chapter" data-level="2.2" data-path="motivating-data.html"><a href="motivating-data.html#temporal-order-judgment-data"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Data</a></li>
+<li class="chapter" data-level="2.3" data-path="motivating-data.html"><a href="motivating-data.html#data-visualizations-and-quirks"><i class="fa fa-check"></i><b>2.3</b> Data Visualizations and Quirks</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>3</b> Background to Modeling</a></li>
 <li class="chapter" data-level="4" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html"><i class="fa fa-check"></i><b>4</b> Bayesian Multilevel Modeling</a><ul>
@@ -290,7 +291,7 @@ Figure 2.2: The PSS is defined as the point where an observer can do no better a
 -->
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:multitask-data">Table 2.1: </span>Sample of motivating data
+<span id="tab:multitask-data">Table 2.1: </span>Sample of motivating data.
 </caption>
 <thead>
 <tr>
@@ -494,23 +495,120 @@ Bottom lasted longer than top
 </tr>
 </tbody>
 </table>
-<!--
-- Temporal Order Judgment Psychometric Experiment
-  - Setup and Methods
-  - Data collection
-  - Order of trials
-  - The manuscript provided by Ally will really be the main source of content for this section
-  - She describes the data collection for three of the sensory tasks
-  - Data cleaning and loading
-  - Research questions
--->
-<!--
-- Observations about the data
-  - Outliers and failed experiments
-  - balance of classes (male v female, young v middle v older, etc.)
-  - Tasks
-  - In the workflow section, I will look for and point out any visual trends in the data
--->
+<p>Finally, after the first block of each task was completed, the participants went through an adaptation period where they were presented with the respective stimuli from each task repeatedly at fixed temporal delays, then they repeated the task. To ensure that the adaptation affect persisted, the subject were presented with the adapter stimulus at regular intervals throughout the second block. The blocks are designated as <code>pre</code> and <code>post1</code>, <code>post2</code>, etc. in the data set. In this paper I will only be focusing on the <code>pre</code> and <code>post1</code> blocks.</p>
+</div>
+<div id="data-visualizations-and-quirks" class="section level2">
+<h2><span class="header-section-number">2.3</span> Data Visualizations and Quirks</h2>
+<p>The dependent variable in these experiments is the perceived response which is encoded as a 0 or a 1, and the independent variable is the SOA value. If the response is plotted against the SOA values, then it is difficult to determine any relationship (see figure <a href="motivating-data.html#fig:simple-response-soa-plot">2.3</a>). Transparency can be used to better visualize the relationships between SOA value and responses. The center plot in figure <a href="motivating-data.html#fig:simple-response-soa-plot">2.3</a> uses the same data as the left plot, except that the transparency is set to 0.05. As a result, one can see that there is a higher density of “0” responses towards more negative SOAs, and a higher density of “1” responses for more positive SOAs. Taking it a step further, I can compute and plot the proportion of responses for a given SOA. This is displayed in the right plot. Now the relationship between SOA value and responses is clear – as the SOA value goes from more negative to more positive, the proportion of positive responses increases from near 0 to near 1.</p>
+<div class="figure" style="text-align: center"><span id="fig:simple-response-soa-plot"></span>
+<img src="adknudson-thesis_files/figure-html/simple-response-soa-plot-1.png" alt="Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency." width="70%" />
+<p class="caption">
+Figure 2.3: Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency.
+</p>
+</div>
+<p>Subjectively the right plot in figure <a href="motivating-data.html#fig:simple-response-soa-plot">2.3</a> is the easiest to interpret. Because of this, I will often present the observed and predicted data using the proportion of responses rather than the actual response. Proportional data also has the advantage of being bounded on the same interval as the response. For the audiovisual task, the responses can be aggregated into binomial data – the number of positive responses for given SOA value – which is sometimes more efficient to work with than the Bernoulli data (see table <a href="motivating-data.html#tab:av-bin-sample">2.3</a>). However the number of times an SOA is presented varies between the pre-adaptation and post-adaptation blocks; 5 and 3 times per SOA respectively.</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:av-bin-sample">Table 2.3: </span>Audiovisual task with aggregated responses.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+trial
+</th>
+<th style="text-align:right;">
+soa
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+k
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;vertical-align: top !important;" rowspan="3">
+pre
+</td>
+<td style="text-align:right;">
+200
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+150
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-350
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;vertical-align: top !important;" rowspan="3">
+post1
+</td>
+<td style="text-align:right;">
+350
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-500
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-200
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>Other quirks about the data pertain to the subjects. There is one younger subject that did not complete the audiovisual task, and one younger subject that did not complete the duration task. Additionally there is one older subject who’s response data for the post-adaptation audiovisual task is unreasonable<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> (see figure <a href="motivating-data.html#fig:av-post1-O-f-CE-plot">2.4</a>).</p>
+<div class="figure" style="text-align: center"><span id="fig:av-post1-O-f-CE-plot"></span>
+<img src="adknudson-thesis_files/figure-html/av-post1-O-f-CE-plot-1.png" alt="Post-adaptation response data for O-f-CE" width="70%" />
+<p class="caption">
+Figure 2.4: Post-adaptation response data for O-f-CE
+</p>
+</div>
 
 </div>
 </div>
@@ -537,6 +635,12 @@ Bottom lasted longer than top
 <div id="ref-wichmann2001a">
 <p>Wichmann, Felix A, and N Jeremy Hill. 2001. “The Psychometric Function: I. Fitting, Sampling, and Goodness of Fit.” <em>Perception &amp; Psychophysics</em> 63 (8): 1293–1313.</p>
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>By unreasonable, I mean that it is extremely unlikely that the data represents genuine responses.<a href="motivating-data.html#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
