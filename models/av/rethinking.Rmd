@@ -24,7 +24,7 @@ dat <- audiovisual_binomial %>%
   mutate_at(vars("rid", "sid", "trial"), fct_drop) %>%
   mutate(soa = soa / 1000, trt = trial == "post1") %>%
   select(soa, n, k, rid, sid, age_group, trt, age) %>%
-  rename(G = age_group)
+  rename(G = age_group, S = sid)
 ```
 
 
@@ -53,3 +53,56 @@ bxMa_notrt_noage_nosub_nolapse <- ulam(alist(
   b ~ normal(0, 30)
 ), data=dat, log_lik=TRUE, chains=4, cores=4, iter=2500, refresh=2500)
 ```
+
+## No Pooling
+
+## Partial Pooling
+
+```{r}
+pp_ln <- alist(
+  k ~ binomial_logit(n, p),
+  p <- exp(b + bG[G] + bS[S] + (bT + bTG[G] + bTS[S])*trt) * (soa - (a + aG[G] + aS[S] + (aT + aTG[G] + aTS[S])*trt)),
+  
+  a ~ normal(0, 0.1),
+  aG[G] ~ normal(0, sd_aG),
+  aS[S] ~ normal(0, sd_aS),
+  
+  aT ~ normal(0, 0.1),
+  aTG[G] ~ normal(0, sd_aTG),
+  aTS[S] ~ normal(0, sd_aTS),
+  
+  b ~ normal(2, 1),
+  bG[G] ~ normal(0, sd_bG),
+  bS[S] ~ normal(0, sd_bS),
+  
+  bT ~ normal(0, 1),
+  bTG[G] ~ normal(0, sd_bTG),
+  bTS[S] ~ normal(0, sd_bTS),
+  
+  c(sd_aG, sd_aS) ~ half_cauchy(0, 2.5),
+  c(sd_aTG, sd_aTS) ~ half_cauchy(0, 2.5),
+  
+  c(sd_bG, sd_bS) ~ half_cauchy(0, 5),
+  c(sd_bTG, sd_bTS) ~ half_cauchy(0, 5)
+)
+
+fit_pp_ln <- ulam(pp_ln, data = dat, log_lik = TRUE,
+                  chains = 8, cores = 8, iter = 2500)
+
+post <- extract.samples(fit_pp_ln)
+```
+
+
+```{r}
+mean(post$a)
+mean(post$aT)
+mean(post$b)
+mean(post$bT)
+
+
+sd(post$a)
+sd(post$T)
+sd(post$b)
+sd(post$bT)
+```
+

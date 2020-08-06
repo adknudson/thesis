@@ -27,4 +27,5 @@
 - shortcomings
   - Convergence failure in the presence of complete separation
     - [@prins2019too], [@ghosh2018use]
-  - 
+    - Give an example with how the MLE values are estimated
+    - Give an example where MLE fails

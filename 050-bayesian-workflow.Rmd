@@ -1,4 +1,4 @@
-# Principaled Bayesian Workflow {#workflow}
+# Principled Bayesian Workflow {#workflow}
 
 - Standardizing Predictors
 - Parameterization of the linear predictor
@@ -6,7 +6,32 @@
   - Choice of Priors
   - lapse rates
 
-## Feature Engineering
 
-## Prior Specification
+In other words we can evaluate a model by answering four questions.
 
+Question One: Domain Expertise Consistency
+Is our model consistent with our domain expertise?
+
+Question Two: Computational Faithfulness
+Will our computational tools be sufficient to accurately fit our posteriors?
+
+Question Three: Inferential Adequacy
+Will our inferences provide enough information to answer our questions?
+
+Question Four: Model Adequacy
+Is our model rich enough to capture the relevant structure of the true data generating process?
+
+- 
+
+
+## Steps of the Workflow
+
+
+
+## Selecting Priors
+
+### Intercept
+
+### Slope
+
+### Lapse
