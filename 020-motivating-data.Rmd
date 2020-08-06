@@ -1,6 +1,6 @@
 # Background and Motivating Data {#motivating-data}
 
-```{r, motivating-data-setup, include=FALSE}
+```{r motivating-data-setup, include=FALSE, cache=FALSE}
 library(FangPsychometric)
 library(tidyverse)
 library(patchwork)
@@ -54,7 +54,7 @@ Our experiences in life as we age shape the mechanisms of processing multisensor
 ggplot(tibble(x = c(-4, 4), y = c(0, 1)), aes(x, y)) +
   geom_hline(yintercept = 0, lwd = 0.5) +
   geom_vline(xintercept = 0, lwd = 0.5) +
-  geom_function(fun = plogis, args = list(location = 1), size = 1.5, 
+  stat_function(fun = plogis, args = list(location = 1), size = 1.5, 
                 color = "steelblue") +
   geom_segment(aes(x = 0, xend = qlogis(0.5, 1), y = 0.5, yend = 0.5),
                lty = "dotted") +
@@ -185,7 +185,7 @@ p3 <- visual_binomial %>%
 Subjectively the right plot in figure \@ref(fig:simple-response-soa-plot) is the easiest to interpret. Because of this, I will often present the observed and predicted data using the proportion of responses rather than the actual response. Proportional data also has the advantage of being bounded on the same interval as the response. For the audiovisual task, the responses can be aggregated into binomial data -- the number of positive responses for given SOA value -- which is sometimes more efficient to work with than the Bernoulli data (see table \@ref(tab:av-bin-sample)). However the number of times an SOA is presented varies between the pre-adaptation and post-adaptation blocks; 5 and 3 times per SOA respectively. 
 
 
-```{r av-bin-sample}
+```{r, av-bin-sample}
 set.seed(5)
 audiovisual_binomial %>%
   select(-rid) %>%
@@ -217,7 +217,7 @@ audiovisual_binomial %>%
 
 It is unreasonable because, of all the negative SOAs, there were only two correct responses^[Correct in the sense that the perceived order matches the actual order.]. If a ssubject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject's proportion of correct responses is above 0.5, then they are doing better than random guessing. In figure \@ref(fig:av-post-neg-trials) it is seen that subject O-f-CE is the only one who's proportion is below 0.5 (and by a considerable amount).
 
-```{r av-post-neg-trials, fig.asp=1, fig.cap="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment."}
+```{r, av-post-neg-trials, fig.asp=1, fig.cap="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment."}
 audiovisual %>%
   filter(trial == "post1", soa < 0) %>%
   mutate(is_neg = soa < 0,
@@ -244,7 +244,7 @@ audiovisual %>%
 
 The consequences of leaving in this experimental block in the data is considered in the [Chapter 5](#workflow), but it is a clear outlier that must be noted. When this method of detecting outliers is repeated for all tasks and blocks, then I end up with 17 records in total (see figure \@ref(fig:naive-prop-outliers)), one of which is the aforementioned subject.
 
-```{r naive-prop-outliers, fig.cap="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs."}
+```{r, naive-prop-outliers, fig.cap="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs."}
 multitask %>%
   mutate(is_pos = soa > 0,
          is_neg = soa < 0,

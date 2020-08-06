@@ -1,5 +1,44 @@
 # Background to Modeling {#background}
 
+A psychometric function can be fit using a generalized linear model (GLM) with the link function coming from the family of S-shaped curves called a sigmoid. Commonly GLMs are fit using maximum likelihood estimation (MLE). In the case of a psychometric experiment, we can represent the outcome of a single trial as the result of a random experiment arising from a Bernoulli process. Without loss of generality, the psychometric function, $F(x; \theta)$, determines the probability that the outcome is 1.
+
+\begin{equation}
+  Y \sim \textrm{Bernoulli}(\pi)
+  (\#eq:psyoutcome)
+\end{equation}
+
+
+\begin{equation}
+  \pi = P(Y=1 \vert x; \theta) = F(x; \theta)
+   (\#eq:bernprob1)
+\end{equation}
+
+If $P(Y=1 | x; \theta) = F(x;\theta)$, then $P(Y = 0 | x; \theta) = 1 - F(x;\theta)$, and hence 
+
+\begin{equation}
+  P(Y=y | x; \theta) = F(x;\theta)^y(1-F(x;\theta))^{1-y}
+  (\#eq:bernproby)
+\end{equation}
+
+The likelihood function $\mathcal{L}$ can be determined using equation \@ref(eq:bernproby)
+
+\begin{equation}
+  \begin{split}
+    \mathcal{L}(\theta | y, x) &= \prod_{i}^{N} P(y_i | x_i; \theta) \\
+    &= \prod_{i}^{N}F(x_i;\theta)^{y_i}(1-F(x_i;\theta))^{1-y_i}
+  \end{split}
+  (\#eq:bernlik)
+\end{equation}
+
+Equation \@ref(eq:bernlik) is commonly expressed in terms of its logarithm.
+
+\begin{equation}
+  \ln \mathcal{L}(\theta | y, x) = \sum_{i}^{N} y_i \ln\left(F(x_i;\theta)\right) + (1-y_i) \ln\left(F(x_i;\theta))\right)
+  (\#eq:bernloglik)
+\end{equation}
+
+From here the classical process would be to take the derivative of \@ref(eq:bernloglik), set it equal to $0$, and solve for $\theta$. Additionally one might perform a second derivative test to ensure that the solution is indeed a maximizer to \@ref(eq:bernloglik). However no closed form exists for \@ref(eq:bernloglik), and so numerical methods like gradient descent are used to iteratively find the MLE solution.
+
 - Generalized Linear Models
   - classical approaches to fitting/estimation
     - Maximum likelihood estimation

@@ -143,9 +143,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.1" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html#bayesian-stuff"><i class="fa fa-check"></i><b>4.1</b> Bayesian Stuff</a></li>
 <li class="chapter" data-level="4.2" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html#multilevel-modeling-stuff"><i class="fa fa-check"></i><b>4.2</b> Multilevel Modeling Stuff</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>5</b> Principaled Bayesian Workflow</a><ul>
-<li class="chapter" data-level="5.1" data-path="workflow.html"><a href="workflow.html#feature-engineering"><i class="fa fa-check"></i><b>5.1</b> Feature Engineering</a></li>
-<li class="chapter" data-level="5.2" data-path="workflow.html"><a href="workflow.html#prior-specification"><i class="fa fa-check"></i><b>5.2</b> Prior Specification</a></li>
+<li class="chapter" data-level="5" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>5</b> Principled Bayesian Workflow</a><ul>
+<li class="chapter" data-level="5.1" data-path="workflow.html"><a href="workflow.html#steps-of-the-workflow"><i class="fa fa-check"></i><b>5.1</b> Steps of the Workflow</a></li>
+<li class="chapter" data-level="5.2" data-path="workflow.html"><a href="workflow.html#selecting-priors"><i class="fa fa-check"></i><b>5.2</b> Selecting Priors</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="workflow.html"><a href="workflow.html#intercept"><i class="fa fa-check"></i><b>5.2.1</b> Intercept</a></li>
+<li class="chapter" data-level="5.2.2" data-path="workflow.html"><a href="workflow.html#slope"><i class="fa fa-check"></i><b>5.2.2</b> Slope</a></li>
+<li class="chapter" data-level="5.2.3" data-path="workflow.html"><a href="workflow.html#lapse"><i class="fa fa-check"></i><b>5.2.3</b> Lapse</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>6</b> Model Checking</a></li>
 <li class="chapter" data-level="7" data-path="predictive-inference.html"><a href="predictive-inference.html"><i class="fa fa-check"></i><b>7</b> Predictive Inference</a></li>
@@ -174,6 +178,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="background" class="section level1">
 <h1><span class="header-section-number">3</span> Background to Modeling</h1>
+<p>A psychometric function can be fit using a generalized linear model (GLM) with the link function coming from the family of S-shaped curves called a sigmoid. Commonly GLMs are fit using maximum likelihood estimation (MLE). In the case of a psychometric experiment, we can represent the outcome of a single trial as the result of a random experiment arising from a Bernoulli process. Without loss of generality, the psychometric function, <span class="math inline">\(F(x; \theta)\)</span>, determines the probability that the outcome is 1.</p>
+<p><span class="math display" id="eq:psyoutcome">\[\begin{equation}
+  Y \sim \textrm{Bernoulli}(\pi)
+  \tag{3.1}
+\end{equation}\]</span></p>
+<p><span class="math display" id="eq:bernprob1">\[\begin{equation}
+  \pi = P(Y=1 \vert x; \theta) = F(x; \theta)
+   \tag{3.2}
+\end{equation}\]</span></p>
+<p>If <span class="math inline">\(P(Y=1 | x; \theta) = F(x;\theta)\)</span>, then <span class="math inline">\(P(Y = 0 | x; \theta) = 1 - F(x;\theta)\)</span>, and hence</p>
+<p><span class="math display" id="eq:bernproby">\[\begin{equation}
+  P(Y=y | x; \theta) = F(x;\theta)^y(1-F(x;\theta))^{1-y}
+  \tag{3.3}
+\end{equation}\]</span></p>
+<p>The likelihood function <span class="math inline">\(\mathcal{L}\)</span> can be determined using equation <a href="background.html#eq:bernproby">(3.3)</a></p>
+<p><span class="math display" id="eq:bernlik">\[\begin{equation}
+  \begin{split}
+    \mathcal{L}(\theta | y, x) &amp;= \prod_{i}^{N} P(y_i | x_i; \theta) \\
+    &amp;= \prod_{i}^{N}F(x_i;\theta)^{y_i}(1-F(x_i;\theta))^{1-y_i}
+  \end{split}
+  \tag{3.4}
+\end{equation}\]</span></p>
+<p>Equation <a href="background.html#eq:bernlik">(3.4)</a> is commonly expressed in terms of its logarithm.</p>
+<p><span class="math display" id="eq:bernloglik">\[\begin{equation}
+  \ln \mathcal{L}(\theta | y, x) = \sum_{i}^{N} y_i \ln\left(F(x_i;\theta)\right) + (1-y_i) \ln\left(F(x_i;\theta))\right)
+  \tag{3.5}
+\end{equation}\]</span></p>
+<p>From here the classical process would be to take the derivative of <a href="background.html#eq:bernloglik">(3.5)</a>, set it equal to <span class="math inline">\(0\)</span>, and solve for <span class="math inline">\(\theta\)</span>. Additionally one might perform a second derivative test to ensure that the solution is indeed a maximizer to <a href="background.html#eq:bernloglik">(3.5)</a>. However no closed form exists for <a href="background.html#eq:bernloglik">(3.5)</a>, and so numerical methods like gradient descent are used to iteratively find the MLE solution.</p>
 <ul>
 <li>Generalized Linear Models
 <ul>
@@ -215,8 +247,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Convergence failure in the presence of complete separation
 <ul>
 <li><span class="citation">(Prins <a href="#ref-prins2019too" role="doc-biblioref">2019</a>)</span>, <span class="citation">(Ghosh et al. <a href="#ref-ghosh2018use" role="doc-biblioref">2018</a>)</span></li>
+<li>Give an example with how the MLE values are estimated</li>
+<li>Give an example where MLE fails</li>
 </ul></li>
-<li></li>
 </ul></li>
 </ul>
 
