@@ -1,12 +1,16 @@
+%==============================================================================00
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
-%
-\documentclass[
-]{report}
+%==============================================================================01
+\documentclass[11pt, oneside]{book}
+%==============================================================================02
 \usepackage{lmodern}
+%==============================================================================03
 \usepackage{setspace}
+%==============================================================================04
 \usepackage{amssymb,amsmath}
+%==============================================================================05
 \usepackage{ifxetex,ifluatex}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
@@ -17,6 +21,7 @@
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
+%==============================================================================06
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
@@ -33,16 +38,20 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
+%==============================================================================07
 \usepackage{xcolor}
+%==============================================================================08
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-  pdftitle={Contributions to Modern Bayesian Multilevel Modeling},
+  pdftitle={Contributions to},
   pdfauthor={Alexander Knudson},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
-\usepackage[top=1.0in,left=1.5in,bottom=1.25in,right=1.5in]{geometry}
+%==============================================================================09
+\usepackage[top=1in, left=1.5in, bottom=1.25in, right=1.5in]{geometry}
+%==============================================================================10
 \usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
@@ -83,6 +92,7 @@
 \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+%==============================================================================11
 \usepackage{longtable,booktabs}
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -92,7 +102,8 @@
 % Allow footnotes in longtable head/foot
 \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
 \makesavenoteenv{longtable}
-\usepackage{graphicx,grffile}
+%==============================================================================12
+\usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
@@ -105,10 +116,17 @@
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
+%==============================================================================13
+%==============================================================================14
+%==============================================================================15
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+%==============================================================================16
 \setcounter{secnumdepth}{5}
+%==============================================================================17
+%==============================================================================18
+
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
@@ -123,35 +141,85 @@
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
 \usepackage{xcolor}
+%==============================================================================19
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+%==============================================================================20
 \usepackage[]{natbib}
 \bibliographystyle{apalike}
-
-\title{Contributions to Modern Bayesian Multilevel Modeling}
-\author{Alexander Knudson}
-\date{Thursday August 06, 2020}
+%==============================================================================21
+\frontmatter
 
 \begin{document}
-\maketitle
 
-{
-\setcounter{tocdepth}{2}
+\begin{titlepage}
+\begin{center}
+
+University of Nevada, Reno
+
+\textbf{Contributions to}
+
+A thesis submitted in partial fulfillment of the \\
+requirements for the degree of Master of Science in \\
+Statistics and Data Science
+
+by
+
+Alexander Knudson
+
+
+
+
+\end{center}
+\end{titlepage}
+%==============================================================================22
+% Begin ---------------
+\thispagestyle{empty}
+Copyright page (optional)
+%------------------ End
+
+
+% Begin ---------------
+\newpage
+\thispagestyle{empty}
+Committee Aproval Page
+%------------------ End
+
+
+% Begin ---------------
+\newpage
+\setcounter{page}{1} % Begin lower case Roman numerals
+Abstract
+
+Big Idea: making contributions to and gaining mastery of state of the art statistical computing tools and Bayesian modeling/probabilistic programming.
+%------------------ End
+
+
+% Begin ---------------
+\newpage
+Dedication (optional)
+%------------------ End
+
+
+% Begin ---------------
+\newpage
+Acknowledgments (optional)
+%------------------ End
+
+% Begin ---------------
+\setcounter{tocdepth}{1}
 \tableofcontents
-}
+
 \listoftables
+
 \listoffigures
-\setstretch{2}
-\hypertarget{abstract}{%
-\chapter*{Abstract}\label{abstract}}
-
-
-\textbf{Big Idea:} \emph{making contributions to \& gaining mastery of state of the art statistical computing tools and Bayesian modeling/probabilistic programming.}
-
-\hypertarget{acknowledgments}{%
-\chapter*{Acknowledgments}\label{acknowledgments}}
-
-
-I would like to first and foremost thank my sister Heather for always being a constant source of sarcasm and teasing. Without her skepticism I would not have had enough motivation to finish this degree out of spite, and instead would have had to rely on self-discipline and encouragement from my peers and mentors.
-
+%------------------ End
+%==============================================================================23
+\setstretch{2.0}
+%==============================================================================24
+\mainmatter
+%==============================================================================25
 \hypertarget{introduction}{%
 \chapter{Introduction}\label{introduction}}
 
@@ -461,24 +529,19 @@ Most of the records that are flagged by this method of outlier detection are fro
 
 A psychometric function can be fit using a generalized linear model (GLM) with the link function coming from the family of S-shaped curves called a sigmoid. Commonly GLMs are fit using maximum likelihood estimation (MLE). In the case of a psychometric experiment, we can represent the outcome of a single trial as the result of a random experiment arising from a Bernoulli process. Without loss of generality, the psychometric function, \(F(x; \theta)\), determines the probability that the outcome is 1.
 
-\begin{equation}
-  Y \sim \textrm{Bernoulli}(\pi)
-  \label{eq:psyoutcome}
-\end{equation}
+\begin{align*}
+Y &\sim \textrm{Bernoulli}(\pi) \\
+\pi &= P(Y=1 \vert x; \theta) = F(x; \theta)
+\end{align*}
 
-\begin{equation}
-  \pi = P(Y=1 \vert x; \theta) = F(x; \theta)
-   \label{eq:bernprob1}
-\end{equation}
-
-If \(P(Y=1 | x; \theta) = F(x;\theta)\), then \(P(Y = 0 | x; \theta) = 1 - F(x;\theta)\), and hence
+If \(P(Y=1 | x; \theta) = F(x;\theta)\), then \(P(Y = 0 | x; \theta) = 1 - F(x;\theta)\), and hence the probability of an outcome is
 
 \begin{equation}
   P(Y=y | x; \theta) = F(x;\theta)^y(1-F(x;\theta))^{1-y}
   \label{eq:bernproby}
 \end{equation}
 
-The likelihood function \(\mathcal{L}\) can be determined using equation \eqref{eq:bernproby}
+The likelihood function, \(\mathcal{L}\), can be determined using equation \eqref{eq:bernproby}
 
 \begin{equation}
   \begin{split}
@@ -495,7 +558,37 @@ Equation \eqref{eq:bernlik} is commonly expressed in terms of its logarithm.
   \label{eq:bernloglik}
 \end{equation}
 
-From here the classical process would be to take the derivative of \eqref{eq:bernloglik}, set it equal to \(0\), and solve for \(\theta\). Additionally one might perform a second derivative test to ensure that the solution is indeed a maximizer to \eqref{eq:bernloglik}. However no closed form exists for \eqref{eq:bernloglik}, and so numerical methods like gradient descent are used to iteratively find the MLE solution.
+From here the classical approach would be to take the derivative of \eqref{eq:bernloglik}, set it equal to \(0\), and solve for \(\theta\). Additionally one might perform a second derivative test to ensure that the solution is indeed a maximizer to \eqref{eq:bernloglik} (and hence to \eqref{eq:bernlik}). However no closed form expression exists for the solution to \(\frac{d}{d\theta} \ln \mathcal{L}(\theta) = 0\), and so numerical optimization methods like gradient descent are used to iteratively find the MLE solution. In most cases this works fine, but there are common situations where MLE fails. In this chapter I will discuss common techniques for fitting psychometric functions, the reasons to use these methods, and the conditions for when they are not optimal.
+
+As introduced above, the first method is to use generalized linear models. A GLM is one that can be transformed into a linear model via a link function. An example of this is the logistic function which takes \(x \in \mathbb{R}\) and squishes the output to be in \((0, 1)\).
+
+\begin{equation}
+  F(\theta) = \frac{1}{1 + \exp\left(-\theta\right)}
+  \label{eq:logistic}
+\end{equation}
+
+Since \(F\) is a strictly increasing and continuous function, it has an inverse, and the link for \eqref{eq:logistic} is the log-odds or logit function.
+
+\begin{equation}
+  F^{-1}(\pi) = \mathrm{logit}(\pi) = \ln\left(\frac{\pi}{1 - \pi}\right)
+  \label{eq:logit}
+\end{equation}
+
+By taking \((F^{-1} \circ F)(\theta)\) we can arrive at a relationship that is linear in \(\theta\).
+
+\begin{align*}
+  \pi = F(\theta) \Longleftrightarrow F^{-1}(\pi) &= F^{-1}(F(\theta)) \\
+  & = \ln\left(\frac{F(\theta)}{1 - F(\theta)}\right) \\
+  &= \ln(F(\theta)) - \ln(1 - F(\theta)) \\
+  &= \ln\left(\frac{1}{1 + \exp(-\theta)}\right) - \ln\left(\frac{\exp(-\theta)}{1 + \exp(-\theta)}\right) \\
+  &= - \ln(1 + \exp(-\theta)) - \ln(\exp(-\theta)) + \ln(1 + \exp(-\theta)) \\
+  &= - \ln(\exp(-\theta)) \\
+  &= \theta
+\end{align*}
+
+Linear models are favored in statistics because they are generally easier to interpret than other types of models. For example, say \(\mathrm{logit}(\pi) = 0.5 + 1.5x\) where \(\pi\) is the probability of a positive outcome, \(Y=1\). We can say that at \(x = 0\), the log-odds of a positive outcome is 0.5, and an increase in \(x\) by 1 increases the log-odds by 1.5.
+
+There is nothing that is particular about the logistic function that makes it the only suitable sigmoid for psychometric functions. Other common link functions include the probit (inverse of the standard normal CDF) and Weibull inverse CDF. In fact, any continuous CDF defined on the real number line can be used for psychometric functions. A PF only requires that a function is strictly increasing and bounded between 0 and 1.The logit and probit links have properties such as connections to log-odds and the normal distribution that make working with them more convenient.
 
 \begin{itemize}
 \tightlist
@@ -645,56 +738,96 @@ From here the classical process would be to take the derivative of \eqref{eq:ber
 \hypertarget{workflow}{%
 \chapter{Principled Bayesian Workflow}\label{workflow}}
 
+There are many great resources out there\footnote{citation needed} for following along with an analysis of some data or problem, and much more is the abundance of tips, tricks, techniques, and testimonies to good modeling practices. The problem is that many of these prescriptions are given without context for when they are appropriate to be taken. According to \citet{betancourt2020}, this leaves ``practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics.'' The concept of a principled workflow is that for any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather great consideration must be given to domain expertise and the questions that one is trying to answer with the data.
+
+Since everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Domain Expertise Consistency - Is our model consistent with our domain expertise?
+\item
+  Computational Faithfulness - Will our computational tools be sufficient to accurately fit our posteriors?
+\item
+  Inferential Adequacy - Will our inferences provide enough information to answer our questions?
+\item
+  Model Adequacy - Is our model rich enough to capture the relevant structure of the true data generating process?
+\end{enumerate}
+
 \begin{itemize}
 \tightlist
 \item
-  Standardizing Predictors
+  Scope out your problem
 \item
-  Parameterization of the linear predictor
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Choice of Link Function
-  \item
-    Choice of Priors
-  \item
-    lapse rates
-  \end{itemize}
+  Specify likelihood and priors
+\item
+  check the model with fake data
+\item
+  fit the model to the real data
+\item
+  check diagnostics
+\item
+  graph fit estimates
+\item
+  check predictive posterior
+\item
+  compare models
 \end{itemize}
 
-In other words we can evaluate a model by answering four questions.
+\hypertarget{pre-model-pre-data}{%
+\section{Pre-Model, Pre-Data}\label{pre-model-pre-data}}
 
-Question One: Domain Expertise Consistency
-Is our model consistent with our domain expertise?
+\hypertarget{conceptual-analysis}{%
+\subsection{Conceptual analysis}\label{conceptual-analysis}}
 
-Question Two: Computational Faithfulness
-Will our computational tools be sufficient to accurately fit our posteriors?
+\hypertarget{define-observational-space}{%
+\subsection{Define observational space}\label{define-observational-space}}
 
-Question Three: Inferential Adequacy
-Will our inferences provide enough information to answer our questions?
+\hypertarget{construct-summary-statistics}{%
+\subsection{Construct summary statistics}\label{construct-summary-statistics}}
 
-Question Four: Model Adequacy
-Is our model rich enough to capture the relevant structure of the true data generating process?
+\hypertarget{post-model-pre-data}{%
+\section{Post-Model, Pre-Data}\label{post-model-pre-data}}
 
-\begin{itemize}
-\item
-\end{itemize}
+\hypertarget{model-development}{%
+\subsection{model development}\label{model-development}}
 
-\hypertarget{steps-of-the-workflow}{%
-\section{Steps of the Workflow}\label{steps-of-the-workflow}}
+\hypertarget{construct-summary-functions}{%
+\subsection{Construct summary functions}\label{construct-summary-functions}}
 
-\hypertarget{selecting-priors}{%
-\section{Selecting Priors}\label{selecting-priors}}
+\hypertarget{simulate-bayesian-ensemble}{%
+\subsection{simulate bayesian ensemble}\label{simulate-bayesian-ensemble}}
 
-\hypertarget{intercept}{%
-\subsection{Intercept}\label{intercept}}
+\hypertarget{prior-checks}{%
+\subsection{Prior checks}\label{prior-checks}}
 
-\hypertarget{slope}{%
-\subsection{Slope}\label{slope}}
+\hypertarget{configure-algorithm}{%
+\subsection{configure algorithm}\label{configure-algorithm}}
 
-\hypertarget{lapse}{%
-\subsection{Lapse}\label{lapse}}
+\hypertarget{fit-simulated-ensemble}{%
+\subsection{fit simulated ensemble}\label{fit-simulated-ensemble}}
+
+\hypertarget{algorithmic-calibration}{%
+\subsection{algorithmic calibration}\label{algorithmic-calibration}}
+
+\hypertarget{inferential-calibration}{%
+\subsection{inferential calibration}\label{inferential-calibration}}
+
+\hypertarget{post-model-post-data}{%
+\section{Post-Model, Post-Data}\label{post-model-post-data}}
+
+\hypertarget{fit-observation}{%
+\subsection{fit observation}\label{fit-observation}}
+
+\hypertarget{diagnose-posterior-fit}{%
+\subsection{diagnose posterior fit}\label{diagnose-posterior-fit}}
+
+\hypertarget{posterior-retrodictive-checks}{%
+\subsection{Posterior retrodictive checks}\label{posterior-retrodictive-checks}}
+
+\hypertarget{celebrate}{%
+\subsection{Celebrate}\label{celebrate}}
 
 \hypertarget{model-checking}{%
 \chapter{Model Checking}\label{model-checking}}
@@ -790,7 +923,7 @@ Really just placeholder stuff for now.
 \]
 
 \hypertarget{appendix-appendix}{%
-\appendix \addcontentsline{toc}{chapter}{\appendixname}}
+\appendix}
 
 
 \hypertarget{supplementary-code}{%
@@ -888,7 +1021,10 @@ model{
 \setstretch{2.0}
 
 \setstretch{1.0}
-
-  \bibliography{bibliography.bib}
-
+%==============================================================================26
+\backmatter
+%==============================================================================27
+\bibliography{bibliography.bib}
+%==============================================================================28
+%==============================================================================29
 \end{document}

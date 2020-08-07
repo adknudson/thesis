@@ -6,7 +6,6 @@ after_chapter_script: [_outgoing.R]
 view: https://github.com/adknudson/thesis/blob/master/%s
 rmd_files: [
   "index.Rmd",
-  "010-introduction.Rmd",
   "020-motivating-data.Rmd",
   "030-background.Rmd",
   "040-bayesian-modeling.Rmd",
