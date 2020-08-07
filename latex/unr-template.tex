@@ -15,6 +15,7 @@ $if(CJKmainfont)$
 $endif$
 %==============================================================================01
 \documentclass[11pt, oneside]{book}
+\usepackage{lipsum}
 %==============================================================================02
 \usepackage{lmodern}
 %==============================================================================03
@@ -50,7 +51,7 @@ $endif$
   \KOMAoptions{parskip=half}}
 \makeatother
 %==============================================================================07
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
 %==============================================================================08
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
@@ -187,22 +188,29 @@ $endif$
 
 \begin{titlepage}
 \begin{center}
-
+\vspace*{1in}
 University of Nevada, Reno
 
+\vspace{1.5in}
 \textbf{$title$}
 
+\vspace{1in}
 A thesis submitted in partial fulfillment of the \\
 requirements for the degree of Master of Science in \\
 Statistics and Data Science
 
+\vspace{1in}
 by
 
+\vspace{1em}
 $author$
 
+\vspace{2em}
 $advisor$
 
+\vspace{3em}
 $date$
+
 \end{center}
 \end{titlepage}
 %==============================================================================22

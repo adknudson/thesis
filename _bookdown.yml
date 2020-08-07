@@ -19,3 +19,4 @@ rmd_files: [
   "300-references.Rmd"
 ]
 output_dir: "docs"
+new_session: true
