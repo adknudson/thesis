@@ -4,11 +4,16 @@ author: "Alexander Knudson"
 advisor: "A.G. Schissler"
 date: "August, 2020"
 site: bookdown::bookdown_site
-bibliography: [bibliography.bib]
+bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: yes
 github-repo: adkudson/thesis
 ---
+
+```{r ch1-setup, include=FALSE}
+knitr::write_bib(c('knitr', 'bookdown', 'rethinking', 'rstan'), 
+                 'packages.bib', width = 80)
+```
 
 # Introduction
 

@@ -1,3 +1,10 @@
+```{r ch5-setup, include=FALSE}
+library(FangPsychometric)
+library(dplyr)
+library(rethinking)
+```
+
+
 # Principled Bayesian Workflow {#workflow}
 
 There are many great resources out there^[citation needed] for following along with an analysis of some data or problem, and much more is the abundance of tips, tricks, techniques, and testimonies to good modeling practices. The problem is that many of these prescriptions are given without context for when they are appropriate to be taken. According to @betancourt2020, this leaves "practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics." The concept of a principled workflow is that for any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather great consideration must be given to domain expertise and the questions that one is trying to answer with the data.
@@ -8,12 +15,6 @@ Since everyone asks different questions, the value of a model is not in how well
 2. Computational Faithfulness - Will our computational tools be sufficient to accurately fit our posteriors?
 3. Inferential Adequacy - Will our inferences provide enough information to answer our questions?
 4. Model Adequacy - Is our model rich enough to capture the relevant structure of the true data generating process?
-
-
-
-<br />
-
-
 
 <br />
 
@@ -31,36 +32,102 @@ Since everyone asks different questions, the value of a model is not in how well
 
 ### Conceptual analysis
 
+What are we really trying to accomplish with this experiment? Ideally we would like to answer a grid of questions related to age, task, and temporal recalibration, and how these factors affect perceptual synchrony and temporal sensitivity.
 
+_<<Summarize the experimental setup again>>_
 
 ### Define observational space
 
+Given the concept of a psychometric experiment, we can begin to develop a formal mathematical model. The response that subjects give to a TOJ task is recorded as a zero or a one (see section \@ref(toj-task)). The response is dependent on some temporal delay between stimuli, and the delay is small -- less than one second. For the audiovisual, visual, and duration tasks, the SOA values are fixed, and multiple trials are presented for each SOA.
+
 ### Construct summary statistics
+
+In order to effectively challenge the validity of a model, we construct a set of summary statistics that help answer questions 1 and 4. We are studying the affects of age and temporal recalibration through the PSS and JND (see section \@ref(psycho-experiments)), and we can put reasonable thresholds on those quantities. 
+
+By the experimental setup and recording process, it is impossible that a properly conducted block would result in a JND less than 0, so that can be a lower limit for its threshold. Incorporating some outside knowledge,  On the other end it is unlikely that it will be beyond the limits of the SOA values, but even more concrete, it seems unreasonable that the just noticeable difference would be more than a second. 
 
 ## Post-Model, Pre-Data
 
-### model development
+### Model development
+
+Now that the conceptual analysis is complete, we can construct an observational model and a complementary prior model to form a complete Bayesian model.
+
+The observational space is the set of responses $\lbrace 0, 1\rbrace$ and the SOA values $\mathbb{R}$. Additionally each experiment has a unique identifier for the task, block, and subject (e.g. `av-pre-M-f-DB`). This identifier can be broken down to yield categorical variables or identifiers for each of the three, which is useful for models that make inferences at different levels in a hierarchy.
+
+As was stated in section \@ref(background), a subject's response is the outcome of a Bernoulli trial parameterized by a probability, $\pi$, that is dependent on the SOA value and potentially other contextual and biological factors.
 
 ### Construct summary functions
 
-### simulate bayesian ensemble
+NA
+
+### Simulate bayesian ensemble
+
+What is the purpose of this step? To make sure that the generating model coupled with the summary stats/functions yields prior estimates that are consistent with domain expertise (see \@ref(prior-checks)).
 
 ### Prior checks
 
-### configure algorithm
+> If the prior predictive checks indicate con ict between the model and our domain expertise then we have to return to step four [(model development)] and refine our model.
 
-### fit simulated ensemble
+### Configure algorithm
 
-### algorithmic calibration
+As a default, we will be using the `rethinking` package [@R-rethinking] which is built on top of `rstan` [@R-rstan]. The rethinking package provides a high-level interface to Stan -- a C-compiled Markov chain Monte Carlo (MCMC) sampler -- while still being flexible enough to specify complex Bayesian models.
 
-### inferential calibration
+
+```{r m1_0, echo=TRUE, eval=FALSE}
+m1_0 <- alist(
+  response ~ bernoulli_logit(p),
+  p = a + b * soa,
+  
+  a ~ normal(0, 100),
+  b ~ normal(0, 100)
+)
+```
+
+
+### Fit simulated ensemble
+
+
+```{r f1_0-sim, echo=TRUE, eval=FALSE}
+f1_0 <- ulam(m1_0, data = simulated_data, chains = 8, cores = 8, log_lik = TRUE)
+```
+
+
+### Algorithmic calibration
+
+Did the algorithm perform correctly? What kind of diagnostics exist for this algorithm?
+
+- Using HMC
+  - $\hat{R}$
+  - Divergences
+  - Effective sample size
+  - Tail effective sample size
+  - Bulk effective sample size
+  - Bayesian fraction of missing information
+
+Is there anything we can tune during the fitting process that can alleviate algorithmic issues? Or is it a case of Folk Theorem, and we need to adjust the model?
+
+### Inferential calibration
+
+> In general we can always consider the distribution of posterior z-scores against posterior contractions to identify common pathologies in our inferences. If there are indications of undesired behavior, such as overfitting or non-identifability, then our model may not be sufficient.
+
+> In either case we might have to return to Step One to consider an improved experimental design or tempered scientific goals. Sometimes we may only need to return to Step Four to incorporate additional domain expertise to improve our inferences.
 
 ## Post-Model, Post-Data
 
-### fit observation
+### Fit observation
 
-### diagnose posterior fit
+
+```{r f1_0, echo=TRUE, eval=FALSE}
+f1_0 <- ulam(m1_0, data = observed_data, chains = 8, cores = 8, log_lik = TRUE)
+```
+
+
+### Diagnose posterior fit
+
+> If any diagnostics indicate poor performance then not only is our computational method suspect but also our model might not be rich enough to capture the relevant details of the observed data. At the very least we should return to Step Eight and enhance our computational method.
 
 ### Posterior retrodictive checks
+
+Need an example of using summary stats on posterior retrodictions
 
 ### Celebrate

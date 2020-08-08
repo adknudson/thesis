@@ -28,7 +28,7 @@ $$S = K \ln I$$
 
 An example to this law is to consider two light sources, one that is 100 lumens ($S_1 = K \ln 100$) and another that is 200 lumens ($S_2 = K \ln 200$). The intensity of the second light is not perceived as twice as bright, but only about 1.15 times as bright according to the Weber-Fechner law: $\theta = S_2 / S_1 \approx 1.15$. Notice that the value $K$ cancels out when calculating the relative intensity, but knowing $K$ can lead to important psychological insights; insights about differences between persons or groups of people! What biological and contextual factors affect how people perceive different stimuli? How do we measure their perception in a meaningful way? As one might expect, we can collect data from psychometric experiments, fit a model to the data from a family of functions called _psychometric functions_, and inspect key operating characteristics of those functions.
 
-## Psychometric Experiments
+## Psychometric Experiments {#psycho-experiments}
 
 Psychometric experiments are devised in a way to examine psychophysical processes, or the response between the world around us and our inward perceptions. A **psychometric function** relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task [@wichmann2001a]. Psychometric functions were studied as early as the late 1800's, and Edwin Boring published a chart of the psychometric function in The American Journal of Psychology in 1917 [@boring1917chart].
 
@@ -64,7 +64,7 @@ Perceptual synchrony and temporal sensitivity can be modified through a baseline
 
 The data set that I introduce in the next section concerns temporal order judgment across various sensory modalities with a temporal recalibration component.
 
-## Temporal Order Judgment Data
+## Temporal Order Judgment Data {#toj-task}
 
 The data set that I am using in this paper comes from experiments done by A.N. Scurry and Dr. Fang Jiang in the Department of Psychology at the University of Nevada. Reduced temporal sensitivity in the aging population manifests in an impaired ability to perceive synchronous events as simultaneous, and similarly more difficulty in segregating asynchronous sensory signals that belong to different sources. The consequences of a widening of the temporal binding window is considered in @scurry2019aging, as well as a complete detailing of the experimental setup and recording process. I provide a shortened summary of the methods.
 

@@ -427,8 +427,8 @@ The difference between a 10 kg and a 12 kg weight should be just barely percepti
 
 An example to this law is to consider two light sources, one that is 100 lumens (\(S_1 = K \ln 100\)) and another that is 200 lumens (\(S_2 = K \ln 200\)). The intensity of the second light is not perceived as twice as bright, but only about 1.15 times as bright according to the Weber-Fechner law: \(\theta = S_2 / S_1 \approx 1.15\). Notice that the value \(K\) cancels out when calculating the relative intensity, but knowing \(K\) can lead to important psychological insights; insights about differences between persons or groups of people! What biological and contextual factors affect how people perceive different stimuli? How do we measure their perception in a meaningful way? As one might expect, we can collect data from psychometric experiments, fit a model to the data from a family of functions called \emph{psychometric functions}, and inspect key operating characteristics of those functions.
 
-\hypertarget{psychometric-experiments}{%
-\section{Psychometric Experiments}\label{psychometric-experiments}}
+\hypertarget{psycho-experiments}{%
+\section{Psychometric Experiments}\label{psycho-experiments}}
 
 Psychometric experiments are devised in a way to examine psychophysical processes, or the response between the world around us and our inward perceptions. A \textbf{psychometric function} relates an observer's performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task \citep{wichmann2001a}. Psychometric functions were studied as early as the late 1800's, and Edwin Boring published a chart of the psychometric function in The American Journal of Psychology in 1917 \citep{boring1917chart}.
 
@@ -460,8 +460,8 @@ Perceptual synchrony and temporal sensitivity can be modified through a baseline
 
 The data set that I introduce in the next section concerns temporal order judgment across various sensory modalities with a temporal recalibration component.
 
-\hypertarget{temporal-order-judgment-data}{%
-\section{Temporal Order Judgment Data}\label{temporal-order-judgment-data}}
+\hypertarget{toj-task}{%
+\section{Temporal Order Judgment Data}\label{toj-task}}
 
 The data set that I am using in this paper comes from experiments done by A.N. Scurry and Dr.~Fang Jiang in the Department of Psychology at the University of Nevada. Reduced temporal sensitivity in the aging population manifests in an impaired ability to perceive synchronous events as simultaneous, and similarly more difficulty in segregating asynchronous sensory signals that belong to different sources. The consequences of a widening of the temporal binding window is considered in \citet{scurry2019aging}, as well as a complete detailing of the experimental setup and recording process. I provide a shortened summary of the methods.
 
@@ -838,47 +838,69 @@ Since everyone asks different questions, the value of a model is not in how well
 \hypertarget{conceptual-analysis}{%
 \subsection{Conceptual analysis}\label{conceptual-analysis}}
 
+What are we really trying to accomplish with this experiment? Ideally we would like to answer a grid of questions related to age, task, and temporal recalibration, and how these factors affect perceptual synchrony and temporal sensitivity
+
 \hypertarget{define-observational-space}{%
 \subsection{Define observational space}\label{define-observational-space}}
 
+Given the concept of a psychometric experiment, we can begin to develop a formal mathematical model. The response that subjects give to a TOJ task is recorded as a zero or a one (see section \ref{toj-task}). The response is dependent on some temporal delay between stimuli, and the delay is small -- less than one second. For the audiovisual, visual, and duration tasks, the SOA values are fixed, and multiple trials are presented for each SOA.
+
 \hypertarget{construct-summary-statistics}{%
 \subsection{Construct summary statistics}\label{construct-summary-statistics}}
+
+In order to effectively challenge the validity of a model, we construct a set of summary statistics that help answer questions 1 and 4. We are studying the affects of age and temporal recalibration through the PSS and JND (see section \ref{psycho-experiments}), and we can put reasonable thresholds on those quantities.
 
 \hypertarget{post-model-pre-data}{%
 \section{Post-Model, Pre-Data}\label{post-model-pre-data}}
 
 \hypertarget{model-development}{%
-\subsection{model development}\label{model-development}}
+\subsection{Model development}\label{model-development}}
+
+Now that the conceptual analysis is complete, we can construct an observational model and a complementary prior model to form a complete Bayesian model.
+
+The observational space is the set of responses \(\lbrace 0, 1\rbrace\) and the SOA values \(\mathbb{R}\). Additionally each experiment has a unique identifier for the task, block, and subject (e.g.~\texttt{av-pre-M-f-DB}). This identifier can be broken down to yield categorical variables or identifiers for each of the three, which is useful for models that make inferences at different levels in a hierarchy.
+
+As was stated in section \ref{background}, a subject's response is the outcome of a Bernoulli trial parameterized by a probability, \(\pi\), that is dependent on the SOA value and potentially other contextual and biological factors.
 
 \hypertarget{construct-summary-functions}{%
 \subsection{Construct summary functions}\label{construct-summary-functions}}
 
+NA
+
 \hypertarget{simulate-bayesian-ensemble}{%
-\subsection{simulate bayesian ensemble}\label{simulate-bayesian-ensemble}}
+\subsection{Simulate bayesian ensemble}\label{simulate-bayesian-ensemble}}
+
+What is the purpose of this step? To make sure that the generating model coupled with the summary stats/functions yields prior estimates that are consistent with domain expertise (see \ref{prior-checks}).
 
 \hypertarget{prior-checks}{%
 \subsection{Prior checks}\label{prior-checks}}
 
+\begin{quote}
+If the prior predictive checks indicate con ict between the model and our domain expertise then we have to return to step four {[}(model development){]} and refine our model.
+\end{quote}
+
 \hypertarget{configure-algorithm}{%
-\subsection{configure algorithm}\label{configure-algorithm}}
+\subsection{Configure algorithm}\label{configure-algorithm}}
+
+As a default, we will be using the \texttt{rethinking} package \citep{R-rethinking} which is built on top of \texttt{rstan} \citep{R-rstan}.
 
 \hypertarget{fit-simulated-ensemble}{%
-\subsection{fit simulated ensemble}\label{fit-simulated-ensemble}}
+\subsection{Fit simulated ensemble}\label{fit-simulated-ensemble}}
 
 \hypertarget{algorithmic-calibration}{%
-\subsection{algorithmic calibration}\label{algorithmic-calibration}}
+\subsection{Algorithmic calibration}\label{algorithmic-calibration}}
 
 \hypertarget{inferential-calibration}{%
-\subsection{inferential calibration}\label{inferential-calibration}}
+\subsection{Inferential calibration}\label{inferential-calibration}}
 
 \hypertarget{post-model-post-data}{%
 \section{Post-Model, Post-Data}\label{post-model-post-data}}
 
 \hypertarget{fit-observation}{%
-\subsection{fit observation}\label{fit-observation}}
+\subsection{Fit observation}\label{fit-observation}}
 
 \hypertarget{diagnose-posterior-fit}{%
-\subsection{diagnose posterior fit}\label{diagnose-posterior-fit}}
+\subsection{Diagnose posterior fit}\label{diagnose-posterior-fit}}
 
 \hypertarget{posterior-retrodictive-checks}{%
 \subsection{Posterior retrodictive checks}\label{posterior-retrodictive-checks}}

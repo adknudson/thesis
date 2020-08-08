@@ -4,11 +4,13 @@ author: "Alexander Knudson"
 advisor: "A.G. Schissler"
 date: "August, 2020"
 site: bookdown::bookdown_site
-bibliography: [bibliography.bib]
+bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: yes
 github-repo: adkudson/thesis
 ---
+
+
 
 # Introduction
 
