@@ -94,27 +94,25 @@ A histogram of computed PSS and JND values will suffice for summary statistics.
 
 ### Model development
 
-
-
 Talk here about how I select priors for the intercept (PSS) and the slope (JND). Choose a standard deviation for intercept so that $\approx 95\%$ of the values are between $\pm 0.1$
 
 $$
 \begin{align*}
 \alpha &\sim \mathcal{N}(0, 0.05) \\
-\beta &\sim \mathrm{Lognormal}(4, 0.8)
+\beta &\sim \mathrm{Lognormal}(3.96, 1.2)
 \end{align*}
 $$
 
-Basically if the expected JND is 0.100 (100 ms) and is distributed log-normally, then $\mathrm{logit}(0.84)/jnd$ is also log-normally distributed with mean $\mathrm{logit}(0.84) - log(0.1) \approx 4$.
+Basically if the expected JND is 0.100 (100 ms) and is distributed log-normally, then $\mathrm{logit}(0.84)/jnd$ is also log-normally distributed with mean $\mathrm{logit}(0.84) - log(0.1) \approx 3.96$.
 
-Choose a standard deviation value so that $\approx 95\%$ of the JND values are less than 0.500.
+Choose a standard deviation value so that $\approx 99\%$ of the JND values are less than 0.500.
 
 The distribution of prior psychometric functions now looks like
 
 ```{r prior-pf-plot, fig.cap="Prior distribution of psychometric functions using the priors for slope and intercept."}
 n <- 100
 a <- rnorm(n, 0, 0.05)
-b <- rlnorm(n, 4, 1.0)
+b <- rlnorm(n, 3.96, 1.2)
 
 fn <- function(x, a, b) {
   plogis(b * (x - a))
@@ -140,9 +138,9 @@ parameters {
   real<lower=0> beta;  // Slope (logit(0.84) / JND)
 }
 model {
-  alpha ~ normal(0, 0.05);  // Prior for intercept
-  beta ~ lognormal(4, 1);   // Prior for slope
-  vector[N] p;              // Binomial probability
+  alpha ~ normal(0, 0.05);      // Prior for intercept
+  beta ~ lognormal(3.96, 1.2);  // Prior for slope
+  vector[N] p;                  // Binomial probability
   for (i in 1:N) {
     p[i] = beta * (x[i] - alpha);
   }
@@ -166,7 +164,7 @@ data {
 }
 generated quantities {
   real alpha = normal_rng(0, 0.05);
-  real beta = lognormal_rng(4, 1);
+  real beta = lognormal_rng(3.96, 1.2);
   vector[N] theta = inv_logit( beta * (x - alpha) );
   int y_sim[N] = binomial_rng(n, theta);
   real pss = alpha;
@@ -185,8 +183,10 @@ sim_dat = list(N = nrow(av_dat),
                x = av_dat$soa / 1000)
 ```
 
+
 ```{r}
-sim_fit <- sampling(sim_iter1, data = sim_dat, algorithm="Fixed_param", refresh=0)
+sim_fit <- sampling(sim_iter1, data = sim_dat, 
+                    algorithm="Fixed_param", refresh = 1000)
 sim_prior <- extract(sim_fit)
 ```
 
@@ -198,9 +198,10 @@ sim_prior <- extract(sim_fit)
 ```{r}
 hist(sim_prior$pss, breaks = 50)
 hist(sim_prior$jnd, breaks = 50)
-mean(sim_prior$jnd < 0.5)
+quantile(sim_prior$jnd, probs = c(0.95, 0.99, 0.999, 1))
 ```
 
+We're satisfied with the prior coverage of the PSS and JND, so now we can move on to fitting the model to the simulated data.
 
 ### Configure algorithm
 
@@ -208,15 +209,60 @@ As a default, we will be using the `rstan` package [@R-rstan].
 
 ### Fit simulated ensemble
 
+```{r}
+sim_dat$k <- sapply(1:ncol(sim_prior$y_sim), function(i) {
+  sim_prior$y_sim[sample(4000, 1), i]
+})
+```
 
-```{stan output.var=}
 
+```{stan output.var="fit_sim_iter1"}
+data {
+  int N;        // Number of observations
+  int n[N];     // Trials per SOA
+  int k[N];     // binomial counts
+  vector[N] x;  // SOA values
+}
+parameters {
+  real alpha;          // Intercept (PSS)
+  real<lower=0> beta;  // Slope (logit(0.84) / JND)
+}
+model {
+  vector[N] p = beta * (x - alpha);  // Binomial probability
+  alpha ~ normal(0, 0.05);           // Prior for intercept
+  beta ~ lognormal(3.96, 1.2);       // Prior for slope
+  k ~ binomial_logit(n, p);          // Observational model
+}
+generated quantities {
+  real pss = alpha;
+  real jnd = logit(0.84) / beta;
+}
+```
+
+
+```{r}
+sim_fit <- sampling(fit_sim_iter1, data = sim_dat, refresh = 1000)
+sim_post <- extract(sim_fit)
 ```
 
 
 ### Algorithmic calibration
 
 Did the algorithm perform correctly? What kind of diagnostics exist for this algorithm?
+
+```{r}
+check_hmc_diagnostics(sim_fit)
+```
+
+```{r}
+round((sim_post_summ <- summary(sim_fit)$summary), 4)[,c(1,2,3,4,8,9,10)]
+```
+
+```{r}
+plot(sim_post$alpha, sim_post$beta)
+plot(sim_post$pss, sim_post$jnd)
+```
+
 
 - Using HMC
   - $\hat{R}$
@@ -230,7 +276,7 @@ Is there anything we can tune during the fitting process that can alleviate algo
 
 ### Inferential calibration
 
-> In general we can always consider the distribution of posterior z-scores against posterior contractions to identify common pathologies in our inferences. If there are indications of undesired behavior, such as overfitting or non-identifability, then our model may not be sufficient.
+Non-identifiable model??
 
 > In either case we might have to return to Step One to consider an improved experimental design or tempered scientific goals. Sometimes we may only need to return to Step Four to incorporate additional domain expertise to improve our inferences.
 
@@ -238,9 +284,40 @@ Is there anything we can tune during the fitting process that can alleviate algo
 
 ### Fit observation
 
+```{stan output.var="fit_obs_iter1"}
+data {
+  int N;        // Number of observations
+  int n[N];     // Trials per SOA
+  int k[N];     // binomial counts
+  vector[N] x;  // SOA values
+}
+parameters {
+  real alpha;          // Intercept (PSS)
+  real<lower=0> beta;  // Slope (logit(0.84) / JND)
+}
+model {
+  vector[N] p = beta * (x - alpha);  // Binomial probability
+  alpha ~ normal(0, 0.05);           // Prior for intercept
+  beta ~ lognormal(3.96, 1.2);       // Prior for slope
+  k ~ binomial_logit(n, p);          // Observational model
+}
+generated quantities {
+  real pss = alpha;
+  real jnd = logit(0.84) / beta;
+  int y_post_pred[N];
+  for (i in 1:N)
+    y_post_pred[i] = binomial_rng(n[i], inv_logit(beta * (x[i] - alpha)));
+}
+```
 
-```{r f1_0, echo=TRUE, eval=FALSE}
-f1_0 <- ulam(m1_0, data = observed_data, chains = 8, cores = 8, log_lik = TRUE)
+
+```{r}
+obs_dat <- list(N = nrow(av_dat), 
+                x = av_dat$soa / 1000,
+                k = av_dat$k,
+                n = av_dat$n)
+
+m1_fit <- sampling(fit_obs_iter1, data = obs_dat, refresh = 1000)
 ```
 
 
@@ -248,8 +325,45 @@ f1_0 <- ulam(m1_0, data = observed_data, chains = 8, cores = 8, log_lik = TRUE)
 
 > If any diagnostics indicate poor performance then not only is our computational method suspect but also our model might not be rich enough to capture the relevant details of the observed data. At the very least we should return to Step Eight and enhance our computational method.
 
+
+```{r}
+check_hmc_diagnostics(m1_fit)
+```
+
+
 ### Posterior retrodictive checks
 
 Need an example of using summary stats on posterior retrodictions
 
-### Celebrate
+```{r}
+m1_post <- extract(m1_fit)
+m1_summ <- summary(m1_fit) $summary
+```
+
+```{r}
+m1_post_k_pred <- t(apply(m1_post$y_post_pred, 2, quantile,
+                          probs = c(1.5, 5.5, 50, 94.5, 98.5) / 100))
+
+m1_pred <- cbind(m1_post_k_pred, post_mean = colMeans(m1_post$y_post_pred)) %>%
+  sweep(1, obs_dat$n, FUN = "/") %>%
+  bind_cols(obs_dat, trt = av_dat$trial) %>%
+  mutate(trt = trt != "pre") %>%
+  select(-N) %>%
+  mutate(p = k / n)
+
+print(m1_pred, n = 21)
+```
+
+
+```{r}
+m1_pred %>%
+  ggplot(aes(x, p)) +
+  geom_point(alpha = 0.1) +
+  geom_ribbon(aes(ymin = `5.5%`, ymax = `94.5%`), alpha = 0.05) +
+  geom_point(aes(y = `50%`), col = "green", alpha = 0.5) +
+  facet_wrap(~trt)
+```
+
+Oh no! The posterior retrodictions have failed to capture the variation in the observed data. Even though there were no problems in the model fitting process, we did not come up with a model that is complex enough to capture the features of the data. Of course, we intentionally left out the treatment, age group, and subject variables in order to create a baseline model that we can build off of. We will now go through a second iteration of the model starting back at step 4: model development.
+
+## Iteration 2
