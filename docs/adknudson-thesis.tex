@@ -3,11 +3,30 @@
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 %==============================================================================01
-\documentclass[11pt, oneside]{book}
+\documentclass[11pt, oneside, openany]{scrbook}
+\setkomafont{disposition}{\bfseries}
+\usepackage{mathptmx}
 \usepackage{lipsum}
-%==============================================================================02
-\usepackage{lmodern}
 %==============================================================================03
+% Make chapter pages have numbering at top right
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\rhead{\thepage}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\makeatletter
+\renewcommand\chapter{\if@openright\cleardoublepage\else\clearpage\fi
+                    \thispagestyle{fancy}%
+                    \global\@topnum\z@
+                    \@afterindentfalse
+                    \secdef\@chapter\@schapter}
+\makeatother
+%==============================================================================03
+\usepackage{lmodern}
 \usepackage{setspace}
 %==============================================================================04
 \usepackage{amssymb,amsmath}
@@ -791,223 +810,6 @@ There is nothing that is particular about the logistic function that makes it th
   Estimating the variance at different levels in the model
 \item
 \end{itemize}
-
-\hypertarget{workflow}{%
-\chapter{Principled Bayesian Workflow}\label{workflow}}
-
-There are many great resources out there\footnote{citation needed} for following along with an analysis of some data or problem, and much more is the abundance of tips, tricks, techniques, and testimonies to good modeling practices. The problem is that many of these prescriptions are given without context for when they are appropriate to be taken. According to \citet{betancourt2020}, this leaves ``practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics.'' The concept of a principled workflow is that for any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather great consideration must be given to domain expertise and the questions that one is trying to answer with the data.
-
-Since everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Domain Expertise Consistency - Is our model consistent with our domain expertise?
-\item
-  Computational Faithfulness - Will our computational tools be sufficient to accurately fit our posteriors?
-\item
-  Inferential Adequacy - Will our inferences provide enough information to answer our questions?
-\item
-  Model Adequacy - Is our model rich enough to capture the relevant structure of the true data generating process?
-\end{enumerate}
-
-\begin{itemize}
-\tightlist
-\item
-  Scope out your problem
-\item
-  Specify likelihood and priors
-\item
-  check the model with fake data
-\item
-  fit the model to the real data
-\item
-  check diagnostics
-\item
-  graph fit estimates
-\item
-  check predictive posterior
-\item
-  compare models
-\end{itemize}
-
-\hypertarget{pre-model-pre-data}{%
-\section{Pre-Model, Pre-Data}\label{pre-model-pre-data}}
-
-Wed begin the modeling process by modeling the experiment by the description of how it occurred and how the data were collected. This first part consists of conceptual analysis, defining the observational space, and constructing summary statistics that can help us to identify issues in the model specification.
-
-\hypertarget{conceptual-analysis}{%
-\subsection{Conceptual analysis}\label{conceptual-analysis}}
-
-In section \ref{toj-task} we discussed the experimental setup and data collection. To reiterate, subjects are presented with two stimuli separated by some temporal delay, and they are asked to respond as their perception of the temporal order. There are 45 subjects with 15 each in the young, middle, and older age groups. As the SOA becomes larger in the positive direction, we expect subjects to give more ``positive'' responses, and as the SOA becomes larger in the negative direction, we expect more ``negative'' responses. By way the experiment and responses are constructed, we would not expect to see a reversal of this trend unless there was an issue with the subject's understanding of the directions given to them or an error in the recording device.
-
-We also know that after the first experimental block the subjects go through a recalibration period, and repeat the experiment again. We are interested in seeing if the recalibration has an effect on temporal sensitivity and perceptual synchrony, and if the effect is different for each age group.
-
-\hypertarget{define-observational-space}{%
-\subsection{Define observational space}\label{define-observational-space}}
-
-The response that subjects give to a TOJ task is recorded as a zero or a one (see section \ref{toj-task}), and their relative performance is determined by the SOA value. Let \(y\) represent the binary outcome of a trial and let \(x\) be the SOA value.
-
-\begin{align*}
-y_i &\in \lbrace 0, 1\rbrace \\
-x_i &\in \mathbb{R}
-\end{align*}
-
-If the SOA values are fixed like in the audiovisual task, then the responses can be aggregated into binomial counts, \(k\).
-
-\[
-k_i, n_i \in \mathbb{Z}_0^+, k_i \le n_i
-\]
-
-In the above equation, \(\mathbb{Z}_0^+\) represents the set of non-negative integers. Notice that the number of trials \(n\) has an index variable \(i\). This is because the number of trials per SOA is not fixed between blocks. In the pre-adaptation block, there are five trials per SOA compared to three in the post-adaptation block. So if observation 32 is recorder during a ``pre'' block, \(n_{32} = 5\), and if observation 1156 is during a ``post'' block, \(n_{1156} = 3\).
-
-Then we also have the three categorical variables -- age group, subject ID, and adaptation. For the first two, we treat them as factor variables. Rather than using one-hot encoding or dummy variables, we leave the age levels as categories and fit a coefficient for each level. Among the benefits of this approach is the ease of interpretation and ease of working with the data programmatically. This is especially true at the subject level. If we used dummy variables for all 45 subjects, we would have 44 different dummy variables to work with, times the number of coefficients that make estimates at the subject level. In the final iteration of our model, this can be as many as \(44 \times 4 = 176\) dummy variables for the subject level!
-
-Age groups and individual subjects can be indexed in the same way that the number of trials is accessed. \(S_i\) refers to the subject in record \(i\), and similarly \(G_i\) refers to the age group of that subject. Observation 63 is for record ID av-post1-M-f-HG, so then \(S_{63}\) is M-f-HG and \(G_{63}\) is middle\_age. Under the hood of R, these factor levels are represented as integers (e.g.~middle age group level is stored internally as the number 2).
-
-We treat the pre- and post-adaptation categories as a binary indicator referred to as \(trt\) (short for treatment) since there are only two levels in the category. In this setup, a value of 1 indicates a post-adaptation block. We chose this encoding over the reverse because the pre-adaptation block is like the baseline performance, and it seemed more appropriate to interpret the post-adaptation block as turning on some effect.
-
-In the Stan modeling language, data for a binomial model with subject and age group levels and treatment is specified as
-
-\begin{verbatim}
-data {
-  int N;        // Number of observations
-  int N_S;      // Number of subject levels
-  int N_G;      // Number of age group levels
-  int n[N];     // Trials per SOA
-  int k[N];     // binomial counts
-  vector[N] x;  // SOA values
-  int S[N];     // Subject identifier
-  int G[N];     // Age group identifier
-  int trt[N];   // Treatment indicator
-}
-\end{verbatim}
-
-\hypertarget{construct-summary-statistics}{%
-\subsection{Construct summary statistics}\label{construct-summary-statistics}}
-
-In order to effectively challenge the validity of a model, we construct a set of summary statistics that help answer the questions of domain expertise consistency and model adequacy. We are studying the affects of age and temporal recalibration through the PSS and JND (see section \ref{psycho-experiments}), so it is natural to define summary statistics around these quantities to verify model consistency. Additionally the PSS and JND can be computed regardless of the model parameterization and chosen psychometric function.
-
-By the experimental setup and recording process, it is impossible that a properly conducted block would result in a JND less than 0 (i.e.~a non-increasing psychometric function), so that can be a lower limit for its threshold. On the other end it is unlikely that it will be beyond the limits of the SOA values, but even more concrete, it seems unlikely (though not impossible) that the just noticeable difference would be more than a second.
-
-A histogram of computed PSS and JND values will suffice for summary statistics.
-
-\hypertarget{post-model-pre-data}{%
-\section{Post-Model, Pre-Data}\label{post-model-pre-data}}
-
-\hypertarget{model-development}{%
-\subsection{Model development}\label{model-development}}
-
-\hypertarget{construct-summary-functions}{%
-\subsection{Construct summary functions}\label{construct-summary-functions}}
-
-NA
-
-\hypertarget{simulate-bayesian-ensemble}{%
-\subsection{Simulate bayesian ensemble}\label{simulate-bayesian-ensemble}}
-
-What is the purpose of this step? To make sure that the generating model coupled with the summary stats/functions yields prior estimates that are consistent with domain expertise (see \ref{prior-checks}).
-
-\hypertarget{prior-checks}{%
-\subsection{Prior checks}\label{prior-checks}}
-
-\begin{quote}
-If the prior predictive checks indicate con ict between the model and our domain expertise then we have to return to step four {[}(model development){]} and refine our model.
-\end{quote}
-
-\hypertarget{configure-algorithm}{%
-\subsection{Configure algorithm}\label{configure-algorithm}}
-
-As a default, we will be using the \texttt{rethinking} package \citep{R-rethinking} which is built on top of \texttt{rstan} \citep{R-rstan}. The rethinking package provides a high-level interface to Stan -- a C-compiled Markov chain Monte Carlo (MCMC) sampler -- while still being flexible enough to specify complex Bayesian models.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{m1_}\DecValTok{0}\NormalTok{ <-}\StringTok{ }\KeywordTok{alist}\NormalTok{(}
-\NormalTok{  response }\OperatorTok{~}\StringTok{ }\KeywordTok{bernoulli_logit}\NormalTok{(p),}
-  \DataTypeTok{p =}\NormalTok{ a }\OperatorTok{+}\StringTok{ }\NormalTok{b }\OperatorTok{*}\StringTok{ }\NormalTok{soa,}
-  
-\NormalTok{  a }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{100}\NormalTok{),}
-\NormalTok{  b }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{100}\NormalTok{)}
-\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{fit-simulated-ensemble}{%
-\subsection{Fit simulated ensemble}\label{fit-simulated-ensemble}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{f1_}\DecValTok{0}\NormalTok{ <-}\StringTok{ }\KeywordTok{ulam}\NormalTok{(m1_}\DecValTok{0}\NormalTok{, }\DataTypeTok{data =}\NormalTok{ simulated_data, }\DataTypeTok{chains =} \DecValTok{8}\NormalTok{, }\DataTypeTok{cores =} \DecValTok{8}\NormalTok{, }\DataTypeTok{log_lik =} \OtherTok{TRUE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{algorithmic-calibration}{%
-\subsection{Algorithmic calibration}\label{algorithmic-calibration}}
-
-Did the algorithm perform correctly? What kind of diagnostics exist for this algorithm?
-
-\begin{itemize}
-\tightlist
-\item
-  Using HMC
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\hat{R}\)
-  \item
-    Divergences
-  \item
-    Effective sample size
-  \item
-    Tail effective sample size
-  \item
-    Bulk effective sample size
-  \item
-    Bayesian fraction of missing information
-  \end{itemize}
-\end{itemize}
-
-Is there anything we can tune during the fitting process that can alleviate algorithmic issues? Or is it a case of Folk Theorem, and we need to adjust the model?
-
-\hypertarget{inferential-calibration}{%
-\subsection{Inferential calibration}\label{inferential-calibration}}
-
-\begin{quote}
-In general we can always consider the distribution of posterior z-scores against posterior contractions to identify common pathologies in our inferences. If there are indications of undesired behavior, such as overfitting or non-identifability, then our model may not be sufficient.
-\end{quote}
-
-\begin{quote}
-In either case we might have to return to Step One to consider an improved experimental design or tempered scientific goals. Sometimes we may only need to return to Step Four to incorporate additional domain expertise to improve our inferences.
-\end{quote}
-
-\hypertarget{post-model-post-data}{%
-\section{Post-Model, Post-Data}\label{post-model-post-data}}
-
-\hypertarget{fit-observation}{%
-\subsection{Fit observation}\label{fit-observation}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{f1_}\DecValTok{0}\NormalTok{ <-}\StringTok{ }\KeywordTok{ulam}\NormalTok{(m1_}\DecValTok{0}\NormalTok{, }\DataTypeTok{data =}\NormalTok{ observed_data, }\DataTypeTok{chains =} \DecValTok{8}\NormalTok{, }\DataTypeTok{cores =} \DecValTok{8}\NormalTok{, }\DataTypeTok{log_lik =} \OtherTok{TRUE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{diagnose-posterior-fit}{%
-\subsection{Diagnose posterior fit}\label{diagnose-posterior-fit}}
-
-\begin{quote}
-If any diagnostics indicate poor performance then not only is our computational method suspect but also our model might not be rich enough to capture the relevant details of the observed data. At the very least we should return to Step Eight and enhance our computational method.
-\end{quote}
-
-\hypertarget{posterior-retrodictive-checks}{%
-\subsection{Posterior retrodictive checks}\label{posterior-retrodictive-checks}}
-
-Need an example of using summary stats on posterior retrodictions
-
-\hypertarget{celebrate}{%
-\subsection{Celebrate}\label{celebrate}}
 
 \hypertarget{model-checking}{%
 \chapter{Model Checking}\label{model-checking}}

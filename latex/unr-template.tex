@@ -14,11 +14,30 @@ $if(CJKmainfont)$
 \PassOptionsToPackage{space}{xeCJK}
 $endif$
 %==============================================================================01
-\documentclass[11pt, oneside]{book}
+\documentclass[11pt, oneside, openany]{scrbook}
+\setkomafont{disposition}{\bfseries}
+\usepackage{mathptmx}
 \usepackage{lipsum}
-%==============================================================================02
-\usepackage{lmodern}
 %==============================================================================03
+% Make chapter pages have numbering at top right
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\rhead{\thepage}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\makeatletter
+\renewcommand\chapter{\if@openright\cleardoublepage\else\clearpage\fi
+                    \thispagestyle{fancy}%
+                    \global\@topnum\z@
+                    \@afterindentfalse
+                    \secdef\@chapter\@schapter}
+\makeatother
+%==============================================================================03
+\usepackage{lmodern}
 \usepackage{setspace}
 %==============================================================================04
 \usepackage{amssymb,amsmath}

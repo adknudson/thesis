@@ -102,10 +102,14 @@ Choose a standard deviation value so that $\approx 99\%$ of the JND values are l
 
 The distribution of prior psychometric functions now looks like
 
-<div class="figure" style="text-align: center">
-<img src="050-bayesian-workflow_files/figure-html/prior-pf-plot-1.png" alt="Prior distribution of psychometric functions using the priors for slope and intercept." width="70%" />
-<p class="caption">(\#fig:prior-pf-plot)Prior distribution of psychometric functions using the priors for slope and intercept.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/prior-pf-plot-1} 
+
+}
+
+\caption{Prior distribution of psychometric functions using the priors for slope and intercept.}(\#fig:prior-pf-plot)
+\end{figure}
 
 Notice that the family of psychometric functions covers the broad range of possible slopes and intercepts.
 
@@ -151,10 +155,12 @@ What is the purpose of this step? To make sure that the generating model coupled
 
 ```
 #>    95%    99%  99.9%   100% 
-#> 0.2300 0.5512 1.5245 2.9639
+#> 0.2344 0.4816 1.5072 3.3055
 ```
 
-<img src="050-bayesian-workflow_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;" /><img src="050-bayesian-workflow_files/figure-html/unnamed-chunk-4-2.png" width="70%" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/unnamed-chunk-4-1} \includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/unnamed-chunk-4-2} \end{center}
 
 We're satisfied with the prior coverage of the PSS and JND, so now we can move on to fitting the model to the simulated data.
 
@@ -189,15 +195,16 @@ Did the algorithm perform correctly? What kind of diagnostics exist for this alg
 
 
 ```
-#>             mean se_mean     sd       2.5%      97.5% n_eff   Rhat
-#> alpha    -0.0012  0.0000 0.0030    -0.0071     0.0046  4077 0.9999
-#> beta     16.1855  0.0092 0.4140    15.4021    17.0143  2036 1.0006
-#> pss      -0.0012  0.0000 0.0030    -0.0071     0.0046  4077 0.9999
-#> jnd       0.1025  0.0001 0.0026     0.0975     0.1077  2022 1.0005
-#> lp__  -1418.7510  0.0206 0.9309 -1421.1737 -1417.8138  2040 1.0045
+#>             mean se_mean     sd       2.5%      97.5% n_eff  Rhat
+#> alpha     0.0032  0.0000 0.0030    -0.0027     0.0093  4062 1.001
+#> beta     15.7694  0.0088 0.4143    14.9902    16.5883  2211 1.000
+#> pss       0.0032  0.0000 0.0030    -0.0027     0.0093  4062 1.001
+#> jnd       0.1052  0.0001 0.0028     0.1000     0.1106  2210 1.000
+#> lp__  -1456.6300  0.0236 0.9916 -1459.2441 -1455.6598  1772 1.001
 ```
 
-<img src="050-bayesian-workflow_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" /><img src="050-bayesian-workflow_files/figure-html/unnamed-chunk-10-2.png" width="70%" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/unnamed-chunk-10-1} \includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/unnamed-chunk-10-2} \end{center}
 
 
 - Using HMC
@@ -253,32 +260,33 @@ Need an example of using summary stats on posterior retrodictions
 #> # A tibble: 1,827 x 11
 #>    `1.5%` `5.5%` `50%` `94.5%` `98.5%` post_mean     x     k     n trt       p
 #>     <dbl>  <dbl> <dbl>   <dbl>   <dbl>     <dbl> <dbl> <int> <int> <lgl> <dbl>
-#>  1  0      0     0       0       0.333    0.0105 -0.5      0     3 TRUE  0    
-#>  2  0      0     0       0       0.333    0.0168 -0.45     0     3 TRUE  0    
-#>  3  0      0     0       0.333   0.333    0.0253 -0.4      0     3 TRUE  0    
-#>  4  0      0     0       0.333   0.333    0.0393 -0.35     0     3 TRUE  0    
-#>  5  0      0     0       0.333   0.333    0.053  -0.3      0     3 TRUE  0    
-#>  6  0      0     0       0.333   0.667    0.0802 -0.25     0     3 TRUE  0    
-#>  7  0      0     0       0.333   0.667    0.117  -0.2      0     3 TRUE  0    
-#>  8  0      0     0       0.667   0.667    0.176  -0.15     0     3 TRUE  0    
-#>  9  0      0     0.333   0.667   0.667    0.236  -0.1      0     3 TRUE  0    
-#> 10  0      0     0.333   0.667   1        0.321  -0.05     0     3 TRUE  0    
-#> 11  0      0     0.333   1       1        0.420   0        1     3 TRUE  0.333
-#> 12  0      0     0.667   1       1        0.527   0.05     0     3 TRUE  0    
-#> 13  0      0.333 0.667   1       1        0.629   0.1      2     3 TRUE  0.667
-#> 14  0      0.333 0.667   1       1        0.723   0.15     3     3 TRUE  1    
-#> 15  0.333  0.333 1       1       1        0.800   0.2      3     3 TRUE  1    
-#> 16  0.333  0.667 1       1       1        0.854   0.25     3     3 TRUE  1    
-#> 17  0.333  0.667 1       1       1        0.904   0.3      3     3 TRUE  1    
-#> 18  0.333  0.667 1       1       1        0.931   0.35     3     3 TRUE  1    
-#> 19  0.667  0.667 1       1       1        0.953   0.4      3     3 TRUE  1    
-#> 20  0.667  0.667 1       1       1        0.97    0.45     3     3 TRUE  1    
-#> 21  0.667  0.667 1       1       1        0.981   0.5      3     3 TRUE  1    
-#> # … with 1,806 more rows
+#>  1  0      0     0       0       0.333   0.00967 -0.5      0     3 TRUE  0    
+#>  2  0      0     0       0       0.333   0.0172  -0.45     0     3 TRUE  0    
+#>  3  0      0     0       0.333   0.333   0.0248  -0.4      0     3 TRUE  0    
+#>  4  0      0     0       0.333   0.333   0.0356  -0.35     0     3 TRUE  0    
+#>  5  0      0     0       0.333   0.333   0.0576  -0.3      0     3 TRUE  0    
+#>  6  0      0     0       0.333   0.667   0.082   -0.25     0     3 TRUE  0    
+#>  7  0      0     0       0.333   0.667   0.122   -0.2      0     3 TRUE  0    
+#>  8  0      0     0       0.667   0.667   0.175   -0.15     0     3 TRUE  0    
+#>  9  0      0     0.333   0.667   0.672   0.236   -0.1      0     3 TRUE  0    
+#> 10  0      0     0.333   0.667   1       0.322   -0.05     0     3 TRUE  0    
+#> 11  0      0     0.333   1       1       0.425    0        1     3 TRUE  0.333
+#> 12  0      0     0.667   1       1       0.528    0.05     0     3 TRUE  0    
+#> 13  0      0.333 0.667   1       1       0.627    0.1      2     3 TRUE  0.667
+#> 14  0      0.333 0.667   1       1       0.725    0.15     3     3 TRUE  1    
+#> 15  0.333  0.333 1       1       1       0.800    0.2      3     3 TRUE  1    
+#> 16  0.333  0.667 1       1       1       0.861    0.25     3     3 TRUE  1    
+#> 17  0.333  0.667 1       1       1       0.899    0.3      3     3 TRUE  1    
+#> 18  0.667  0.667 1       1       1       0.935    0.35     3     3 TRUE  1    
+#> 19  0.667  0.667 1       1       1       0.956    0.4      3     3 TRUE  1    
+#> 20  0.667  0.667 1       1       1       0.969    0.45     3     3 TRUE  1    
+#> 21  0.667  0.667 1       1       1       0.977    0.5      3     3 TRUE  1    
+#> # ... with 1,806 more rows
 ```
 
 
-<img src="050-bayesian-workflow_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/unnamed-chunk-16-1} \end{center}
 
 Oh no! The posterior retrodictions have failed to capture the variation in the observed data. Even though there were no problems in the model fitting process, we did not come up with a model that is complex enough to capture the features of the data. Of course, we intentionally left out the treatment, age group, and subject variables in order to create a baseline model that we can build off of. We will now go through a second iteration of the model starting back at step 4: model development.
 
