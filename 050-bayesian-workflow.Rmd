@@ -178,9 +178,9 @@ av_dat <- audiovisual_binomial %>%
   filter(trial %in% c("pre", "post1"),
          rid != "av-post1-O-f-CE")
 
-sim_dat = list(N = nrow(av_dat),
-               n = av_dat$n,
-               x = av_dat$soa / 1000)
+sim_dat <- list(N = nrow(av_dat),
+                n = av_dat$n,
+                x = av_dat$soa / 1000)
 ```
 
 

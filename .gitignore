@@ -24,3 +24,4 @@ _bookdown_files
 # WHEN FINISHED, UNCOMMENT THE NEXT LINE
 # !docs/*.pdf
 *.rds
+*.Rds

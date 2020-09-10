@@ -16,7 +16,7 @@ In this iteration we will now add in the treatment and age group levels. Instead
 
 $$
 \begin{align*}
-\beta &\sim \mathcal{N}(3.96, 1.2) \\
+\beta &\sim \mathcal{N}(4, 2) \\
 \beta_G &\sim \mathcal{N}(0, \sigma_{\beta G}^2) \\
 \beta_T &\sim \mathcal{N}(0, 1) \\
 \beta_{TG} &\sim \mathcal{N}(0, \sigma_{\beta TG}^2) \\
@@ -24,7 +24,7 @@ $$
 \end{align*}
 $$
 
-In the above formulation, $\gamma$ is a log-normal random variable with mean-log $3.96$ and variance-log $1.2^2 + \sigma_{\beta G}^2$ if it's the pre-adaptation block, and $1.56^2 + \sigma_{\beta G}^2 + \sigma_{\beta TG}^2$ if it's the post-adaptation block. Values that are negative reduce the slope and increase the JND, and vice versa for positive values.
+In the above formulation, $\gamma$ is a log-normal random variable with mean-log $4$ and variance-log $2^2 + \sigma_{\beta G}^2$ if it's the pre-adaptation block, and $1.56^2 + \sigma_{\beta G}^2 + \sigma_{\beta TG}^2$ if it's the post-adaptation block. Values that are negative reduce the slope and increase the JND, and vice versa for positive values.
 
 The intercept term can be specified similarly. Conservatively we choose the prior for the intercepts to be normally distributed with mean 0.
 
