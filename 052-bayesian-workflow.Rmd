@@ -16,25 +16,37 @@ In this iteration we will now add in the treatment and age group levels. Instead
 
 $$
 \begin{align*}
-\beta &\sim \mathcal{N}(4, 2) \\
+\beta &\sim \mathcal{N}(2.5, 1^2) \\
 \beta_G &\sim \mathcal{N}(0, \sigma_{\beta G}^2) \\
-\beta_T &\sim \mathcal{N}(0, 1) \\
+\beta_T &\sim \mathcal{N}(0, 1^2) \\
 \beta_{TG} &\sim \mathcal{N}(0, \sigma_{\beta TG}^2) \\
-\gamma &\sim \exp(\beta + \beta_G + (\beta_T + \beta_{TG})\times trt)
+\mu_\beta &\sim \exp(\beta + \beta_G + (\beta_T + \beta_{TG})\times trt)
 \end{align*}
 $$
 
-In the above formulation, $\gamma$ is a log-normal random variable with mean-log $4$ and variance-log $2^2 + \sigma_{\beta G}^2$ if it's the pre-adaptation block, and $1.56^2 + \sigma_{\beta G}^2 + \sigma_{\beta TG}^2$ if it's the post-adaptation block. Values that are negative reduce the slope and increase the JND, and vice versa for positive values.
+In the above formulation, $\mu_\beta$ is a log-normal random variable with mean-log $2.5$ and variance-log $1^2 + \sigma_{\beta G}^2$ if it's the pre-adaptation block, and $\left(\sqrt{1^2 + 1^2}\right)^2 + \sigma_{\beta G}^2 + \sigma_{\beta TG}^2$ if it's the post-adaptation block. Values that are negative reduce the slope (increase the JND), and values that are positive increase the slope (reduce the JND). 
+
+But wait! this model implies that there is more uncertainty about the post-adaptation trials compared to the baseline trials, and this is not necessarily true. Furthermore, as we'll see in the linear part of model, the intercept, $\alpha$, is no longer the average response probability of the sample, but is instead exclusively the average for the pre-adaptation trials. This may not matter in certain analyses, but one nice property of multilevel models is the separation of population level estimates and group level estimates. So we modify the model for the slope to be:
+
+$$
+\begin{align*}
+\beta &\sim \mathcal{N}(2.5, 1^2) \\
+\beta_G &\sim \mathcal{N}(0, \sigma_{\beta G}^2) \\
+\beta_T &\sim \mathcal{N}(0, \sigma_{\beta T}^2) \\
+\mu_\beta &= \exp(\beta + \beta_G + \beta_T)
+\end{align*}
+$$
+
+Now $\mu_\beta$ is a log-normal random variable with mean-log $2.5$ and variance-log $1^2 + \sigma_{\beta G}^2 + \sigma_{\beta T}^2$, regardless of whether it's the pre-adaptation or the post-adaptation block.
 
 The intercept term can be specified similarly. Conservatively we choose the prior for the intercepts to be normally distributed with mean 0.
 
 $$
 \begin{align*}
-\alpha &\sim \mathcal{N}(0, 0.05) \\
+\alpha &\sim \mathcal{N}(0, 0.05^2) \\
 \alpha_G &\sim \mathcal{N}(0, \sigma_{\alpha G}^2) \\
-\alpha_T &\sim \mathcal{N}(0, 0.05) \\
-\alpha_{TG} &\sim \mathcal{N}(0, \sigma_{\alpha TG}^2) \\
-\delta &\sim \alpha + \alpha_{G} + (\alpha_{T} + \alpha_{TG}) \times trt
+\alpha_T &\sim \mathcal{N}(0, \sigma_{\alpha T}^2) \\
+\mu_\alpha &= \alpha + \alpha_{G} + \alpha_{T}
 \end{align*}
 $$
 
@@ -42,43 +54,38 @@ The parameters and model of the Stan program is
 
 ```
 parameters {
-  real alpha;
-  real alpha_G[N_G];
-  real alpha_T;
-  real alpha_TG[N_G];
+  real a;
+  real aG[N_G];
+  real aT[N_T];
   
-  real beta;
-  real beta_G[N_G];
-  real beta_T;
-  real beta_TG[N_G];
+  real b;
+  real bG[N_G];
+  real bT[N_T];
   
-  real<lower=machine_precision()> sigma_aG;
-  real<lower=machine_precision()> sigma_aTG;
-  real<lower=machine_precision()> sigma_bG;
-  real<lower=machine_precision()> sigma_bTG;
+  real<lower=machine_precision()> sd_aG;
+  real<lower=machine_precision()> sd_aT;
+  real<lower=machine_precision()> sd_bG;
+  real<lower=machine_precision()> sd_bT;
 }
-
 model {
-  alpha ~ normal(0, 0.05);
-  alpha_G ~ normal(0, sigma_aG);
-  alpha_T ~ normal(0, 0.05);
-  alpha_TG ~ normal(0, sigma_aTG);
+  a ~ normal(0, 0.05);
+  aG ~ normal(0, sd_aG);
+  aT ~ normal(0, sd_aT);
   
-  beta ~ normal(3.96, 1.2);
-  beta_G ~ normal(0, sigma_bG);
-  beta_T ~ normal(0, 1);
-  beta_TG ~ normal(0, sigma_bTG);
+  b ~ normal(2.5, 1.0);
+  bG ~ normal(0, sd_bG);
+  bT ~ normal(0, sd_bT);
   
-  sigma_aG ~ cauchy(0, 0.1);
-  sigma_aTG ~ cauchy(0, 0.1);
-  sigma_bG ~ cauchy(0, 1.0);
-  sigma_bTG ~ cauchy(0, 1.0);
+  sd_aG ~ cauchy(0, 0.05);
+  sd_aT ~ cauchy(0, 0.05);
+  sd_bG ~ cauchy(0, 0.5);
+  sd_bT ~ cauchy(0, 0.5);
   
   vector[N] p;
   for (i in 1:N) {
-    real gamma = exp(beta + beta_G[G[i]] + (beta_T + beta_TG[G[i]]) * trt[i]);
-    real delta = alpha + alpha_G[G[i]] + (alpha_T + alpha_TG[G[i]]) * trt[i];
-    p[i] = gamma * (x[i] - delta);
+    real mu_b = exp(b + bG[G[i]] + bT[T[i]]);
+    real mu_a = a + aG[G[i]] + aT[T[i]];
+    p[i] = mu_b * (x[i] - mu_a);
   }
   k ~ binomial_logit(n, p); // Observational model
 }
@@ -100,6 +107,7 @@ functions {
 data {
   int N;
   int N_G;
+  int N_T;
   int n[N];
   vector[N] x;
   int G[N];
@@ -108,43 +116,36 @@ data {
 generated quantities {
   vector[N] theta;
   int y_sim[N];
-  vector[N_G] pss_pre;
-  vector[N_G] pss_post;
-  vector[N_G] jnd_pre;
-  vector[N_G] jnd_post;
+  matrix[N_G, N_T] pss;
+  matrix[N_G, N_T] jnd;
   
   real alpha = normal_rng(0, 0.05);
-  real alpha_T = normal_rng(0, 0.025);
-  real<lower=0> sigma_aG = half_cauchy_rng(0.005);
-  real<lower=0> sigma_aTG = half_cauchy_rng(0.005);
+  real<lower=0> sigma_aG = half_cauchy_rng(0.05);
+  real<lower=0> sigma_aT = half_cauchy_rng(0.05);
   real alpha_G[N_G] = normal_rng(rep_vector(0, N_G), sigma_aG);
-  real alpha_TG[N_G] = normal_rng(rep_vector(0, N_G), sigma_aTG);
+  real alpha_T[N_T] = normal_rng(rep_vector(0, N_T), sigma_aT);
   
-  real beta = normal_rng(3.96, 1.0);
-  real beta_T = normal_rng(0, 0.1);
-  real<lower=0> sigma_bG = half_cauchy_rng(0.05);
-  real<lower=0> sigma_bTG = half_cauchy_rng(0.05);
+  real beta = normal_rng(2.5, 1.0);
+  real<lower=0> sigma_bG = half_cauchy_rng(0.5);
+  real<lower=0> sigma_bT = half_cauchy_rng(0.5);
   real beta_G[N_G] = normal_rng(rep_vector(0, N_G), sigma_bG);
-  real beta_TG[N_G] = normal_rng(rep_vector(0, N_G), sigma_bTG);
+  real beta_T[N_T] = normal_rng(rep_vector(0, N_T), sigma_bT);
   
   for (i in 1:N) {
-    real gamma = exp(beta + beta_G[G[i]] + (beta_T + beta_TG[G[i]]) * trt[i]);
-    real delta = alpha + alpha_G[G[i]] + (alpha_T + alpha_TG[G[i]]) * trt[i];
+    real gamma = exp(beta + beta_G[G[i]] + beta_T[trt[i]]);
+    real delta = alpha + alpha_G[G[i]] + alpha_T[trt[i]];
     
     theta[i] = inv_logit( gamma * (x[i] - delta) );
     y_sim[i] = binomial_rng(n[i], theta[i]);
   }
   
   for (i in 1:N_G) {
-    real gamma_pre = exp(beta + beta_G[i]);
-    real gamma_post = exp(beta + beta_G[i] + beta_T + beta_TG[i]);
-    real delta_pre = alpha + alpha_G[i];
-    real delta_post = alpha + alpha_G[i] + alpha_T + alpha_TG[i];
-    
-    pss_pre[i] = delta_pre;
-    pss_post[i] = delta_post;
-    jnd_pre[i] = logit(0.84) / gamma_pre;
-    jnd_post[i] = logit(0.84) / gamma_post;
+    for (j in 1:N_T) {
+      real mu_b = exp(beta + beta_G[i] + beta_T[j]);
+      real mu_a = alpha + alpha_G[i] + alpha_T[j];
+      pss[i, j] = mu_a;
+      jnd[i, j] = logit(0.84) / mu_b;
+    }
   }
 }
 ```
@@ -154,20 +155,21 @@ generated quantities {
 av_dat <- audiovisual_binomial %>%
   filter(trial %in% c("pre", "post1"),
          rid != "av-post1-O-f-CE") %>%
-  mutate(trt = as.integer(trial != "pre"))
+  mutate(trt = droplevels(trial))
 
 sim_dat2 = list(N = nrow(av_dat),
                 N_G = max(as.integer(av_dat$age_group)),
+                N_T = max(as.integer(av_dat$trt)),
                 n = av_dat$n,
                 x = av_dat$soa / 1000,
                 G = as.integer(av_dat$age_group),
-                trt = av_dat$trt)
+                trt = as.integer(av_dat$trt))
 ```
 
 
 ```{r}
 sim_fit2 <- sampling(sim_iter2, data = sim_dat2, 
-                     algorithm="Fixed_param", refresh = 2000)
+                     algorithm="Fixed_param", refresh = 0)
 sim_prior2 <- extract(sim_fit2)
 ```
 
@@ -176,10 +178,10 @@ sim_prior2 <- extract(sim_fit2)
 ```{r}
 par(mfrow=c(2,3))
 for (i in 1:3) {
-  hist(sim_prior2$pss_pre[,i], breaks = 50, probability = TRUE)
+  hist(sim_prior2$pss[,i,1], breaks = 50, probability = TRUE)
 }
 for (i in 1:3) {
-  hist(sim_prior2$pss_post[,i], breaks = 50, probability = TRUE)
+  hist(sim_prior2$pss[,i,2], breaks = 50, probability = TRUE)
 }
 ```
 
@@ -187,16 +189,15 @@ for (i in 1:3) {
 ```{r}
 par(mfrow=c(2,3))
 for (i in 1:3) {
-  hist(sim_prior2$jnd_pre[,i], breaks = 50, probability = TRUE)
+  hist(sim_prior2$jnd[,i,1], breaks = 50, probability = TRUE)
 }
 for (i in 1:3) {
-  hist(sim_prior2$jnd_post[,i], breaks = 50, probability = TRUE)
+  hist(sim_prior2$jnd[,i,2], breaks = 50, probability = TRUE)
 }
 ```
 
 ```{r}
-apply(sim_prior2$jnd_pre, 2, quantile, probs = c(0.5, 0.95, 0.99, 0.999)) %>%  round(3)
-apply(sim_prior2$jnd_post, 2, quantile, probs = c(0.5, 0.95, 0.99, 0.999)) %>%  round(3)
+apply(sim_prior2$jnd, c(2,3), quantile, probs = c(0.5, 0.95, 0.99, 0.999)) %>%  round(3)
 ```
 
 ### Configure algorithm
@@ -207,6 +208,7 @@ apply(sim_prior2$jnd_post, 2, quantile, probs = c(0.5, 0.95, 0.99, 0.999)) %>%  
 data {
   int N;
   int N_G;
+  int N_T;
   int n[N];
   int k[N];
   vector[N] x;
@@ -214,65 +216,52 @@ data {
   int trt[N];
 }
 parameters {
-  real alpha;
-  real alpha_T;
-  real<lower=0> sigma_aG;
-  real<lower=0> sigma_aTG;
-  real alpha_G[N_G];
-  real alpha_TG[N_G];
+  real a;
+  real<lower=0> sd_aG;
+  real<lower=0> sd_aT;
+  real aG[N_G];
+  real aT[N_T];
   
-  real beta;
-  real beta_T;
-  real<lower=0> sigma_bG;
-  real<lower=0> sigma_bTG;
-  real beta_G[N_G];
-  real beta_TG[N_G];
+  real b;
+  real<lower=0> sd_bG;
+  real<lower=0> sd_bT;
+  real bG[N_G];
+  real bT[N_T];
 }
 model {
   vector[N] theta;
 
-  alpha     ~ normal(0, 0.05);
-  alpha_G   ~ normal(0, sigma_aG);
+  a  ~ normal(0, 0.05);
+  aG ~ normal(0, sd_aG);
+  aT ~ normal(0, sd_aT);
+  sd_aG ~ cauchy(2.5, 2.5);
+  sd_aT ~ cauchy(2.5, 2.5);
   
-  alpha_T   ~ normal(0, 0.025);
-  alpha_TG  ~ normal(0, sigma_aTG);
-  
-  sigma_aG  ~ cauchy(0, 0.005);
-  sigma_aTG ~ cauchy(0, 0.005);
-  
-  beta      ~ normal(3.96, 1.0);
-  beta_G    ~ normal(0, sigma_bG);
-  
-  beta_T    ~ normal(0, 1);
-  beta_TG   ~ normal(0, sigma_bTG);
-  
-  sigma_bG  ~ cauchy(0, 2.5);
-  sigma_bTG ~ cauchy(0, 2.5);
+  b  ~ normal(2.5, 1.0);
+  bG ~ normal(0, sd_bG);
+  bT ~ normal(0, sd_bT);
+  sd_bG ~ cauchy(2.5, 2.5);
+  sd_bT ~ cauchy(2.5, 2.5);
   
   for (i in 1:N) {
-    real gamma = exp(beta + beta_G[G[i]] + (beta_T + beta_TG[G[i]]) * trt[i]);
-    real delta = alpha + alpha_G[G[i]] + (alpha_T + alpha_TG[G[i]]) * trt[i];
-    theta[i] = gamma * (x[i] - delta);
+    real mu_b = exp(b + bG[G[i]] + bT[trt[i]]);
+    real mu_a = a + aG[G[i]] + aT[trt[i]];
+    theta[i] = mu_b * (x[i] - mu_a);
   }
   
   k ~ binomial_logit(n, theta);
 }
 generated quantities {
-  vector[N_G] pss_pre;
-  vector[N_G] pss_post;
-  vector[N_G] jnd_pre;
-  vector[N_G] jnd_post;
+  matrix[N_G, N_T] pss;
+  matrix[N_G, N_T] jnd;
   
   for (i in 1:N_G) {
-    real gamma_pre = exp(beta + beta_G[i]);
-    real gamma_post = exp(beta + beta_G[i] + beta_T + beta_TG[i]);
-    real delta_pre = alpha + alpha_G[i];
-    real delta_post = alpha + alpha_G[i] + alpha_T + alpha_TG[i];
-    
-    pss_pre[i] = delta_pre;
-    pss_post[i] = delta_post;
-    jnd_pre[i] = logit(0.84) / gamma_pre;
-    jnd_post[i] = logit(0.84) / gamma_post;
+    for (j in 1:N_T) {
+      real mu_b = exp(b + bG[i] + bT[j]);
+      real mu_a = a + aG[i] + aT[j];
+      pss[i, j] = mu_a;
+      jnd[i, j] = logit(0.84) / mu_b;
+    }
   }
 }
 ```
@@ -283,9 +272,6 @@ sim_dat2$k <- sapply(1:ncol(sim_prior2$y_sim), function(i) {
   sim_prior2$y_sim[sample(4000, 1), i]
 })
 ```
-
-
-Since we are dealing with the log-normal distribution, we need to be careful and specifiy initial values for sampling.
 
 
 ```{r}
@@ -304,7 +290,8 @@ Additionally we were given the warning that the Bulk ESS is too low, and that ru
 
 ```{r}
 sim_fit2 <- sampling(fit_sim_iter2, data = sim_dat2, iter = 4000, warmup = 1000,
-                     refresh = 1000, control = list(adapt_delta = 0.95))
+                     refresh = 1000, control = list(adapt_delta = 0.95,
+                                                    max_treedepth = 12))
 sim_post2 <- extract(sim_fit2)
 ```
 
@@ -320,6 +307,7 @@ summary(sim_fit2)$summary %>% round(4)
 data {
   int N;
   int N_G;
+  int N_T;
   int n[N];
   int k[N];
   vector[N] x;
@@ -327,72 +315,59 @@ data {
   int trt[N];
 }
 parameters {
-  real alpha;
-  real alpha_T;
-  real<lower=0> sigma_aG;
-  real<lower=0> sigma_aTG;
-  real alpha_G[N_G];
-  real alpha_TG[N_G];
+  real a;
+  real<lower=0> sd_aG;
+  real<lower=0> sd_aT;
+  real aG[N_G];
+  real aT[N_T];
   
-  real beta;
-  real beta_T;
-  real<lower=0> sigma_bG;
-  real<lower=0> sigma_bTG;
-  real beta_G[N_G];
-  real beta_TG[N_G];
+  real b;
+  real<lower=0> sd_bG;
+  real<lower=0> sd_bT;
+  real bG[N_G];
+  real bT[N_T];
 }
 model {
   vector[N] theta;
 
-  alpha     ~ normal(0, 1);
-  alpha_G   ~ normal(0, sigma_aG);
+  a  ~ normal(0, 0.05);
+  aG ~ normal(0, sd_aG);
+  aT ~ normal(0, sd_aT);
+  sd_aG ~ cauchy(2.5, 2.5);
+  sd_aT ~ cauchy(2.5, 2.5);
   
-  alpha_T   ~ normal(0, 1);
-  alpha_TG  ~ normal(0, sigma_aTG);
-  
-  sigma_aG  ~ cauchy(0, 2.5);
-  sigma_aTG ~ cauchy(0, 2.5);
-  
-  beta      ~ normal(5, 10);
-  beta_G    ~ normal(0, sigma_bG);
-  
-  beta_T    ~ normal(0, 10);
-  beta_TG   ~ normal(0, sigma_bTG);
-  
-  sigma_bG  ~ cauchy(0, 5);
-  sigma_bTG ~ cauchy(0, 5);
+  b  ~ normal(2.5, 1.0);
+  bG ~ normal(0, sd_bG);
+  bT ~ normal(0, sd_bT);
+  sd_bG ~ cauchy(2.5, 2.5);
+  sd_bT ~ cauchy(2.5, 2.5);
   
   for (i in 1:N) {
-    real gamma = exp(beta + beta_G[G[i]] + (beta_T + beta_TG[G[i]]) * trt[i]);
-    real delta = alpha + alpha_G[G[i]] + (alpha_T + alpha_TG[G[i]]) * trt[i];
-    theta[i] = gamma * (x[i] - delta);
+    real mu_b = exp(b + bG[G[i]] + bT[trt[i]]);
+    real mu_a = a + aG[G[i]] + aT[trt[i]];
+    theta[i] = mu_b * (x[i] - mu_a);
   }
   
   k ~ binomial_logit(n, theta);
 }
 generated quantities {
   int y_post_pred[N];
-  vector[N_G] pss_pre;
-  vector[N_G] pss_post;
-  vector[N_G] jnd_pre;
-  vector[N_G] jnd_post;
+  matrix[N_G, N_T] pss;
+  matrix[N_G, N_T] jnd;
   
   for (i in 1:N_G) {
-    real gamma_pre = exp(beta + beta_G[i]);
-    real gamma_post = exp(beta + beta_G[i] + beta_T + beta_TG[i]);
-    real delta_pre = alpha + alpha_G[i];
-    real delta_post = alpha + alpha_G[i] + alpha_T + alpha_TG[i];
-    
-    pss_pre[i] = delta_pre;
-    pss_post[i] = delta_post;
-    jnd_pre[i] = logit(0.84) / gamma_pre;
-    jnd_post[i] = logit(0.84) / gamma_post;
+    for (j in 1:N_T) {
+      real mu_b = exp(b + bG[i] + bT[j]);
+      real mu_a = a + aG[i] + aT[j];
+      pss[i, j] = mu_a;
+      jnd[i, j] = logit(0.84) / mu_b;
+    }
   }
-  
+
   for (i in 1:N) {
-    real gamma = exp(beta + beta_G[G[i]] + (beta_T + beta_TG[G[i]]) * trt[i]);
-    real delta = alpha + alpha_G[G[i]] + (alpha_T + alpha_TG[G[i]]) * trt[i];
-    y_post_pred[i] = binomial_rng(n[i], inv_logit(beta * (x[i] - alpha)));
+    real mu_b = exp(b + bG[G[i]] + bT[trt[i]]);
+    real mu_a = a + aG[G[i]] + aT[trt[i]];
+    y_post_pred[i] = binomial_rng(n[i], inv_logit(mu_b * (x[i] - mu_a)));
   }
 }
 ```
@@ -403,18 +378,26 @@ generated quantities {
 ```{r}
 obs_dat2 <- list(N = nrow(av_dat),
                  N_G = max(as.integer(av_dat$age_group)),
+                 N_T = max(as.integer(av_dat$trt)),
                  x = av_dat$soa / 1000,
                  k = av_dat$k,
                  n = av_dat$n,
                  G = as.integer(av_dat$age_group),
-                 trt = av_dat$trt)
+                 trt = as.integer(av_dat$trt))
 
 m2_fit <- sampling(fit_obs_iter2, data = obs_dat2, iter = 5000, warmup = 2500,
-                   refresh = 2500, control = list(adapt_delta=0.95, max_treedepth=12))
+                   refresh = 2500, 
+                   control = list(adapt_delta=0.95, max_treedepth=12))
 ```
 
 
 ### Diagnose posterior fit
+
+```{r}
+check_hmc_diagnostics(m2_fit)
+```
+
+It's looking alright!
 
 ### Posterior retrodictive checks
 
@@ -446,3 +429,5 @@ m2_pred %>%
   geom_point(aes(y = `50%`), col = "green", alpha = 0.5) +
   facet_grid(G~trt)
 ```
+
+We're getting closer to an acceptable model, but our model's retrodictions still do not represent the data very well. Specifically the retrodictions are still under-dispersed. 

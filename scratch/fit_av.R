@@ -11,7 +11,8 @@ av_dat <- audiovisual_binomial %>%
          rid != "av-post1-O-f-CE") %>%
   mutate_at(vars(rid, sid, trial, age_group), fct_drop) %>%
   mutate(trt = as.integer(trial != "pre"),
-         x = soa / 1000) %>%
+         x = soa / 1000,
+         x_s = (x - mean(x)) / (2 * sd(x))) %>%
   rename(G = age_group, S = sid)
 
 m1 <- ulam(alist(
@@ -195,3 +196,35 @@ control = list(adapt_delta=0.95, max_treedepth=12),
 start = list(l = 0.02))
 saveRDS(m6, file = "scratch/av_m6.Rds")
 rm(m6)
+
+#------------------------------------------------------------------------------
+f1 <- ulam(alist(
+  k ~ binomial_logit(n, p),
+  p <- a + b * x_s,
+  a  ~ half_cauchy(0, 2.5),
+  b  ~ half_cauchy(0, 2.5)
+), data = av_dat, chains = 4, cores = 4, iter = 5000, log_lik = TRUE)
+saveRDS(f1, file = "scratch/av_f1.Rds")
+rm(f1)
+
+f1 <- ulam(alist(
+  k ~ binomial_logit(n, p),
+  p <- a + aG[G] + aS[S]+ (aT + aTG[G]) * trt + (b + bG[G] + (bT + bTG[G]) * trt) * x_s,
+
+  a  ~ half_cauchy(0, 2.5),
+  aT ~ half_cauchy(0, 2.5),
+  aG[G]  ~ normal(0, sd_aG),
+  aTG[G] ~ normal(0, sd_aTG),
+
+  b  ~ half_cauchy(0, 2.5),
+  bT ~ half_cauchy(0, 2.5),
+  bG[G]  ~ normal(0, sd_bG),
+  bTG[G] ~ normal(0, sd_bTG),
+
+  sd_aG  ~ half_cauchy(0, 25),
+  sd_aTG ~ half_cauchy(0, 25),
+  sd_bG  ~ half_cauchy(0, 25),
+  sd_bTG ~ half_cauchy(0, 25)
+), data = av_dat, chains = 4, cores = 4, iter = 5000, log_lik = TRUE)
+saveRDS(f1, file = "scratch/av_f1.Rds")
+rm(f1)
