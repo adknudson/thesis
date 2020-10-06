@@ -1,12 +1,6 @@
 // mu_a = a + aG + aT + aS
 // mu_b = b + bG + bT + bS
-// mu_l = l
-// pi = mu_l + (1 - 2*mu_l)*inv_logit( exp(mu_b) * (x - mu_a) )
-functions {
-  real inv_Psi(real p, real a, real b, real l) {
-    return logit((p - l) / (1 - 2 * l)) / b + a;
-  }
-}
+// pi = inv_logit( exp(mu_b) * (x - mu_a) )
 data {
   int N;
   int N_G;
@@ -35,8 +29,6 @@ parameters {
   real bG[N_G];
   real bT[N_T];
   real bS[N_S];
-
-  real<lower=0,upper=1> l;
 }
 model {
   vector[N] theta;
@@ -57,12 +49,10 @@ model {
   sd_bT ~ cauchy(2.5, 2.5);
   sd_bS ~ cauchy(2.5, 2.5);
 
-  l ~ beta(4, 96);
-
   for (i in 1:N) {
     real mu_b = exp(b + bG[G[i]] + bT[trt[i]] + bS[S[i]]);
     real mu_a = a + aG[G[i]] + aT[trt[i]] + aS[S[i]];
-    theta[i] = l + (1 - 2*l) * inv_logit(mu_b * (x[i] - mu_a));
+    theta[i] = inv_logit(mu_b * (x[i] - mu_a));
   }
 
   k ~ binomial(n, theta);
@@ -76,15 +66,15 @@ generated quantities {
     for (j in 1:N_T) {
       real mu_b = exp(b + bG[i] + bT[j]);
       real mu_a = a + aG[i] + aT[j];
-      pss[i, j] = inv_Psi(0.50, mu_a, mu_b, l);
-      jnd[i, j] = inv_Psi(0.84, mu_a, mu_b, l) - inv_Psi(0.50, mu_a, mu_b, l);
+      pss[i, j] = mu_a;
+      jnd[i, j] = logit(0.84) / mu_b;
     }
   }
 
   for (i in 1:N) {
     real mu_b = exp(b + bG[G[i]] + bT[trt[i]] + bS[S[i]]);
     real mu_a = a + aG[G[i]] + aT[trt[i]] + aS[S[i]];
-    real theta = l + (1 - 2*l) * inv_logit(mu_b * (x[i] - mu_a));
+    real theta = inv_logit(mu_b * (x[i] - mu_a));
     y_post_pred[i] = binomial_rng(n[i], theta);
   }
 }

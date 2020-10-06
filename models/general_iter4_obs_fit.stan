@@ -1,6 +1,6 @@
 // mu_a = a + aG + aT + aS
 // mu_b = b + bG + bT + bS
-// mu_l = l + lG
+// mu_l = lG
 // pi = mu_l + (1 - 2*mu_l) * inv_logit( exp(mu_b) * (x - mu_a) )
 functions {
   real inv_Psi(real p, real a, real b, real l) {
@@ -36,8 +36,7 @@ parameters {
   real bT[N_T];
   real bS[N_S];
 
-  real<lower=0,upper=1> l;
-  real lG[N_G];
+  real<lower=0,upper=1> lG[N_G];
 }
 model {
   vector[N] theta;
@@ -58,11 +57,10 @@ model {
   sd_bT ~ cauchy(2.5, 2.5);
   sd_bS ~ cauchy(2.5, 2.5);
 
-  l ~ beta(4, 96);
-  lG ~ normal(0, 0.005);
+  lG ~ beta(4, 96);
 
   for (i in 1:N) {
-    real mu_l = l + lG[G[i]];
+    real mu_l = lG[G[i]];
     real mu_a = a + aG[G[i]] + aT[trt[i]] + aS[S[i]];
     real mu_b = b + bG[G[i]] + bT[trt[i]] + bS[S[i]];
     theta[i] = mu_l + (1 - 2*mu_l) * inv_logit(exp(mu_b) * (x[i] - mu_a));
@@ -78,20 +76,20 @@ generated quantities {
   // Estimate Group/Treatment PSS and JND
   for (i in 1:N_G) {
     for (j in 1:N_T) {
-      real mu_l = l + lG[G[i]];
+      real mu_l = lG[G[i]];
       real mu_a = a + aG[i] + aT[j];
-      real mu_b = b + bG[i] + bT[j];
-      pss[i, j] = inv_Psi(0.50, mu_a, exp(mu_b), mu_l);
-      jnd[i, j] = inv_Psi(0.84, mu_a, exp(mu_b), mu_l) - pss[i, j];
+      real mu_b = exp(b + bG[i] + bT[j]);
+      pss[i, j] = inv_Psi(0.50, mu_a, mu_b, mu_l);
+      jnd[i, j] = inv_Psi(0.84, mu_a, mu_b, mu_l) - pss[i, j];
     }
   }
 
   // Simulate the posterior predictions
   for (i in 1:N) {
-    real mu_l = l + lG[G[i]];
+    real mu_l = lG[G[i]];
     real mu_a = a + aG[G[i]] + aT[trt[i]] + aS[S[i]];
     real mu_b = b + bG[G[i]] + bT[trt[i]] + bS[S[i]];
-    real theta = mu_l + (1 - 2*mu_l) * inv_logit(mu_b * (x[i] - mu_a));
+    real theta = mu_l + (1 - 2*mu_l) * inv_logit(exp(mu_b) * (x[i] - mu_a));
     y_post_pred[i] = binomial_rng(n[i], theta);
   }
 }

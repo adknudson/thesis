@@ -96,61 +96,6 @@ model {
 
 ###  Simulate bayesian ensemble
 
-```{stan output.var="sim_iter2"}
-functions {
-  real half_cauchy_rng(real sigma) {
-    real u = uniform_rng(0.5, 0.99);
-    real y = sigma * tan(pi() * (u - 0.5));
-    return y;
-  }
-}
-data {
-  int N;
-  int N_G;
-  int N_T;
-  int n[N];
-  vector[N] x;
-  int G[N];
-  int trt[N];
-}
-generated quantities {
-  vector[N] theta;
-  int y_sim[N];
-  matrix[N_G, N_T] pss;
-  matrix[N_G, N_T] jnd;
-  
-  real alpha = normal_rng(0, 0.05);
-  real<lower=0> sigma_aG = half_cauchy_rng(0.05);
-  real<lower=0> sigma_aT = half_cauchy_rng(0.05);
-  real alpha_G[N_G] = normal_rng(rep_vector(0, N_G), sigma_aG);
-  real alpha_T[N_T] = normal_rng(rep_vector(0, N_T), sigma_aT);
-  
-  real beta = normal_rng(2.5, 1.0);
-  real<lower=0> sigma_bG = half_cauchy_rng(0.5);
-  real<lower=0> sigma_bT = half_cauchy_rng(0.5);
-  real beta_G[N_G] = normal_rng(rep_vector(0, N_G), sigma_bG);
-  real beta_T[N_T] = normal_rng(rep_vector(0, N_T), sigma_bT);
-  
-  for (i in 1:N) {
-    real gamma = exp(beta + beta_G[G[i]] + beta_T[trt[i]]);
-    real delta = alpha + alpha_G[G[i]] + alpha_T[trt[i]];
-    
-    theta[i] = inv_logit( gamma * (x[i] - delta) );
-    y_sim[i] = binomial_rng(n[i], theta[i]);
-  }
-  
-  for (i in 1:N_G) {
-    for (j in 1:N_T) {
-      real mu_b = exp(beta + beta_G[i] + beta_T[j]);
-      real mu_a = alpha + alpha_G[i] + alpha_T[j];
-      pss[i, j] = mu_a;
-      jnd[i, j] = logit(0.84) / mu_b;
-    }
-  }
-}
-```
-
-
 ```{r}
 av_dat <- audiovisual_binomial %>%
   filter(trial %in% c("pre", "post1"),
@@ -168,8 +113,12 @@ sim_dat2 = list(N = nrow(av_dat),
 
 
 ```{r}
-sim_fit2 <- sampling(sim_iter2, data = sim_dat2, 
+av_iter2_sim <- stan_model("models/av_iter2_sim.stan",
+                          model_name = "av_iter2_sim")
+
+sim_fit2 <- sampling(av_iter2_sim, data = sim_dat2, 
                      algorithm="Fixed_param", refresh = 0)
+
 sim_prior2 <- extract(sim_fit2)
 ```
 
@@ -197,75 +146,12 @@ for (i in 1:3) {
 ```
 
 ```{r}
-apply(sim_prior2$jnd, c(2,3), quantile, probs = c(0.5, 0.95, 0.99, 0.999)) %>%  round(3)
+apply(sim_prior2$jnd, c(2,3), quantile, probs = c(0.5, 0.95, 0.99, 0.999)) %>% round(3)
 ```
 
 ### Configure algorithm
 
 ### Fit simulated ensemble
-
-```{stan output.var="fit_sim_iter2"}
-data {
-  int N;
-  int N_G;
-  int N_T;
-  int n[N];
-  int k[N];
-  vector[N] x;
-  int G[N];
-  int trt[N];
-}
-parameters {
-  real a;
-  real<lower=0> sd_aG;
-  real<lower=0> sd_aT;
-  real aG[N_G];
-  real aT[N_T];
-  
-  real b;
-  real<lower=0> sd_bG;
-  real<lower=0> sd_bT;
-  real bG[N_G];
-  real bT[N_T];
-}
-model {
-  vector[N] theta;
-
-  a  ~ normal(0, 0.05);
-  aG ~ normal(0, sd_aG);
-  aT ~ normal(0, sd_aT);
-  sd_aG ~ cauchy(2.5, 2.5);
-  sd_aT ~ cauchy(2.5, 2.5);
-  
-  b  ~ normal(2.5, 1.0);
-  bG ~ normal(0, sd_bG);
-  bT ~ normal(0, sd_bT);
-  sd_bG ~ cauchy(2.5, 2.5);
-  sd_bT ~ cauchy(2.5, 2.5);
-  
-  for (i in 1:N) {
-    real mu_b = exp(b + bG[G[i]] + bT[trt[i]]);
-    real mu_a = a + aG[G[i]] + aT[trt[i]];
-    theta[i] = mu_b * (x[i] - mu_a);
-  }
-  
-  k ~ binomial_logit(n, theta);
-}
-generated quantities {
-  matrix[N_G, N_T] pss;
-  matrix[N_G, N_T] jnd;
-  
-  for (i in 1:N_G) {
-    for (j in 1:N_T) {
-      real mu_b = exp(b + bG[i] + bT[j]);
-      real mu_a = a + aG[i] + aT[j];
-      pss[i, j] = mu_a;
-      jnd[i, j] = logit(0.84) / mu_b;
-    }
-  }
-}
-```
-
 
 ```{r}
 sim_dat2$k <- sapply(1:ncol(sim_prior2$y_sim), function(i) {
@@ -275,7 +161,9 @@ sim_dat2$k <- sapply(1:ncol(sim_prior2$y_sim), function(i) {
 
 
 ```{r}
-sim_fit2 <- sampling(fit_sim_iter2, data = sim_dat2, refresh = 1000)
+av_iter2_sim_fit <- stan_model("models/av_iter2_sim_fit.stan",
+                               model_name = "av_iter2_sim_fit")
+sim_fit2 <- sampling(av_iter2_sim_fit, data = sim_dat2, refresh = 0)
 sim_post2 <- extract(sim_fit2)
 ```
 
@@ -289,9 +177,10 @@ check_hmc_diagnostics(sim_fit2)
 Additionally we were given the warning that the Bulk ESS is too low, and that running the chains for more iterations can help. So we do just that, and also increase the adapt delta.
 
 ```{r}
-sim_fit2 <- sampling(fit_sim_iter2, data = sim_dat2, iter = 4000, warmup = 1000,
-                     refresh = 1000, control = list(adapt_delta = 0.95,
-                                                    max_treedepth = 12))
+sim_fit2 <- sampling(av_iter2_sim_fit, data = sim_dat2, 
+                     iter = 4000, warmup = 1000, refresh = 0, 
+                     control = list(adapt_delta = 0.95,
+                                    max_treedepth = 12))
 sim_post2 <- extract(sim_fit2)
 ```
 
@@ -302,77 +191,6 @@ summary(sim_fit2)$summary %>% round(4)
 ### Inferential Calibration
 
 ### Fit Observation
-
-```{stan output.var="fit_obs_iter2"}
-data {
-  int N;
-  int N_G;
-  int N_T;
-  int n[N];
-  int k[N];
-  vector[N] x;
-  int G[N];
-  int trt[N];
-}
-parameters {
-  real a;
-  real<lower=0> sd_aG;
-  real<lower=0> sd_aT;
-  real aG[N_G];
-  real aT[N_T];
-  
-  real b;
-  real<lower=0> sd_bG;
-  real<lower=0> sd_bT;
-  real bG[N_G];
-  real bT[N_T];
-}
-model {
-  vector[N] theta;
-
-  a  ~ normal(0, 0.05);
-  aG ~ normal(0, sd_aG);
-  aT ~ normal(0, sd_aT);
-  sd_aG ~ cauchy(2.5, 2.5);
-  sd_aT ~ cauchy(2.5, 2.5);
-  
-  b  ~ normal(2.5, 1.0);
-  bG ~ normal(0, sd_bG);
-  bT ~ normal(0, sd_bT);
-  sd_bG ~ cauchy(2.5, 2.5);
-  sd_bT ~ cauchy(2.5, 2.5);
-  
-  for (i in 1:N) {
-    real mu_b = exp(b + bG[G[i]] + bT[trt[i]]);
-    real mu_a = a + aG[G[i]] + aT[trt[i]];
-    theta[i] = mu_b * (x[i] - mu_a);
-  }
-  
-  k ~ binomial_logit(n, theta);
-}
-generated quantities {
-  int y_post_pred[N];
-  matrix[N_G, N_T] pss;
-  matrix[N_G, N_T] jnd;
-  
-  for (i in 1:N_G) {
-    for (j in 1:N_T) {
-      real mu_b = exp(b + bG[i] + bT[j]);
-      real mu_a = a + aG[i] + aT[j];
-      pss[i, j] = mu_a;
-      jnd[i, j] = logit(0.84) / mu_b;
-    }
-  }
-
-  for (i in 1:N) {
-    real mu_b = exp(b + bG[G[i]] + bT[trt[i]]);
-    real mu_a = a + aG[G[i]] + aT[trt[i]];
-    y_post_pred[i] = binomial_rng(n[i], inv_logit(mu_b * (x[i] - mu_a)));
-  }
-}
-```
-
-
 
 
 ```{r}
@@ -385,8 +203,11 @@ obs_dat2 <- list(N = nrow(av_dat),
                  G = as.integer(av_dat$age_group),
                  trt = as.integer(av_dat$trt))
 
-m2_fit <- sampling(fit_obs_iter2, data = obs_dat2, iter = 5000, warmup = 2500,
-                   refresh = 2500, 
+av_iter2_obs_fit <- stan_model("models/av_iter2_obs_fit.stan",
+                               model_name = "av_iter2_obs_fit")
+
+m2_fit <- sampling(av_iter2_obs_fit, data = obs_dat2, 
+                   iter = 5000, warmup = 2500, refresh = 2500, 
                    control = list(adapt_delta=0.95, max_treedepth=12))
 ```
 
@@ -403,14 +224,18 @@ It's looking alright!
 
 ```{r}
 m2_post <- extract(m2_fit)
-m2_summ <- summary(m2_fit)$summary
+# m2_summ <- summary(m2_fit)$summary
 ```
 
 ```{r}
 m2_post_k_pred <- t(apply(m2_post$y_post_pred, 2, quantile,
                           probs = c(1.5, 5.5, 50, 94.5, 98.5) / 100))
 
-m2_pred <- cbind(m2_post_k_pred, post_mean = colMeans(m2_post$y_post_pred)) %>%
+idx <- sample(1:nrow(m2_post$y_post_pred), 1)
+
+m2_pred <- cbind(m2_post_k_pred, 
+                 post_mean = colMeans(m2_post$y_post_pred),
+                 post_rand = m2_post$y_post_pred[idx,]) %>%
   sweep(1, obs_dat2$n, FUN = "/") %>%
   bind_cols(obs_dat2) %>%
   select(-N) %>%
@@ -423,11 +248,12 @@ print(m2_pred, n = 21)
 ```{r}
 m2_pred %>%
   ggplot(aes(x, p)) +
-  geom_ribbon(aes(ymin = `1.5%`, ymax = `98.5%`), alpha = 0.05) +
-  geom_ribbon(aes(ymin = `5.5%`, ymax = `94.5%`), alpha = 0.15) +
-  geom_point(alpha = 0.1) +
-  geom_point(aes(y = `50%`), col = "green", alpha = 0.5) +
+  geom_jitter(width = 0.0125, height = 0.01,
+              col = rgb(123, 28, 212, maxColorValue = 255)) +
+  geom_jitter(aes(y = post_rand), 
+              col = rgb(28, 214, 68, 120, maxColorValue = 255),
+              width = 0.0125, height = 0.01) +
   facet_grid(G~trt)
 ```
 
-We're getting closer to an acceptable model, but our model's retrodictions still do not represent the data very well. Specifically the retrodictions are still under-dispersed. 
+We're getting closer to an acceptable model, but our model's retrodictions still do not represent the younger pre-adaptation data very well. Specifically the retrodictions are still under-dispersed.

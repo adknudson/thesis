@@ -71,6 +71,7 @@ data {
   int N;        // Number of observations
   int N_S;      // Number of subject levels
   int N_G;      // Number of age group levels
+  int N_T;      // Number of treatment/control groups
   int n[N];     // Trials per SOA
   int k[N];     // binomial counts
   vector[N] x;  // SOA values
@@ -112,7 +113,7 @@ The distribution of prior psychometric functions now looks like
 ```{r prior-pf-plot, fig.cap="Prior distribution of psychometric functions using the priors for slope and intercept."}
 n <- 100
 a <- rnorm(n, 0, 0.05)
-b <- rlnorm(n, 3.96, 1.2)
+b <- rlnorm(n, 3.96, 1.1)
 
 fn <- function(x, a, b) {
   plogis(b * (x - a))
@@ -139,7 +140,7 @@ parameters {
 }
 model {
   alpha ~ normal(0, 0.05);      // Prior for intercept
-  beta ~ lognormal(3.96, 1.2);  // Prior for slope
+  beta ~ lognormal(2.5, 1);  // Prior for slope
   vector[N] p;                  // Binomial probability
   for (i in 1:N) {
     p[i] = beta * (x[i] - alpha);
@@ -156,22 +157,6 @@ NA
 
 What is the purpose of this step? To make sure that the generating model coupled with the summary stats/functions yields prior estimates that are consistent with domain expertise (see \@ref(prior-checks)).
 
-```{stan output.var="sim_iter1"}
-data {
-  int<lower=0> N;
-  int n[N];
-  vector[N] x;
-}
-generated quantities {
-  real alpha = normal_rng(0, 0.05);
-  real beta = lognormal_rng(3.96, 1.2);
-  vector[N] theta = inv_logit( beta * (x - alpha) );
-  int y_sim[N] = binomial_rng(n, theta);
-  real pss = alpha;
-  real jnd = logit(0.84) / beta;
-}
-```
-
 
 ```{r}
 av_dat <- audiovisual_binomial %>%
@@ -185,8 +170,11 @@ sim_dat <- list(N = nrow(av_dat),
 
 
 ```{r}
-sim_fit <- sampling(sim_iter1, data = sim_dat, 
-                    algorithm="Fixed_param", refresh = 1000)
+av_iter1_sim <- stan_model(file = "models/av_iter1_sim.stan", 
+                           model_name = "av_iter1_sim")
+
+sim_fit <- sampling(av_iter1_sim, data = sim_dat, 
+                    algorithm="Fixed_param", refresh = 0)
 sim_prior <- extract(sim_fit)
 ```
 
@@ -216,32 +204,11 @@ sim_dat$k <- sapply(1:ncol(sim_prior$y_sim), function(i) {
 ```
 
 
-```{stan output.var="fit_sim_iter1"}
-data {
-  int N;        // Number of observations
-  int n[N];     // Trials per SOA
-  int k[N];     // binomial counts
-  vector[N] x;  // SOA values
-}
-parameters {
-  real alpha;          // Intercept (PSS)
-  real<lower=0> beta;  // Slope (logit(0.84) / JND)
-}
-model {
-  vector[N] p = beta * (x - alpha);  // Binomial probability
-  alpha ~ normal(0, 0.05);           // Prior for intercept
-  beta ~ lognormal(3.96, 1.2);       // Prior for slope
-  k ~ binomial_logit(n, p);          // Observational model
-}
-generated quantities {
-  real pss = alpha;
-  real jnd = logit(0.84) / beta;
-}
-```
-
-
 ```{r}
-sim_fit <- sampling(fit_sim_iter1, data = sim_dat, refresh = 1000)
+av_iter1_sim_fit <- stan_model(file = "models/av_iter1_sim_fit.stan", 
+                               model_name = "av_iter1_sim_fit")
+
+sim_fit <- sampling(av_iter1_sim_fit, data = sim_dat, refresh = 0)
 sim_post <- extract(sim_fit)
 ```
 
@@ -284,40 +251,16 @@ Non-identifiable model??
 
 ### Fit observation
 
-```{stan output.var="fit_obs_iter1"}
-data {
-  int N;        // Number of observations
-  int n[N];     // Trials per SOA
-  int k[N];     // binomial counts
-  vector[N] x;  // SOA values
-}
-parameters {
-  real alpha;          // Intercept (PSS)
-  real<lower=0> beta;  // Slope (logit(0.84) / JND)
-}
-model {
-  vector[N] p = beta * (x - alpha);  // Binomial probability
-  alpha ~ normal(0, 0.05);           // Prior for intercept
-  beta ~ lognormal(3.96, 1.2);       // Prior for slope
-  k ~ binomial_logit(n, p);          // Observational model
-}
-generated quantities {
-  real pss = alpha;
-  real jnd = logit(0.84) / beta;
-  int y_post_pred[N];
-  for (i in 1:N)
-    y_post_pred[i] = binomial_rng(n[i], inv_logit(beta * (x[i] - alpha)));
-}
-```
-
-
 ```{r}
 obs_dat <- list(N = nrow(av_dat), 
                 x = av_dat$soa / 1000,
                 k = av_dat$k,
                 n = av_dat$n)
 
-m1_fit <- sampling(fit_obs_iter1, data = obs_dat, refresh = 1000)
+av_iter1_obs_fit <- stan_model("models/av_iter1_obs_fit.stan",
+                               model_name = "av_iter1_obs_fit")
+
+m1_fit <- sampling(av_iter1_obs_fit, data = obs_dat, refresh = 0)
 ```
 
 
@@ -337,14 +280,18 @@ Need an example of using summary stats on posterior retrodictions
 
 ```{r}
 m1_post <- extract(m1_fit)
-m1_summ <- summary(m1_fit) $summary
+# m1_summ <- summary(m1_fit) $summary
 ```
 
 ```{r}
 m1_post_k_pred <- t(apply(m1_post$y_post_pred, 2, quantile,
                           probs = c(1.5, 5.5, 50, 94.5, 98.5) / 100))
 
-m1_pred <- cbind(m1_post_k_pred, post_mean = colMeans(m1_post$y_post_pred)) %>%
+idx <- sample(1:nrow(m1_post$y_post_pred), 1)
+
+m1_pred <- cbind(m1_post_k_pred, 
+                 post_mean = colMeans(m1_post$y_post_pred),
+                 post_rand = m1_post$y_post_pred[idx,]) %>%
   sweep(1, obs_dat$n, FUN = "/") %>%
   bind_cols(obs_dat, trt = av_dat$trial) %>%
   mutate(trt = trt != "pre") %>%
@@ -358,9 +305,11 @@ print(m1_pred, n = 21)
 ```{r}
 m1_pred %>%
   ggplot(aes(x, p)) +
-  geom_point(alpha = 0.1) +
-  geom_ribbon(aes(ymin = `5.5%`, ymax = `94.5%`), alpha = 0.05) +
-  geom_point(aes(y = `50%`), col = "green", alpha = 0.5) +
+  geom_jitter(width = 0.0125, height = 0.01,
+              col = rgb(123, 28, 212, maxColorValue = 255)) +
+  geom_jitter(aes(y = post_rand), 
+              col = rgb(28, 214, 68, 120, maxColorValue = 255),
+              width = 0.0125, height = 0.01) +
   facet_wrap(~trt)
 ```
 
