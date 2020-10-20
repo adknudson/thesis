@@ -1,11 +1,6 @@
 # Background and Motivating Data {#motivating-data}
 
-```{r ch020-setup, include=FALSE, cache=FALSE}
-library(FangPsychometric)
-library(tidyverse)
-library(patchwork)
-library(kableExtra)
-```
+
 
 It was Charles Darwin who in his book _On the Origin of Species_ developed the idea that living organisms adapt to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Though the dark side of statistics and hubris lead Galton to become a pioneer of eugenics, his works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
 
@@ -38,9 +33,10 @@ An example to this law is to consider two light sources, one that is 100 lumens 
 Psychometric experiments are devised in a way to examine psychophysical processes, or the response between the world around us and our inward perceptions. A **psychometric function** relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task [@wichmann2001a]. Psychometric functions were studied as early as the late 1800's, and Edwin Boring published a chart of the psychometric function in The American Journal of Psychology in 1917 [@boring1917chart].
 
 
-```{r chart-of-pf, fig.cap="A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or 'two', recorded as either 'two' or 'not two'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their response of 'two'. So at what separation is the impression of two points liminal?"}
-knitr::include_graphics("figures/chart_of_pf.png")
-```
+<div class="figure" style="text-align: center">
+<img src="figures/chart_of_pf.png" alt="A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or 'two', recorded as either 'two' or 'not two'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their response of 'two'. So at what separation is the impression of two points liminal?" width="70%" />
+<p class="caption">(\#fig:chart-of-pf)A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or 'two', recorded as either 'two' or 'not two'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their response of 'two'. So at what separation is the impression of two points liminal?</p>
+</div>
 
 
 Figure \@ref(fig:chart-of-pf) displays the key aspects of the psychometric function. The most crucial part is the sigmoid function, the S-like non-decreasing curve, which in this case is represented by the Normal CDF, $\Phi(\gamma)$. The horizontal axis represents the stimulus stimulus intensity, the separation of two points in centimeters. The vertical axis represents the probability that a subject has the impression of two points. With only experimental data, the response proportion becomes an approximation for the probability.
@@ -50,38 +46,10 @@ This leads me to talk about the type of psychometric experiment that this paper 
 Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the **point of subjective simultaneity** (PSS) -- the temporal delay between two signals at which an observer is unsure about their temporal order [@stone2001now]. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the **just noticeable difference** (JND) -- the smallest lapse in time so that a temporal order can just be determined. Figure \@ref(fig:plot-ref-pf) highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e. the response probability is 50%). The JND is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84% level and the PSS, though the upper level depends on domain expertise.
 
 
-```{r plot-ref-pf, fig.cap="The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise."}
-ggplot(tibble(x = c(-4, 4), y = c(0, 1)), aes(x, y)) +
-  geom_hline(yintercept = 0, lwd = 0.5) +
-  geom_vline(xintercept = 0, lwd = 0.5) +
-  stat_function(fun = plogis, args = list(location = 1), size = 1.5, 
-                color = "steelblue") +
-  geom_segment(aes(x = 0, xend = qlogis(0.5, 1), y = 0.5, yend = 0.5),
-               lty = "dotted") +
-  geom_segment(aes(x = qlogis(0.5, 1), xend = qlogis(0.5, 1), y = 0, yend = 0.5),
-               lty = "dotted") +
-  geom_segment(aes(x = 0, xend = qlogis(0.84, 1), y = 0.84, yend = 0.84),
-               lty = "dotted") +
-  geom_segment(aes(x = qlogis(0.84, 1), xend = qlogis(0.84, 1), y = 0, yend = 0.84),
-               lty = "dotted") +
-  annotate("segment", x = qlogis(0.5, 1), xend = qlogis(0.84, 1), 
-           y = 0.25, yend = 0.25, size = 0.5, color = "gray32",
-           arrow = arrow(ends = "both", type = "closed")) +
-  annotate("label", x = mean(qlogis(c(0.5, 0.84), 1)), y = 0.25, label = "JND") +
-  annotate("segment", 
-           x = -1, xend = qlogis(0.5, 1),
-           y = 0.84, yend = 0.5, color = "gray32",
-           arrow = arrow(type = "closed")) +
-  annotate("label", x = -1, y = 0.84, label = "PSS", hjust = 1, vjust = 0) +
-  annotate("segment", x = -2, xend = -1.5, 
-           y = 0.25, yend = plogis(-1.5, 1), color = "gray32",
-           arrow = arrow(type = "closed")) +
-  annotate("label", x = -2, y = 0.25, label = "F(x)", vjust = 0, hjust = 1) +
-  scale_y_continuous(breaks = c(0, 0.5, 0.84, 1.0)) +
-  theme(axis.ticks.x = element_blank(), axis.text.x = element_blank()) +
-  labs(x = "Stimulus Intensity", y = "Probability",
-       title = "Components of the Psychometric Function, F")
-```
+<div class="figure" style="text-align: center">
+<img src="020-motivating-data_files/figure-html/plot-ref-pf-1.png" alt="The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise." width="70%" />
+<p class="caption">(\#fig:plot-ref-pf)The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise.</p>
+</div>
 
 
 Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing [@fujisaki2004recalibration]. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer [@vroomen2004recalibration]. This repetition of presenting the adapter stimulus is called **temporal recalibration**.
@@ -95,32 +63,138 @@ The data set that I am using in this paper comes from experiments done by A.N. S
 There are four different tasks in the experiment: audio-visual, visual-visual, visuo-motor, and duration, and I will refer to each task respectively as audiovisual, visual, sensorimotor, and duration. The participants consist of 15 young adults (age 20-27), 15 middle age adults (age 39-50), and 15 older adults (age 65-75), all recruited from the University of Nevada, Reno. Additionally all subjects are right handed and were reported to have normal or corrected to normal hearing and vision.
 
 <!-- Count the number of unique subjects by age group and task
-```{r}
-multitask %>% 
-  drop_na() %>% 
-  group_by(age_group, task) %>% 
-  select(sid) %>% 
-  unique() %>% 
-  count() %>%
-  ungroup() %>%
-  kable(caption = "Number of subjects in each task.", booktabs = TRUE) %>%
-  kable_styling(latex_options = c("hold_position", "striped")) %>%
-  collapse_rows(columns = c(1), valign = "top")
-```
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>(\#tab:unnamed-chunk-1)Number of subjects in each task.</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> age_group </th>
+   <th style="text-align:left;"> task </th>
+   <th style="text-align:right;"> n </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> young_adult </td>
+   <td style="text-align:left;"> audiovisual </td>
+   <td style="text-align:right;"> 14 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> duration </td>
+   <td style="text-align:right;"> 14 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> sensorimotor </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> visual </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> middle_age </td>
+   <td style="text-align:left;"> audiovisual </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> duration </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> sensorimotor </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> visual </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> older_adult </td>
+   <td style="text-align:left;"> audiovisual </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> duration </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> sensorimotor </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> visual </td>
+   <td style="text-align:right;"> 15 </td>
+  </tr>
+</tbody>
+</table>
 -->
 
 
-```{r, multitask-data}
-set.seed(4)
-multitask %>%
-  filter(trial %in% c("pre", "post1")) %>%
-  select(-rid) %>%
-  group_by(task) %>%
-  slice_sample(n = 1) %>%
-    ungroup() %>%
-  kable(caption = "Sample of motivating data.", booktabs = TRUE) %>%
-  kable_styling(latex_options = c("hold_position"))
-```
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>(\#tab:multitask-data)Sample of motivating data.</caption>
+ <thead>
+  <tr>
+   <th style="text-align:right;"> soa </th>
+   <th style="text-align:right;"> response </th>
+   <th style="text-align:left;"> sid </th>
+   <th style="text-align:left;"> task </th>
+   <th style="text-align:left;"> trial </th>
+   <th style="text-align:left;"> age_group </th>
+   <th style="text-align:right;"> age </th>
+   <th style="text-align:left;"> sex </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> -350 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> O-m-BC </td>
+   <td style="text-align:left;"> audiovisual </td>
+   <td style="text-align:left;"> pre </td>
+   <td style="text-align:left;"> older_adult </td>
+   <td style="text-align:right;"> 70 </td>
+   <td style="text-align:left;"> M </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -200 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> M-m-SJ </td>
+   <td style="text-align:left;"> duration </td>
+   <td style="text-align:left;"> post1 </td>
+   <td style="text-align:left;"> middle_age </td>
+   <td style="text-align:right;"> 48 </td>
+   <td style="text-align:left;"> M </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 28 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> O-f-KK </td>
+   <td style="text-align:left;"> sensorimotor </td>
+   <td style="text-align:left;"> pre </td>
+   <td style="text-align:left;"> older_adult </td>
+   <td style="text-align:right;"> 66 </td>
+   <td style="text-align:left;"> F </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 275 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> O-f-MW </td>
+   <td style="text-align:left;"> visual </td>
+   <td style="text-align:left;"> post1 </td>
+   <td style="text-align:left;"> older_adult </td>
+   <td style="text-align:right;"> 69 </td>
+   <td style="text-align:left;"> F </td>
+  </tr>
+</tbody>
+</table>
 
 
 In the audiovisual TOJ task, participants were asked to determine the temporal order between an auditory and visual stimulus. Stimulus onset asynchrony values were selected uniformly between -500 to +500 ms with 50 ms steps, where negative SOAs indicated that the visual stimulus was leading, and positive values indicated that the auditory stimulus was leading. Each SOA value was presented 5 times in random order in the initial block. At the end of each trial the subject was asked to report if the auditory stimulus came before the visual, where a $1$ indicates that they perceived the sound first, and a $0$ indicates that they perceived the visual stimulus first.
@@ -130,21 +204,38 @@ A similar setup is repeated for the visual, sensorimotor, and duration tasks. Th
 The duration task presents two vertically stacked circles on a screen with one appearing right after the other. The top stimulus appeared for a fixed amount of time of 300 ms, and the bottom was displayed for anywhere between +100 ms to +500 ms in 50 ms steps corresponding to SOA values between -200 ms to +200 ms. The subject then responds to if they perceived the bottom circle as appearing longer than the top circle.
 
 
-```{r, toj-summary}
-tibble(
-  Task = c("Audiovisual", "Visual", "Sensorimotor", "Duration"),
-  `Positive Response` = c("Perceived audio first", 
-                          "Perceived right first", 
-                          "Perceived visual first",
-                          "Perceived bottom as longer"),
-  `Positive SOA Truth` = c("Audio came before visual",
-                           "Right came before left",
-                           "Visual came before tactile",
-                           "Bottom lasted longer than top")
-) %>%
-  kable(caption = "Summary of TOJ Tasks", booktabs = TRUE) %>%
-  kable_styling(latex_options = c("hold_position"))
-```
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>(\#tab:toj-summary)Summary of TOJ Tasks</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Task </th>
+   <th style="text-align:left;"> Positive Response </th>
+   <th style="text-align:left;"> Positive SOA Truth </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Audiovisual </td>
+   <td style="text-align:left;"> Perceived audio first </td>
+   <td style="text-align:left;"> Audio came before visual </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Visual </td>
+   <td style="text-align:left;"> Perceived right first </td>
+   <td style="text-align:left;"> Right came before left </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Sensorimotor </td>
+   <td style="text-align:left;"> Perceived visual first </td>
+   <td style="text-align:left;"> Visual came before tactile </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Duration </td>
+   <td style="text-align:left;"> Perceived bottom as longer </td>
+   <td style="text-align:left;"> Bottom lasted longer than top </td>
+  </tr>
+</tbody>
+</table>
 
 
 Finally, after the first block of each task was completed, the participants went through an adaptation period where they were presented with the respective stimuli from each task repeatedly at fixed temporal delays, then they repeated the task. To ensure that the adaptation affect persisted, the subject were presented with the adapter stimulus at regular intervals throughout the second block. The blocks are designated as `pre` and `post1`, `post2`, etc. in the data set. In this paper I will only be focusing on the `pre` and `post1` blocks.
@@ -154,120 +245,92 @@ Finally, after the first block of each task was completed, the participants went
 The dependent variable in these experiments is the perceived response which is encoded as a 0 or a 1, and the independent variable is the SOA value. If the response is plotted against the SOA values, then it is difficult to determine any relationship (see figure \@ref(fig:simple-response-soa-plot)). Transparency can be used to better visualize the relationships between SOA value and responses. The center plot in figure \@ref(fig:simple-response-soa-plot) uses the same data as the left plot, except that the transparency is set to 0.05. As a result, one can see that there is a higher density of "0" responses towards more negative SOAs, and a higher density of "1" responses for more positive SOAs. Taking it a step further, I can compute and plot the proportion of responses for a given SOA. This is displayed in the right plot. Now the relationship between SOA value and responses is clear -- as the SOA value goes from more negative to more positive, the proportion of positive responses increases from near 0 to near 1.
 
 
-```{r, simple-response-soa-plot, fig.cap="Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency."}
-p1 <- visual %>%
-  filter(trial == "pre") %>%
-  ggplot(aes(soa, response)) +
-  geom_point(size = 2) +
-  theme(axis.title.y = element_blank(),
-        axis.title.x = element_blank())
-
-p2 <- visual %>%
-  filter(trial == "pre") %>%
-  ggplot(aes(soa, response)) +
-  geom_point(size = 2, alpha = 0.05) +
-  theme(axis.title.y = element_blank(),
-        axis.title.x = element_blank())
-
-p3 <- visual_binomial %>%
-  filter(trial == "pre") %>%
-  mutate(p = k / n) %>%
-  ggplot(aes(soa, p)) +
-  geom_point(size = 2, alpha = 0.05) +
-  theme(axis.title.y = element_blank(),
-        axis.title.x = element_blank())
-
-(p1 | p2 | p3) + plot_annotation(title = "Three plots, same data",
-                                 subtitle = "Visual Task - Pre adaptation")
-```
+<div class="figure" style="text-align: center">
+<img src="020-motivating-data_files/figure-html/simple-response-soa-plot-1.png" alt="Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency." width="70%" />
+<p class="caption">(\#fig:simple-response-soa-plot)Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency.</p>
+</div>
 
 
 Subjectively the right plot in figure \@ref(fig:simple-response-soa-plot) is the easiest to interpret. Because of this, I will often present the observed and predicted data using the proportion of responses rather than the actual response. Proportional data also has the advantage of being bounded on the same interval as the response. For the audiovisual task, the responses can be aggregated into binomial data -- the number of positive responses for given SOA value -- which is sometimes more efficient to work with than the Bernoulli data (see table \@ref(tab:av-bin-sample)). However the number of times an SOA is presented varies between the pre-adaptation and post-adaptation blocks; 5 and 3 times per SOA respectively. 
 
 
-```{r, av-bin-sample}
-set.seed(5)
-audiovisual_binomial %>%
-  select(-rid) %>%
-  filter(trial %in% c("pre", "post1")) %>%
-  group_by(trial) %>%
-  slice_sample(n = 3) %>%
-  ungroup() %>%
-  select(trial, soa, n, k) %>%
-  mutate(proportion = k / n) %>%
-  kable(digits = 2, caption = "Audiovisual task with aggregated responses.", booktabs = TRUE) %>%
-  kable_styling(latex_options = c("hold_position")) %>%
-  collapse_rows(columns = 1, valign = "top")
-```
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>(\#tab:av-bin-sample)Audiovisual task with aggregated responses.</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> trial </th>
+   <th style="text-align:right;"> soa </th>
+   <th style="text-align:right;"> n </th>
+   <th style="text-align:right;"> k </th>
+   <th style="text-align:right;"> proportion </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="3"> pre </td>
+   <td style="text-align:right;"> 200 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 0.80 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:right;"> 150 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:right;"> 1.00 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:right;"> -350 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="3"> post1 </td>
+   <td style="text-align:right;"> 350 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 1.00 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:right;"> -500 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0.33 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:right;"> -200 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0.00 </td>
+  </tr>
+</tbody>
+</table>
 
 
 Other quirks about the data pertain to the subjects. There is one younger subject that did not complete the audiovisual task, and one younger subject that did not complete the duration task. Additionally there is one older subject who's response data for the post-adaptation audiovisual task is unreasonable^[By unreasonable, I mean that it is extremely unlikely that the data represents genuine responses.] (see figure \@ref(fig:av-post1-O-f-CE-plot)).
 
-```{r, av-post1-O-f-CE-plot, fig.cap="Post-adaptation response data for O-f-CE"}
-audiovisual_binomial %>%
-  filter(rid == "av-post1-O-f-CE") %>%
-  mutate(p = k / n) %>%
-  ggplot(aes(soa, p)) +
-  geom_point(size = 2, alpha = 0.9) + 
-  labs(title = "Proportion of responses vs. SOA",
-       subtitle = "Subject ID O-f-CE",
-       y = "response proportion") +
-  scale_y_continuous(limits = c(0, 1))
-```
+<div class="figure" style="text-align: center">
+<img src="020-motivating-data_files/figure-html/av-post1-O-f-CE-plot-1.png" alt="Post-adaptation response data for O-f-CE" width="70%" />
+<p class="caption">(\#fig:av-post1-O-f-CE-plot)Post-adaptation response data for O-f-CE</p>
+</div>
 
 It is unreasonable because, of all the negative SOAs, there were only two correct responses^[Correct in the sense that the perceived order matches the actual order.]. If a ssubject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject's proportion of correct responses is above 0.5, then they are doing better than random guessing. In figure \@ref(fig:av-post-neg-trials) it is seen that subject O-f-CE is the only one who's proportion is below 0.5 (and by a considerable amount).
 
-```{r, av-post-neg-trials, fig.asp=1, fig.cap="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment."}
-audiovisual %>%
-  filter(trial == "post1", soa < 0) %>%
-  mutate(is_neg = soa < 0,
-         neg_resp = !as.logical(response),
-         correct = is_neg & neg_resp,
-         sid = fct_reorder(sid, as.integer(age_group))) %>%
-  arrange(sid) %>%
-  group_by(sid) %>%
-  add_count() %>%
-  summarise(k = sum(correct), p = k / n) %>%
-  mutate(less0.5 = p < 0.5) %>%
-  ggplot(aes(p, sid, shape = `less0.5`)) +
-  geom_point(size = 3) +
-  geom_vline(xintercept = 0.5, linetype = "dashed") +
-  labs(title = "Proportion of correct responses for negative SOA values",
-       subtitle = "Audiovisual experiment, post-adaptation block",
-       x = "Proportion of correct responses",
-       y = "Subject ID") +
-  theme(legend.position = "none") +
-  annotate("text", x = 0.49, y = 40, label = "Random guessing", 
-           angle = 90, hjust = 1, vjust = 0) +
-  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.25))
-```
+<div class="figure" style="text-align: center">
+<img src="020-motivating-data_files/figure-html/av-post-neg-trials-1.png" alt="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment." width="70%" />
+<p class="caption">(\#fig:av-post-neg-trials)Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment.</p>
+</div>
 
 The consequences of leaving in this experimental block in the data is considered in the [Chapter 5](#workflow), but it is a clear outlier that must be noted. When this method of detecting outliers is repeated for all tasks and blocks, then I end up with 17 records in total (see figure \@ref(fig:naive-prop-outliers)), one of which is the aforementioned subject.
 
-```{r, naive-prop-outliers, fig.cap="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs."}
-multitask %>%
-  mutate(is_pos = soa > 0,
-         is_neg = soa < 0,
-         resp_pos = response == 1,
-         resp_neg = response == 0) %>%
-  filter(is_pos | is_neg, trial %in% c("pre", "post1")) %>%
-  mutate(correct = (is_pos & resp_pos) | (is_neg & resp_neg)) %>%
-  group_by(rid, is_pos) %>%
-  add_count() %>%
-  summarise(k = sum(correct), p = k / n) %>%
-  filter(p < 0.5) %>%
-  distinct() %>%
-  ggplot(aes(p, rid)) +
-  geom_point(size = 3) +
-  geom_vline(xintercept = 0.5, linetype = "dashed") +
-  labs(title = "Proportion of correct responses",
-       subtitle = "All tasks and blocks",
-       x = "Proportion of correct responses",
-       y = "Record ID") +
-  theme(legend.position = "none") +
-  annotate("text", x = 0.51, y = 8, label = "Random guessing", 
-           angle = 270, vjust = 0) +
-  scale_x_continuous(limits = c(0, 0.65), breaks = seq(0, 1, 0.25))
-```
+<div class="figure" style="text-align: center">
+<img src="020-motivating-data_files/figure-html/naive-prop-outliers-1.png" alt="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs." width="70%" />
+<p class="caption">(\#fig:naive-prop-outliers)Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs.</p>
+</div>
 
 Most of the records that are flagged by this method of outlier detection are from the sensorimotor task, and none are from the visual task. This may be caused by the perceived difficulty of the task. One consequence of higher temporal sensitivity is that it is easier to determine temporal order. It may also be that determining temporal order is inherently easier for certain multisensory tasks than others. Since the sensorimotor task does not have fixed SOA values like the other tasks, it may be perceived as more difficult. Or perhaps the mechanisms that process touch and visual signals are not as well coupled as those that process audio and visual signals. I'll consider how to handle the sensorimotor outliers in the model fitting process.

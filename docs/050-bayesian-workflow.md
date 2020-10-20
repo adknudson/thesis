@@ -1,30 +1,4 @@
-```{r ch050-setup, include=FALSE}
-library(FangPsychometric)
-library(dplyr)
-library(ggplot2)
-library(rstan)
 
-options(mc.cores = parallel::detectCores())
-rstan_options(auto_write = TRUE)
-
-logit <- function(p) qlogis(p)
-inv_logit <- function(x) plogis(x)
-logistic <- function(x) inv_logit(x)
-
-av_dat <- local({
-  dat <- audiovisual_binomial %>%
-    filter(trial %in% c("pre", "post1"),
-           rid != "av-post1-O-f-CE") %>%
-    mutate(x = soa / 1000,
-           rid = factor(rid),
-           sid = factor(sid),
-           trial = factor(trial)) %>%
-    as.list()
-  dat$N <- length(dat$x)
-  dat
-})
-str(av_dat)
-```
 
 
 # Principled Bayesian Workflow {#workflow}
@@ -80,7 +54,7 @@ In the above equation, $\mathbb{Z}_0^+$ represents the set of non-negative integ
 
 Then we also have the three categorical variables -- age group, subject ID, and adaptation. For the first two, we treat them as factor variables^[Factor variables also go by the name index variable or categorical variable]. Rather than using one-hot encoding or dummy variables, we leave the age levels as categories and fit a coefficient for each level. Among the benefits of this approach is the ease of interpretation and ease of working with the data programmatically. This is especially true at the subject level. If we used dummy variables for all 45 subjects, we would have 44 different dummy variables to work with, times the number of coefficients that make estimates at the subject level. In the final iteration of our model, this can be as many as $44 \times 4 = 176$ dummy variables for the subject level!
 
-Age groups and individual subjects can be indexed in the same way that we index the number of trials. $S_i$ refers to the subject in record $i$, and similarly $G_i$ refers to the age group of that subject. Observation 63 is for record ID `r FangPsychometric::audiovisual_binomial$rid[63]`, so then $S_{63}$ is `r FangPsychometric::audiovisual_binomial$sid[63]` and $G_{63}$ is `r FangPsychometric::audiovisual_binomial$age_group[63]`. Under the hood of R, these factor levels are represented as integers (e.g. middle age group level is stored internally as the number 2).
+Age groups and individual subjects can be indexed in the same way that we index the number of trials. $S_i$ refers to the subject in record $i$, and similarly $G_i$ refers to the age group of that subject. Observation 63 is for record ID av-post1-M-f-HG, so then $S_{63}$ is M-f-HG and $G_{63}$ is middle_age. Under the hood of R, these factor levels are represented as integers (e.g. middle age group level is stored internally as the number 2).
 
 We treat the pre- and post-adaptation categories as a binary indicator referred to as $trt$ (short for treatment) since there are only two levels in the category. In this setup, a value of 1 indicates a post-adaptation block. We chose this encoding over the reverse because the pre-adaptation block is like the baseline performance, and it seemed more appropriate to interpret the post-adaptation block as turning on some effect. Using a binary indicator in a regression setting may not be the best practice as we discuss in section \@ref(mod-dev-iter2).
 
@@ -136,22 +110,10 @@ Choose a standard deviation value so that $\approx 99\%$ of the JND values are l
 
 The distribution of prior psychometric functions now looks like
 
-```{r ch050-prior-pf-plot, fig.cap="Prior distribution of psychometric functions using the priors for slope and intercept."}
-n <- 100
-a <- rnorm(n, 0, 0.05)
-b <- rlnorm(n, 3.96, 1.7)
-
-fn <- function(x, a, b) logistic(b * (x - a))
-
-p <- data.frame(x = c(-0.5, 0.5), y = c(0, 1)) %>% ggplot(aes(x, y))
-for (i in 1:n) {
-  p <- p +
-    geom_function(fun = fn, args = list(a = a[i], b = b[i]),
-                  color = "steelblue4", alpha = 0.15)
-}
-
-p
-```
+<div class="figure" style="text-align: center">
+<img src="050-bayesian-workflow_files/figure-html/ch050-prior-pf-plot-1.png" alt="Prior distribution of psychometric functions using the priors for slope and intercept." width="70%" />
+<p class="caption">(\#fig:ch050-prior-pf-plot)Prior distribution of psychometric functions using the priors for slope and intercept.</p>
+</div>
 
 
 Notice that the family of psychometric functions covers the broad range of possible slopes and intercepts, though the prior distribution appears to put more weight on steeper slopes (smaller JNDs). There is also too much possibility that the PF is nearly flat. We can reduce the mean-log and sd-log of the slope parameter and get a much more uniform-looking distribution of prior psychometric curves.
@@ -159,22 +121,14 @@ Notice that the family of psychometric functions covers the broad range of possi
 
 \begin{align*}
 \alpha &\sim \mathcal{N}(0, 0.05) \\
-\beta  z&\sim \mathrm{Lognormal}(3.0, 1.5)
+\beta &\sim \mathrm{Lognormal}(3.0, 1.5)
 \end{align*}
 
 
-```{r ch050-prior-pf-plot-2, fig.cap="Second prior distribution of psychometric functions using the priors for slope and intercept."}
-b <- rlnorm(n, 3.0, 1.5)
-
-p <- data.frame(x = c(-0.5, 0.5), y = c(0, 1)) %>% ggplot(aes(x, y))
-for (i in 1:n) {
-  p <- p +
-    geom_function(fun = fn, args = list(a = a[i], b = b[i]),
-                  color = "steelblue4", alpha = 0.15)
-}
-
-p
-```
+<div class="figure" style="text-align: center">
+<img src="050-bayesian-workflow_files/figure-html/ch050-prior-pf-plot-2-1.png" alt="Second prior distribution of psychometric functions using the priors for slope and intercept." width="70%" />
+<p class="caption">(\#fig:ch050-prior-pf-plot-2)Second prior distribution of psychometric functions using the priors for slope and intercept.</p>
+</div>
 
 This prior distribution is much more reasonable. There is good prior coverage of both very steep slopes and very shallow slopes, but not so wide that nearly flat or nearly vertical slopes are likely. Also notice how the spread around $y=0.5$ remains the same independent of the slope values. This is because of how the model is parameterized. If instead we parameterized the linear predictor as 
 
@@ -223,95 +177,26 @@ NA
 What is the purpose of this step? To make sure that the generating model coupled with the summary stats/functions yields prior estimates that are consistent with domain expertise (see \@ref(prior-checks)).
 
 
-```{stan output.var="av_iter1_sim"}
-data {
-  int<lower=0> N;
-  int n[N];
-  vector[N] x;
-}
-generated quantities {
-  real alpha = normal_rng(0, 0.05);
-  real beta = lognormal_rng(3.0, 1.5);
-  vector[N] theta = inv_logit( beta * (x - alpha) );
-  int y_sim[N] = binomial_rng(n, theta);
-  real pss = alpha;
-  real jnd = logit(0.84) / beta;
-}
-```
 
-
-```{r}
-dat <- with(av_dat, list(N = N, x = x, n = n)) 
-
-m5_1_1 <- sampling(av_iter1_sim, data = dat, 
-                   chains = 1, cores = 1, iter = 3000, warmup = 1000,
-                   algorithm = "Fixed_param", refresh = 0)
-prior5_1_1 <- extract(m5_1_1)
-```
 
 
 #### Prior checks
 
-> If the prior predictive checks indicate conflict between the model and our domain expertise then we have to return to step four [(model development)] and refine our model.
+> If the prior predictive checks indicate con ict between the model and our domain expertise then we have to return to step four [(model development)] and refine our model.
 
-```{r}
-hist(prior5_1_1$pss, breaks=50)
-hist(prior5_1_1$jnd, breaks=50)
-quantile(prior5_1_1$jnd, probs=c(0.95, 0.99, 0.999, 1))
-```
+
 
 We're satisfied with the prior coverage of the PSS and JND, so now we can move on to fitting the model to the simulated data.
 
 #### Configure algorithm
 
-As a default, we will be using the `rethinking` package [@rethinking].
+As a default, we will be using the `rstan` package [@R-rstan].
 
 #### Fit simulated ensemble
 
-```{r}
-n_sims <- length(prior5_1_1$alpha)
-n_obs <- length(dat$x)
-idx <- sample(1:n_sims, n_obs, replace = TRUE)
-a <- prior5_1_1$alpha[idx]
-b <- prior5_1_1$beta[idx]
-probs <- logistic(b * (dat$x - a))
-sim_k <- rbinom(n_obs, dat$n, probs)
-```
 
 
-```{stan output.var="av_iter1_sim_fit"}
-data {
-  int N;
-  int n[N];
-  int k[N];
-  vector[N] x;
-}
-parameters {
-  real alpha;
-  real<lower=0> beta;
-}
-model {
-  vector[N] p = beta * (x - alpha);
-  alpha ~ normal(0, 0.05);
-  beta ~ lognormal(3.0, 1.5);
-  k ~ binomial_logit(n, p);
-}
-generated quantities {
-  real pss = alpha;
-  real jnd = logit(0.84) / beta;
-}
 
-```
-
-
-```{r}
-sim_dat <- with(av_dat, list(N = N, x = x, n = n, k = sim_k)) 
-
-m5_1_2 <- sampling(av_iter1_sim_fit, data = sim_dat, 
-                   chains = 10, cores = 10, iter = 2500, warmup = 2000,
-                   refresh = 0)
-post5_1_2 <- extract(m5_1_2)
-```
 
 
 
@@ -319,18 +204,11 @@ post5_1_2 <- extract(m5_1_2)
 
 Did the algorithm perform correctly? What kind of diagnostics exist for this algorithm?
 
-```{r}
-check_hmc_diagnostics(m5_1_2)
-```
 
-```{r}
-round((post5_1_2_summary <- summary(m5_1_2)$summary), 4)[,c(1,2,3,4,8,9,10)]
-```
 
-```{r}
-plot(post5_1_2$alpha, post5_1_2$beta)
-plot(post5_1_2$pss, post5_1_2$jnd)
-```
+
+
+
 
 
 - Using HMC
@@ -353,42 +231,7 @@ Non-identifiable model??
 
 #### Fit observation
 
-```{stan output.var="av_iter1_obs_fit"}
-data {
-  int N;
-  int n[N];
-  int k[N];
-  vector[N] x;
-}
-parameters {
-  real alpha;
-  real<lower=0> beta;
-}
-model {
-  vector[N] p = beta * (x - alpha);
-  alpha ~ normal(0, 0.05);
-  beta ~ lognormal(3.0, 1.5);
-  k ~ binomial_logit(n, p);
-}
-generated quantities {
-  real pss = alpha;
-  real jnd = logit(0.84) / beta;
-  int y_post_pred[N];
-  for (i in 1:N)
-    y_post_pred[i] = binomial_rng(n[i], inv_logit(beta * (x[i] - alpha)));
-}
 
-```
-
-
-```{r}
-obs_dat <- with(av_dat, list(N = N, x = x, n = n, k = k)) 
-
-m5_1_3 <- sampling(av_iter1_obs_fit, data = obs_dat,
-                   chains = 10, cores = 10, iter = 2500, warmup = 2000,
-                   refresh = 0)
-# post5_1_2 <- extract(m5_1_2)
-```
 
 
 #### Diagnose posterior fit
@@ -396,87 +239,19 @@ m5_1_3 <- sampling(av_iter1_obs_fit, data = obs_dat,
 > If any diagnostics indicate poor performance then not only is our computational method suspect but also our model might not be rich enough to capture the relevant details of the observed data. At the very least we should return to Step Eight and enhance our computational method.
 
 
-```{r}
-check_hmc_diagnostics(m5_1_3)
-round(summary(m5_1_3, pars = c("alpha", "beta", "pss", "jnd"))$summary, 4)[,c(1,2,3,4,8,9,10)]
-```
+
 
 
 #### Posterior retrodictive checks
 
 Need an example of using summary stats on posterior retrodictions
 
-```{r}
-post5_1_3 <- extract(m5_1_3)
-# m1_summ <- summary(m1_fit) $summary
-```
-
-```{r}
-post5_1_3_k_pred <- t(apply(post5_1_3$y_post_pred, 2, quantile,
-                          probs = c(1.5, 5.5, 50, 94.5, 98.5) / 100))
-
-idx <- sample(1:nrow(post5_1_3$y_post_pred), 1)
-
-m5_1_3_pred <- cbind(post5_1_3_k_pred,
-                 post_mean = colMeans(post5_1_3$y_post_pred),
-                 post_rand = post5_1_3$y_post_pred[idx,]) %>%
-  sweep(1, obs_dat$n, FUN = "/") %>%
-  bind_cols(obs_dat, trial = av_dat$trial) %>%
-  select(-N) %>%
-  mutate(p = k / n)
-```
 
 
-```{r}
-m5_1_3_pred %>%
-  ggplot(aes(x, p)) +
-  scale_x_continuous(breaks = seq(-0.5, 0.5, 0.25)) +
-  scale_y_continuous(breaks = c(0, 0.5, 1)) +
-  geom_jitter(width = 0.0125, height = 0.01,
-              col = rgb(123, 28, 212, maxColorValue = 255)) +
-  geom_jitter(aes(y = post_rand),
-              col = rgb(28, 214, 68, 120, maxColorValue = 255),
-              width = 0.0125, height = 0.01) +
-  facet_wrap(~trial)
-```
 
-The posterior retrodictions do well to cover the observed data, but we don't actually have a model that can answer the questions that we are seeking to answer. At best, this model can only inform of of the population average PSS and JND across both pre- and post-adaptation. This first iteration does serve as a useful foundation for building a more complex model, and for practicing visualization techniques that will be more important in the next few iterations.
 
-While we are here, let's also take a look at the underlying performance (psychometric) function as well as the density estimates of the PSS and JND.
 
-```{r}
-n_smp <- 100
-idx <- sample(1:length(post5_1_3$alpha), n_smp, replace = TRUE)
 
-p <- tibble(x = c(-0.5, 0.5), y = c(0, 1)) %>%
-  ggplot(aes(x, y)) +
-  scale_x_continuous(breaks = seq(-0.5, 0.5, 0.1)) +
-  scale_y_continuous(breaks = c(0, 0.5, 1)) +
-  labs(title = "Underlying Psychometric Function",
-       subtitle = "Average across all subjects and trials",
-       x = "SOA (seconds)", y = "Probability")
 
-for (i in idx) {
-  p <- p + geom_line(stat = "function", fun = fn, 
-                     args = list(a = post5_1_3$alpha[i],
-                                 b = post5_1_3$beta[i]),
-                     alpha = 0.05)
-}
-p <- p + geom_line(stat = "function", fun = f,
-               args = list(a = mean(post5_1_3$alpha),
-                           b = mean(post5_1_3$beta)),
-               color = "green")
-p
-```
-
-We can see that the distribution of psychometric curves never wanders too far off from the mean. In this sense, we can be fairly confident that the PSS is positive.
-
-```{r}
-tibble(PSS = post5_1_3$pss, JND = post5_1_3$jnd) %>%
-  tidyr::pivot_longer(c("PSS", "JND"), names_to = "Name", values_to = "Seconds") %>%
-  mutate(Name = factor(Name, levels = c("PSS", "JND"))) %>%
-  ggplot(aes(Seconds)) +
-  geom_density(fill = rgb(0, 1, 0, 0.25, maxColorValue = 1)) +
-  facet_grid(~ Name, scales = "free_x")
-```
+Oh no! The posterior retrodictions have failed to capture the variation in the observed data. Even though there were no problems in the model fitting process, we did not come up with a model that is complex enough to capture the features of the data. Of course, we intentionally left out the treatment, age group, and subject variables in order to create a baseline model that we can build off of. We will now go through a second iteration of the model starting back at step 4: model development.
 

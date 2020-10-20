@@ -79,28 +79,22 @@ There are four different tasks in the experiment: audio-visual, visual-visual, v
 \toprule
 age\_group & task & n\\
 \midrule
-\rowcolor{gray!6}   & audiovisual & 14\\
-\cmidrule{2-3}
+\cellcolor{gray!6}{young\_adult} & \cellcolor{gray!6}{audiovisual} & \cellcolor{gray!6}{14}\\
  & duration & 14\\
 \cmidrule{2-3}
-\rowcolor{gray!6}   & sensorimotor & 15\\
-\cmidrule{2-3}
+\cellcolor{gray!6}{young\_adult} & \cellcolor{gray!6}{sensorimotor} & \cellcolor{gray!6}{15}\\
 \multirow[t]{-4}{*}{\raggedright\arraybackslash young\_adult} & visual & 15\\
 \cmidrule{1-3}
-\rowcolor{gray!6}   & audiovisual & 15\\
-\cmidrule{2-3}
+\cellcolor{gray!6}{middle\_age} & \cellcolor{gray!6}{audiovisual} & \cellcolor{gray!6}{15}\\
  & duration & 15\\
 \cmidrule{2-3}
-\rowcolor{gray!6}   & sensorimotor & 15\\
-\cmidrule{2-3}
+\cellcolor{gray!6}{middle\_age} & \cellcolor{gray!6}{sensorimotor} & \cellcolor{gray!6}{15}\\
 \multirow[t]{-4}{*}{\raggedright\arraybackslash middle\_age} & visual & 15\\
 \cmidrule{1-3}
-\rowcolor{gray!6}   & audiovisual & 15\\
-\cmidrule{2-3}
+\cellcolor{gray!6}{older\_adult} & \cellcolor{gray!6}{audiovisual} & \cellcolor{gray!6}{15}\\
  & duration & 15\\
 \cmidrule{2-3}
-\rowcolor{gray!6}   & sensorimotor & 15\\
-\cmidrule{2-3}
+\cellcolor{gray!6}{older\_adult} & \cellcolor{gray!6}{sensorimotor} & \cellcolor{gray!6}{15}\\
 \multirow[t]{-4}{*}{\raggedright\arraybackslash older\_adult} & visual & 15\\
 \bottomrule
 \end{tabular}
