@@ -10,6 +10,7 @@ rstan_options(auto_write = TRUE)
 logit <- function(p) qlogis(p)
 inv_logit <- function(x) plogis(x)
 logistic <- function(x) inv_logit(x)
+fn <- function(x, a, b) logistic(b * (x - a))
 
 av_dat <- local({
   dat <- audiovisual_binomial %>%
@@ -21,9 +22,15 @@ av_dat <- local({
            trial = factor(trial)) %>%
     as.list()
   dat$N <- length(dat$x)
+  dat$N_G <- length(levels(dat$age_group))
+  dat$N_S <- length(levels(dat$sid))
+  dat$N_T <- length(levels(dat$trial))
   dat
 })
-str(av_dat)
+
+stan_summary <- function(object, ...) {
+  round(summary(object, ...)$summary, 4)[,c(1,2,3,4,8,9,10)]
+}
 ```
 
 
@@ -223,7 +230,7 @@ NA
 What is the purpose of this step? To make sure that the generating model coupled with the summary stats/functions yields prior estimates that are consistent with domain expertise (see \@ref(prior-checks)).
 
 
-```{stan output.var="av_iter1_sim"}
+```{stan ch050-Pointless Doorstop, output.var="av_iter1_sim"}
 data {
   int<lower=0> N;
   int n[N];
@@ -240,7 +247,7 @@ generated quantities {
 ```
 
 
-```{r}
+```{r ch050-Square Autumn}
 dat <- with(av_dat, list(N = N, x = x, n = n)) 
 
 m5_1_1 <- sampling(av_iter1_sim, data = dat, 
@@ -254,7 +261,7 @@ prior5_1_1 <- extract(m5_1_1)
 
 > If the prior predictive checks indicate conflict between the model and our domain expertise then we have to return to step four [(model development)] and refine our model.
 
-```{r}
+```{r ch050-Long Supersonic Cosmic}
 hist(prior5_1_1$pss, breaks=50)
 hist(prior5_1_1$jnd, breaks=50)
 quantile(prior5_1_1$jnd, probs=c(0.95, 0.99, 0.999, 1))
@@ -268,7 +275,7 @@ As a default, we will be using the `rethinking` package [@rethinking].
 
 #### Fit simulated ensemble
 
-```{r}
+```{r ch050-Magenta Heart}
 n_sims <- length(prior5_1_1$alpha)
 n_obs <- length(dat$x)
 idx <- sample(1:n_sims, n_obs, replace = TRUE)
@@ -279,7 +286,7 @@ sim_k <- rbinom(n_obs, dat$n, probs)
 ```
 
 
-```{stan output.var="av_iter1_sim_fit"}
+```{stan ch050-Maroon Vulture, output.var="av_iter1_sim_fit"}
 data {
   int N;
   int n[N];
@@ -304,7 +311,7 @@ generated quantities {
 ```
 
 
-```{r}
+```{r ch050-Minimum Artificial}
 sim_dat <- with(av_dat, list(N = N, x = x, n = n, k = sim_k)) 
 
 m5_1_2 <- sampling(av_iter1_sim_fit, data = sim_dat, 
@@ -319,19 +326,13 @@ post5_1_2 <- extract(m5_1_2)
 
 Did the algorithm perform correctly? What kind of diagnostics exist for this algorithm?
 
-```{r}
+```{r ch050-Persistent Hook}
 check_hmc_diagnostics(m5_1_2)
 ```
 
-```{r}
-round((post5_1_2_summary <- summary(m5_1_2)$summary), 4)[,c(1,2,3,4,8,9,10)]
+```{r ch050-Cloudy Toupee}
+stan_summary(m5_1_2, c("alpha", "beta", "pss", "jnd"))
 ```
-
-```{r}
-plot(post5_1_2$alpha, post5_1_2$beta)
-plot(post5_1_2$pss, post5_1_2$jnd)
-```
-
 
 - Using HMC
   - $\hat{R}$
@@ -353,7 +354,7 @@ Non-identifiable model??
 
 #### Fit observation
 
-```{stan output.var="av_iter1_obs_fit"}
+```{stan ch050-Golden Locomotive, output.var="av_iter1_obs_fit"}
 data {
   int N;
   int n[N];
@@ -381,13 +382,12 @@ generated quantities {
 ```
 
 
-```{r}
+```{r ch050-Homeless Tea}
 obs_dat <- with(av_dat, list(N = N, x = x, n = n, k = k)) 
 
 m5_1_3 <- sampling(av_iter1_obs_fit, data = obs_dat,
                    chains = 10, cores = 10, iter = 2500, warmup = 2000,
                    refresh = 0)
-# post5_1_2 <- extract(m5_1_2)
 ```
 
 
@@ -396,9 +396,13 @@ m5_1_3 <- sampling(av_iter1_obs_fit, data = obs_dat,
 > If any diagnostics indicate poor performance then not only is our computational method suspect but also our model might not be rich enough to capture the relevant details of the observed data. At the very least we should return to Step Eight and enhance our computational method.
 
 
-```{r}
+```{r ch050-Silly Clown}
 check_hmc_diagnostics(m5_1_3)
-round(summary(m5_1_3, pars = c("alpha", "beta", "pss", "jnd"))$summary, 4)[,c(1,2,3,4,8,9,10)]
+```
+
+
+```{r ch050-Northernmost Epsilon}
+stan_summary(m5_1_3, pars = c("alpha", "beta", "pss", "jnd"))
 ```
 
 
@@ -406,12 +410,8 @@ round(summary(m5_1_3, pars = c("alpha", "beta", "pss", "jnd"))$summary, 4)[,c(1,
 
 Need an example of using summary stats on posterior retrodictions
 
-```{r}
+```{r ch050-Mysterious Beacon Gamma}
 post5_1_3 <- extract(m5_1_3)
-# m1_summ <- summary(m1_fit) $summary
-```
-
-```{r}
 post5_1_3_k_pred <- t(apply(post5_1_3$y_post_pred, 2, quantile,
                           probs = c(1.5, 5.5, 50, 94.5, 98.5) / 100))
 
@@ -427,7 +427,7 @@ m5_1_3_pred <- cbind(post5_1_3_k_pred,
 ```
 
 
-```{r}
+```{r ch050-Angry Pineapple}
 m5_1_3_pred %>%
   ggplot(aes(x, p)) +
   scale_x_continuous(breaks = seq(-0.5, 0.5, 0.25)) +
@@ -444,7 +444,7 @@ The posterior retrodictions do well to cover the observed data, but we don't act
 
 While we are here, let's also take a look at the underlying performance (psychometric) function as well as the density estimates of the PSS and JND.
 
-```{r}
+```{r ch050-Swift Strong Xylophone}
 n_smp <- 100
 idx <- sample(1:length(post5_1_3$alpha), n_smp, replace = TRUE)
 
@@ -462,7 +462,7 @@ for (i in idx) {
                                  b = post5_1_3$beta[i]),
                      alpha = 0.05)
 }
-p <- p + geom_line(stat = "function", fun = f,
+p <- p + geom_line(stat = "function", fun = fn,
                args = list(a = mean(post5_1_3$alpha),
                            b = mean(post5_1_3$beta)),
                color = "green")
@@ -471,7 +471,7 @@ p
 
 We can see that the distribution of psychometric curves never wanders too far off from the mean. In this sense, we can be fairly confident that the PSS is positive.
 
-```{r}
+```{r ch050-Hollow Mustard}
 tibble(PSS = post5_1_3$pss, JND = post5_1_3$jnd) %>%
   tidyr::pivot_longer(c("PSS", "JND"), names_to = "Name", values_to = "Seconds") %>%
   mutate(Name = factor(Name, levels = c("PSS", "JND"))) %>%

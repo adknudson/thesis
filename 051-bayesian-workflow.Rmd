@@ -1,4 +1,4 @@
-```{r ch5_1-setup, include=FALSE}
+```{r ch051-setup, include=FALSE}
 library(FangPsychometric)
 library(dplyr)
 library(ggplot2)
@@ -7,11 +7,6 @@ library(rstan)
 
 options(mc.cores = parallel::detectCores())
 rstan_options(auto_write = TRUE)
-
-logit <- function(p) qlogis(p)
-inv_logit <- function(x) plogis(x)
-logistic <- function(x) inv_logit(x)
-fn <- function(x, a, b) logistic(b * (x - a))
 
 av_dat <- local({
   dat <- audiovisual_binomial %>%
@@ -85,10 +80,10 @@ parameters {
   real bG[N_G];
   real bT[N_T];
   
-  real<lower=machine_precision()> sd_aG;
-  real<lower=machine_precision()> sd_aT;
-  real<lower=machine_precision()> sd_bG;
-  real<lower=machine_precision()> sd_bT;
+  real<lower=0> sd_aG;
+  real<lower=0> sd_aT;
+  real<lower=0> sd_bG;
+  real<lower=0> sd_bT;
 }
 model {
   a ~ normal(0, 0.05);
@@ -120,7 +115,7 @@ Just like in the first iteration, we begin by simulating the observational model
 
 ###  Simulate bayesian ensemble
 
-```{stan output.var="av_iter2_sim"}
+```{stan ch051-Iron Forgotten, output.var="av_iter2_sim"}
 functions {
   real half_cauchy_rng(real sigma) {
     real u = uniform_rng(0.5, 0.99);
@@ -172,11 +167,10 @@ generated quantities {
     }
   }
 }
-
 ```
 
 
-```{r}
+```{r ch051-Freaky Screwdriver}
 dat <- with(av_dat, list(N = N, N_G = N_G, N_T = N_T, 
                          G = as.integer(age_group), 
                          trt = as.integer(trial),
@@ -190,7 +184,7 @@ prior5_2_1 <- extract(m5_2_1)
 
 ### Prior Checks
 
-```{r}
+```{r ch051-Surreal Comic}
 par(mfrow=c(2,3))
 for (i in 1:3) {
   hist(prior5_2_1$pss[,i,1], breaks = 50, probability = TRUE)
@@ -201,7 +195,7 @@ for (i in 1:3) {
 ```
 
 
-```{r}
+```{r ch051-Severe Kangaroo}
 par(mfrow=c(2,3))
 for (i in 1:3) {
   hist(prior5_2_1$jnd[,i,1], breaks = 50, probability = TRUE)
@@ -211,7 +205,7 @@ for (i in 1:3) {
 }
 ```
 
-```{r}
+```{r ch051-Ivory Brutal Ray}
 apply(prior5_2_1$jnd, c(2,3), quantile, probs = c(0.5, 0.95, 0.99, 0.999)) %>% round(3)
 ```
 
@@ -219,7 +213,7 @@ apply(prior5_2_1$jnd, c(2,3), quantile, probs = c(0.5, 0.95, 0.99, 0.999)) %>% r
 
 ### Fit simulated ensemble
 
-```{r}
+```{r ch051-Cosmic Lone}
 n_sims <- length(prior5_2_1$alpha)
 n_obs <- length(dat$x)
 idx <- sample(1:n_sims, n_obs, replace = TRUE)
@@ -230,7 +224,7 @@ sim_k <- rbinom(n_obs, dat$n, probs)
 ```
 
 
-```{stan output.var="av_iter2_sim_fit"}
+```{stan ch051-Homeless Albatross, output.var="av_iter2_sim_fit"}
 data {
   int N;
   int N_G;
@@ -293,28 +287,28 @@ generated quantities {
 ```
 
 
-```{r}
+```{r ch051-Western Weeknight}
 sim_dat <- with(av_dat, list(N = N, N_G = N_G, N_T = N_T, 
                              G = as.integer(age_group), 
                              trt = as.integer(trial),
                              x = x, n = n, k = sim_k)) 
 
 m5_2_2 <- sampling(av_iter2_sim_fit, data = sim_dat, 
-                   chains = 10, cores = 10, iter = 2500, warmup = 2000,
-                   refresh = 0)
-# post5_2_2 <- extract(m5_2_2)
+                   chains = 10, cores = 10, 
+                   iter = 2500, warmup = 2000,
+                   refresh = 0, seed = 1)
 ```
 
 
 ### Algorithmic calibration
 
-```{r}
+```{r ch051-Intense Canal}
 check_hmc_diagnostics(m5_2_2)
 ```
 
-Let's see if we can do a little better by using a reparameterized model.
+Let's see if we can do a little better by reparameterizing the model, and tuning the algorithm a bit. As I'll discuss more in the [model checking](#model-checking) section, we can use the non-centered parameterization of the normal and Cauchy distributions to make it easier for the Hamiltonian Monte Carlo algorithm to explore the posterior. Additionally Stan suggests increasing the `adapt_delta` parameter to remove divergences, so we will do that. Finally, to take care of the message about R-hat and effective sample sizes, I will run the chains for more iterations.
 
-```{stan output.var="av_iter2_sim_fit_nc"}
+```{stan ch051-Stormy Mountain, output.var="av_iter2_sim_fit_nc"}
 data {
   int N;
   int N_G;
@@ -327,14 +321,14 @@ data {
 }
 parameters {
   real a_raw;
-  real<lower=0> sd_aG;
-  real<lower=0> sd_aT;
+  real<lower=machine_precision(),upper=pi()/2> aG_unif;
+  real<lower=machine_precision(),upper=pi()/2> aT_unif;
   vector[N_G] aG_raw;
   vector[N_T] aT_raw;
 
-  real b;
-  real<lower=0> sd_bG;
-  real<lower=0> sd_bT;
+  real b_raw;
+  real<lower=machine_precision(),upper=pi()/2> bG_unif;
+  real<lower=machine_precision(),upper=pi()/2> bT_unif;
   vector[N_G] bG_raw;
   vector[N_T] bT_raw;
 }
@@ -342,12 +336,26 @@ transformed parameters {
   real a;
   vector[N_G] aG;
   vector[N_T] aT;
+  real sd_aG;
+  real sd_aT;
+  
+  real b;
   vector[N_G] bG;
   vector[N_T] bT;
+  real sd_bG;
+  real sd_bT;
   
   a = a_raw * 0.05;
+  // mu + tau * tan(U) ~ cauchy(mu, tau)
+  sd_aG = 0.01 * tan(aG_unif);
+  sd_aT = 0.01 * tan(aT_unif);
   aG = aG_raw * sd_aG;
   aT = aT_raw * sd_aT;
+  
+  b = 3.0 + b_raw * 1.5;
+  // mu + tau * tan(U) ~ cauchy(mu, tau)
+  sd_bG = 0.5 * tan(bG_unif);
+  sd_bT = 0.5 * tan(bT_unif);
   bG = bG_raw * sd_bG;
   bT = bT_raw * sd_bT;
 }
@@ -357,14 +365,10 @@ model {
   a_raw ~ std_normal();
   aG_raw ~ std_normal();
   aT_raw ~ std_normal();
-  sd_aG ~ cauchy(0, 0.01);
-  sd_aT ~ cauchy(0, 0.01);
 
-  b  ~ normal(3.0, 1.5);
+  b_raw ~ std_normal();
   bG_raw ~ std_normal();
   bT_raw ~ std_normal();
-  sd_bG ~ cauchy(0, 0.5);
-  sd_bT ~ cauchy(0, 0.5);
 
   for (i in 1:N) {
     real mu_b = exp(b + bG[G[i]] + bT[trt[i]]);
@@ -390,30 +394,35 @@ generated quantities {
 ```
 
 
-```{r}
+```{r ch051-Pink Morning}
+keep_pars <- c(
+  "a", "b",
+  "pss", "jnd",
+  "aG", "bG",
+  "aT", "bT",
+  "sd_aG", "sd_bG", 
+  "sd_aT", "sd_bT"
+)
+
 m5_2_3 <- sampling(av_iter2_sim_fit_nc, data = sim_dat, 
-                   chains = 10, cores = 10, iter = 2500, warmup = 2000,
-                   refresh = 0)
-post5_2_3 <- extract(m5_2_3)
+                   chains = 4, cores = 4,
+                   iter = 7000, warmup = 2000,
+                   refresh = 0, pars = keep_pars,
+                   control = list(adapt_delta = 0.95),
+                   seed = 2)
 ```
 
-```{r}
+```{r ch051-Dusty Ray}
 check_hmc_diagnostics(m5_2_3)
 ```
 
-```{r}
-round(summary(m5_2_3, pars = c("a", "aG", "aT"))$summary, 4)[,c(1,2,3,4,8,9,10)]
-round(summary(m5_2_3, pars = c("b", "bG", "bT"))$summary, 4)[,c(1,2,3,4,8,9,10)]
-round(summary(m5_2_3, pars = c("pss"))$summary, 4)[,c(1,2,3,4,8,9,10)]
-round(summary(m5_2_3, pars = c("jnd"))$summary, 4)[,c(1,2,3,4,8,9,10)]
-```
-
+Excellent! Now only about half a percent of the transitions are divergent, and there are no longer any warnings about the R-hat statistic.
 
 ### Inferential Calibration
 
 ### Fit Observation
 
-```{stan output.var="av_iter2_obs_fit"}
+```{stan ch051-Temple Husky, output.var="av_iter2_obs_fit"}
 data {
   int N;
   int N_G;
@@ -426,14 +435,14 @@ data {
 }
 parameters {
   real a_raw;
-  real<lower=0> sd_aG;
-  real<lower=0> sd_aT;
+  real<lower=machine_precision(),upper=pi()/2> aG_unif;
+  real<lower=machine_precision(),upper=pi()/2> aT_unif;
   vector[N_G] aG_raw;
   vector[N_T] aT_raw;
 
-  real b;
-  real<lower=0> sd_bG;
-  real<lower=0> sd_bT;
+  real b_raw;
+  real<lower=machine_precision(),upper=pi()/2> bG_unif;
+  real<lower=machine_precision(),upper=pi()/2> bT_unif;
   vector[N_G] bG_raw;
   vector[N_T] bT_raw;
 }
@@ -441,12 +450,26 @@ transformed parameters {
   real a;
   vector[N_G] aG;
   vector[N_T] aT;
+  real sd_aG;
+  real sd_aT;
+  
+  real b;
   vector[N_G] bG;
   vector[N_T] bT;
+  real sd_bG;
+  real sd_bT;
   
   a = a_raw * 0.05;
+  // mu + tau * tan(U) ~ cauchy(mu, tau)
+  sd_aG = 0.01 * tan(aG_unif);
+  sd_aT = 0.01 * tan(aT_unif);
   aG = aG_raw * sd_aG;
   aT = aT_raw * sd_aT;
+  
+  b = 3.0 + b_raw * 1.5;
+  // mu + tau * tan(U) ~ cauchy(mu, tau)
+  sd_bG = 0.5 * tan(bG_unif);
+  sd_bT = 0.5 * tan(bT_unif);
   bG = bG_raw * sd_bG;
   bT = bT_raw * sd_bT;
 }
@@ -456,14 +479,10 @@ model {
   a_raw ~ std_normal();
   aG_raw ~ std_normal();
   aT_raw ~ std_normal();
-  sd_aG ~ cauchy(0, 0.01);
-  sd_aT ~ cauchy(0, 0.01);
 
-  b  ~ normal(3.0, 1.5);
+  b_raw ~ std_normal();
   bG_raw ~ std_normal();
   bT_raw ~ std_normal();
-  sd_bG ~ cauchy(0, 0.5);
-  sd_bT ~ cauchy(0, 0.5);
 
   for (i in 1:N) {
     real mu_b = exp(b + bG[G[i]] + bT[trt[i]]);
@@ -496,40 +515,53 @@ generated quantities {
 ```
 
 
-```{r}
+```{r ch051-Empty Steel}
 obs_dat <- with(av_dat, list(N = N, N_G = N_G, N_T = N_T, 
                              G = as.integer(age_group), 
                              trt = as.integer(trial),
                              x = x, n = n, k = k)) 
 
+keep_pars <- c(
+  "a", "b",
+  "pss", "jnd",
+  "aG", "bG",
+  "aT", "bT",
+  "sd_aG", "sd_bG", 
+  "sd_aT", "sd_bT",
+  "y_post_pred"
+)
+
 m5_2_4 <- sampling(av_iter2_obs_fit, data = obs_dat, 
-                   chains = 10, cores = 10, iter = 2500, warmup = 2000,
-                   refresh = 0)
-post5_2_4 <- extract(m5_2_4)
+                   chains = 4, cores = 4,
+                   iter = 7000, warmup = 2000,
+                   refresh = 0, pars = keep_pars,
+                   control = list(adapt_delta = 0.95),
+                   seed = 2)
 ```
 
 
 ### Diagnose posterior fit
 
-```{r}
+```{r ch051-Hungry Wrench}
 check_hmc_diagnostics(m5_2_4)
 ```
 
 It's looking alright!
 
-```{r}
-round(summary(m5_2_4, pars = c("a", "aG", "aT"))$summary, 4)[,c(1,2,3,4,8,9,10)]
-round(summary(m5_2_4, pars = c("b", "bG", "bT"))$summary, 4)[,c(1,2,3,4,8,9,10)]
-round(summary(m5_2_4, pars = c("pss"))$summary, 4)[,c(1,2,3,4,8,9,10)]
-round(summary(m5_2_4, pars = c("jnd"))$summary, 4)[,c(1,2,3,4,8,9,10)]
+```{r ch051-Green Burst}
+stan_summary(m5_2_4, pars = c("a", "aG", "aT"))
+stan_summary(m5_2_4, pars = c("b", "bG", "bT"))
+stan_summary(m5_2_4, pars = c("pss"))
+stan_summary(m5_2_4, pars = c("jnd"))
 ```
 
 
 ### Posterior retrodictive checks
 
-```{r}
+```{r ch051-Purple Clown}
+post5_2_4 <- extract(m5_2_4)
 post5_2_4_k_pred <- t(apply(post5_2_4$y_post_pred, 2, quantile,
-                          probs = c(1.5, 5.5, 50, 94.5, 98.5) / 100))
+                            probs = c(1.5, 5.5, 50, 94.5, 98.5) / 100))
 
 idx <- sample(1:nrow(post5_2_4$y_post_pred), 1)
 
@@ -543,7 +575,7 @@ m5_2_4_pred <- cbind(post5_2_4_k_pred,
 ```
 
 
-```{r}
+```{r ch051-Sleepy Roadrunner}
 m5_2_4_pred %>%
   ggplot(aes(x, p)) +
   scale_x_continuous(breaks = seq(-0.5, 0.5, 0.25)) +
@@ -556,9 +588,11 @@ m5_2_4_pred %>%
   facet_grid(age_group ~ trial)
 ```
 
+
 The retrodictive data are matching well with the observed data, which means that we are getting closer to a model that we can use for inferences.
 
-```{r}
+
+```{r ch051-Steady Canal}
 plot_pf <- function(n, post, age_group, trt) {
   n_smp <- 100
   idx <- sample(1:length(post$a), n_smp, replace = TRUE)
@@ -581,8 +615,7 @@ plot_pf <- function(n, post, age_group, trt) {
 ```
 
 
-
-```{r}
+```{r ch051-Furious Jazz}
 ypre <- plot_pf(100, post5_2_4, 1, 1)
 ypos <- plot_pf(100, post5_2_4, 1, 2)
 mpre <- plot_pf(100, post5_2_4, 2, 1)
@@ -593,9 +626,11 @@ opos <- plot_pf(100, post5_2_4, 3, 2)
 (ypre + ypos) / (mpre + mpos) / (opre + opos)
 ```
 
+
 It's difficult to determine from this graph if there any difference between the age groups. Looking at the density plot of the PSS and JND across the different conditions paints a much clearer image.
 
-```{r}
+
+```{r ch051-Discarded Torpedo}
 age_trt <- expand.grid(a = 1:3, t = 1:2)
 
 dat_pssjnd <- lapply(1:nrow(age_trt), function(i) {
@@ -610,10 +645,7 @@ dat_pssjnd <- lapply(1:nrow(age_trt), function(i) {
          t = factor(t, levels = 1:2, labels = levels(av_dat$trial))) %>%
   rename(age_group = a, trial = t) %>%
   tidyr::pivot_longer(c("PSS", "JND"), names_to = "Name", values_to = "Seconds")
-```
 
-
-```{r}
 dat_pssjnd %>%
   ggplot(aes(Seconds, fill = trial)) +
   geom_density() +
@@ -622,6 +654,7 @@ dat_pssjnd %>%
                                rgb(143/255, 19/255, 19/255, 0.5))) +
   facet_grid(age_group ~ Name, scales = "free_x")
 ```
+
 
 Using ocular analysis^[Often referred to in the non-sciences as eyeballs] we can see that recalibration has a significant affect on the just noticeable difference for each age group; specifically recalibration heightens temporal sensitivity and thus reduces the just noticeable difference. Comparing between age groups, the young and middle age groups are very similar in both the pre- and post-adaptation trials, and temporal sensitivity is lower in the older age group.
 

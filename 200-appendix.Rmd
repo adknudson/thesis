@@ -9,7 +9,7 @@ One model, Three Implementations. There are a few ways to specify a hierarchical
 
 Novice
 \setstretch{1.0}
-```{r, eval=FALSE, echo=TRUE}
+```{r appendix-Endless Old Fox, eval=FALSE, echo=TRUE}
 library(rstanarm)
 stan_glmer(cbind(k, n-k) ~ 1 + x + (1 + x | G1) + (1 + x | G2), 
            family = binomial(link = "logit"),
@@ -20,7 +20,7 @@ stan_glmer(cbind(k, n-k) ~ 1 + x + (1 + x | G1) + (1 + x | G2),
 Intermediate
 
 \setstretch{1.0}
-```{r, eval=FALSE, echo=TRUE}
+```{r appendix-Solid Mustard, eval=FALSE, echo=TRUE}
 library(rethinking)
 ulam(alist(
   k ~ binomial(n, pi)
