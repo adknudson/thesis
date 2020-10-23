@@ -197,19 +197,22 @@ The number of effective samples and the R-hat indicate that there is no problem 
 
 
 
-<img src="052-bayesian-workflow_files/figure-html/ch052-Leather Lucky-1.png" width="70%" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics[width=0.7\linewidth]{052-bayesian-workflow_files/figure-latex/ch052-Leather Lucky-1} \end{center}
 
 
 
 
 
-<img src="052-bayesian-workflow_files/figure-html/ch052-Forsaken Purple Moose-1.png" width="70%" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics[width=0.7\linewidth]{052-bayesian-workflow_files/figure-latex/ch052-Forsaken Purple Moose-1} \end{center}
 
 
 It's difficult to determine from this graph if there any difference between the age groups. Looking at the density plot of the PSS and JND across the different conditions paints a much clearer image.
 
 
-<img src="052-bayesian-workflow_files/figure-html/ch052-Severe Lion-1.png" width="70%" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics[width=0.7\linewidth]{052-bayesian-workflow_files/figure-latex/ch052-Severe Lion-1} \end{center}
 
 Okay what gives? The differences within and between age groups is not a separated as it was in the previous iteration. This is due to the fact that the previous model averaged over the variation at the subject level. We'll consider the task of making predictions at the different levels in the hierarchical model.
 
