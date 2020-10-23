@@ -38,19 +38,19 @@ An example to this law is to consider two light sources, one that is 100 lumens 
 Psychometric experiments are devised in a way to examine psychophysical processes, or the response between the world around us and our inward perceptions. A **psychometric function** relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task [@wichmann2001a]. Psychometric functions were studied as early as the late 1800's, and Edwin Boring published a chart of the psychometric function in The American Journal of Psychology in 1917 [@boring1917chart].
 
 
-```{r chart-of-pf, fig.cap="A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or 'two', recorded as either 'two' or 'not two'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their response of 'two'. So at what separation is the impression of two points liminal?"}
+```{r ch020-chart-of-pf, fig.cap="A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or 'two', recorded as either 'two' or 'not two'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their response of 'two'. So at what separation is the impression of two points liminal?"}
 knitr::include_graphics("figures/chart_of_pf.png")
 ```
 
 
-Figure \@ref(fig:chart-of-pf) displays the key aspects of the psychometric function. The most crucial part is the sigmoid function, the S-like non-decreasing curve, which in this case is represented by the Normal CDF, $\Phi(\gamma)$. The horizontal axis represents the stimulus stimulus intensity, the separation of two points in centimeters. The vertical axis represents the probability that a subject has the impression of two points. With only experimental data, the response proportion becomes an approximation for the probability.
+Figure \@ref(fig:ch020-chart-of-pf) displays the key aspects of the psychometric function. The most crucial part is the sigmoid function, the S-like non-decreasing curve, which in this case is represented by the Normal CDF, $\Phi(\gamma)$. The horizontal axis represents the stimulus stimulus intensity, the separation of two points in centimeters. The vertical axis represents the probability that a subject has the impression of two points. With only experimental data, the response proportion becomes an approximation for the probability.
 
 This leads me to talk about the type of psychometric experiment that this paper deals with called a **temporal order judgment** (TOJ) experiment. The concept is that if there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept -- perceive them as happening simultaneously. Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events. The temporal asynchrony between stimuli is called the **stimulus onset asynchrony** (SOA), and the range of SOAs for which sensory signals are integrated into a global percept is called the **temporal binding window**. When the SOA grows too large then the brain segregates the two signals and the temporal order can be determined.
 
-Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the **point of subjective simultaneity** (PSS) -- the temporal delay between two signals at which an observer is unsure about their temporal order [@stone2001now]. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the **just noticeable difference** (JND) -- the smallest lapse in time so that a temporal order can just be determined. Figure \@ref(fig:plot-ref-pf) highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e. the response probability is 50%). The JND is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84% level and the PSS, though the upper level depends on domain expertise.
+Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the **point of subjective simultaneity** (PSS) -- the temporal delay between two signals at which an observer is unsure about their temporal order [@stone2001now]. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the **just noticeable difference** (JND) -- the smallest lapse in time so that a temporal order can just be determined. Figure \@ref(fig:ch020-plot-ref-pf) highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e. the response probability is 50%). The JND is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84% level and the PSS, though the upper level depends on domain expertise.
 
 
-```{r plot-ref-pf, fig.cap="The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise."}
+```{r ch020-plot-ref-pf, fig.cap="The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise."}
 ggplot(tibble(x = c(-4, 4), y = c(0, 1)), aes(x, y)) +
   geom_hline(yintercept = 0, lwd = 0.5) +
   geom_vline(xintercept = 0, lwd = 0.5) +
@@ -110,7 +110,7 @@ multitask %>%
 -->
 
 
-```{r, multitask-data}
+```{r ch020-multitask-data}
 set.seed(4)
 multitask %>%
   filter(trial %in% c("pre", "post1")) %>%
@@ -130,7 +130,7 @@ A similar setup is repeated for the visual, sensorimotor, and duration tasks. Th
 The duration task presents two vertically stacked circles on a screen with one appearing right after the other. The top stimulus appeared for a fixed amount of time of 300 ms, and the bottom was displayed for anywhere between +100 ms to +500 ms in 50 ms steps corresponding to SOA values between -200 ms to +200 ms. The subject then responds to if they perceived the bottom circle as appearing longer than the top circle.
 
 
-```{r, toj-summary}
+```{r ch020-toj-summary}
 tibble(
   Task = c("Audiovisual", "Visual", "Sensorimotor", "Duration"),
   `Positive Response` = c("Perceived audio first", 
@@ -151,10 +151,10 @@ Finally, after the first block of each task was completed, the participants went
 
 ## Data Visualizations and Quirks
 
-The dependent variable in these experiments is the perceived response which is encoded as a 0 or a 1, and the independent variable is the SOA value. If the response is plotted against the SOA values, then it is difficult to determine any relationship (see figure \@ref(fig:simple-response-soa-plot)). Transparency can be used to better visualize the relationships between SOA value and responses. The center plot in figure \@ref(fig:simple-response-soa-plot) uses the same data as the left plot, except that the transparency is set to 0.05. As a result, one can see that there is a higher density of "0" responses towards more negative SOAs, and a higher density of "1" responses for more positive SOAs. Taking it a step further, I can compute and plot the proportion of responses for a given SOA. This is displayed in the right plot. Now the relationship between SOA value and responses is clear -- as the SOA value goes from more negative to more positive, the proportion of positive responses increases from near 0 to near 1.
+The dependent variable in these experiments is the perceived response which is encoded as a 0 or a 1, and the independent variable is the SOA value. If the response is plotted against the SOA values, then it is difficult to determine any relationship (see figure \@ref(fig:ch020-simple-response-soa-plot)). Transparency can be used to better visualize the relationships between SOA value and responses. The center plot in figure \@ref(fig:ch020-simple-response-soa-plot) uses the same data as the left plot, except that the transparency is set to 0.05. As a result, one can see that there is a higher density of "0" responses towards more negative SOAs, and a higher density of "1" responses for more positive SOAs. Taking it a step further, I can compute and plot the proportion of responses for a given SOA. This is displayed in the right plot. Now the relationship between SOA value and responses is clear -- as the SOA value goes from more negative to more positive, the proportion of positive responses increases from near 0 to near 1.
 
 
-```{r, simple-response-soa-plot, fig.cap="Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency."}
+```{r ch020-simple-response-soa-plot, fig.cap="Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency."}
 p1 <- visual %>%
   filter(trial == "pre") %>%
   ggplot(aes(soa, response)) +
@@ -182,10 +182,10 @@ p3 <- visual_binomial %>%
 ```
 
 
-Subjectively the right plot in figure \@ref(fig:simple-response-soa-plot) is the easiest to interpret. Because of this, I will often present the observed and predicted data using the proportion of responses rather than the actual response. Proportional data also has the advantage of being bounded on the same interval as the response. For the audiovisual task, the responses can be aggregated into binomial data -- the number of positive responses for given SOA value -- which is sometimes more efficient to work with than the Bernoulli data (see table \@ref(tab:av-bin-sample)). However the number of times an SOA is presented varies between the pre-adaptation and post-adaptation blocks; 5 and 3 times per SOA respectively. 
+Subjectively the right plot in figure \@ref(fig:ch020-simple-response-soa-plot) is the easiest to interpret. Because of this, I will often present the observed and predicted data using the proportion of responses rather than the actual response. Proportional data also has the advantage of being bounded on the same interval as the response. For the audiovisual task, the responses can be aggregated into binomial data -- the number of positive responses for given SOA value -- which is sometimes more efficient to work with than the Bernoulli data (see table \@ref(tab:ch020-av-bin-sample)). However the number of times an SOA is presented varies between the pre-adaptation and post-adaptation blocks; 5 and 3 times per SOA respectively. 
 
 
-```{r, av-bin-sample}
+```{r ch020-av-bin-sample}
 set.seed(5)
 audiovisual_binomial %>%
   select(-rid) %>%
@@ -201,9 +201,9 @@ audiovisual_binomial %>%
 ```
 
 
-Other quirks about the data pertain to the subjects. There is one younger subject that did not complete the audiovisual task, and one younger subject that did not complete the duration task. Additionally there is one older subject who's response data for the post-adaptation audiovisual task is unreasonable^[By unreasonable, I mean that it is extremely unlikely that the data represents genuine responses.] (see figure \@ref(fig:av-post1-O-f-CE-plot)).
+Other quirks about the data pertain to the subjects. There is one younger subject that did not complete the audiovisual task, and one younger subject that did not complete the duration task. Additionally there is one older subject who's response data for the post-adaptation audiovisual task is unreasonable^[By unreasonable, I mean that it is extremely unlikely that the data represents genuine responses.] (see figure \@ref(fig:ch020-av-post1-O-f-CE-plot)).
 
-```{r, av-post1-O-f-CE-plot, fig.cap="Post-adaptation response data for O-f-CE"}
+```{r ch020-av-post1-O-f-CE-plot, fig.cap="Post-adaptation response data for O-f-CE"}
 audiovisual_binomial %>%
   filter(rid == "av-post1-O-f-CE") %>%
   mutate(p = k / n) %>%
@@ -215,9 +215,9 @@ audiovisual_binomial %>%
   scale_y_continuous(limits = c(0, 1))
 ```
 
-It is unreasonable because, of all the negative SOAs, there were only two correct responses^[Correct in the sense that the perceived order matches the actual order.]. If a ssubject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject's proportion of correct responses is above 0.5, then they are doing better than random guessing. In figure \@ref(fig:av-post-neg-trials) it is seen that subject O-f-CE is the only one who's proportion is below 0.5 (and by a considerable amount).
+It is unreasonable because, of all the negative SOAs, there were only two correct responses^[Correct in the sense that the perceived order matches the actual order.]. If a subject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject's proportion of correct responses is above 0.5, then they are doing better than random guessing. In figure \@ref(fig:ch020-av-post-neg-trials) it is seen that subject O-f-CE is the only one who's proportion is below 0.5 (and by a considerable amount).
 
-```{r, av-post-neg-trials, fig.asp=1, fig.cap="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment."}
+```{r ch020-av-post-neg-trials, fig.asp=1, fig.cap="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment."}
 audiovisual %>%
   filter(trial == "post1", soa < 0) %>%
   mutate(is_neg = soa < 0,
@@ -242,9 +242,9 @@ audiovisual %>%
   scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.25))
 ```
 
-The consequences of leaving in this experimental block in the data is considered in the [Chapter 5](#workflow), but it is a clear outlier that must be noted. When this method of detecting outliers is repeated for all tasks and blocks, then I end up with 17 records in total (see figure \@ref(fig:naive-prop-outliers)), one of which is the aforementioned subject.
+The consequences of leaving in this experimental block in the data is considered in the [Chapter 5](#workflow), but it is a clear outlier that must be noted. When this method of detecting outliers is repeated for all tasks and blocks, then I end up with 17 records in total (see figure \@ref(fig:ch020-naive-prop-outliers)), one of which is the aforementioned subject.
 
-```{r, naive-prop-outliers, fig.cap="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs."}
+```{r ch020-naive-prop-outliers, fig.cap="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs."}
 multitask %>%
   mutate(is_pos = soa > 0,
          is_neg = soa < 0,

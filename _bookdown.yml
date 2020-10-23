@@ -12,6 +12,7 @@ rmd_files: [
   "050-bayesian-workflow.Rmd",
   "051-bayesian-workflow.Rmd",
   "052-bayesian-workflow.Rmd",
+  "053-bayesian-workflow.Rmd",
   "060-model-checking.Rmd",
   "070-predictive-inference.Rmd",
   "080-results.Rmd",

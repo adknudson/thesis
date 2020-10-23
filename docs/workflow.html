@@ -50,8 +50,74 @@
 
 
 <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 </head>
 
@@ -77,37 +143,46 @@
 <li class="chapter" data-level="4.2" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html#multilevel-modeling-stuff"><i class="fa fa-check"></i><b>4.2</b> Multilevel Modeling Stuff</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>5</b> Principled Bayesian Workflow</a><ul>
-<li class="chapter" data-level="5.1" data-path="workflow.html"><a href="workflow.html#iteration-1-the-journey-of-a-thousand-miles-begins-with-a-single-step"><i class="fa fa-check"></i><b>5.1</b> Iteration 1 (The Journey of a Thousand Miles Begins with a Single Step)</a><ul>
+<li class="chapter" data-level="5.1" data-path="workflow.html"><a href="workflow.html#iter1"><i class="fa fa-check"></i><b>5.1</b> Iteration 1 (The Journey of a Thousand Miles Begins with a Single Step)</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="workflow.html"><a href="workflow.html#pre-model-pre-data"><i class="fa fa-check"></i><b>5.1.1</b> Pre-Model, Pre-Data</a></li>
 <li class="chapter" data-level="5.1.2" data-path="workflow.html"><a href="workflow.html#post-model-pre-data"><i class="fa fa-check"></i><b>5.1.2</b> Post-Model, Pre-Data</a></li>
 <li class="chapter" data-level="5.1.3" data-path="workflow.html"><a href="workflow.html#post-model-post-data"><i class="fa fa-check"></i><b>5.1.3</b> Post-Model, Post-Data</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="workflow.html"><a href="workflow.html#iteration-2-electric-boogaloo"><i class="fa fa-check"></i><b>5.2</b> Iteration 2 (Electric Boogaloo)</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="workflow.html"><a href="workflow.html#mod-dev-iter2"><i class="fa fa-check"></i><b>5.2.1</b> Model Development</a></li>
-<li class="chapter" data-level="5.2.2" data-path="workflow.html"><a href="workflow.html#simulate-bayesian-ensemble"><i class="fa fa-check"></i><b>5.2.2</b> Simulate bayesian ensemble</a></li>
-<li class="chapter" data-level="5.2.3" data-path="workflow.html"><a href="workflow.html#prior-checks"><i class="fa fa-check"></i><b>5.2.3</b> Prior Checks</a></li>
-<li class="chapter" data-level="5.2.4" data-path="workflow.html"><a href="workflow.html#configure-algorithm"><i class="fa fa-check"></i><b>5.2.4</b> Configure algorithm</a></li>
-<li class="chapter" data-level="5.2.5" data-path="workflow.html"><a href="workflow.html#fit-simulated-ensemble"><i class="fa fa-check"></i><b>5.2.5</b> Fit simulated ensemble</a></li>
-<li class="chapter" data-level="5.2.6" data-path="workflow.html"><a href="workflow.html#algorithmic-calibration"><i class="fa fa-check"></i><b>5.2.6</b> Algorithmic calibration</a></li>
-<li class="chapter" data-level="5.2.7" data-path="workflow.html"><a href="workflow.html#inferential-calibration"><i class="fa fa-check"></i><b>5.2.7</b> Inferential Calibration</a></li>
-<li class="chapter" data-level="5.2.8" data-path="workflow.html"><a href="workflow.html#fit-observation"><i class="fa fa-check"></i><b>5.2.8</b> Fit Observation</a></li>
-<li class="chapter" data-level="5.2.9" data-path="workflow.html"><a href="workflow.html#diagnose-posterior-fit"><i class="fa fa-check"></i><b>5.2.9</b> Diagnose posterior fit</a></li>
-<li class="chapter" data-level="5.2.10" data-path="workflow.html"><a href="workflow.html#posterior-retrodictive-checks"><i class="fa fa-check"></i><b>5.2.10</b> Posterior retrodictive checks</a></li>
+<li class="chapter" data-level="5.2" data-path="workflow.html"><a href="workflow.html#iter2"><i class="fa fa-check"></i><b>5.2</b> Iteration 2 (Electric Boogaloo)</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="workflow.html"><a href="workflow.html#iter2-model-dev"><i class="fa fa-check"></i><b>5.2.1</b> Model Development</a></li>
+<li class="chapter" data-level="5.2.2" data-path="workflow.html"><a href="workflow.html#iter2-sim"><i class="fa fa-check"></i><b>5.2.2</b> Simulate bayesian ensemble</a></li>
+<li class="chapter" data-level="5.2.3" data-path="workflow.html"><a href="workflow.html#iter2-prior-check"><i class="fa fa-check"></i><b>5.2.3</b> Prior Checks</a></li>
+<li class="chapter" data-level="5.2.4" data-path="workflow.html"><a href="workflow.html#iter2-config-algo"><i class="fa fa-check"></i><b>5.2.4</b> Configure algorithm</a></li>
+<li class="chapter" data-level="5.2.5" data-path="workflow.html"><a href="workflow.html#iter2-fit-sim"><i class="fa fa-check"></i><b>5.2.5</b> Fit simulated ensemble</a></li>
+<li class="chapter" data-level="5.2.6" data-path="workflow.html"><a href="workflow.html#iter2-algo-calibration"><i class="fa fa-check"></i><b>5.2.6</b> Algorithmic calibration</a></li>
+<li class="chapter" data-level="5.2.7" data-path="workflow.html"><a href="workflow.html#iter2-inferential-calibration"><i class="fa fa-check"></i><b>5.2.7</b> Inferential Calibration</a></li>
+<li class="chapter" data-level="5.2.8" data-path="workflow.html"><a href="workflow.html#iter2-fit-obs"><i class="fa fa-check"></i><b>5.2.8</b> Fit Observation</a></li>
+<li class="chapter" data-level="5.2.9" data-path="workflow.html"><a href="workflow.html#iter2-diagnose-post"><i class="fa fa-check"></i><b>5.2.9</b> Diagnose posterior fit</a></li>
+<li class="chapter" data-level="5.2.10" data-path="workflow.html"><a href="workflow.html#iter2-post-retro"><i class="fa fa-check"></i><b>5.2.10</b> Posterior retrodictive checks</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="workflow.html"><a href="workflow.html#iteration-3-the-one-for-me"><i class="fa fa-check"></i><b>5.3</b> Iteration 3 (The one for Me)</a><ul>
-<li class="chapter" data-level="5.3.1" data-path="workflow.html"><a href="workflow.html#model-development"><i class="fa fa-check"></i><b>5.3.1</b> Model Development</a></li>
-<li class="chapter" data-level="5.3.2" data-path="workflow.html"><a href="workflow.html#diagnose-posterior-fit"><i class="fa fa-check"></i><b>5.3.2</b> Diagnose posterior fit</a></li>
-<li class="chapter" data-level="5.3.3" data-path="workflow.html"><a href="workflow.html#posterior-retrodictive-checks"><i class="fa fa-check"></i><b>5.3.3</b> Posterior retrodictive checks</a></li>
-<li class="chapter" data-level="5.3.4" data-path="workflow.html"><a href="workflow.html#posterior-retrodictive-checks-1"><i class="fa fa-check"></i><b>5.3.4</b> Posterior retrodictive checks</a></li>
+<li class="chapter" data-level="5.3" data-path="workflow.html"><a href="workflow.html#iter3"><i class="fa fa-check"></i><b>5.3</b> Iteration 3 (The one for Me)</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="workflow.html"><a href="workflow.html#iter3-model-dev"><i class="fa fa-check"></i><b>5.3.1</b> Model Development</a></li>
+<li class="chapter" data-level="5.3.2" data-path="workflow.html"><a href="workflow.html#iter3-diagnose-post"><i class="fa fa-check"></i><b>5.3.2</b> Diagnose posterior fit</a></li>
+<li class="chapter" data-level="5.3.3" data-path="workflow.html"><a href="workflow.html#iter3-post-retro"><i class="fa fa-check"></i><b>5.3.3</b> Posterior retrodictive checks</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="workflow.html"><a href="workflow.html#iter4"><i class="fa fa-check"></i><b>5.4</b> Iteration 4 (What’s one more?)</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="workflow.html"><a href="workflow.html#iter4-conceptual"><i class="fa fa-check"></i><b>5.4.1</b> Conceptual analysis</a></li>
+<li class="chapter" data-level="5.4.2" data-path="workflow.html"><a href="workflow.html#iter4-summary-stats"><i class="fa fa-check"></i><b>5.4.2</b> Construct summary statistics</a></li>
+<li class="chapter" data-level="5.4.3" data-path="workflow.html"><a href="workflow.html#iter4-model-dev"><i class="fa fa-check"></i><b>5.4.3</b> Model Development</a></li>
+<li class="chapter" data-level="5.4.4" data-path="workflow.html"><a href="workflow.html#iter4-fit-obs"><i class="fa fa-check"></i><b>5.4.4</b> Fit the model</a></li>
+<li class="chapter" data-level="5.4.5" data-path="workflow.html"><a href="workflow.html#iter4-post-retro"><i class="fa fa-check"></i><b>5.4.5</b> Posterior retrodictive checks</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>6</b> Model Checking</a></li>
+<li class="chapter" data-level="6" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>6</b> Model Checking</a><ul>
+<li class="chapter" data-level="6.1" data-path="model-checking.html"><a href="model-checking.html#section"><i class="fa fa-check"></i><b>6.1</b> </a></li>
+</ul></li>
 <li class="chapter" data-level="7" data-path="predictive-inference.html"><a href="predictive-inference.html"><i class="fa fa-check"></i><b>7</b> Predictive Inference</a></li>
 <li class="chapter" data-level="8" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>8</b> Results</a></li>
 <li class="chapter" data-level="9" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>9</b> Discussion</a></li>
 <li class="chapter" data-level="10" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>10</b> Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="supplementary-code.html"><a href="supplementary-code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
       </nav>
@@ -127,7 +202,7 @@
             <section class="normal" id="section-">
 <div id="workflow" class="section level1">
 <h1><span class="header-section-number">5</span> Principled Bayesian Workflow</h1>
-<p>There are many great resources out there<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> for following along with an analysis of some data or problem, and much more is the abundance of tips, tricks, techniques, and testimonies to good modeling practices. The problem is that many of these prescriptions are given without context for when they are appropriate to be taken. According to <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span>, this leaves “practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics.” The concept of a principled workflow is that for any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather great consideration must be given to domain expertise and the questions that one is trying to answer with the data.</p>
+<p>There are many great resources out there<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> for following along with an analysis of some data or problem, and much more is the abundance of tips, tricks, techniques, and testimonies to good modeling practices. The problem is that many of these prescriptions are given without context for when they are appropriate to be taken. According to <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span>, this leaves “practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics.” The concept of a principled workflow is that for any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather great consideration must be given to domain expertise and the questions that one is trying to answer with the data.</p>
 <p>Since everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by:</p>
 <ol style="list-style-type: decimal">
 <li>Domain Expertise Consistency - Is our model consistent with our domain expertise?</li>
@@ -146,17 +221,17 @@
 <li>check predictive posterior</li>
 <li>compare models</li>
 </ul>
-<div id="iteration-1-the-journey-of-a-thousand-miles-begins-with-a-single-step" class="section level2">
+<div id="iter1" class="section level2">
 <h2><span class="header-section-number">5.1</span> Iteration 1 (The Journey of a Thousand Miles Begins with a Single Step)</h2>
 <div id="pre-model-pre-data" class="section level3">
 <h3><span class="header-section-number">5.1.1</span> Pre-Model, Pre-Data</h3>
 <p>We begin the modeling process by modeling the experiment according to the description of how it occurred and how the data were collected. This first part consists of conceptual analysis, defining the observational space, and constructing summary statistics that can help us to identify issues in the model specification.</p>
-<div id="conceptual-analysis" class="section level4">
+<div id="iter1-concept" class="section level4">
 <h4><span class="header-section-number">5.1.1.1</span> Conceptual analysis</h4>
 <p>In section <a href="motivating-data.html#toj-task">2.2</a> we discussed the experimental setup and data collection. To reiterate, subjects are presented with two stimuli separated by some temporal delay, and they are asked to respond as to their perception of the temporal order. There are 45 subjects with 15 each in the young, middle, and older age groups. As the SOA becomes larger in the positive direction, we expect subjects to give more “positive” responses, and as the SOA becomes larger in the negative direction, we expect more “negative” responses. By the way the experiment and responses are constructed, we would not expect to see a reversal of this trend unless there was an issue with the subject’s understanding of the directions given to them or an error in the recording device.</p>
 <p>We also know that after the first experimental block the subjects go through a recalibration period, and repeat the experiment again. We are interested in seeing if the recalibration has an effect on temporal sensitivity and perceptual synchrony, and if the effect is different for each age group.</p>
 </div>
-<div id="define-observational-space" class="section level4">
+<div id="iter1-obs-space" class="section level4">
 <h4><span class="header-section-number">5.1.1.2</span> Define observational space</h4>
 <p>The response that subjects give to a TOJ task is recorded as a zero or a one (see section <a href="motivating-data.html#toj-task">2.2</a>), and their relative performance is determined by the SOA value. Let <span class="math inline">\(y\)</span> represent the binary outcome of a trial and let <span class="math inline">\(x\)</span> be the SOA value.</p>
 <p><span class="math display">\[\begin{align*}
@@ -168,10 +243,11 @@ x_i &amp;\in \mathbb{R}
 k_i, n_i \in \mathbb{Z}_0^+, k_i \le n_i
 \]</span></p>
 <p>In the above equation, <span class="math inline">\(\mathbb{Z}_0^+\)</span> represents the set of non-negative integers. Notice that the number of trials <span class="math inline">\(n\)</span> has an index variable <span class="math inline">\(i\)</span>. This is because the number of trials per SOA is not fixed between blocks. In the pre-adaptation block, there are five trials per SOA compared to three in the post-adaptation block. So if observation 32 is recorder during a “pre” block, <span class="math inline">\(n_{32} = 5\)</span>, and if observation 1156 is during a “post” block, <span class="math inline">\(n_{1156} = 3\)</span>.</p>
-<p>Then we also have the three categorical variables – age group, subject ID, and adaptation. For the first two, we treat them as factor variables<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Rather than using one-hot encoding or dummy variables, we leave the age levels as categories and fit a coefficient for each level. Among the benefits of this approach is the ease of interpretation and ease of working with the data programmatically. This is especially true at the subject level. If we used dummy variables for all 45 subjects, we would have 44 different dummy variables to work with, times the number of coefficients that make estimates at the subject level. In the final iteration of our model, this can be as many as <span class="math inline">\(44 \times 4 = 176\)</span> dummy variables for the subject level!</p>
+<p>Then we also have the three categorical variables – age group, subject ID, and adaptation. For the first two, we treat them as factor variables<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. Rather than using one-hot encoding or dummy variables, we leave the age levels as categories and fit a coefficient for each level. Among the benefits of this approach is the ease of interpretation and ease of working with the data programmatically. This is especially true at the subject level. If we used dummy variables for all 45 subjects, we would have 44 different dummy variables to work with, times the number of coefficients that make estimates at the subject level. In the final iteration of our model, this can be as many as <span class="math inline">\(44 \times 4 = 176\)</span> dummy variables for the subject level!</p>
 <p>Age groups and individual subjects can be indexed in the same way that we index the number of trials. <span class="math inline">\(S_i\)</span> refers to the subject in record <span class="math inline">\(i\)</span>, and similarly <span class="math inline">\(G_i\)</span> refers to the age group of that subject. Observation 63 is for record ID av-post1-M-f-HG, so then <span class="math inline">\(S_{63}\)</span> is M-f-HG and <span class="math inline">\(G_{63}\)</span> is middle_age. Under the hood of R, these factor levels are represented as integers (e.g. middle age group level is stored internally as the number 2).</p>
-<p>We treat the pre- and post-adaptation categories as a binary indicator referred to as <span class="math inline">\(trt\)</span> (short for treatment) since there are only two levels in the category. In this setup, a value of 1 indicates a post-adaptation block. We chose this encoding over the reverse because the pre-adaptation block is like the baseline performance, and it seemed more appropriate to interpret the post-adaptation block as turning on some effect. Using a binary indicator in a regression setting may not be the best practice as we discuss in section <a href="workflow.html#mod-dev-iter2">5.2.1</a>.</p>
+<p>We treat the pre- and post-adaptation categories as a binary indicator referred to as <span class="math inline">\(trt\)</span> (short for treatment) since there are only two levels in the category. In this setup, a value of 1 indicates a post-adaptation block. We chose this encoding over the reverse because the pre-adaptation block is like the baseline performance, and it seemed more appropriate to interpret the post-adaptation block as turning on some effect. Using a binary indicator in a regression setting may not be the best practice as we discuss in section <a href="workflow.html#iter2-model-dev">5.2.1</a>.</p>
 <p>We will be using the Stan probabilistic programming language to estimate the model for our data. In the Stan modeling language, data for a binomial model with subject and age group levels and treatment is specified as</p>
+
 <pre><code>data {
   int N;        // Number of observations
   int N_S;      // Number of subject levels
@@ -184,9 +260,10 @@ k_i, n_i \in \mathbb{Z}_0^+, k_i \le n_i
   int G[N];     // Age group identifier
   int trt[N];   // Treatment indicator
 }</code></pre>
+
 <p>However, in most of this paper we will be using the <code>rethinking</code> package <span class="citation">(McElreath <a href="#ref-R-rethinking" role="doc-biblioref">2020</a>)</span> which is a high level wrapper around <code>rstan</code>. For most of the model fitting and analyses, it is sufficient. For more complex routines and for finer control, we will utilize <code>rstan</code> directly.</p>
 </div>
-<div id="construct-summary-statistics" class="section level4">
+<div id="iter1-sum-stats" class="section level4">
 <h4><span class="header-section-number">5.1.1.3</span> Construct summary statistics</h4>
 <p>In order to effectively challenge the validity of our model, we construct a set of summary statistics that help answer the questions of domain expertise consistency and model adequacy. We are studying the affects of age and temporal recalibration through the PSS and JND (see section <a href="motivating-data.html#psycho-experiments">2.1</a>), so it is natural to define summary statistics around these quantities to verify model consistency. Additionally the PSS and JND can be computed regardless of the model parameterization or chosen psychometric function.</p>
 <p>By the experimental setup and recording process, it is impossible that a properly conducted block would result in a JND less than 0 (i.e. the psychometric function is always non-decreasing), so that can be a lower limit for its threshold. On the other end it is unlikely that it will be beyond the limits of the SOA values, but even more concrete, it seems unlikely (though not impossible) that the just noticeable difference would be more than a second.</p>
@@ -198,7 +275,7 @@ k_i, n_i \in \mathbb{Z}_0^+, k_i \le n_i
 <div id="post-model-pre-data" class="section level3">
 <h3><span class="header-section-number">5.1.2</span> Post-Model, Pre-Data</h3>
 <p>We will now define priors for our model, still not having looked at the data. The priors should be motivated by domain expertise and <em>prior knowledge</em>, not the data.</p>
-<div id="model-development" class="section level4">
+<div id="iter1-model-dev" class="section level4">
 <h4><span class="header-section-number">5.1.2.1</span> Model development</h4>
 <p>Talk here about linear parameterization and connection to PSS and JND.</p>
 <p>Talk here about how I select priors for the intercept (PSS) and the slope (JND). Choose a standard deviation for intercept so that <span class="math inline">\(\approx 95\%\)</span> of the values are between <span class="math inline">\(\pm 0.1\)</span></p>
@@ -218,7 +295,7 @@ Figure 5.1: Prior distribution of psychometric functions using the priors for sl
 <p>Notice that the family of psychometric functions covers the broad range of possible slopes and intercepts, though the prior distribution appears to put more weight on steeper slopes (smaller JNDs). There is also too much possibility that the PF is nearly flat. We can reduce the mean-log and sd-log of the slope parameter and get a much more uniform-looking distribution of prior psychometric curves.</p>
 <p><span class="math display">\[\begin{align*}
 \alpha &amp;\sim \mathcal{N}(0, 0.05) \\
-\beta &amp;\sim \mathrm{Lognormal}(3.0, 1.5)
+\beta  z&amp;\sim \mathrm{Lognormal}(3.0, 1.5)
 \end{align*}\]</span></p>
 <div class="figure" style="text-align: center"><span id="fig:ch050-prior-pf-plot-2"></span>
 <img src="050-bayesian-workflow_files/figure-html/ch050-prior-pf-plot-2-1.png" alt="Second prior distribution of psychometric functions using the priors for slope and intercept." width="70%" />
@@ -240,6 +317,7 @@ Figure 5.2: Second prior distribution of psychometric functions using the priors
 \]</span></p>
 <p>The problem is that it is much harder to define priors for the slope and intercept when they are so closely coupled, and the interpretation of the parameters becomes more difficult as well.</p>
 <p>We can now extend the Stan program to include the parameters and model.</p>
+
 <pre><code>parameters {
   real alpha;          // Intercept (PSS)
   real&lt;lower=0&gt; beta;  // Slope (logit(0.84) / JND)
@@ -253,32 +331,90 @@ model {
   }
   k ~ binomial_logit(n, p); // Observational model
 }</code></pre>
+
 </div>
-<div id="construct-summary-functions" class="section level4">
+<div id="iter1-summary-funs" class="section level4">
 <h4><span class="header-section-number">5.1.2.2</span> Construct summary functions</h4>
 <p>NA</p>
 </div>
-<div id="simulate-bayesian-ensemble" class="section level4">
+<div id="iter1-sim" class="section level4">
 <h4><span class="header-section-number">5.1.2.3</span> Simulate bayesian ensemble</h4>
-<p>What is the purpose of this step? To make sure that the generating model coupled with the summary stats/functions yields prior estimates that are consistent with domain expertise (see <a href="workflow.html#prior-checks">5.1.2.4</a>).</p>
+<p>What is the purpose of this step? To make sure that the generating model coupled with the summary stats/functions yields prior estimates that are consistent with domain expertise (see <a href="workflow.html#iter1-prior-check">5.1.2.4</a>).</p>
+
+<pre class="stan"><code>data {
+  int&lt;lower=0&gt; N;
+  int n[N];
+  vector[N] x;
+}
+generated quantities {
+  real alpha = normal_rng(0, 0.05);
+  real beta = lognormal_rng(3.0, 1.5);
+  vector[N] theta = inv_logit( beta * (x - alpha) );
+  int y_sim[N] = binomial_rng(n, theta);
+  real pss = alpha;
+  real jnd = logit(0.84) / beta;
+}</code></pre>
+
 </div>
-<div id="prior-checks" class="section level4">
+<div id="iter1-prior-check" class="section level4">
 <h4><span class="header-section-number">5.1.2.4</span> Prior checks</h4>
 <blockquote>
-<p>If the prior predictive checks indicate con ict between the model and our domain expertise then we have to return to step four [(model development)] and refine our model.</p>
+<p>If the prior predictive checks indicate conflict between the model and our domain expertise then we have to return to step four [(model development)] and refine our model.</p>
 </blockquote>
+<pre><code>#&gt;    95%    99%  99.9%   100% 
+#&gt;  1.099  2.904  6.681 20.538</code></pre>
+<p><img src="050-bayesian-workflow_files/figure-html/ch050-Long%20Supersonic%20Cosmic-1.png" width="70%" style="display: block; margin: auto;" /><img src="050-bayesian-workflow_files/figure-html/ch050-Long%20Supersonic%20Cosmic-2.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>We’re satisfied with the prior coverage of the PSS and JND, so now we can move on to fitting the model to the simulated data.</p>
 </div>
-<div id="configure-algorithm" class="section level4">
+<div id="iter1-config-algo" class="section level4">
 <h4><span class="header-section-number">5.1.2.5</span> Configure algorithm</h4>
-<p>As a default, we will be using the <code>rstan</code> package <span class="citation">(Guo et al. <a href="#ref-R-rstan" role="doc-biblioref">2020</a>)</span>.</p>
+<p>As a default, we will be using the <code>rethinking</code> package <span class="citation">(<span class="citeproc-not-found" data-reference-id="rethinking"><strong>???</strong></span>)</span>.</p>
 </div>
-<div id="fit-simulated-ensemble" class="section level4">
+<div id="iter1-fit-sim" class="section level4">
 <h4><span class="header-section-number">5.1.2.6</span> Fit simulated ensemble</h4>
+
+<pre class="stan"><code>data {
+  int N;
+  int n[N];
+  int k[N];
+  vector[N] x;
+}
+parameters {
+  real alpha;
+  real&lt;lower=0&gt; beta;
+}
+model {
+  vector[N] p = beta * (x - alpha);
+  alpha ~ normal(0, 0.05);
+  beta ~ lognormal(3.0, 1.5);
+  k ~ binomial_logit(n, p);
+}
+generated quantities {
+  real pss = alpha;
+  real jnd = logit(0.84) / beta;
+}
+</code></pre>
+
 </div>
-<div id="algorithmic-calibration" class="section level4">
+<div id="iter1-algo-calibration" class="section level4">
 <h4><span class="header-section-number">5.1.2.7</span> Algorithmic calibration</h4>
 <p>Did the algorithm perform correctly? What kind of diagnostics exist for this algorithm?</p>
+
+<pre><code>#&gt; 
+#&gt; Divergences:
+#&gt; 0 of 5000 iterations ended with a divergence.
+#&gt; 
+#&gt; Tree depth:
+#&gt; 0 of 5000 iterations saturated the maximum tree depth of 10.
+#&gt; 
+#&gt; Energy:
+#&gt; E-BFMI indicated no pathological behavior.</code></pre>
+
+<pre><code>#&gt;          mean se_mean     sd    2.5%   97.5% n_eff  Rhat
+#&gt; alpha -0.0110   1e-04 0.0043 -0.0194 -0.0025  4762 1.000
+#&gt; beta   7.8900   3e-03 0.1759  7.5517  8.2420  3385 1.002
+#&gt; pss   -0.0110   1e-04 0.0043 -0.0194 -0.0025  4762 1.000
+#&gt; jnd    0.2103   1e-04 0.0047  0.2012  0.2196  3369 1.002</code></pre>
 <ul>
 <li>Using HMC
 <ul>
@@ -292,7 +428,7 @@ model {
 </ul>
 <p>Is there anything we can tune during the fitting process that can alleviate algorithmic issues? Or is it a case of Folk Theorem, and we need to adjust the model?</p>
 </div>
-<div id="inferential-calibration" class="section level4">
+<div id="iter1-inferential-calibration" class="section level4">
 <h4><span class="header-section-number">5.1.2.8</span> Inferential calibration</h4>
 <p>Non-identifiable model??</p>
 <blockquote>
@@ -302,70 +438,481 @@ model {
 </div>
 <div id="post-model-post-data" class="section level3">
 <h3><span class="header-section-number">5.1.3</span> Post-Model, Post-Data</h3>
-<div id="fit-observation" class="section level4">
+<div id="iter1-fit-obs" class="section level4">
 <h4><span class="header-section-number">5.1.3.1</span> Fit observation</h4>
+
+<pre class="stan"><code>data {
+  int N;
+  int n[N];
+  int k[N];
+  vector[N] x;
+}
+parameters {
+  real alpha;
+  real&lt;lower=0&gt; beta;
+}
+model {
+  vector[N] p = beta * (x - alpha);
+  alpha ~ normal(0, 0.05);
+  beta ~ lognormal(3.0, 1.5);
+  k ~ binomial_logit(n, p);
+}
+generated quantities {
+  real pss = alpha;
+  real jnd = logit(0.84) / beta;
+  int y_post_pred[N];
+  for (i in 1:N)
+    y_post_pred[i] = binomial_rng(n[i], inv_logit(beta * (x[i] - alpha)));
+}</code></pre>
+
 </div>
-<div id="diagnose-posterior-fit" class="section level4">
+<div id="iter1-diagnose-post" class="section level4">
 <h4><span class="header-section-number">5.1.3.2</span> Diagnose posterior fit</h4>
 <blockquote>
 <p>If any diagnostics indicate poor performance then not only is our computational method suspect but also our model might not be rich enough to capture the relevant details of the observed data. At the very least we should return to Step Eight and enhance our computational method.</p>
 </blockquote>
+
+<pre><code>#&gt; 
+#&gt; Divergences:
+#&gt; 0 of 5000 iterations ended with a divergence.
+#&gt; 
+#&gt; Tree depth:
+#&gt; 0 of 5000 iterations saturated the maximum tree depth of 10.
+#&gt; 
+#&gt; Energy:
+#&gt; E-BFMI indicated no pathological behavior.</code></pre>
+<pre><code>#&gt;         mean se_mean     sd   2.5%  97.5% n_eff   Rhat
+#&gt; alpha 0.0372   1e-04 0.0041 0.0292 0.0453  5217 0.9995
+#&gt; beta  8.4235   3e-03 0.1832 8.0731 8.7861  3814 0.9994
+#&gt; pss   0.0372   1e-04 0.0041 0.0292 0.0453  5217 0.9995
+#&gt; jnd   0.1970   1e-04 0.0043 0.1887 0.2054  3828 0.9994</code></pre>
+
 </div>
-<div id="posterior-retrodictive-checks" class="section level4">
+<div id="iter1-post-retro" class="section level4">
 <h4><span class="header-section-number">5.1.3.3</span> Posterior retrodictive checks</h4>
 <p>Need an example of using summary stats on posterior retrodictions</p>
-<p>Oh no! The posterior retrodictions have failed to capture the variation in the observed data. Even though there were no problems in the model fitting process, we did not come up with a model that is complex enough to capture the features of the data. Of course, we intentionally left out the treatment, age group, and subject variables in order to create a baseline model that we can build off of. We will now go through a second iteration of the model starting back at step 4: model development.</p>
+<p><img src="050-bayesian-workflow_files/figure-html/ch050-Angry%20Pineapple-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>The posterior retrodictions do well to cover the observed data, but we don’t actually have a model that can answer the questions that we are seeking to answer. At best, this model can only inform of of the population average PSS and JND across both pre- and post-adaptation. This first iteration does serve as a useful foundation for building a more complex model, and for practicing visualization techniques that will be more important in the next few iterations.</p>
+<p>While we are here, let’s also take a look at the underlying performance (psychometric) function as well as the density estimates of the PSS and JND.</p>
+<p><img src="050-bayesian-workflow_files/figure-html/ch050-Swift%20Strong%20Xylophone-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>We can see that the distribution of psychometric curves never wanders too far off from the mean. In this sense, we can be fairly confident that the PSS is positive.</p>
+<p><img src="050-bayesian-workflow_files/figure-html/ch050-Hollow%20Mustard-1.png" width="70%" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
 </div>
-<div id="iteration-2-electric-boogaloo" class="section level2">
+<div id="iter2" class="section level2">
 <h2><span class="header-section-number">5.2</span> Iteration 2 (Electric Boogaloo)</h2>
-<div id="mod-dev-iter2" class="section level3">
+<div id="iter2-model-dev" class="section level3">
 <h3><span class="header-section-number">5.2.1</span> Model Development</h3>
+<p>In this iteration we will now add in the treatment and age group levels. Instead of modeling the prior distribution of the slope as log-normal, we model it as a normal distribution and then take the exponential. This allows us to also model the age group and treatment slopes as normally distributed and with an additive affect.</p>
+<p><span class="math display">\[\begin{align*}
+\beta &amp;\sim \mathcal{N}(3.0, 1.5^2) \\
+\beta_G &amp;\sim \mathcal{N}(0, \sigma_{\beta G}^2) \\
+\beta_T &amp;\sim \mathcal{N}(0, 1.0^2) \\
+\beta_{TG} &amp;\sim \mathcal{N}(0, \sigma_{\beta TG}^2) \\
+\mu_\beta &amp;\sim \exp(\beta + \beta_G + (\beta_T + \beta_{TG})\times trt)
+\end{align*}\]</span></p>
+<p>In the above formulation, <span class="math inline">\(\mu_\beta\)</span> is a log-normal random variable with mean-log <span class="math inline">\(3.0\)</span> and variance-log <span class="math inline">\(1.5^2 + \sigma_{\beta G}^2\)</span> if it’s the pre-adaptation block, and <span class="math inline">\(\left(\sqrt{1.5^2 + 1.0^2}\right)^2 + \sigma_{\beta G}^2 + \sigma_{\beta TG}^2\)</span> if it’s the post-adaptation block. Values that are negative reduce the slope (increase the JND), and values that are positive increase the slope (reduce the JND).</p>
+<p>But wait! this model implies that there is more uncertainty about the post-adaptation trials compared to the baseline trials, and this is not necessarily true. Furthermore, as we’ll see in the linear part of model, the intercept, <span class="math inline">\(\alpha\)</span>, is no longer the average response probability of the sample, but is instead exclusively the average for the pre-adaptation trials. This may not matter in certain analyses, but one nice property of multilevel models is the separation of population level estimates and group level estimates. So we modify the model for the slope to be:</p>
+<p><span class="math display">\[\begin{align*}
+\beta &amp;\sim \mathcal{N}(3.0, 1.5^2) \\
+\beta_G &amp;\sim \mathcal{N}(0, \sigma_{\beta G}^2) \\
+\beta_T &amp;\sim \mathcal{N}(0, \sigma_{\beta T}^2) \\
+\mu_\beta &amp;= \exp(\beta + \beta_G + \beta_T)
+\end{align*}\]</span></p>
+<p>Now <span class="math inline">\(\mu_\beta\)</span> is a log-normal random variable with mean-log <span class="math inline">\(3.0\)</span> and variance-log <span class="math inline">\(1.5^2 + \sigma_{\beta G}^2 + \sigma_{\beta T}^2\)</span>, regardless of whether it’s the pre-adaptation or the post-adaptation block.</p>
+<p>The intercept term can be specified similarly. Conservatively we choose the prior for the intercepts to be normally distributed with mean 0.</p>
+<p><span class="math display">\[\begin{align*}
+\alpha &amp;\sim \mathcal{N}(0, 0.05^2) \\
+\alpha_G &amp;\sim \mathcal{N}(0, \sigma_{\alpha G}^2) \\
+\alpha_T &amp;\sim \mathcal{N}(0, \sigma_{\alpha T}^2) \\
+\mu_\alpha &amp;= \alpha + \alpha_{G} + \alpha_{T}
+\end{align*}\]</span></p>
+<p>The parameters and model of the Stan program is</p>
+<pre><code>parameters {
+  real a;
+  real aG[N_G];
+  real aT[N_T];
+  
+  real b;
+  real bG[N_G];
+  real bT[N_T];
+  
+  real&lt;lower=0&gt; sd_aG;
+  real&lt;lower=0&gt; sd_aT;
+  real&lt;lower=0&gt; sd_bG;
+  real&lt;lower=0&gt; sd_bT;
+}
+model {
+  a ~ normal(0, 0.05);
+  aG ~ normal(0, sd_aG);
+  aT ~ normal(0, sd_aT);
+  
+  b ~ normal(3.0, 1.5);
+  bG ~ normal(0, sd_bG);
+  bT ~ normal(0, sd_bT);
+  
+  sd_aG ~ cauchy(0, 0.01);
+  sd_aT ~ cauchy(0, 0.01);
+  sd_bG ~ cauchy(0, 0.5);
+  sd_bT ~ cauchy(0, 0.5);
+  
+  vector[N] p;
+  for (i in 1:N) {
+    real mu_b = exp(b + bG[G[i]] + bT[T[i]]);
+    real mu_a = a + aG[G[i]] + aT[T[i]];
+    p[i] = mu_b * (x[i] - mu_a);
+  }
+  k ~ binomial_logit(n, p);
+}</code></pre>
+<p>Just like in the first iteration, we begin by simulating the observational model.</p>
 </div>
-<div id="simulate-bayesian-ensemble" class="section level3">
+<div id="iter2-sim" class="section level3">
 <h3><span class="header-section-number">5.2.2</span> Simulate bayesian ensemble</h3>
 </div>
-<div id="prior-checks" class="section level3">
+<div id="iter2-prior-check" class="section level3">
 <h3><span class="header-section-number">5.2.3</span> Prior Checks</h3>
+<p><img src="051-bayesian-workflow_files/figure-html/ch051-Surreal%20Comic-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="051-bayesian-workflow_files/figure-html/ch051-Severe%20Kangaroo-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<pre><code>#&gt; , , 1
+#&gt; 
+#&gt;        
+#&gt;              [,1]      [,2]      [,3]
+#&gt;   50%   8.400e-02 8.600e-02 8.000e-02
+#&gt;   95%   7.270e+00 5.816e+00 5.376e+00
+#&gt;   99%   1.689e+02 3.366e+02 1.350e+02
+#&gt;   99.9% 5.760e+06 3.344e+09 1.785e+07
+#&gt; 
+#&gt; , , 2
+#&gt; 
+#&gt;        
+#&gt;              [,1]      [,2]      [,3]
+#&gt;   50%   8.000e-02 7.800e-02 7.400e-02
+#&gt;   95%   5.205e+00 5.288e+00 4.041e+00
+#&gt;   99%   8.859e+02 1.368e+03 3.881e+02
+#&gt;   99.9% 2.720e+06 1.299e+08 1.875e+05</code></pre>
 </div>
-<div id="configure-algorithm" class="section level3">
+<div id="iter2-config-algo" class="section level3">
 <h3><span class="header-section-number">5.2.4</span> Configure algorithm</h3>
 </div>
-<div id="fit-simulated-ensemble" class="section level3">
+<div id="iter2-fit-sim" class="section level3">
 <h3><span class="header-section-number">5.2.5</span> Fit simulated ensemble</h3>
 </div>
-<div id="algorithmic-calibration" class="section level3">
+<div id="iter2-algo-calibration" class="section level3">
 <h3><span class="header-section-number">5.2.6</span> Algorithmic calibration</h3>
+<pre><code>#&gt; 
+#&gt; Divergences:
+#&gt; 103 of 5000 iterations ended with a divergence (2.06%).
+#&gt; Try increasing &#39;adapt_delta&#39; to remove the divergences.
+#&gt; 
+#&gt; Tree depth:
+#&gt; 0 of 5000 iterations saturated the maximum tree depth of 10.
+#&gt; 
+#&gt; Energy:
+#&gt; E-BFMI indicated no pathological behavior.</code></pre>
+<p>Let’s see if we can do a little better by reparameterizing the model, and tuning the algorithm a bit. As I’ll discuss more in the <a href="model-checking.html#model-checking">model checking</a> section, we can use the non-centered parameterization of the normal and Cauchy distributions to make it easier for the Hamiltonian Monte Carlo algorithm to explore the posterior. Additionally Stan suggests increasing the <code>adapt_delta</code> parameter to remove divergences, so we will do that. Finally, to take care of the message about R-hat and effective sample sizes, I will run the chains for more iterations.</p>
+<pre><code>#&gt; 
+#&gt; Divergences:
+#&gt; 627 of 20000 iterations ended with a divergence (3.135%).
+#&gt; Try increasing &#39;adapt_delta&#39; to remove the divergences.
+#&gt; 
+#&gt; Tree depth:
+#&gt; 0 of 20000 iterations saturated the maximum tree depth of 10.
+#&gt; 
+#&gt; Energy:
+#&gt; E-BFMI indicated no pathological behavior.</code></pre>
+<p>Excellent! Now only about half a percent of the transitions are divergent, and there are no longer any warnings about the R-hat statistic.</p>
 </div>
-<div id="inferential-calibration" class="section level3">
+<div id="iter2-inferential-calibration" class="section level3">
 <h3><span class="header-section-number">5.2.7</span> Inferential Calibration</h3>
 </div>
-<div id="fit-observation" class="section level3">
+<div id="iter2-fit-obs" class="section level3">
 <h3><span class="header-section-number">5.2.8</span> Fit Observation</h3>
 </div>
-<div id="diagnose-posterior-fit" class="section level3">
+<div id="iter2-diagnose-post" class="section level3">
 <h3><span class="header-section-number">5.2.9</span> Diagnose posterior fit</h3>
+<pre><code>#&gt; 
+#&gt; Divergences:
+#&gt; 48 of 20000 iterations ended with a divergence (0.24%).
+#&gt; Try increasing &#39;adapt_delta&#39; to remove the divergences.
+#&gt; 
+#&gt; Tree depth:
+#&gt; 0 of 20000 iterations saturated the maximum tree depth of 10.
+#&gt; 
+#&gt; Energy:
+#&gt; E-BFMI indicated no pathological behavior.</code></pre>
+<p>It’s looking alright!</p>
+<pre><code>#&gt;          mean se_mean     sd    2.5%  97.5% n_eff Rhat
+#&gt; a      0.0317   2e-04 0.0174 -0.0083 0.0629  8585    1
+#&gt; aG[1] -0.0043   1e-04 0.0142 -0.0309 0.0270  9696    1
+#&gt; aG[2]  0.0212   2e-04 0.0150 -0.0032 0.0557  8552    1
+#&gt; aG[3] -0.0099   1e-04 0.0143 -0.0387 0.0202 10241    1
+#&gt; aT[1]  0.0066   1e-04 0.0122 -0.0122 0.0362  9371    1
+#&gt; aT[2] -0.0034   1e-04 0.0116 -0.0263 0.0212 10156    1
+#&gt;          mean se_mean     sd    2.5%  97.5% n_eff Rhat
+#&gt; b      2.2242  0.0045 0.3639  1.5030 3.0457  6409    1
+#&gt; bG[1]  0.0461  0.0021 0.1964 -0.3710 0.4348  8561    1
+#&gt; bG[2]  0.0973  0.0021 0.1964 -0.3136 0.4869  8559    1
+#&gt; bG[3] -0.1766  0.0021 0.1971 -0.6036 0.2027  8477    1
+#&gt; bT[1] -0.1445  0.0040 0.3155 -0.8963 0.4765  6073    1
+#&gt; bT[2]  0.0762  0.0040 0.3148 -0.6675 0.7076  6156    1
+#&gt;            mean se_mean     sd   2.5%  97.5% n_eff   Rhat
+#&gt; pss[1,1] 0.0340   1e-04 0.0076 0.0192 0.0489 18735 0.9999
+#&gt; pss[1,2] 0.0240   1e-04 0.0082 0.0077 0.0396 18099 0.9999
+#&gt; pss[2,1] 0.0595   1e-04 0.0079 0.0441 0.0749 13674 1.0000
+#&gt; pss[2,2] 0.0495   1e-04 0.0083 0.0327 0.0653 15479 1.0001
+#&gt; pss[3,1] 0.0284   1e-04 0.0084 0.0120 0.0450 17367 0.9999
+#&gt; pss[3,2] 0.0184   1e-04 0.0091 0.0003 0.0357 16956 0.9999
+#&gt;            mean se_mean     sd   2.5%  97.5% n_eff   Rhat
+#&gt; jnd[1,1] 0.1981   1e-04 0.0084 0.1821 0.2150 20727 0.9999
+#&gt; jnd[1,2] 0.1589   1e-04 0.0075 0.1446 0.1742 20006 1.0001
+#&gt; jnd[2,1] 0.1882   1e-04 0.0077 0.1736 0.2038 18843 1.0001
+#&gt; jnd[2,2] 0.1510   1e-04 0.0075 0.1370 0.1662 19879 1.0001
+#&gt; jnd[3,1] 0.2475   1e-04 0.0101 0.2282 0.2679 18233 1.0000
+#&gt; jnd[3,2] 0.1985   1e-04 0.0097 0.1804 0.2180 19050 1.0000</code></pre>
 </div>
-<div id="posterior-retrodictive-checks" class="section level3">
+<div id="iter2-post-retro" class="section level3">
 <h3><span class="header-section-number">5.2.10</span> Posterior retrodictive checks</h3>
+<p><img src="051-bayesian-workflow_files/figure-html/ch051-Sleepy%20Roadrunner-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>The retrodictive data are matching well with the observed data, which means that we are getting closer to a model that we can use for inferences.</p>
+<p><img src="051-bayesian-workflow_files/figure-html/ch051-Furious%20Jazz-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>It’s difficult to determine from this graph if there any difference between the age groups. Looking at the density plot of the PSS and JND across the different conditions paints a much clearer image.</p>
+<p><img src="051-bayesian-workflow_files/figure-html/ch051-Discarded%20Torpedo-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>Using ocular analysis<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> we can see that recalibration has a significant affect on the just noticeable difference for each age group; specifically recalibration heightens temporal sensitivity and thus reduces the just noticeable difference. Comparing between age groups, the young and middle age groups are very similar in both the pre- and post-adaptation trials, and temporal sensitivity is lower in the older age group.</p>
+<p>The point of subjective simultaneity between trials is not as well separated, but the model still consistently estimates that the subjects will perceive simultaneity at a value closer to zero post-adaptation.</p>
 
 </div>
 </div>
-<div id="iteration-3-the-one-for-me" class="section level2">
+<div id="iter3" class="section level2">
 <h2><span class="header-section-number">5.3</span> Iteration 3 (The one for Me)</h2>
-<div id="model-development" class="section level3">
+<p>In this iteration of the model building process, we are going to add the individual subjects into the multilevel model, and because this is a simple addition, we are going to skip the prior predictive simulations.</p>
+<div id="iter3-model-dev" class="section level3">
 <h3><span class="header-section-number">5.3.1</span> Model Development</h3>
+<pre class="stan"><code>data {
+  int N;
+  int N_G;
+  int N_T;
+  int N_S;
+  int n[N];
+  int k[N];
+  vector[N] x;
+  int G[N];
+  int trt[N];
+  int S[N];
+}
+parameters {
+  real a_raw;
+  real&lt;lower=machine_precision(),upper=pi()/2&gt; aG_unif;
+  real&lt;lower=machine_precision(),upper=pi()/2&gt; aT_unif;
+  real&lt;lower=machine_precision(),upper=pi()/2&gt; aS_unif;
+  vector[N_G] aG_raw;
+  vector[N_T] aT_raw;
+  vector[N_S] aS_raw;
+
+  real b_raw;
+  real&lt;lower=machine_precision(),upper=pi()/2&gt; bG_unif;
+  real&lt;lower=machine_precision(),upper=pi()/2&gt; bT_unif;
+  real&lt;lower=machine_precision(),upper=pi()/2&gt; bS_unif;
+  vector[N_G] bG_raw;
+  vector[N_T] bT_raw;
+  vector[N_S] bS_raw;
+}
+transformed parameters {
+  real a;
+  vector[N_G] aG;
+  vector[N_T] aT;
+  vector[N_S] aS;
+  real sd_aG;
+  real sd_aT;
+  real sd_aS;
+  
+  real b;
+  vector[N_G] bG;
+  vector[N_T] bT;
+  vector[N_S] bS;
+  real sd_bG;
+  real sd_bT;
+  real sd_bS;
+  
+  // Z * sigma ~ N(0, sigma^2)
+  a = a_raw * 0.05;
+  
+  // mu + tau * tan(U) ~ cauchy(mu, tau)
+  sd_aG = 0.01 * tan(aG_unif);
+  sd_aT = 0.01 * tan(aT_unif);
+  sd_aS = 0.05 * tan(aS_unif);
+  
+  aG = aG_raw * sd_aG;
+  aT = aT_raw * sd_aT;
+  aS = aS_raw * sd_aS;
+  
+  // mu + Z * sigma ~ N(mu, sigma^2)
+  b = 3.0 + b_raw * 1.5;
+  
+  // mu + tau * tan(U) ~ cauchy(mu, tau)
+  sd_bG = 0.5 * tan(bG_unif);
+  sd_bT = 0.5 * tan(bT_unif);
+  sd_bS = 0.5 * tan(bS_unif);
+  
+  bG = bG_raw * sd_bG;
+  bT = bT_raw * sd_bT;
+  bS = bS_raw * sd_bS;
+}
+model {
+  vector[N] theta;
+
+  a_raw ~ std_normal();
+  aG_raw ~ std_normal();
+  aT_raw ~ std_normal();
+  aS_raw ~ std_normal();
+
+  b_raw ~ std_normal();
+  bG_raw ~ std_normal();
+  bT_raw ~ std_normal();
+  bS_raw ~ std_normal();
+
+  for (i in 1:N) {
+    real mu_b = exp(b + bG[G[i]] + bT[trt[i]] + bS[S[i]]);
+    real mu_a = a + aG[G[i]] + aT[trt[i]] + aS[S[i]];
+    theta[i] = mu_b * (x[i] - mu_a);
+  }
+
+  k ~ binomial_logit(n, theta);
+}
+generated quantities {
+  int y_post_pred[N];
+  matrix[N_G, N_T] pss;
+  matrix[N_G, N_T] jnd;
+
+  for (i in 1:N_G) {
+    for (j in 1:N_T) {
+      real mu_b = exp(b + bG[i] + bT[j]);
+      real mu_a = a + aG[i] + aT[j];
+      pss[i, j] = mu_a;
+      jnd[i, j] = logit(0.84) / mu_b;
+    }
+  }
+
+  for (i in 1:N) {
+    real mu_b = exp(b + bG[G[i]] + bT[trt[i]] + bS[S[i]]);
+    real mu_a = a + aG[G[i]] + aT[trt[i]] + aS[S[i]];
+    real theta = inv_logit(mu_b * (x[i] - mu_a));
+    y_post_pred[i] = binomial_rng(n[i], theta);
+  }
+}</code></pre>
 </div>
-<div id="diagnose-posterior-fit" class="section level3">
+<div id="iter3-diagnose-post" class="section level3">
 <h3><span class="header-section-number">5.3.2</span> Diagnose posterior fit</h3>
+<pre><code>#&gt; 
+#&gt; Divergences:
+#&gt; 325 of 20000 iterations ended with a divergence (1.625%).
+#&gt; Try increasing &#39;adapt_delta&#39; to remove the divergences.
+#&gt; 
+#&gt; Tree depth:
+#&gt; 0 of 20000 iterations saturated the maximum tree depth of 10.
+#&gt; 
+#&gt; Energy:
+#&gt; E-BFMI indicated no pathological behavior.</code></pre>
+<pre><code>#&gt;          mean se_mean     sd    2.5%  97.5% n_eff  Rhat
+#&gt; a      0.0321   3e-04 0.0171 -0.0047 0.0634  4551 1.001
+#&gt; aG[1] -0.0010   1e-04 0.0121 -0.0281 0.0248  8336 1.000
+#&gt; aG[2]  0.0067   2e-04 0.0141 -0.0118 0.0451  4854 1.000
+#&gt; aG[3] -0.0028   1e-04 0.0122 -0.0320 0.0193  7753 1.000
+#&gt; aT[1]  0.0055   1e-04 0.0113 -0.0119 0.0329  7144 1.000
+#&gt; aT[2] -0.0028   1e-04 0.0109 -0.0239 0.0203  7570 1.000
+#&gt;          mean se_mean     sd    2.5%  97.5% n_eff  Rhat
+#&gt; b      2.3742  0.0072 0.3784  1.6341 3.2295  2776 1.002
+#&gt; bG[1]  0.0796  0.0025 0.2153 -0.3495 0.5552  7624 1.001
+#&gt; bG[2]  0.0592  0.0023 0.2149 -0.3778 0.5171  8376 1.000
+#&gt; bG[3] -0.1689  0.0030 0.2253 -0.6833 0.2064  5723 1.001
+#&gt; bT[1] -0.1493  0.0081 0.3223 -0.9116 0.5265  1582 1.002
+#&gt; bT[2]  0.1007  0.0084 0.3221 -0.6519 0.8034  1482 1.002
+#&gt;            mean se_mean     sd    2.5%  97.5% n_eff  Rhat
+#&gt; pss[1,1] 0.0365   2e-04 0.0140  0.0075 0.0632  4147 1.002
+#&gt; pss[1,2] 0.0283   2e-04 0.0142 -0.0012 0.0555  4085 1.002
+#&gt; pss[2,1] 0.0443   3e-04 0.0148  0.0168 0.0766  3427 1.001
+#&gt; pss[2,2] 0.0360   3e-04 0.0150  0.0085 0.0685  3491 1.001
+#&gt; pss[3,1] 0.0348   2e-04 0.0144  0.0042 0.0614  4209 1.001
+#&gt; pss[3,2] 0.0265   2e-04 0.0146 -0.0048 0.0535  4130 1.001
+#&gt;            mean se_mean     sd   2.5%  97.5% n_eff  Rhat
+#&gt; jnd[1,1] 0.1666   3e-04 0.0194 0.1303 0.2059  4725 1.001
+#&gt; jnd[1,2] 0.1298   2e-04 0.0155 0.1009 0.1618  4903 1.001
+#&gt; jnd[2,1] 0.1700   3e-04 0.0192 0.1342 0.2093  4633 1.001
+#&gt; jnd[2,2] 0.1324   2e-04 0.0154 0.1040 0.1643  4939 1.002
+#&gt; jnd[3,1] 0.2139   5e-04 0.0274 0.1673 0.2726  3374 1.001
+#&gt; jnd[3,2] 0.1667   4e-04 0.0221 0.1292 0.2144  3393 1.001</code></pre>
+<pre><code>#&gt;         mean se_mean     sd   2.5%  97.5% n_eff  Rhat
+#&gt; sd_aG 0.0114   2e-04 0.0132 0.0003 0.0451  5168 1.000
+#&gt; sd_aT 0.0117   1e-04 0.0138 0.0005 0.0465  9787 1.000
+#&gt; sd_aS 0.0689   2e-04 0.0090 0.0535 0.0880  2106 1.002
+#&gt;         mean se_mean     sd   2.5%  97.5%  n_eff  Rhat
+#&gt; sd_bG 0.2804  0.0032 0.2453 0.0168 0.9295 5707.0 1.001
+#&gt; sd_bT 0.4261  0.0266 0.4193 0.0837 1.5445  247.9 1.013
+#&gt; sd_bS 0.4403  0.0008 0.0577 0.3405 0.5657 5653.6 1.000</code></pre>
+<p>The number of effective samples and the R-hat indicate that there is no problem with the posterior samples.</p>
 </div>
-<div id="posterior-retrodictive-checks" class="section level3">
+<div id="iter3-post-retro" class="section level3">
 <h3><span class="header-section-number">5.3.3</span> Posterior retrodictive checks</h3>
+<p><img src="052-bayesian-workflow_files/figure-html/ch052-Leather%20Lucky-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="052-bayesian-workflow_files/figure-html/ch052-Forsaken%20Purple%20Moose-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>It’s difficult to determine from this graph if there any difference between the age groups. Looking at the density plot of the PSS and JND across the different conditions paints a much clearer image.</p>
+<p><img src="052-bayesian-workflow_files/figure-html/ch052-Severe%20Lion-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>Okay what gives? The differences within and between age groups is not a separated as it was in the previous iteration. This is due to the fact that the previous model averaged over the variation at the subject level. We’ll consider the task of making predictions at the different levels in the hierarchical model.</p>
+
 </div>
-<div id="posterior-retrodictive-checks-1" class="section level3">
-<h3><span class="header-section-number">5.3.4</span> Posterior retrodictive checks</h3>
+</div>
+<div id="iter4" class="section level2">
+<h2><span class="header-section-number">5.4</span> Iteration 4 (What’s one more?)</h2>
+<p>We now have a model that works well for the audiovisual data, but there are still two other data sets that we can apply the model to. Additionally there is one more modification that we can make to the model that reflects a real world problem - lapses in judgment.</p>
+<div id="iter4-conceptual" class="section level3">
+<h3><span class="header-section-number">5.4.1</span> Conceptual analysis</h3>
+<p>A lapse in judgment can happen for any reason, and is assumed to be random and independent of other lapses. They can come in the form of the subject accidentally blinking during the presentation of a visual stimulus, or unintentionally pressing the wrong button to respond. Whatever the case is, lapses can have a significant affect on the resulting psychometric function.</p>
+</div>
+<div id="iter4-summary-stats" class="section level3">
+<h3><span class="header-section-number">5.4.2</span> Construct summary statistics</h3>
+<p>We will continue to use the posterior density of the PSS and JND as summary statistics, but the way we calculate them will change as a result of the change in the model in the next section.</p>
+</div>
+<div id="iter4-model-dev" class="section level3">
+<h3><span class="header-section-number">5.4.3</span> Model Development</h3>
+<p>Lapses can be modeled as occurring independently at some fixed rate. Fundamentally this means that the underlying performance function, <span class="math inline">\(F\)</span>, is bounded by some lower and upper lapse rate. This manifests as a scaling and translation of <span class="math inline">\(F\)</span>. For a given lower and upper lapse rate <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\gamma\)</span>, the performance function <span class="math inline">\(\Psi\)</span> is</p>
+<p><span class="math display">\[
+\Psi(x; \alpha, \beta, \lambda, \gamma) = \lambda + (1 - \lambda - \gamma) F(x; \alpha, \beta)
+\]</span></p>
+<div class="figure" style="text-align: center"><span id="fig:ch053-plot-pf-with-lapse"></span>
+<img src="053-bayesian-workflow_files/figure-html/ch053-plot-pf-with-lapse-1.png" alt="Psychometric function with lower and upper performance bounds." width="70%" />
+<p class="caption">
+Figure 5.3: Psychometric function with lower and upper performance bounds.
+</p>
+</div>
+<p>In certain psychometric experiments, <span class="math inline">\(\lambda\)</span> is interpreted as the lower performance bound or the guessing rate. For example, in certain 2-alternative forced choice (2-AFC) tasks, subjects are asked to respond which of two masses is heavier, and the correctness of their response is recorded. When the masses are the same, the subject can do no better than random guessing. In this task, the lower performance bound is assumed to be 50% as their guess is split between two choices. As the absolute difference in mass grows, the subject’s correctness rate increases, though lapses can still happen. In this scenario, <span class="math inline">\(\lambda\)</span> is fixed at <span class="math inline">\(0.5\)</span> and the lapse rate <span class="math inline">\(\gamma\)</span> is a parameter in the model.</p>
+<p>Our data does not explicitly record correctness, so we do not give <span class="math inline">\(\lambda\)</span> the interpretation of a guessing rate. Since we are recording proportion of positive responses, we instead treat <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\gamma\)</span> as lapse rates for negative and positive SOAs. But why should we treat the lapse rates separately? A lapse in judgment can occur independently of the SOA, so <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\gamma\)</span> should be the same no matter what. With this assumption in mind, we throw away <span class="math inline">\(\gamma\)</span> and assume that the lower and upper performance bounds are restricted by the same amount. I.e.</p>
+<p><span class="math display">\[
+\Psi(x; \alpha, \beta, \lambda) = \lambda + (1 - 2\lambda) F(x; \alpha, \beta)
+\]</span></p>
+<p>While we’re throwing in lapse rates, let’s also ask the question if different age groups have different lapse rates. To answer this (or rather have our model answer this), we include the new parameter <span class="math inline">\(\lambda_{G[i]}\)</span> into the model so that we get an estimated lapse rate for each age group.</p>
+<p>We assume that lapses in judgment are rare, and we know that the rate (or probability of a lapse) is bounded in the interval <span class="math inline">\([0, 1]\)</span>. Because of this, we put a <span class="math inline">\(\mathrm{Beta(4, 96)}\)</span> prior on <span class="math inline">\(\lambda\)</span> which <em>a priori</em> puts 99% of the weight below <span class="math inline">\(0.1\)</span> and an expected lapse rate of <span class="math inline">\(0.04\)</span>.</p>
+<p>We could also set up our model so that information about the lapse rate is shared between age groups (i.e. hierarchical), but we’ll leave that as an exercise for the reader.</p>
+</div>
+<div id="iter4-fit-obs" class="section level3">
+<h3><span class="header-section-number">5.4.4</span> Fit the model</h3>
+<pre><code>#&gt; 
+#&gt; Divergences:
+#&gt; 95 of 20000 iterations ended with a divergence (0.475%).
+#&gt; Try increasing &#39;adapt_delta&#39; to remove the divergences.
+#&gt; 
+#&gt; Tree depth:
+#&gt; 1 of 20000 iterations saturated the maximum tree depth of 10 (0.005%).
+#&gt; Try increasing &#39;max_treedepth&#39; to avoid saturation.
+#&gt; 
+#&gt; Energy:
+#&gt; E-BFMI indicated no pathological behavior.</code></pre>
+</div>
+<div id="iter4-post-retro" class="section level3">
+<h3><span class="header-section-number">5.4.5</span> Posterior retrodictive checks</h3>
+<p><img src="053-bayesian-workflow_files/figure-html/ch053-Furious%20Ninth%20Xylophone-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="053-bayesian-workflow_files/figure-html/ch053-Bulldozer%20Cold-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="053-bayesian-workflow_files/figure-html/ch053-Discarded%20Firecracker-1.png" width="70%" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
@@ -375,18 +922,16 @@ model {
 <div id="ref-betancourt2020">
 <p>Betancourt, Michael. 2020. “Towards a Principled Bayesian Workflow.” <em>Betanalpha</em>. <a href="betanalpha.github.io">betanalpha.github.io</a>.</p>
 </div>
-<div id="ref-R-rstan">
-<p>Guo, Jiqiang, Jonah Gabry, Ben Goodrich, and Sebastian Weber. 2020. <em>Rstan: R Interface to Stan</em>. <a href="https://CRAN.R-project.org/package=rstan">https://CRAN.R-project.org/package=rstan</a>.</p>
-</div>
 <div id="ref-R-rethinking">
 <p>McElreath, Richard. 2020. <em>Rethinking: Statistical Rethinking Book Package</em>.</p>
 </div>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p>citation needed<a href="workflow.html#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>Factor variables also go by the name index variable or categorical variable<a href="workflow.html#fnref2" class="footnote-back">↩︎</a></p></li>
+<ol start="3">
+<li id="fn3"><p>citation needed<a href="workflow.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Factor variables also go by the name index variable or categorical variable<a href="workflow.html#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>Often referred to in the non-sciences as eyeballs<a href="workflow.html#fnref5" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

@@ -56,19 +56,19 @@ Since everyone asks different questions, the value of a model is not in how well
 - check predictive posterior
 - compare models
 
-## Iteration 1 (The Journey of a Thousand Miles Begins with a Single Step)
+## Iteration 1 (The Journey of a Thousand Miles Begins with a Single Step) {#iter1}
 
 ### Pre-Model, Pre-Data
 
 We begin the modeling process by modeling the experiment according to the description of how it occurred and how the data were collected. This first part consists of conceptual analysis, defining the observational space, and constructing summary statistics that can help us to identify issues in the model specification.
 
-#### Conceptual analysis
+#### Conceptual analysis {#iter1-concept}
 
 In section \@ref(toj-task) we discussed the experimental setup and data collection. To reiterate, subjects are presented with two stimuli separated by some temporal delay, and they are asked to respond as to their perception of the temporal order. There are 45 subjects with 15 each in the young, middle, and older age groups. As the SOA becomes larger in the positive direction, we expect subjects to give more "positive" responses, and as the SOA becomes larger in the negative direction, we expect more "negative" responses. By the way the experiment and responses are constructed, we would not expect to see a reversal of this trend unless there was an issue with the subject's understanding of the directions given to them or an error in the recording device.
 
 We also know that after the first experimental block the subjects go through a recalibration period, and repeat the experiment again. We are interested in seeing if the recalibration has an effect on temporal sensitivity and perceptual synchrony, and if the effect is different for each age group.
 
-#### Define observational space
+#### Define observational space {#iter1-obs-space}
 
 The response that subjects give to a TOJ task is recorded as a zero or a one (see section \@ref(toj-task)), and their relative performance is determined by the SOA value. Let $y$ represent the binary outcome of a trial and let $x$ be the SOA value.
 
@@ -89,10 +89,11 @@ Then we also have the three categorical variables -- age group, subject ID, and 
 
 Age groups and individual subjects can be indexed in the same way that we index the number of trials. $S_i$ refers to the subject in record $i$, and similarly $G_i$ refers to the age group of that subject. Observation 63 is for record ID `r FangPsychometric::audiovisual_binomial$rid[63]`, so then $S_{63}$ is `r FangPsychometric::audiovisual_binomial$sid[63]` and $G_{63}$ is `r FangPsychometric::audiovisual_binomial$age_group[63]`. Under the hood of R, these factor levels are represented as integers (e.g. middle age group level is stored internally as the number 2).
 
-We treat the pre- and post-adaptation categories as a binary indicator referred to as $trt$ (short for treatment) since there are only two levels in the category. In this setup, a value of 1 indicates a post-adaptation block. We chose this encoding over the reverse because the pre-adaptation block is like the baseline performance, and it seemed more appropriate to interpret the post-adaptation block as turning on some effect. Using a binary indicator in a regression setting may not be the best practice as we discuss in section \@ref(mod-dev-iter2).
+We treat the pre- and post-adaptation categories as a binary indicator referred to as $trt$ (short for treatment) since there are only two levels in the category. In this setup, a value of 1 indicates a post-adaptation block. We chose this encoding over the reverse because the pre-adaptation block is like the baseline performance, and it seemed more appropriate to interpret the post-adaptation block as turning on some effect. Using a binary indicator in a regression setting may not be the best practice as we discuss in section \@ref(iter2-model-dev).
 
 We will be using the Stan probabilistic programming language to estimate the model for our data. In the Stan modeling language, data for a binomial model with subject and age group levels and treatment is specified as
 
+\setstretch{1.0}
 ```
 data {
   int N;        // Number of observations
@@ -107,10 +108,11 @@ data {
   int trt[N];   // Treatment indicator
 }
 ```
+\setstretch{2.0}
 
 However, in most of this paper we will be using the `rethinking` package [@R-rethinking] which is a high level wrapper around `rstan`. For most of the model fitting and analyses, it is sufficient. For more complex routines and for finer control, we will utilize `rstan` directly.
 
-#### Construct summary statistics
+#### Construct summary statistics {#iter1-sum-stats}
 
 In order to effectively challenge the validity of our model, we construct a set of summary statistics that help answer the questions of domain expertise consistency and model adequacy. We are studying the affects of age and temporal recalibration through the PSS and JND (see section \@ref(psycho-experiments)), so it is natural to define summary statistics around these quantities to verify model consistency. Additionally the PSS and JND can be computed regardless of the model parameterization or chosen psychometric function.
 
@@ -126,7 +128,7 @@ A histogram of computed PSS and JND values will suffice for summary statistics. 
 
 We will now define priors for our model, still not having looked at the data. The priors should be motivated by domain expertise and *prior knowledge*, not the data.
 
-#### Model development
+#### Model development {#iter1-model-dev}
 
 Talk here about linear parameterization and connection to PSS and JND.
 
@@ -205,6 +207,7 @@ The problem is that it is much harder to define priors for the slope and interce
 
 We can now extend the Stan program to include the parameters and model.
 
+\setstretch{1.0}
 ```
 parameters {
   real alpha;          // Intercept (PSS)
@@ -220,17 +223,18 @@ model {
   k ~ binomial_logit(n, p); // Observational model
 }
 ```
+\setstretch{2.0}
 
-#### Construct summary functions
+#### Construct summary functions {#iter1-summary-funs}
 
 NA
 
-#### Simulate bayesian ensemble
+#### Simulate bayesian ensemble {#iter1-sim}
 
-What is the purpose of this step? To make sure that the generating model coupled with the summary stats/functions yields prior estimates that are consistent with domain expertise (see \@ref(prior-checks)).
+What is the purpose of this step? To make sure that the generating model coupled with the summary stats/functions yields prior estimates that are consistent with domain expertise (see \@ref(iter1-prior-check)).
 
-
-```{stan ch050-Pointless Doorstop, output.var="av_iter1_sim"}
+\setstretch{1.0}
+```{stan ch050-Pointless Doorstop, output.var="av_iter1_sim", echo=TRUE}
 data {
   int<lower=0> N;
   int n[N];
@@ -245,6 +249,7 @@ generated quantities {
   real jnd = logit(0.84) / beta;
 }
 ```
+\setstretch{2.0}
 
 
 ```{r ch050-Square Autumn}
@@ -257,9 +262,10 @@ prior5_1_1 <- extract(m5_1_1)
 ```
 
 
-#### Prior checks
+#### Prior checks {#iter1-prior-check}
 
 > If the prior predictive checks indicate conflict between the model and our domain expertise then we have to return to step four [(model development)] and refine our model.
+
 
 ```{r ch050-Long Supersonic Cosmic}
 hist(prior5_1_1$pss, breaks=50)
@@ -267,13 +273,14 @@ hist(prior5_1_1$jnd, breaks=50)
 quantile(prior5_1_1$jnd, probs=c(0.95, 0.99, 0.999, 1))
 ```
 
+
 We're satisfied with the prior coverage of the PSS and JND, so now we can move on to fitting the model to the simulated data.
 
-#### Configure algorithm
+#### Configure algorithm {#iter1-config-algo}
 
 As a default, we will be using the `rethinking` package [@rethinking].
 
-#### Fit simulated ensemble
+#### Fit simulated ensemble {#iter1-fit-sim}
 
 ```{r ch050-Magenta Heart}
 n_sims <- length(prior5_1_1$alpha)
@@ -286,7 +293,8 @@ sim_k <- rbinom(n_obs, dat$n, probs)
 ```
 
 
-```{stan ch050-Maroon Vulture, output.var="av_iter1_sim_fit"}
+\setstretch{1.0}
+```{stan ch050-Maroon Vulture, output.var="av_iter1_sim_fit", echo=TRUE}
 data {
   int N;
   int n[N];
@@ -309,6 +317,7 @@ generated quantities {
 }
 
 ```
+\setstretch{2.0}
 
 
 ```{r ch050-Minimum Artificial}
@@ -322,13 +331,17 @@ post5_1_2 <- extract(m5_1_2)
 
 
 
-#### Algorithmic calibration
+#### Algorithmic calibration {#iter1-algo-calibration}
 
 Did the algorithm perform correctly? What kind of diagnostics exist for this algorithm?
 
-```{r ch050-Persistent Hook}
+
+\setstretch{1.0}
+```{r ch050-Persistent Hook, message=TRUE}
 check_hmc_diagnostics(m5_1_2)
 ```
+\setstretch{2.0}
+
 
 ```{r ch050-Cloudy Toupee}
 stan_summary(m5_1_2, c("alpha", "beta", "pss", "jnd"))
@@ -344,7 +357,7 @@ stan_summary(m5_1_2, c("alpha", "beta", "pss", "jnd"))
 
 Is there anything we can tune during the fitting process that can alleviate algorithmic issues? Or is it a case of Folk Theorem, and we need to adjust the model?
 
-#### Inferential calibration
+#### Inferential calibration {#iter1-inferential-calibration}
 
 Non-identifiable model??
 
@@ -352,9 +365,11 @@ Non-identifiable model??
 
 ### Post-Model, Post-Data
 
-#### Fit observation
+#### Fit observation {#iter1-fit-obs}
 
-```{stan ch050-Golden Locomotive, output.var="av_iter1_obs_fit"}
+
+\setstretch{1.0}
+```{stan ch050-Golden Locomotive, output.var="av_iter1_obs_fit", echo=TRUE}
 data {
   int N;
   int n[N];
@@ -378,8 +393,8 @@ generated quantities {
   for (i in 1:N)
     y_post_pred[i] = binomial_rng(n[i], inv_logit(beta * (x[i] - alpha)));
 }
-
 ```
+\setstretch{2.0}
 
 
 ```{r ch050-Homeless Tea}
@@ -391,22 +406,23 @@ m5_1_3 <- sampling(av_iter1_obs_fit, data = obs_dat,
 ```
 
 
-#### Diagnose posterior fit
+#### Diagnose posterior fit {#iter1-diagnose-post}
 
 > If any diagnostics indicate poor performance then not only is our computational method suspect but also our model might not be rich enough to capture the relevant details of the observed data. At the very least we should return to Step Eight and enhance our computational method.
 
 
-```{r ch050-Silly Clown}
+\setstretch{1.0}
+```{r ch050-Silly Clown, message=TRUE}
 check_hmc_diagnostics(m5_1_3)
 ```
-
 
 ```{r ch050-Northernmost Epsilon}
 stan_summary(m5_1_3, pars = c("alpha", "beta", "pss", "jnd"))
 ```
+\setstretch{2.0}
 
 
-#### Posterior retrodictive checks
+#### Posterior retrodictive checks {#iter1-post-retro}
 
 Need an example of using summary stats on posterior retrodictions
 

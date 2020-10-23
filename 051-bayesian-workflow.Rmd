@@ -26,9 +26,9 @@ av_dat <- local({
 ```
 
 
-## Iteration 2 (Electric Boogaloo)
+## Iteration 2 (Electric Boogaloo) {#iter2}
 
-### Model Development {#mod-dev-iter2}
+### Model Development {#iter2-model-dev}
 
 In this iteration we will now add in the treatment and age group levels. Instead of modeling the prior distribution of the slope as log-normal, we model it as a normal distribution and then take the exponential. This allows us to also model the age group and treatment slopes as normally distributed and with an additive affect.
 
@@ -113,7 +113,7 @@ model {
 Just like in the first iteration, we begin by simulating the observational model.
 
 
-###  Simulate bayesian ensemble
+###  Simulate bayesian ensemble {#iter2-sim}
 
 ```{stan ch051-Iron Forgotten, output.var="av_iter2_sim"}
 functions {
@@ -182,7 +182,7 @@ m5_2_1 <- sampling(av_iter2_sim, data = dat,
 prior5_2_1 <- extract(m5_2_1)
 ```
 
-### Prior Checks
+### Prior Checks {#iter2-prior-check}
 
 ```{r ch051-Surreal Comic}
 par(mfrow=c(2,3))
@@ -209,9 +209,9 @@ for (i in 1:3) {
 apply(prior5_2_1$jnd, c(2,3), quantile, probs = c(0.5, 0.95, 0.99, 0.999)) %>% round(3)
 ```
 
-### Configure algorithm
+### Configure algorithm {#iter2-config-algo}
 
-### Fit simulated ensemble
+### Fit simulated ensemble {#iter2-fit-sim}
 
 ```{r ch051-Cosmic Lone}
 n_sims <- length(prior5_2_1$alpha)
@@ -300,9 +300,9 @@ m5_2_2 <- sampling(av_iter2_sim_fit, data = sim_dat,
 ```
 
 
-### Algorithmic calibration
+### Algorithmic calibration {#iter2-algo-calibration}
 
-```{r ch051-Intense Canal}
+```{r ch051-Intense Canal, message=TRUE}
 check_hmc_diagnostics(m5_2_2)
 ```
 
@@ -412,15 +412,15 @@ m5_2_3 <- sampling(av_iter2_sim_fit_nc, data = sim_dat,
                    seed = 2)
 ```
 
-```{r ch051-Dusty Ray}
+```{r ch051-Dusty Ray, message=TRUE}
 check_hmc_diagnostics(m5_2_3)
 ```
 
 Excellent! Now only about half a percent of the transitions are divergent, and there are no longer any warnings about the R-hat statistic.
 
-### Inferential Calibration
+### Inferential Calibration {#iter2-inferential-calibration}
 
-### Fit Observation
+### Fit Observation {#iter2-fit-obs}
 
 ```{stan ch051-Temple Husky, output.var="av_iter2_obs_fit"}
 data {
@@ -540,9 +540,9 @@ m5_2_4 <- sampling(av_iter2_obs_fit, data = obs_dat,
 ```
 
 
-### Diagnose posterior fit
+### Diagnose posterior fit {#iter2-diagnose-post}
 
-```{r ch051-Hungry Wrench}
+```{r ch051-Hungry Wrench, message=TRUE}
 check_hmc_diagnostics(m5_2_4)
 ```
 
@@ -556,7 +556,7 @@ stan_summary(m5_2_4, pars = c("jnd"))
 ```
 
 
-### Posterior retrodictive checks
+### Posterior retrodictive checks {#iter2-post-retro}
 
 ```{r ch051-Purple Clown}
 post5_2_4 <- extract(m5_2_4)

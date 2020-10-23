@@ -1,5 +1,7 @@
 # Model Checking {#model-checking}
 
+## 
+
 - The problem of simulating multivariate data with arbitrary marginal distributions
 - Copula approach
   - Nonlinear transformation that invalidates the correlation structure
