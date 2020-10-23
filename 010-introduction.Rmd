@@ -1,5 +1,7 @@
 # Introduction
 
+
+
 - Soft intro to modern computing, analysis
   - advance in CPU+programming leads to evolved statistical methods
     - ML/DL, high dimensional analysis, big data, Bayesian techniques

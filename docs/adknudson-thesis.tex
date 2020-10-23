@@ -850,23 +850,23 @@ Since everyone asks different questions, the value of a model is not in how well
   compare models
 \end{itemize}
 
-\hypertarget{iteration-1-the-journey-of-a-thousand-miles-begins-with-a-single-step}{%
-\section{Iteration 1 (The Journey of a Thousand Miles Begins with a Single Step)}\label{iteration-1-the-journey-of-a-thousand-miles-begins-with-a-single-step}}
+\hypertarget{iter1}{%
+\section{Iteration 1 (The Journey of a Thousand Miles Begins with a Single Step)}\label{iter1}}
 
 \hypertarget{pre-model-pre-data}{%
 \subsection{Pre-Model, Pre-Data}\label{pre-model-pre-data}}
 
 We begin the modeling process by modeling the experiment according to the description of how it occurred and how the data were collected. This first part consists of conceptual analysis, defining the observational space, and constructing summary statistics that can help us to identify issues in the model specification.
 
-\hypertarget{conceptual-analysis}{%
-\subsubsection{Conceptual analysis}\label{conceptual-analysis}}
+\hypertarget{iter1-concept}{%
+\subsubsection{Conceptual analysis}\label{iter1-concept}}
 
 In section \ref{toj-task} we discussed the experimental setup and data collection. To reiterate, subjects are presented with two stimuli separated by some temporal delay, and they are asked to respond as to their perception of the temporal order. There are 45 subjects with 15 each in the young, middle, and older age groups. As the SOA becomes larger in the positive direction, we expect subjects to give more ``positive'' responses, and as the SOA becomes larger in the negative direction, we expect more ``negative'' responses. By the way the experiment and responses are constructed, we would not expect to see a reversal of this trend unless there was an issue with the subject's understanding of the directions given to them or an error in the recording device.
 
 We also know that after the first experimental block the subjects go through a recalibration period, and repeat the experiment again. We are interested in seeing if the recalibration has an effect on temporal sensitivity and perceptual synchrony, and if the effect is different for each age group.
 
-\hypertarget{define-observational-space}{%
-\subsubsection{Define observational space}\label{define-observational-space}}
+\hypertarget{iter1-obs-space}{%
+\subsubsection{Define observational space}\label{iter1-obs-space}}
 
 The response that subjects give to a TOJ task is recorded as a zero or a one (see section \ref{toj-task}), and their relative performance is determined by the SOA value. Let \(y\) represent the binary outcome of a trial and let \(x\) be the SOA value.
 
@@ -887,7 +887,7 @@ Then we also have the three categorical variables -- age group, subject ID, and 
 
 Age groups and individual subjects can be indexed in the same way that we index the number of trials. \(S_i\) refers to the subject in record \(i\), and similarly \(G_i\) refers to the age group of that subject. Observation 63 is for record ID av-post1-M-f-HG, so then \(S_{63}\) is M-f-HG and \(G_{63}\) is middle\_age. Under the hood of R, these factor levels are represented as integers (e.g.~middle age group level is stored internally as the number 2).
 
-We treat the pre- and post-adaptation categories as a binary indicator referred to as \(trt\) (short for treatment) since there are only two levels in the category. In this setup, a value of 1 indicates a post-adaptation block. We chose this encoding over the reverse because the pre-adaptation block is like the baseline performance, and it seemed more appropriate to interpret the post-adaptation block as turning on some effect. Using a binary indicator in a regression setting may not be the best practice as we discuss in section \ref{mod-dev-iter2}.
+We treat the pre- and post-adaptation categories as a binary indicator referred to as \(trt\) (short for treatment) since there are only two levels in the category. In this setup, a value of 1 indicates a post-adaptation block. We chose this encoding over the reverse because the pre-adaptation block is like the baseline performance, and it seemed more appropriate to interpret the post-adaptation block as turning on some effect. Using a binary indicator in a regression setting may not be the best practice as we discuss in section \ref{iter2-model-dev}.
 
 We will be using the Stan probabilistic programming language to estimate the model for our data. In the Stan modeling language, data for a binomial model with subject and age group levels and treatment is specified as
 
@@ -912,8 +912,8 @@ data {
 
 However, in most of this paper we will be using the \texttt{rethinking} package \citep{R-rethinking} which is a high level wrapper around \texttt{rstan}. For most of the model fitting and analyses, it is sufficient. For more complex routines and for finer control, we will utilize \texttt{rstan} directly.
 
-\hypertarget{construct-summary-statistics}{%
-\subsubsection{Construct summary statistics}\label{construct-summary-statistics}}
+\hypertarget{iter1-sum-stats}{%
+\subsubsection{Construct summary statistics}\label{iter1-sum-stats}}
 
 In order to effectively challenge the validity of our model, we construct a set of summary statistics that help answer the questions of domain expertise consistency and model adequacy. We are studying the affects of age and temporal recalibration through the PSS and JND (see section \ref{psycho-experiments}), so it is natural to define summary statistics around these quantities to verify model consistency. Additionally the PSS and JND can be computed regardless of the model parameterization or chosen psychometric function.
 
@@ -926,8 +926,8 @@ A histogram of computed PSS and JND values will suffice for summary statistics. 
 
 We will now define priors for our model, still not having looked at the data. The priors should be motivated by domain expertise and \emph{prior knowledge}, not the data.
 
-\hypertarget{model-development}{%
-\subsubsection{Model development}\label{model-development}}
+\hypertarget{iter1-model-dev}{%
+\subsubsection{Model development}\label{iter1-model-dev}}
 
 Talk here about linear parameterization and connection to PSS and JND.
 
@@ -1011,15 +1011,15 @@ model {
 
 \setstretch{2.0}
 
-\hypertarget{construct-summary-functions}{%
-\subsubsection{Construct summary functions}\label{construct-summary-functions}}
+\hypertarget{iter1-summary-funs}{%
+\subsubsection{Construct summary functions}\label{iter1-summary-funs}}
 
 NA
 
-\hypertarget{simulate-bayesian-ensemble}{%
-\subsubsection{Simulate bayesian ensemble}\label{simulate-bayesian-ensemble}}
+\hypertarget{iter1-sim}{%
+\subsubsection{Simulate bayesian ensemble}\label{iter1-sim}}
 
-What is the purpose of this step? To make sure that the generating model coupled with the summary stats/functions yields prior estimates that are consistent with domain expertise (see \ref{prior-checks}).
+What is the purpose of this step? To make sure that the generating model coupled with the summary stats/functions yields prior estimates that are consistent with domain expertise (see \ref{iter1-prior-check}).
 
 \setstretch{1.0}
 
@@ -1041,8 +1041,8 @@ generated quantities {
 
 \setstretch{2.0}
 
-\hypertarget{prior-checks}{%
-\subsubsection{Prior checks}\label{prior-checks}}
+\hypertarget{iter1-prior-check}{%
+\subsubsection{Prior checks}\label{iter1-prior-check}}
 
 \begin{quote}
 If the prior predictive checks indicate conflict between the model and our domain expertise then we have to return to step four {[}(model development){]} and refine our model.
@@ -1057,13 +1057,13 @@ If the prior predictive checks indicate conflict between the model and our domai
 
 We're satisfied with the prior coverage of the PSS and JND, so now we can move on to fitting the model to the simulated data.
 
-\hypertarget{configure-algorithm}{%
-\subsubsection{Configure algorithm}\label{configure-algorithm}}
+\hypertarget{iter1-config-algo}{%
+\subsubsection{Configure algorithm}\label{iter1-config-algo}}
 
 As a default, we will be using the \texttt{rethinking} package \citep{rethinking}.
 
-\hypertarget{fit-simulated-ensemble}{%
-\subsubsection{Fit simulated ensemble}\label{fit-simulated-ensemble}}
+\hypertarget{iter1-fit-sim}{%
+\subsubsection{Fit simulated ensemble}\label{iter1-fit-sim}}
 
 \setstretch{1.0}
 
@@ -1092,8 +1092,8 @@ generated quantities {
 
 \setstretch{2.0}
 
-\hypertarget{algorithmic-calibration}{%
-\subsubsection{Algorithmic calibration}\label{algorithmic-calibration}}
+\hypertarget{iter1-algo-calibration}{%
+\subsubsection{Algorithmic calibration}\label{iter1-algo-calibration}}
 
 Did the algorithm perform correctly? What kind of diagnostics exist for this algorithm?
 
@@ -1145,8 +1145,8 @@ Did the algorithm perform correctly? What kind of diagnostics exist for this alg
 
 Is there anything we can tune during the fitting process that can alleviate algorithmic issues? Or is it a case of Folk Theorem, and we need to adjust the model?
 
-\hypertarget{inferential-calibration}{%
-\subsubsection{Inferential calibration}\label{inferential-calibration}}
+\hypertarget{iter1-inferential-calibration}{%
+\subsubsection{Inferential calibration}\label{iter1-inferential-calibration}}
 
 Non-identifiable model??
 
@@ -1157,8 +1157,8 @@ In either case we might have to return to Step One to consider an improved exper
 \hypertarget{post-model-post-data}{%
 \subsection{Post-Model, Post-Data}\label{post-model-post-data}}
 
-\hypertarget{fit-observation}{%
-\subsubsection{Fit observation}\label{fit-observation}}
+\hypertarget{iter1-fit-obs}{%
+\subsubsection{Fit observation}\label{iter1-fit-obs}}
 
 \setstretch{1.0}
 
@@ -1190,8 +1190,8 @@ generated quantities {
 
 \setstretch{2.0}
 
-\hypertarget{diagnose-posterior-fit}{%
-\subsubsection{Diagnose posterior fit}\label{diagnose-posterior-fit}}
+\hypertarget{iter1-diagnose-post}{%
+\subsubsection{Diagnose posterior fit}\label{iter1-diagnose-post}}
 
 \begin{quote}
 If any diagnostics indicate poor performance then not only is our computational method suspect but also our model might not be rich enough to capture the relevant details of the observed data. At the very least we should return to Step Eight and enhance our computational method.
@@ -1221,8 +1221,8 @@ If any diagnostics indicate poor performance then not only is our computational 
 
 \setstretch{2.0}
 
-\hypertarget{posterior-retrodictive-checks}{%
-\subsubsection{Posterior retrodictive checks}\label{posterior-retrodictive-checks}}
+\hypertarget{iter1-post-retro}{%
+\subsubsection{Posterior retrodictive checks}\label{iter1-post-retro}}
 
 Need an example of using summary stats on posterior retrodictions
 
@@ -1238,11 +1238,11 @@ We can see that the distribution of psychometric curves never wanders too far of
 
 \begin{center}\includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/ch050-Hollow Mustard-1} \end{center}
 
-\hypertarget{iteration-2-electric-boogaloo}{%
-\section{Iteration 2 (Electric Boogaloo)}\label{iteration-2-electric-boogaloo}}
+\hypertarget{iter2}{%
+\section{Iteration 2 (Electric Boogaloo)}\label{iter2}}
 
-\hypertarget{mod-dev-iter2}{%
-\subsection{Model Development}\label{mod-dev-iter2}}
+\hypertarget{iter2-model-dev}{%
+\subsection{Model Development}\label{iter2-model-dev}}
 
 In this iteration we will now add in the treatment and age group levels. Instead of modeling the prior distribution of the slope as log-normal, we model it as a normal distribution and then take the exponential. This allows us to also model the age group and treatment slopes as normally distributed and with an additive affect.
 
@@ -1319,11 +1319,11 @@ model {
 
 Just like in the first iteration, we begin by simulating the observational model.
 
-\hypertarget{simulate-bayesian-ensemble}{%
-\subsection{Simulate bayesian ensemble}\label{simulate-bayesian-ensemble}}
+\hypertarget{iter2-sim}{%
+\subsection{Simulate bayesian ensemble}\label{iter2-sim}}
 
-\hypertarget{prior-checks}{%
-\subsection{Prior Checks}\label{prior-checks}}
+\hypertarget{iter2-prior-check}{%
+\subsection{Prior Checks}\label{iter2-prior-check}}
 
 \begin{center}\includegraphics[width=0.7\linewidth]{051-bayesian-workflow_files/figure-latex/ch051-Surreal Comic-1} \end{center}
 
@@ -1349,14 +1349,14 @@ Just like in the first iteration, we begin by simulating the observational model
 #>   99.9% 2.720e+06 1.299e+08 1.875e+05
 \end{verbatim}
 
-\hypertarget{configure-algorithm}{%
-\subsection{Configure algorithm}\label{configure-algorithm}}
+\hypertarget{iter2-config-algo}{%
+\subsection{Configure algorithm}\label{iter2-config-algo}}
 
-\hypertarget{fit-simulated-ensemble}{%
-\subsection{Fit simulated ensemble}\label{fit-simulated-ensemble}}
+\hypertarget{iter2-fit-sim}{%
+\subsection{Fit simulated ensemble}\label{iter2-fit-sim}}
 
-\hypertarget{algorithmic-calibration}{%
-\subsection{Algorithmic calibration}\label{algorithmic-calibration}}
+\hypertarget{iter2-algo-calibration}{%
+\subsection{Algorithmic calibration}\label{iter2-algo-calibration}}
 
 \begin{verbatim}
 #> 
@@ -1388,14 +1388,14 @@ Let's see if we can do a little better by reparameterizing the model, and tuning
 
 Excellent! Now only about half a percent of the transitions are divergent, and there are no longer any warnings about the R-hat statistic.
 
-\hypertarget{inferential-calibration}{%
-\subsection{Inferential Calibration}\label{inferential-calibration}}
+\hypertarget{iter2-inferential-calibration}{%
+\subsection{Inferential Calibration}\label{iter2-inferential-calibration}}
 
-\hypertarget{fit-observation}{%
-\subsection{Fit Observation}\label{fit-observation}}
+\hypertarget{iter2-fit-obs}{%
+\subsection{Fit Observation}\label{iter2-fit-obs}}
 
-\hypertarget{diagnose-posterior-fit}{%
-\subsection{Diagnose posterior fit}\label{diagnose-posterior-fit}}
+\hypertarget{iter2-diagnose-post}{%
+\subsection{Diagnose posterior fit}\label{iter2-diagnose-post}}
 
 \begin{verbatim}
 #> 
@@ -1443,8 +1443,8 @@ It's looking alright!
 #> jnd[3,2] 0.1985   1e-04 0.0097 0.1804 0.2180 19050 1.0000
 \end{verbatim}
 
-\hypertarget{posterior-retrodictive-checks}{%
-\subsection{Posterior retrodictive checks}\label{posterior-retrodictive-checks}}
+\hypertarget{iter2-post-retro}{%
+\subsection{Posterior retrodictive checks}\label{iter2-post-retro}}
 
 \begin{center}\includegraphics[width=0.7\linewidth]{051-bayesian-workflow_files/figure-latex/ch051-Sleepy Roadrunner-1} \end{center}
 
@@ -1460,13 +1460,13 @@ Using ocular analysis\footnote{Often referred to in the non-sciences as eyeballs
 
 The point of subjective simultaneity between trials is not as well separated, but the model still consistently estimates that the subjects will perceive simultaneity at a value closer to zero post-adaptation.
 
-\hypertarget{iteration-3-the-one-for-me}{%
-\section{Iteration 3 (The one for Me)}\label{iteration-3-the-one-for-me}}
+\hypertarget{iter3}{%
+\section{Iteration 3 (The one for Me)}\label{iter3}}
 
 In this iteration of the model building process, we are going to add the individual subjects into the multilevel model, and because this is a simple addition, we are going to skip the prior predictive simulations.
 
-\hypertarget{model-development}{%
-\subsection{Model Development}\label{model-development}}
+\hypertarget{iter3-model-dev}{%
+\subsection{Model Development}\label{iter3-model-dev}}
 
 \begin{verbatim}
 data {
@@ -1583,8 +1583,8 @@ generated quantities {
 }
 \end{verbatim}
 
-\hypertarget{diagnose-posterior-fit}{%
-\subsection{Diagnose posterior fit}\label{diagnose-posterior-fit}}
+\hypertarget{iter3-diagnose-post}{%
+\subsection{Diagnose posterior fit}\label{iter3-diagnose-post}}
 
 \begin{verbatim}
 #> 
@@ -1643,8 +1643,8 @@ generated quantities {
 
 The number of effective samples and the R-hat indicate that there is no problem with the posterior samples.
 
-\hypertarget{posterior-retrodictive-checks}{%
-\subsection{Posterior retrodictive checks}\label{posterior-retrodictive-checks}}
+\hypertarget{iter3-post-retro}{%
+\subsection{Posterior retrodictive checks}\label{iter3-post-retro}}
 
 \begin{center}\includegraphics[width=0.7\linewidth]{052-bayesian-workflow_files/figure-latex/ch052-Leather Lucky-1} \end{center}
 
@@ -1656,23 +1656,23 @@ It's difficult to determine from this graph if there any difference between the 
 
 Okay what gives? The differences within and between age groups is not a separated as it was in the previous iteration. This is due to the fact that the previous model averaged over the variation at the subject level. We'll consider the task of making predictions at the different levels in the hierarchical model.
 
-\hypertarget{iteration-4-whats-one-more}{%
-\section{Iteration 4 (What's one more?)}\label{iteration-4-whats-one-more}}
+\hypertarget{iter4}{%
+\section{Iteration 4 (What's one more?)}\label{iter4}}
 
 We now have a model that works well for the audiovisual data, but there are still two other data sets that we can apply the model to. Additionally there is one more modification that we can make to the model that reflects a real world problem - lapses in judgment.
 
-\hypertarget{conceptual-analysis}{%
-\subsection{Conceptual analysis}\label{conceptual-analysis}}
+\hypertarget{iter4-conceptual}{%
+\subsection{Conceptual analysis}\label{iter4-conceptual}}
 
 A lapse in judgment can happen for any reason, and is assumed to be random and independent of other lapses. They can come in the form of the subject accidentally blinking during the presentation of a visual stimulus, or unintentionally pressing the wrong button to respond. Whatever the case is, lapses can have a significant affect on the resulting psychometric function.
 
-\hypertarget{construct-summary-statistics}{%
-\subsection{Construct summary statistics}\label{construct-summary-statistics}}
+\hypertarget{iter4-summary-stats}{%
+\subsection{Construct summary statistics}\label{iter4-summary-stats}}
 
 We will continue to use the posterior density of the PSS and JND as summary statistics, but the way we calculate them will change as a result of the change in the model in the next section.
 
-\hypertarget{model-development}{%
-\subsection{Model Development}\label{model-development}}
+\hypertarget{iter4-model-dev}{%
+\subsection{Model Development}\label{iter4-model-dev}}
 
 Lapses can be modeled as occurring independently at some fixed rate. Fundamentally this means that the underlying performance function, \(F\), is bounded by some lower and upper lapse rate. This manifests as a scaling and translation of \(F\). For a given lower and upper lapse rate \(\lambda\) and \(\gamma\), the performance function \(\Psi\) is
 
@@ -1699,9 +1699,12 @@ Our data does not explicitly record correctness, so we do not give \(\lambda\) t
 
 While we're throwing in lapse rates, let's also ask the question if different age groups have different lapse rates. To answer this (or rather have our model answer this), we include the new parameter \(\lambda_{G[i]}\) into the model so that we get an estimated lapse rate for each age group.
 
-We assume that lapses in judgment are rare, and we know that the rate (or probability of a lapse) is bounded in the interval \([0, 1]\). Because of this, we put a \(\mathrm{Beta(4, 96)}\) prior on \(\lambda\) which \emph{a priori} puts 99\% of the weight below \(0.1\) and and expected lapse rate of \(0.04\).
+We assume that lapses in judgment are rare, and we know that the rate (or probability of a lapse) is bounded in the interval \([0, 1]\). Because of this, we put a \(\mathrm{Beta(4, 96)}\) prior on \(\lambda\) which \emph{a priori} puts 99\% of the weight below \(0.1\) and an expected lapse rate of \(0.04\).
 
-We could also set up our model so that we
+We could also set up our model so that information about the lapse rate is shared between age groups (i.e.~hierarchical), but we'll leave that as an exercise for the reader.
+
+\hypertarget{iter4-fit-obs}{%
+\subsection{Fit the model}\label{iter4-fit-obs}}
 
 \begin{verbatim}
 #> 
@@ -1717,8 +1720,8 @@ We could also set up our model so that we
 #> E-BFMI indicated no pathological behavior.
 \end{verbatim}
 
-\hypertarget{posterior-retrodictive-checks}{%
-\subsection{Posterior retrodictive checks}\label{posterior-retrodictive-checks}}
+\hypertarget{iter4-post-retro}{%
+\subsection{Posterior retrodictive checks}\label{iter4-post-retro}}
 
 \begin{center}\includegraphics[width=0.7\linewidth]{053-bayesian-workflow_files/figure-latex/ch053-Furious Ninth Xylophone-1} \end{center}
 
@@ -1796,8 +1799,6 @@ Complementing a calibration free workflow is a pure simulation study that studie
 \begin{itemize}
 \tightlist
 \item
-  Compare to conjugate model
-\item
   Prior predictive distributions
 \item
   Posterior predictive distributions
@@ -1805,6 +1806,8 @@ Complementing a calibration free workflow is a pure simulation study that studie
   Calibrating the model
 \item
   Use of synthetic data to assess model properties
+\item
+  Consequences of using a lapse rate
 \end{itemize}
 
 \hypertarget{results}{%

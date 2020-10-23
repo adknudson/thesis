@@ -112,10 +112,14 @@ Choose a standard deviation value so that $\approx 99\%$ of the JND values are l
 
 The distribution of prior psychometric functions now looks like
 
-<div class="figure" style="text-align: center">
-<img src="050-bayesian-workflow_files/figure-html/ch050-prior-pf-plot-1.png" alt="Prior distribution of psychometric functions using the priors for slope and intercept." width="70%" />
-<p class="caption">(\#fig:ch050-prior-pf-plot)Prior distribution of psychometric functions using the priors for slope and intercept.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/ch050-prior-pf-plot-1} 
+
+}
+
+\caption{Prior distribution of psychometric functions using the priors for slope and intercept.}(\#fig:ch050-prior-pf-plot)
+\end{figure}
 
 
 Notice that the family of psychometric functions covers the broad range of possible slopes and intercepts, though the prior distribution appears to put more weight on steeper slopes (smaller JNDs). There is also too much possibility that the PF is nearly flat. We can reduce the mean-log and sd-log of the slope parameter and get a much more uniform-looking distribution of prior psychometric curves.
@@ -127,10 +131,14 @@ Notice that the family of psychometric functions covers the broad range of possi
 \end{align*}
 
 
-<div class="figure" style="text-align: center">
-<img src="050-bayesian-workflow_files/figure-html/ch050-prior-pf-plot-2-1.png" alt="Second prior distribution of psychometric functions using the priors for slope and intercept." width="70%" />
-<p class="caption">(\#fig:ch050-prior-pf-plot-2)Second prior distribution of psychometric functions using the priors for slope and intercept.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/ch050-prior-pf-plot-2-1} 
+
+}
+
+\caption{Second prior distribution of psychometric functions using the priors for slope and intercept.}(\#fig:ch050-prior-pf-plot-2)
+\end{figure}
 
 This prior distribution is much more reasonable. There is good prior coverage of both very steep slopes and very shallow slopes, but not so wide that nearly flat or nearly vertical slopes are likely. Also notice how the spread around $y=0.5$ remains the same independent of the slope values. This is because of how the model is parameterized. If instead we parameterized the linear predictor as 
 
@@ -214,7 +222,9 @@ generated quantities {
 #>  1.099  2.904  6.681 20.538
 ```
 
-<img src="050-bayesian-workflow_files/figure-html/ch050-Long Supersonic Cosmic-1.png" width="70%" style="display: block; margin: auto;" /><img src="050-bayesian-workflow_files/figure-html/ch050-Long Supersonic Cosmic-2.png" width="70%" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/ch050-Long Supersonic Cosmic-1} \includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/ch050-Long Supersonic Cosmic-2} \end{center}
 
 
 We're satisfied with the prior coverage of the PSS and JND, so now we can move on to fitting the model to the simulated data.
@@ -381,15 +391,18 @@ Need an example of using summary stats on posterior retrodictions
 
 
 
-<img src="050-bayesian-workflow_files/figure-html/ch050-Angry Pineapple-1.png" width="70%" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/ch050-Angry Pineapple-1} \end{center}
 
 The posterior retrodictions do well to cover the observed data, but we don't actually have a model that can answer the questions that we are seeking to answer. At best, this model can only inform of of the population average PSS and JND across both pre- and post-adaptation. This first iteration does serve as a useful foundation for building a more complex model, and for practicing visualization techniques that will be more important in the next few iterations.
 
 While we are here, let's also take a look at the underlying performance (psychometric) function as well as the density estimates of the PSS and JND.
 
-<img src="050-bayesian-workflow_files/figure-html/ch050-Swift Strong Xylophone-1.png" width="70%" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/ch050-Swift Strong Xylophone-1} \end{center}
 
 We can see that the distribution of psychometric curves never wanders too far off from the mean. In this sense, we can be fairly confident that the PSS is positive.
 
-<img src="050-bayesian-workflow_files/figure-html/ch050-Hollow Mustard-1.png" width="70%" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics[width=0.7\linewidth]{050-bayesian-workflow_files/figure-latex/ch050-Hollow Mustard-1} \end{center}
 
