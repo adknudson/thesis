@@ -22,14 +22,10 @@ $$
 $$
 
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\linewidth]{053-bayesian-workflow_files/figure-latex/ch053-plot-pf-with-lapse-1} 
-
-}
-
-\caption{Psychometric function with lower and upper performance bounds.}(\#fig:ch053-plot-pf-with-lapse)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="053-bayesian-workflow_files/figure-html/ch053-plot-pf-with-lapse-1.png" alt="Psychometric function with lower and upper performance bounds." width="70%" />
+<p class="caption">(\#fig:ch053-plot-pf-with-lapse)Psychometric function with lower and upper performance bounds.</p>
+</div>
 
 
 In certain psychometric experiments, $\lambda$ is interpreted as the lower performance bound or the guessing rate. For example, in certain 2-alternative forced choice (2-AFC) tasks, subjects are asked to respond which of two masses is heavier, and the correctness of their response is recorded. When the masses are the same, the subject can do no better than random guessing. In this task, the lower performance bound is assumed to be 50% as their guess is split between two choices. As the absolute difference in mass grows, the subject's correctness rate increases, though lapses can still happen. In this scenario, $\lambda$ is fixed at $0.5$ and the lapse rate $\gamma$ is a parameter in the model.
@@ -78,16 +74,13 @@ We could also set up our model so that information about the lapse rate is share
 
 
 
-
-\begin{center}\includegraphics[width=0.7\linewidth]{053-bayesian-workflow_files/figure-latex/ch053-Furious Ninth Xylophone-1} \end{center}
-
+<img src="053-bayesian-workflow_files/figure-html/ch053-Furious Ninth Xylophone-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 
 
 
-\begin{center}\includegraphics[width=0.7\linewidth]{053-bayesian-workflow_files/figure-latex/ch053-Bulldozer Cold-1} \end{center}
+<img src="053-bayesian-workflow_files/figure-html/ch053-Bulldozer Cold-1.png" width="70%" style="display: block; margin: auto;" />
 
 
-
-\begin{center}\includegraphics[width=0.7\linewidth]{053-bayesian-workflow_files/figure-latex/ch053-Discarded Firecracker-1} \end{center}
+<img src="053-bayesian-workflow_files/figure-html/ch053-Discarded Firecracker-1.png" width="70%" style="display: block; margin: auto;" />

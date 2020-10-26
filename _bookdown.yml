@@ -8,7 +8,6 @@ rmd_files: [
   "index.Rmd",
   "020-motivating-data.Rmd",
   "030-background.Rmd",
-  "040-bayesian-modeling.Rmd",
   "050-bayesian-workflow.Rmd",
   "051-bayesian-workflow.Rmd",
   "052-bayesian-workflow.Rmd",

@@ -97,12 +97,10 @@ Just like in the first iteration, we begin by simulating the observational model
 
 ### Prior Checks {#iter2-prior-check}
 
-
-\begin{center}\includegraphics[width=0.7\linewidth]{051-bayesian-workflow_files/figure-latex/ch051-Surreal Comic-1} \end{center}
-
+<img src="051-bayesian-workflow_files/figure-html/ch051-Surreal Comic-1.png" width="70%" style="display: block; margin: auto;" />
 
 
-\begin{center}\includegraphics[width=0.7\linewidth]{051-bayesian-workflow_files/figure-latex/ch051-Severe Kangaroo-1} \end{center}
+<img src="051-bayesian-workflow_files/figure-html/ch051-Severe Kangaroo-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 ```
@@ -243,8 +241,7 @@ It's looking alright!
 
 
 
-
-\begin{center}\includegraphics[width=0.7\linewidth]{051-bayesian-workflow_files/figure-latex/ch051-Sleepy Roadrunner-1} \end{center}
+<img src="051-bayesian-workflow_files/figure-html/ch051-Sleepy Roadrunner-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 The retrodictive data are matching well with the observed data, which means that we are getting closer to a model that we can use for inferences.
@@ -253,15 +250,13 @@ The retrodictive data are matching well with the observed data, which means that
 
 
 
-
-\begin{center}\includegraphics[width=0.7\linewidth]{051-bayesian-workflow_files/figure-latex/ch051-Furious Jazz-1} \end{center}
+<img src="051-bayesian-workflow_files/figure-html/ch051-Furious Jazz-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 It's difficult to determine from this graph if there any difference between the age groups. Looking at the density plot of the PSS and JND across the different conditions paints a much clearer image.
 
 
-
-\begin{center}\includegraphics[width=0.7\linewidth]{051-bayesian-workflow_files/figure-latex/ch051-Discarded Torpedo-1} \end{center}
+<img src="051-bayesian-workflow_files/figure-html/ch051-Discarded Torpedo-1.png" width="70%" style="display: block; margin: auto;" />
 
 
 Using ocular analysis^[Often referred to in the non-sciences as eyeballs] we can see that recalibration has a significant affect on the just noticeable difference for each age group; specifically recalibration heightens temporal sensitivity and thus reduces the just noticeable difference. Comparing between age groups, the young and middle age groups are very similar in both the pre- and post-adaptation trials, and temporal sensitivity is lower in the older age group.

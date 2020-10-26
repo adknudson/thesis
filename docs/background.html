@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3 Background to Modeling | Contributions to Modern Bayesian Multilevel Modeling</title>
-  <meta name="description" content="3 Background to Modeling | Contributions to Modern Bayesian Multilevel Modeling" />
+  <title>3 Modeling the Psychometric Function | Contributions to Modern Bayesian Multilevel Modeling</title>
+  <meta name="description" content="3 Modeling the Psychometric Function | Contributions to Modern Bayesian Multilevel Modeling" />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3 Background to Modeling | Contributions to Modern Bayesian Multilevel Modeling" />
+  <meta property="og:title" content="3 Modeling the Psychometric Function | Contributions to Modern Bayesian Multilevel Modeling" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="adkudson/thesis" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 Background to Modeling | Contributions to Modern Bayesian Multilevel Modeling" />
+  <meta name="twitter:title" content="3 Modeling the Psychometric Function | Contributions to Modern Bayesian Multilevel Modeling" />
   
   
   
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="motivating-data.html"/>
-<link rel="next" href="bayesian-modeling.html"/>
+<link rel="next" href="workflow.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -137,49 +137,53 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="motivating-data.html"><a href="motivating-data.html#toj-task"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Data</a></li>
 <li class="chapter" data-level="2.3" data-path="motivating-data.html"><a href="motivating-data.html#data-visualizations-and-quirks"><i class="fa fa-check"></i><b>2.3</b> Data Visualizations and Quirks</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>3</b> Background to Modeling</a></li>
-<li class="chapter" data-level="4" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html"><i class="fa fa-check"></i><b>4</b> Bayesian Multilevel Modeling</a><ul>
-<li class="chapter" data-level="4.1" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html#bayesian-stuff"><i class="fa fa-check"></i><b>4.1</b> Bayesian Stuff</a></li>
-<li class="chapter" data-level="4.2" data-path="bayesian-modeling.html"><a href="bayesian-modeling.html#multilevel-modeling-stuff"><i class="fa fa-check"></i><b>4.2</b> Multilevel Modeling Stuff</a></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>5</b> Principled Bayesian Workflow</a><ul>
-<li class="chapter" data-level="5.1" data-path="workflow.html"><a href="workflow.html#iter1"><i class="fa fa-check"></i><b>5.1</b> Iteration 1 (The Journey of a Thousand Miles Begins with a Single Step)</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="workflow.html"><a href="workflow.html#pre-model-pre-data"><i class="fa fa-check"></i><b>5.1.1</b> Pre-Model, Pre-Data</a></li>
-<li class="chapter" data-level="5.1.2" data-path="workflow.html"><a href="workflow.html#post-model-pre-data"><i class="fa fa-check"></i><b>5.1.2</b> Post-Model, Pre-Data</a></li>
-<li class="chapter" data-level="5.1.3" data-path="workflow.html"><a href="workflow.html#post-model-post-data"><i class="fa fa-check"></i><b>5.1.3</b> Post-Model, Post-Data</a></li>
-</ul></li>
-<li class="chapter" data-level="5.2" data-path="workflow.html"><a href="workflow.html#iter2"><i class="fa fa-check"></i><b>5.2</b> Iteration 2 (Electric Boogaloo)</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="workflow.html"><a href="workflow.html#iter2-model-dev"><i class="fa fa-check"></i><b>5.2.1</b> Model Development</a></li>
-<li class="chapter" data-level="5.2.2" data-path="workflow.html"><a href="workflow.html#iter2-sim"><i class="fa fa-check"></i><b>5.2.2</b> Simulate bayesian ensemble</a></li>
-<li class="chapter" data-level="5.2.3" data-path="workflow.html"><a href="workflow.html#iter2-prior-check"><i class="fa fa-check"></i><b>5.2.3</b> Prior Checks</a></li>
-<li class="chapter" data-level="5.2.4" data-path="workflow.html"><a href="workflow.html#iter2-config-algo"><i class="fa fa-check"></i><b>5.2.4</b> Configure algorithm</a></li>
-<li class="chapter" data-level="5.2.5" data-path="workflow.html"><a href="workflow.html#iter2-fit-sim"><i class="fa fa-check"></i><b>5.2.5</b> Fit simulated ensemble</a></li>
-<li class="chapter" data-level="5.2.6" data-path="workflow.html"><a href="workflow.html#iter2-algo-calibration"><i class="fa fa-check"></i><b>5.2.6</b> Algorithmic calibration</a></li>
-<li class="chapter" data-level="5.2.7" data-path="workflow.html"><a href="workflow.html#iter2-inferential-calibration"><i class="fa fa-check"></i><b>5.2.7</b> Inferential Calibration</a></li>
-<li class="chapter" data-level="5.2.8" data-path="workflow.html"><a href="workflow.html#iter2-fit-obs"><i class="fa fa-check"></i><b>5.2.8</b> Fit Observation</a></li>
-<li class="chapter" data-level="5.2.9" data-path="workflow.html"><a href="workflow.html#iter2-diagnose-post"><i class="fa fa-check"></i><b>5.2.9</b> Diagnose posterior fit</a></li>
-<li class="chapter" data-level="5.2.10" data-path="workflow.html"><a href="workflow.html#iter2-post-retro"><i class="fa fa-check"></i><b>5.2.10</b> Posterior retrodictive checks</a></li>
-</ul></li>
-<li class="chapter" data-level="5.3" data-path="workflow.html"><a href="workflow.html#iter3"><i class="fa fa-check"></i><b>5.3</b> Iteration 3 (The one for Me)</a><ul>
-<li class="chapter" data-level="5.3.1" data-path="workflow.html"><a href="workflow.html#iter3-model-dev"><i class="fa fa-check"></i><b>5.3.1</b> Model Development</a></li>
-<li class="chapter" data-level="5.3.2" data-path="workflow.html"><a href="workflow.html#iter3-diagnose-post"><i class="fa fa-check"></i><b>5.3.2</b> Diagnose posterior fit</a></li>
-<li class="chapter" data-level="5.3.3" data-path="workflow.html"><a href="workflow.html#iter3-post-retro"><i class="fa fa-check"></i><b>5.3.3</b> Posterior retrodictive checks</a></li>
-</ul></li>
-<li class="chapter" data-level="5.4" data-path="workflow.html"><a href="workflow.html#iter4"><i class="fa fa-check"></i><b>5.4</b> Iteration 4 (What’s one more?)</a><ul>
-<li class="chapter" data-level="5.4.1" data-path="workflow.html"><a href="workflow.html#iter4-conceptual"><i class="fa fa-check"></i><b>5.4.1</b> Conceptual analysis</a></li>
-<li class="chapter" data-level="5.4.2" data-path="workflow.html"><a href="workflow.html#iter4-summary-stats"><i class="fa fa-check"></i><b>5.4.2</b> Construct summary statistics</a></li>
-<li class="chapter" data-level="5.4.3" data-path="workflow.html"><a href="workflow.html#iter4-model-dev"><i class="fa fa-check"></i><b>5.4.3</b> Model Development</a></li>
-<li class="chapter" data-level="5.4.4" data-path="workflow.html"><a href="workflow.html#iter4-fit-obs"><i class="fa fa-check"></i><b>5.4.4</b> Fit the model</a></li>
-<li class="chapter" data-level="5.4.5" data-path="workflow.html"><a href="workflow.html#iter4-post-retro"><i class="fa fa-check"></i><b>5.4.5</b> Posterior retrodictive checks</a></li>
+<li class="chapter" data-level="3" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>3</b> Modeling the Psychometric Function</a><ul>
+<li class="chapter" data-level="3.1" data-path="background.html"><a href="background.html#methods-for-working-with-pfs"><i class="fa fa-check"></i><b>3.1</b> Methods for working with PFs</a></li>
+<li class="chapter" data-level="3.2" data-path="background.html"><a href="background.html#post-model-analysis"><i class="fa fa-check"></i><b>3.2</b> Post-model Analysis</a></li>
+<li class="chapter" data-level="3.3" data-path="background.html"><a href="background.html#shortcomings"><i class="fa fa-check"></i><b>3.3</b> Shortcomings</a></li>
+<li class="chapter" data-level="3.4" data-path="background.html"><a href="background.html#bayesian-modeling"><i class="fa fa-check"></i><b>3.4</b> Bayesian Multilevel Modeling</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="background.html"><a href="background.html#bayesian-stuff"><i class="fa fa-check"></i><b>3.4.1</b> Bayesian Stuff</a></li>
+<li class="chapter" data-level="3.4.2" data-path="background.html"><a href="background.html#multilevel-modeling-stuff"><i class="fa fa-check"></i><b>3.4.2</b> Multilevel Modeling Stuff</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>6</b> Model Checking</a><ul>
-<li class="chapter" data-level="6.1" data-path="model-checking.html"><a href="model-checking.html#section"><i class="fa fa-check"></i><b>6.1</b> </a></li>
+<li class="chapter" data-level="4" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>4</b> Principled Bayesian Workflow</a><ul>
+<li class="chapter" data-level="4.1" data-path="workflow.html"><a href="workflow.html#iter1"><i class="fa fa-check"></i><b>4.1</b> Iteration 1 (The Journey of a Thousand Miles Begins with a Single Step)</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="workflow.html"><a href="workflow.html#pre-model-pre-data"><i class="fa fa-check"></i><b>4.1.1</b> Pre-Model, Pre-Data</a></li>
+<li class="chapter" data-level="4.1.2" data-path="workflow.html"><a href="workflow.html#post-model-pre-data"><i class="fa fa-check"></i><b>4.1.2</b> Post-Model, Pre-Data</a></li>
+<li class="chapter" data-level="4.1.3" data-path="workflow.html"><a href="workflow.html#post-model-post-data"><i class="fa fa-check"></i><b>4.1.3</b> Post-Model, Post-Data</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="predictive-inference.html"><a href="predictive-inference.html"><i class="fa fa-check"></i><b>7</b> Predictive Inference</a></li>
-<li class="chapter" data-level="8" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>8</b> Results</a></li>
-<li class="chapter" data-level="9" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>9</b> Discussion</a></li>
-<li class="chapter" data-level="10" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>10</b> Conclusion</a></li>
+<li class="chapter" data-level="4.2" data-path="workflow.html"><a href="workflow.html#iter2"><i class="fa fa-check"></i><b>4.2</b> Iteration 2 (Electric Boogaloo)</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="workflow.html"><a href="workflow.html#iter2-model-dev"><i class="fa fa-check"></i><b>4.2.1</b> Model Development</a></li>
+<li class="chapter" data-level="4.2.2" data-path="workflow.html"><a href="workflow.html#iter2-sim"><i class="fa fa-check"></i><b>4.2.2</b> Simulate bayesian ensemble</a></li>
+<li class="chapter" data-level="4.2.3" data-path="workflow.html"><a href="workflow.html#iter2-prior-check"><i class="fa fa-check"></i><b>4.2.3</b> Prior Checks</a></li>
+<li class="chapter" data-level="4.2.4" data-path="workflow.html"><a href="workflow.html#iter2-config-algo"><i class="fa fa-check"></i><b>4.2.4</b> Configure algorithm</a></li>
+<li class="chapter" data-level="4.2.5" data-path="workflow.html"><a href="workflow.html#iter2-fit-sim"><i class="fa fa-check"></i><b>4.2.5</b> Fit simulated ensemble</a></li>
+<li class="chapter" data-level="4.2.6" data-path="workflow.html"><a href="workflow.html#iter2-algo-calibration"><i class="fa fa-check"></i><b>4.2.6</b> Algorithmic calibration</a></li>
+<li class="chapter" data-level="4.2.7" data-path="workflow.html"><a href="workflow.html#iter2-inferential-calibration"><i class="fa fa-check"></i><b>4.2.7</b> Inferential Calibration</a></li>
+<li class="chapter" data-level="4.2.8" data-path="workflow.html"><a href="workflow.html#iter2-fit-obs"><i class="fa fa-check"></i><b>4.2.8</b> Fit Observation</a></li>
+<li class="chapter" data-level="4.2.9" data-path="workflow.html"><a href="workflow.html#iter2-diagnose-post"><i class="fa fa-check"></i><b>4.2.9</b> Diagnose posterior fit</a></li>
+<li class="chapter" data-level="4.2.10" data-path="workflow.html"><a href="workflow.html#iter2-post-retro"><i class="fa fa-check"></i><b>4.2.10</b> Posterior retrodictive checks</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="workflow.html"><a href="workflow.html#iter3"><i class="fa fa-check"></i><b>4.3</b> Iteration 3 (The one for Me)</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="workflow.html"><a href="workflow.html#iter3-model-dev"><i class="fa fa-check"></i><b>4.3.1</b> Model Development</a></li>
+<li class="chapter" data-level="4.3.2" data-path="workflow.html"><a href="workflow.html#iter3-diagnose-post"><i class="fa fa-check"></i><b>4.3.2</b> Diagnose posterior fit</a></li>
+<li class="chapter" data-level="4.3.3" data-path="workflow.html"><a href="workflow.html#iter3-post-retro"><i class="fa fa-check"></i><b>4.3.3</b> Posterior retrodictive checks</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="workflow.html"><a href="workflow.html#iter4"><i class="fa fa-check"></i><b>4.4</b> Iteration 4 (What’s one more?)</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="workflow.html"><a href="workflow.html#iter4-conceptual"><i class="fa fa-check"></i><b>4.4.1</b> Conceptual analysis</a></li>
+<li class="chapter" data-level="4.4.2" data-path="workflow.html"><a href="workflow.html#iter4-summary-stats"><i class="fa fa-check"></i><b>4.4.2</b> Construct summary statistics</a></li>
+<li class="chapter" data-level="4.4.3" data-path="workflow.html"><a href="workflow.html#iter4-model-dev"><i class="fa fa-check"></i><b>4.4.3</b> Model Development</a></li>
+<li class="chapter" data-level="4.4.4" data-path="workflow.html"><a href="workflow.html#iter4-fit-obs"><i class="fa fa-check"></i><b>4.4.4</b> Fit the model</a></li>
+<li class="chapter" data-level="4.4.5" data-path="workflow.html"><a href="workflow.html#iter4-post-retro"><i class="fa fa-check"></i><b>4.4.5</b> Posterior retrodictive checks</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>5</b> Model Checking</a><ul>
+<li class="chapter" data-level="5.1" data-path="model-checking.html"><a href="model-checking.html#section"><i class="fa fa-check"></i><b>5.1</b> </a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="predictive-inference.html"><a href="predictive-inference.html"><i class="fa fa-check"></i><b>6</b> Predictive Inference</a></li>
+<li class="chapter" data-level="7" data-path="application-results.html"><a href="application-results.html"><i class="fa fa-check"></i><b>7</b> Application Results</a></li>
+<li class="chapter" data-level="8" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>8</b> Discussion</a></li>
+<li class="chapter" data-level="9" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>9</b> Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="supplementary-code.html"><a href="supplementary-code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -201,7 +205,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="background" class="section level1">
-<h1><span class="header-section-number">3</span> Background to Modeling</h1>
+<h1><span class="header-section-number">3</span> Modeling the Psychometric Function</h1>
 <p>A psychometric function can be fit using a generalized linear model (GLM) with the link function coming from the family of S-shaped curves called a sigmoid. Commonly GLMs are fit using maximum likelihood estimation (MLE). In the case of a psychometric experiment, we can represent the outcome of a single trial as the result of a random experiment arising from a Bernoulli process. Without loss of generality, the psychometric function, <span class="math inline">\(F(x; \theta)\)</span>, determines the probability that the outcome is 1.</p>
 <p><span class="math display">\[\begin{align*}
 Y &amp;\sim \textrm{Bernoulli}(\pi) \\
@@ -248,6 +252,8 @@ Y &amp;\sim \textrm{Bernoulli}(\pi) \\
 \end{align*}\]</span></p>
 <p>Linear models are favored in statistics because they are generally easier to interpret than other types of models. For example, say <span class="math inline">\(\mathrm{logit}(\pi) = 0.5 + 1.5x\)</span> where <span class="math inline">\(\pi\)</span> is the probability of a positive outcome, <span class="math inline">\(Y=1\)</span>. We can say that at <span class="math inline">\(x = 0\)</span>, the log-odds of a positive outcome is 0.5, and an increase in <span class="math inline">\(x\)</span> by 1 increases the log-odds by 1.5.</p>
 <p>There is nothing that is particular about the logistic function that makes it the only suitable sigmoid for psychometric functions. Other common link functions include the probit (inverse of the standard normal CDF) and Weibull inverse CDF. In fact, any continuous CDF defined on the real number line can be used for psychometric functions. A PF only requires that a function is strictly increasing and bounded between 0 and 1.The logit and probit links have properties such as connections to log-odds and the normal distribution that make working with them more convenient.</p>
+<div id="methods-for-working-with-pfs" class="section level2">
+<h2><span class="header-section-number">3.1</span> Methods for working with PFs</h2>
 <ul>
 <li>Generalized Linear Models
 <ul>
@@ -265,26 +271,43 @@ Y &amp;\sim \textrm{Bernoulli}(\pi) \\
 <li>Completely reliant on MCMC</li>
 </ul></li>
 </ul></li>
-<li>Model-free estimations (footnote? remark?)
+</ul>
+<p>Above we introduced GLMs as a method for estimating the properties of psychometric functions. GLMs are abundant in statistical analyses, and almost every piece of statistical software will have an implementation for working with them - most commonly through maximum likelihood estimation. MLE is not the only method; there is also the expectation-maximization (EM) algorithm and Bayesian GLMs.</p>
+<!-- How much do I need to know about EM algorithm? -->
+<!-- How much do I need to know about Bayesian GLMs? -->
+<p>Bayesian methods for fitting psychometric function are also common</p>
 <ul>
-<li>non-parametric models</li>
-<li><span class="citation">(Zchaluk and Foster <a href="#ref-zchaluk2009model" role="doc-biblioref">2009</a>)</span></li>
-</ul></li>
 <li>Bayesian logistic regression
 <ul>
 <li><span class="citation">Gelman et al. (<a href="#ref-gelman2008weakly" role="doc-biblioref">2008</a>)</span></li>
 <li>Can’t completely express the structure (hierarchy) of the data</li>
 </ul></li>
+</ul>
+<p>We can also throw away GLMs entirely and utilize non-parametric techniques for estimating psychometric functions. <span class="citation">Zchaluk and Foster (<a href="#ref-zchaluk2009model" role="doc-biblioref">2009</a>)</span> make the argument that the true model for a PF is rarely (if ever) known, so it is better to make no assumptions about the underlying performance function - a requirement for GLMs. They show that their model-free estimation yields better-if-not-equal results in signal detection than parametric models, but the tradeoff is the loss of inferential power and the ability to generalize predictions to new groups or previously unobserved data.</p>
+</div>
+<div id="post-model-analysis" class="section level2">
+<h2><span class="header-section-number">3.2</span> Post-model Analysis</h2>
+<ul>
 <li>Residual Analysis
 <ul>
 <li>using the fitted values vs. the observed values to evaluate goodness of fit</li>
-<li></li>
 </ul></li>
-<li>So what’s the answer?
+<li>ANOVA</li>
+<li>T-tests</li>
+</ul>
+</div>
+<div id="shortcomings" class="section level2">
+<h2><span class="header-section-number">3.3</span> Shortcomings</h2>
+<p>Despite the proliferation of maximum likelihood estimation for psychometric functions, there are also common situations where MLE is sub-optimal or not possible. The most common example given is when the data are perfectly separable. Perfect separation is when all the positive responses can be determined by a set of predictors with no contamination (see figure <a href="background.html#fig:ch030-perfect-separation">3.1</a>).</p>
+<div class="figure" style="text-align: center"><span id="fig:ch030-perfect-separation"></span>
+<img src="030-background_files/figure-html/ch030-perfect-separation-1.png" alt="The positive responses on the right can be completely separated from the negative responses on the left by any value of x between 1 and 2." width="70%" />
+<p class="caption">
+Figure 3.1: The positive responses on the right can be completely separated from the negative responses on the left by any value of x between 1 and 2.
+</p>
+</div>
+<p>Two problems happen here: 1) the maximum likelihood estimate of the slope is <span class="math inline">\(\infty\)</span> which means that some algorithms will never converge, and 2) the center of the psychometric function is not uniquely defined. Any location value in the range <span class="math inline">\([1, 2]\)</span> is valid and perfectly separates the positive and negative responses. In psychometric experiments, neither of these results are likely, and neither are informative. The just noticeble <em>difference</em> is not zero, and the <em>point</em> of subject simultaneity is not a range.</p>
 <ul>
-<li>The last two options (bayes + multilevel) when on their own do well, but are not robust to</li>
-</ul></li>
-<li>shortcomings
+<li><p>shortcomings</p>
 <ul>
 <li>Convergence failure in the presence of complete separation
 <ul>
@@ -293,8 +316,49 @@ Y &amp;\sim \textrm{Bernoulli}(\pi) \\
 <li>Give an example where MLE fails</li>
 </ul></li>
 </ul></li>
+<li><p>problems/limitations of post-model analyses</p></li>
+<li><p>problems with thinking that simply using Bayesian techniques solves all problems with classical ones</p></li>
+<li><p>So what’s the answer?</p>
+<ul>
+<li>The last two options (bayes + multilevel) when on their own do well, but are not robust to</li>
+</ul></li>
+</ul>
+</div>
+<div id="bayesian-modeling" class="section level2">
+<h2><span class="header-section-number">3.4</span> Bayesian Multilevel Modeling</h2>
+<ul>
+<li>short intro
+<ul>
+<li>sentence 1</li>
+<li>sentence 2</li>
+<li>sentence 3</li>
+</ul></li>
+</ul>
+<div id="bayesian-stuff" class="section level3">
+<h3><span class="header-section-number">3.4.1</span> Bayesian Stuff</h3>
+<ul>
+<li>Mathematical foundations
+<ul>
+<li>Bayes rule in regression setting</li>
+</ul></li>
+<li>Easy in theory, difficult in practice
+<ul>
+<li>Example of a conjugate priors</li>
+<li>need more complexity -&gt; computer methods</li>
+<li>Computer methods needed</li>
+</ul></li>
+<li></li>
+</ul>
+</div>
+<div id="multilevel-modeling-stuff" class="section level3">
+<h3><span class="header-section-number">3.4.2</span> Multilevel Modeling Stuff</h3>
+<ul>
+<li>Estimating the variance at different levels in the model</li>
+<li></li>
 </ul>
 
+</div>
+</div>
 </div>
 <h3>References</h3>
 <div id="refs" class="references">
@@ -317,7 +381,7 @@ Y &amp;\sim \textrm{Bernoulli}(\pi) \\
         </div>
       </div>
 <a href="motivating-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="bayesian-modeling.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="workflow.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

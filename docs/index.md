@@ -14,21 +14,9 @@ github-repo: adkudson/thesis
 
 # Introduction
 
-- Soft intro to modern computing, analysis
-  - advance in CPU+programming leads to evolved statistical methods
-    - ML/DL, high dimensional analysis, big data, Bayesian techniques
-  - multidisciplinary techniques; numerical methods, probability theory, statistics, computer science, visualizations, etc
-    - root finding, change of variables, Gaussian quadrature, Hermite polynomials, Monte Carlo simulation, floating point arithmetic
-  - Organization and reproducibility are crucial in a data analysis setting
-    - pre-planning, modularity, workflows, versioning, virtual environments, DRY programming, code that is easy to read
-  - Clean data is important for good modeling
-    - garbage in leads to garbage out
+With the advances in computational power and high-level programming languages like Python, R, and Julia, statistical methods have evolved to be more flexible and expressive. No longer must we be subjugated by p-values and step-wise regression techniques. Gone are the days of using clever modeling techniques to tame misbehaved data. Now is the time for principled and informed decisions to create bespoke models and domain-motivated analyses. We have the shoulders of giants to stand upon and look out at the vast sea of data science.
 
-
-
-With the advances in computational power and high-level programming languages like Python, R, and Julia, statistical methods have evolved to be more flexible and expressive. 
-
-
+I want to talk about how the advances in computational power have lead to a sort of mini revolution - resurrection - in statistics where Bayesian modeling has gained an incredible following thanks to projects like Stan. The steady adoption of computer aided statistical workflows also brings the need for multidisciplinary techniques from numerical analysis, probability theory, statistics, computer science, visualizations, and more. And with the age of computers, there is a strong push towards reproducibility. Concepts of modular design, workflows, project history and versioning, virtual environments, and human readable code all contribute to reproducible analyses. And somehow I also want to tie in how data is immutable - raw data should (must) be treated as a constant and unchangeable entity, and merely touching it will cause data mitosis.
 
 - Overview of classical modeling methods
   - classical approaches to data analysis usually adhere to the flexibility-interpretability trade-off
