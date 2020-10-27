@@ -21,6 +21,8 @@ With the advances in computational power and high-level programming languages li
 
 I want to talk about how the advances in computational power have lead to a sort of mini revolution - resurrection - in statistics where Bayesian modeling has gained an incredible following thanks to projects like Stan. The steady adoption of computer aided statistical workflows also brings the need for multidisciplinary techniques from numerical analysis, probability theory, statistics, computer science, visualizations, and more. And with the age of computers, there is a strong push towards reproducibility. Concepts of modular design, workflows, project history and versioning, virtual environments, and human readable code all contribute to reproducible analyses. And somehow I also want to tie in how data is immutable - raw data should (must) be treated as a constant and unchangeable entity, and merely touching it will cause data mitosis.
 
+
+
 - Overview of classical modeling methods
   - classical approaches to data analysis usually adhere to the flexibility-interpretability trade-off
   - generally inflexible (parametric) to be more interpretable and computationally easier
@@ -29,7 +31,11 @@ I want to talk about how the advances in computational power have lead to a sort
     - normality, independence, heteroskedacity, etc.
   - often limited when it comes to statistical summaries and confidence intervals
 
-
+Computational Power 
+  --> Importance of reproducibility and workflows
+  --> Classical modeling methods 
+    --> Problems with classical methods
+  --> Proposed solutions
 
 - Solutions or alternatives when classical models fail
   - Bayesian inference is a powerful, descriptive, and flexible modeling framework
