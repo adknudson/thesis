@@ -21,7 +21,7 @@ With the advances in computational power and high-level programming languages li
 
 I want to talk about how the advances in computational power have lead to a sort of mini revolution - resurrection - in statistics where Bayesian modeling has gained an incredible following thanks to projects like Stan. The steady adoption of computer aided statistical workflows also brings the need for multidisciplinary techniques from numerical analysis, probability theory, statistics, computer science, visualizations, and more. And with the age of computers, there is a strong push towards reproducibility. Concepts of modular design, workflows, project history and versioning, virtual environments, and human readable code all contribute to reproducible analyses. And somehow I also want to tie in how data is immutable - raw data should (must) be treated as a constant and unchangeable entity, and merely touching it will cause data mitosis.
 
-
+## Classical Approaches to Modeling
 
 - Overview of classical modeling methods
   - classical approaches to data analysis usually adhere to the flexibility-interpretability trade-off
@@ -53,6 +53,8 @@ Computational Power
     - The denominator acts as a scaling value that forces $P(\theta|X)$ to be a probability distribution (i.e. area under PDF is equal to 1)
     - There are simulation-based techniques that let one approximate the posterior distribution without needing to know the analytic solution to the denominator
 
+## Proposal of New Methods
 
+## Organization
 
 I have organized this thesis as follows. In [Chapter 2](#motivating-data) I introduce the data set that drives the narrative and that motivates the adoption of Bayesian multilevel modeling. In [Chapter 3](#background) there is a review of common approaches approaches to modeling with psychometric data, and the benefits and drawbacks of such techniques. [Chapter 4](#bayesian-modeling) introduces Bayesian hierarchical modeling and programming frameworks for Bayesian inference. In [Chapter 5](#workflow) I describe and work through a principled Bayesian workflow for multilevel modeling. [Chapter 6](#model-checking) goes into more depth on checking the model goodness of fit and model diagnostics in a Bayesian setting. Finally in [Chapter 7](#predictive-inference) I demonstrate how to use the Bayesian model from the principled workflow for predictive inference, and use posterior predictive distributions to plot and compare models.

@@ -64,4 +64,10 @@
       - He was interested in fitting a 2-AFC model in Julia, which did not provide a link function for such psychometric experiments
       - In the end of our discussion, I wrote my own N-AFC link function that can be dropped in to the `GLM.jl` package
 
+- Model selection is not always the goal
+  - Building a model motivated by a set of principals and domain expertise should be the prefereed way
+  - Model comparison is important, especially in terms of predictive inference
+  - One model doesn't fit all
+    - Different models help to answer different questions
+      - Mean effect, individual effect, predicitve density, conditional densities, etc
   

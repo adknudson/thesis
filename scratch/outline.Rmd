@@ -1,0 +1,47 @@
+---
+title: "Outline"
+author: "Alex Knudson"
+date: "10/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- Introduction
+  - Advances in CS as a lead-in to discussing newer modeling workflows
+  - Classical Approaches to Modeling
+  - Proposal of new methods (Thesis)
+  - Organization
+- Psychometrics and Motivating Data
+  - Psychometric Experiments
+  - TOJ tasks
+  - Data Viz and Quirks
+- Principaled Bayesian Workflow
+  - Discussion
+  - Introduce concepts but save details for later sections
+  - Building a model in steps
+    - Iter1
+    - Iter2
+    - ...
+  - Segue
+- Model Checking
+  - Diagnostics
+  - Simulation study (bigsimr?)
+  - Consequence of using "wrong" model
+- Predictive Inference
+  - Simulating/Predicting at different levels
+  - Average vs. Marginal effects
+- Application Results
+  - Age Groups
+    - Parameter Scale (relative)
+    - Prediction Scale (absolute)
+  - Predictive distribution of new subject
+  - Consequence of removing outlier(s)
+- Discussion
+  - Project history
+    - Data cleaning
+    - Model development
+  - Model comparison, but not model selection
+- Conclusion
