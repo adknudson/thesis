@@ -1,0 +1,378 @@
+```{r ch043-setup, include=FALSE}
+library(FangPsychometric)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+library(rstan)
+
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+av_dat <- local({
+  dat <- audiovisual_binomial %>%
+    filter(trial %in% c("pre", "post1"),
+           rid != "av-post1-O-f-CE") %>%
+    mutate(x = soa / 1000,
+           rid = factor(rid),
+           sid = factor(sid),
+           trial = factor(trial)) %>%
+    as.list()
+  dat$N <- length(dat$x)
+  dat$N_G <- length(levels(dat$age_group))
+  dat$N_S <- length(levels(dat$sid))
+  dat$N_T <- length(levels(dat$trial))
+  dat
+})
+```
+
+
+## Iteration 4 (What's one more?) {#iter4}
+
+We now have a model that works well for the audiovisual data, but there are still two other data sets that we can apply the model to. Additionally there is one more modification that we can make to the model that reflects a real world problem - lapses in judgment.
+
+### Conceptual analysis {#iter4-conceptual}
+
+A lapse in judgment can happen for any reason, and is assumed to be random and independent of other lapses. They can come in the form of the subject accidentally blinking during the presentation of a visual stimulus, or unintentionally pressing the wrong button to respond. Whatever the case is, lapses can have a significant affect on the resulting psychometric function.
+
+### Construct summary statistics {#iter4-summary-stats}
+
+We will continue to use the posterior density of the PSS and JND as summary statistics, but the way we calculate them will change as a result of the change in the model in the next section.
+
+### Model Development {#iter4-model-dev}
+
+Lapses can be modeled as occurring independently at some fixed rate. Fundamentally this means that the underlying performance function, $F$, is bounded by some lower and upper lapse rate. This manifests as a scaling and translation of $F$. For a given lower and upper lapse rate $\lambda$ and $\gamma$, the performance function $\Psi$ is 
+
+$$
+\Psi(x; \alpha, \beta, \lambda, \gamma) = \lambda + (1 - \lambda - \gamma) F(x; \alpha, \beta)
+$$
+
+
+```{r ch043-plot-pf-with-lapse, fig.cap="Psychometric function with lower and upper performance bounds."}
+fn_lapse <- function(x, a=0, b=1, l=0, g=0) l + (1 - l - g) * fn(x, a, b)
+
+ggplot(tibble(x = c(-4, 6), y = c(0, 1)), aes(x, y)) +
+  geom_hline(yintercept = 0, lwd = 0.5) +
+  geom_vline(xintercept = 0, lwd = 0.5) +
+  stat_function(fun = fn_lapse, 
+                args = list(a = 1), 
+                size = 1, alpha = 0.5,
+                color = "steelblue") +
+  stat_function(fun = fn_lapse, 
+                args = list(a = 1, l=0.05, g=0.11), 
+                size = 1.5, 
+                color = "orangered") +
+  geom_hline(yintercept = 0.05, linetype="dashed") +
+  geom_hline(yintercept = 1-0.11, linetype="dashed") +
+  annotate("segment", 
+           x = -2, xend = -1, 
+           y = 0.45, yend = fn_lapse(-1, a=1, l=0.05, g=0.11), 
+           color = "gray32", arrow = arrow(type = "closed")) +
+  annotate("label", x = -2, y = 0.45, label = "Ψ(x)", vjust = 0, hjust = 1) +
+  annotate("segment", x = -2, xend = -1.5, 
+           y = 0.25, yend = plogis(-1.5, 1), color = "gray32",
+           arrow = arrow(type = "closed")) +
+  annotate("label", x = -2, y = 0.25, label = "F(x)", vjust = 0, hjust = 1) +
+  theme(axis.ticks.x = element_blank(), axis.text.x = element_blank()) +
+  labs(x = "Stimulus Intensity", y = "Probability",
+       title = "Psychometric function with lower and upper performance bounds")
+```
+
+
+In certain psychometric experiments, $\lambda$ is interpreted as the lower performance bound or the guessing rate. For example, in certain 2-alternative forced choice (2-AFC) tasks, subjects are asked to respond which of two masses is heavier, and the correctness of their response is recorded. When the masses are the same, the subject can do no better than random guessing. In this task, the lower performance bound is assumed to be 50% as their guess is split between two choices. As the absolute difference in mass grows, the subject's correctness rate increases, though lapses can still happen. In this scenario, $\lambda$ is fixed at $0.5$ and the lapse rate $\gamma$ is a parameter in the model.
+
+Our data does not explicitly record correctness, so we do not give $\lambda$ the interpretation of a guessing rate. Since we are recording proportion of positive responses, we instead treat $\lambda$ and $\gamma$ as lapse rates for negative and positive SOAs. But why should we treat the lapse rates separately? A lapse in judgment can occur independently of the SOA, so $\lambda$ and $\gamma$ should be the same no matter what. With this assumption in mind, we throw away $\gamma$ and assume that the lower and upper performance bounds are restricted by the same amount. I.e.
+
+
+$$
+\Psi(x; \alpha, \beta, \lambda) = \lambda + (1 - 2\lambda) F(x; \alpha, \beta)
+$$
+
+
+While we're throwing in lapse rates, let's also ask the question if different age groups have different lapse rates. To answer this (or rather have our model answer this), we include the new parameter $\lambda_{G[i]}$ into the model so that we get an estimated lapse rate for each age group.
+
+We assume that lapses in judgment are rare, and we know that the rate (or probability of a lapse) is bounded in the interval $[0, 1]$. Because of this, we put a $\mathrm{Beta(4, 96)}$ prior on $\lambda$ which *a priori* puts 99% of the weight below $0.1$ and an expected lapse rate of $0.04$.
+
+We could also set up our model so that information about the lapse rate is shared between age groups (i.e. hierarchical), but we'll leave that as an exercise for the reader.
+
+### Fit the model {#iter4-fit-obs}
+
+
+
+```{stan ch043-Eager Modern Parachute, output.var="av_iter4_obs_fit"}
+functions {
+  real inv_Psi(real p, real a, real b, real l) {
+    return logit((p - l) / (1 - 2 * l)) / b + a;
+  }
+}
+data {
+  int N;
+  int N_G;
+  int N_T;
+  int N_S;
+  int n[N];
+  int k[N];
+  vector[N] x;
+  int G[N];
+  int trt[N];
+  int S[N];
+}
+parameters {
+  real a_raw;
+  real<lower=machine_precision(),upper=pi()/2> aG_unif;
+  real<lower=machine_precision(),upper=pi()/2> aT_unif;
+  real<lower=machine_precision(),upper=pi()/2> aS_unif;
+  vector[N_G] aG_raw;
+  vector[N_T] aT_raw;
+  vector[N_S] aS_raw;
+
+  real b_raw;
+  real<lower=machine_precision(),upper=pi()/2> bG_unif;
+  real<lower=machine_precision(),upper=pi()/2> bT_unif;
+  real<lower=machine_precision(),upper=pi()/2> bS_unif;
+  vector[N_G] bG_raw;
+  vector[N_T] bT_raw;
+  vector[N_S] bS_raw;
+  
+  vector[N_G] lG;
+}
+transformed parameters {
+  real a;
+  vector[N_G] aG;
+  vector[N_T] aT;
+  vector[N_S] aS;
+  real sd_aG;
+  real sd_aT;
+  real sd_aS;
+  
+  real b;
+  vector[N_G] bG;
+  vector[N_T] bT;
+  vector[N_S] bS;
+  real sd_bG;
+  real sd_bT;
+  real sd_bS;
+  
+  // Z * sigma ~ N(0, sigma^2)
+  a = a_raw * 0.05;
+  
+  // mu + tau * tan(U) ~ cauchy(mu, tau)
+  sd_aG = 0.01 * tan(aG_unif);
+  sd_aT = 0.01 * tan(aT_unif);
+  sd_aS = 0.05 * tan(aS_unif);
+  
+  aG = aG_raw * sd_aG;
+  aT = aT_raw * sd_aT;
+  aS = aS_raw * sd_aS;
+  
+  // mu + Z * sigma ~ N(mu, sigma^2)
+  b = 3.0 + b_raw * 1.5;
+  
+  // mu + tau * tan(U) ~ cauchy(mu, tau)
+  sd_bG = 0.5 * tan(bG_unif);
+  sd_bT = 0.5 * tan(bT_unif);
+  sd_bS = 0.5 * tan(bS_unif);
+  
+  bG = bG_raw * sd_bG;
+  bT = bT_raw * sd_bT;
+  bS = bS_raw * sd_bS;
+}
+model {
+  vector[N] theta;
+
+  a_raw ~ std_normal();
+  aG_raw ~ std_normal();
+  aT_raw ~ std_normal();
+  aS_raw ~ std_normal();
+
+  b_raw ~ std_normal();
+  bG_raw ~ std_normal();
+  bT_raw ~ std_normal();
+  bS_raw ~ std_normal();
+  
+  lG ~ beta(4, 96);
+
+  for (i in 1:N) {
+    real mu_b = exp(b + bG[G[i]] + bT[trt[i]] + bS[S[i]]);
+    real mu_a = a + aG[G[i]] + aT[trt[i]] + aS[S[i]];
+    theta[i] = lG[G[i]] + (1 - 2*lG[G[i]]) * inv_logit(mu_b * (x[i] - mu_a));
+  }
+
+  k ~ binomial(n, theta);
+}
+generated quantities {
+  int y_post_pred[N];
+  matrix[N_G, N_T] pss;
+  matrix[N_G, N_T] jnd;
+
+  for (i in 1:N_G) {
+    for (j in 1:N_T) {
+      real mu_b = exp(b + bG[i] + bT[j]);
+      real mu_a = a + aG[i] + aT[j];
+      real mu_l = lG[i];
+      pss[i, j] = inv_Psi(0.50, mu_a, mu_b, mu_l);
+      jnd[i, j] = inv_Psi(0.84, mu_a, mu_b, mu_l) - pss[i, j];
+    }
+  }
+
+  for (i in 1:N) {
+    real mu_b = exp(b + bG[G[i]] + bT[trt[i]] + bS[S[i]]);
+    real mu_a = a + aG[G[i]] + aT[trt[i]] + aS[S[i]];
+    real mu_l = lG[G[i]];
+    real theta = mu_l + (1 - 2*mu_l) * inv_logit(mu_b * (x[i] - mu_a));
+    y_post_pred[i] = binomial_rng(n[i], theta);
+  }
+}
+```
+
+
+```{r ch043-Unique Drill}
+obs_dat <- with(av_dat, list(
+  N = N,
+  N_G = N_G,
+  N_T = N_T,
+  N_S = N_S,
+  x = x,
+  k = k,
+  n = n,
+  G = as.integer(av_dat$age_group),
+  trt = as.integer(av_dat$trial),
+  S = as.integer(av_dat$sid)
+))
+
+keep_pars <- c(
+  "a", "b", "lG",
+  "pss", "jnd",
+  "aG", "bG",
+  "aT", "bT",
+  "aS", "bS",
+  "sd_aG", "sd_bG", 
+  "sd_aT", "sd_bT", 
+  "sd_aS", "sd_bS",
+  "y_post_pred"
+)
+
+n_chains <- 4L
+
+init5_4_1 <- replicate(n_chains, list(
+  a_raw = rnorm(1),
+  aG_raw = rnorm(av_dat$N_G, 0, 0.5),
+  aT_raw = rnorm(av_dat$N_T, 0, 0.5),
+  aS_raw = rnorm(av_dat$N_S, 0, 0.5),
+  aG_unif = runif(1, 0, 0.75),
+  aT_unif = runif(1, 0, 0.75),
+  aS_unif = runif(1, 0, 0.75),
+  b_raw = rnorm(1),
+  bG_raw = rnorm(av_dat$N_G, 0, 0.5),
+  bT_raw = rnorm(av_dat$N_T, 0, 0.5),
+  bS_raw = rnorm(av_dat$N_S, 0, 0.5),
+  bG_unif = runif(1, 0, 0.75),
+  bT_unif = runif(1, 0, 0.75),
+  bS_unif = runif(1, 0, 0.75),
+  lG = runif(av_dat$N_G, 0, 0.05)),
+simplify = FALSE)
+
+m5_4_1 <- sampling(av_iter4_obs_fit, data = obs_dat, 
+                   chains = n_chains, cores = n_chains,
+                   iter = 7000, warmup = 2000,
+                   refresh = 0, pars = keep_pars,
+                   control = list(adapt_delta = 0.95),
+                   init = init5_4_1, seed = 4)
+```
+
+
+```{r ch043-Rich Haystack, message=TRUE}
+check_hmc_diagnostics(m5_4_1)
+```
+
+### Posterior retrodictive checks {#iter4-post-retro}
+
+```{r ch043-Supersonic Torpedo}
+post5_4_1 <- extract(m5_4_1)
+post5_4_1_k_pred <- t(apply(post5_4_1$y_post_pred, 2, quantile,
+                          probs = c(1.5, 5.5, 50, 94.5, 98.5) / 100))
+
+idx <- sample(1:nrow(post5_4_1$y_post_pred), 1)
+
+m5_4_1_pred <- cbind(post5_4_1_k_pred,
+                 post_mean = colMeans(post5_4_1$y_post_pred),
+                 post_rand = post5_4_1$y_post_pred[idx,]) %>%
+  sweep(1, obs_dat$n, FUN = "/") %>%
+  bind_cols(obs_dat, trial = av_dat$trial, age_group = av_dat$age_group) %>%
+  select(-N) %>%
+  mutate(p = k / n)
+```
+
+
+```{r ch043-Furious Ninth Xylophone}
+m5_4_1_pred %>%
+  ggplot(aes(x, p)) +
+  scale_x_continuous(breaks = seq(-0.5, 0.5, 0.25)) +
+  scale_y_continuous(breaks = c(0, 0.5, 1)) +
+  geom_jitter(width = 0.0125, height = 0.01,
+              col = rgb(123, 28, 212, maxColorValue = 255)) +
+  geom_jitter(aes(y = post_rand),
+              col = rgb(28, 214, 68, 120, maxColorValue = 255),
+              width = 0.0125, height = 0.01) +
+  facet_grid(age_group ~ trial)
+```
+
+
+```{r ch043-Aberrant Serpent}
+plot_pf <- function(n, post, age_group, trt) {
+  n_smp <- 100
+  idx <- sample(1:length(post$a), n_smp, replace = TRUE)
+  
+  alpha <- with(post, a[idx] + aG[idx, age_group] + aT[idx, trt])
+  beta <- with(post, exp(b[idx] + bG[idx, age_group] + bT[idx, trt]))
+  
+  p <- tibble(x = c(-0.5, 0.5), y = c(0, 1)) %>%
+    ggplot(aes(x, y)) +
+    scale_x_continuous(breaks = seq(-0.5, 0.5, 0.1)) +
+    scale_y_continuous(breaks = c(0, 0.5, 1))
+  for (i in 1:n_smp) {
+    p <- p + geom_line(stat = "function", fun = fn, 
+                       args = list(a = alpha[i],
+                                   b = beta[i]),
+                       alpha = 0.05)
+  }
+  p
+}
+```
+
+
+```{r ch043-Bulldozer Cold}
+ypre <- plot_pf(100, post5_4_1, 1, 1)
+ypos <- plot_pf(100, post5_4_1, 1, 2)
+mpre <- plot_pf(100, post5_4_1, 2, 1)
+mpos <- plot_pf(100, post5_4_1, 2, 2)
+opre <- plot_pf(100, post5_4_1, 3, 1)
+opos <- plot_pf(100, post5_4_1, 3, 2)
+
+(ypre + ypos) / (mpre + mpos) / (opre + opos)
+```
+
+
+```{r ch043-Discarded Firecracker}
+age_trt <- expand.grid(a = 1:3, t = 1:2)
+
+dat_pssjnd <- lapply(1:nrow(age_trt), function(i) {
+  a <- age_trt$a[i]
+  t <- age_trt$t[i]
+  tibble(PSS = post5_4_1$pss[,a,t],
+         JND = post5_4_1$jnd[,a,t],
+         a = a,
+         t = t)
+}) %>% do.call(what = bind_rows) %>%
+  mutate(a = factor(a, levels = 1:3, labels = levels(av_dat$age_group)),
+         t = factor(t, levels = 1:2, labels = levels(av_dat$trial))) %>%
+  rename(age_group = a, trial = t) %>%
+  tidyr::pivot_longer(c("PSS", "JND"), names_to = "Name", values_to = "Seconds")
+
+dat_pssjnd %>%
+  ggplot(aes(Seconds, fill = trial)) +
+  geom_density() +
+  scale_fill_manual("trial",
+                    values = c(rgb(29/255, 149/255, 219/255, 0.5),
+                               rgb(143/255, 19/255, 19/255, 0.5))) +
+  facet_grid(age_group ~ Name, scales = "free_x")
+```

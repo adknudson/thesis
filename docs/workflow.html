@@ -177,9 +177,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.4.5" data-path="workflow.html"><a href="workflow.html#iter4-post-retro"><i class="fa fa-check"></i><b>4.4.5</b> Posterior retrodictive checks</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>5</b> Model Checking</a><ul>
-<li class="chapter" data-level="5.1" data-path="model-checking.html"><a href="model-checking.html#section"><i class="fa fa-check"></i><b>5.1</b> </a></li>
-</ul></li>
+<li class="chapter" data-level="5" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>5</b> Model Checking</a></li>
 <li class="chapter" data-level="6" data-path="predictive-inference.html"><a href="predictive-inference.html"><i class="fa fa-check"></i><b>6</b> Predictive Inference</a></li>
 <li class="chapter" data-level="7" data-path="application-results.html"><a href="application-results.html"><i class="fa fa-check"></i><b>7</b> Application Results</a></li>
 <li class="chapter" data-level="8" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>8</b> Discussion</a></li>
@@ -290,8 +288,8 @@ k_i, n_i \in \mathbb{Z}_0^+, k_i \le n_i
 <p>If the expected JND is 0.100 (100 ms) and is distributed log-normally, then <span class="math inline">\(\mathrm{logit}(0.84)/jnd\)</span> is also log-normally distributed with mean <span class="math inline">\(\mathrm{logit}(0.84) - log(0.1) \approx 3.96\)</span>.</p>
 <p>Choose a standard deviation value so that <span class="math inline">\(\approx 99\%\)</span> of the JND values are less than 1.</p>
 <p>The distribution of prior psychometric functions now looks like</p>
-<div class="figure" style="text-align: center"><span id="fig:ch050-prior-pf-plot"></span>
-<img src="050-bayesian-workflow_files/figure-html/ch050-prior-pf-plot-1.png" alt="Prior distribution of psychometric functions using the priors for slope and intercept." width="70%" />
+<div class="figure" style="text-align: center"><span id="fig:ch040-prior-pf-plot"></span>
+<img src="040-bayesian-workflow_files/figure-html/ch040-prior-pf-plot-1.png" alt="Prior distribution of psychometric functions using the priors for slope and intercept." width="70%" />
 <p class="caption">
 Figure 4.1: Prior distribution of psychometric functions using the priors for slope and intercept.
 </p>
@@ -301,8 +299,8 @@ Figure 4.1: Prior distribution of psychometric functions using the priors for sl
 \alpha &amp;\sim \mathcal{N}(0, 0.05) \\
 \beta  z&amp;\sim \mathrm{Lognormal}(3.0, 1.5)
 \end{align*}\]</span></p>
-<div class="figure" style="text-align: center"><span id="fig:ch050-prior-pf-plot-2"></span>
-<img src="050-bayesian-workflow_files/figure-html/ch050-prior-pf-plot-2-1.png" alt="Second prior distribution of psychometric functions using the priors for slope and intercept." width="70%" />
+<div class="figure" style="text-align: center"><span id="fig:ch040-prior-pf-plot-2"></span>
+<img src="040-bayesian-workflow_files/figure-html/ch040-prior-pf-plot-2-1.png" alt="Second prior distribution of psychometric functions using the priors for slope and intercept." width="70%" />
 <p class="caption">
 Figure 4.2: Second prior distribution of psychometric functions using the priors for slope and intercept.
 </p>
@@ -367,7 +365,7 @@ generated quantities {
 </blockquote>
 <pre><code>#&gt;    95%    99%  99.9%   100% 
 #&gt;  1.099  2.904  6.681 20.538</code></pre>
-<p><img src="050-bayesian-workflow_files/figure-html/ch050-Long%20Supersonic%20Cosmic-1.png" width="70%" style="display: block; margin: auto;" /><img src="050-bayesian-workflow_files/figure-html/ch050-Long%20Supersonic%20Cosmic-2.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="040-bayesian-workflow_files/figure-html/ch040-Long%20Supersonic%20Cosmic-1.png" width="70%" style="display: block; margin: auto;" /><img src="040-bayesian-workflow_files/figure-html/ch040-Long%20Supersonic%20Cosmic-2.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>We’re satisfied with the prior coverage of the PSS and JND, so now we can move on to fitting the model to the simulated data.</p>
 </div>
 <div id="iter1-config-algo" class="section level4">
@@ -495,12 +493,12 @@ generated quantities {
 <div id="iter1-post-retro" class="section level4">
 <h4><span class="header-section-number">4.1.3.3</span> Posterior retrodictive checks</h4>
 <p>Need an example of using summary stats on posterior retrodictions</p>
-<p><img src="050-bayesian-workflow_files/figure-html/ch050-Angry%20Pineapple-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="040-bayesian-workflow_files/figure-html/ch040-Angry%20Pineapple-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>The posterior retrodictions do well to cover the observed data, but we don’t actually have a model that can answer the questions that we are seeking to answer. At best, this model can only inform of of the population average PSS and JND across both pre- and post-adaptation. This first iteration does serve as a useful foundation for building a more complex model, and for practicing visualization techniques that will be more important in the next few iterations.</p>
 <p>While we are here, let’s also take a look at the underlying performance (psychometric) function as well as the density estimates of the PSS and JND.</p>
-<p><img src="050-bayesian-workflow_files/figure-html/ch050-Swift%20Strong%20Xylophone-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="040-bayesian-workflow_files/figure-html/ch040-Swift%20Strong%20Xylophone-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>We can see that the distribution of psychometric curves never wanders too far off from the mean. In this sense, we can be fairly confident that the PSS is positive.</p>
-<p><img src="050-bayesian-workflow_files/figure-html/ch050-Hollow%20Mustard-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="040-bayesian-workflow_files/figure-html/ch040-Hollow%20Mustard-1.png" width="70%" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
@@ -577,8 +575,8 @@ model {
 </div>
 <div id="iter2-prior-check" class="section level3">
 <h3><span class="header-section-number">4.2.3</span> Prior Checks</h3>
-<p><img src="051-bayesian-workflow_files/figure-html/ch051-Surreal%20Comic-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<p><img src="051-bayesian-workflow_files/figure-html/ch051-Severe%20Kangaroo-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="041-bayesian-workflow_files/figure-html/ch041-Surreal%20Comic-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="041-bayesian-workflow_files/figure-html/ch041-Severe%20Kangaroo-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <pre><code>#&gt; , , 1
 #&gt; 
 #&gt;        
@@ -678,11 +676,11 @@ model {
 </div>
 <div id="iter2-post-retro" class="section level3">
 <h3><span class="header-section-number">4.2.10</span> Posterior retrodictive checks</h3>
-<p><img src="051-bayesian-workflow_files/figure-html/ch051-Sleepy%20Roadrunner-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="041-bayesian-workflow_files/figure-html/ch041-Sleepy%20Roadrunner-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>The retrodictive data are matching well with the observed data, which means that we are getting closer to a model that we can use for inferences.</p>
-<p><img src="051-bayesian-workflow_files/figure-html/ch051-Furious%20Jazz-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="041-bayesian-workflow_files/figure-html/ch041-Furious%20Jazz-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>It’s difficult to determine from this graph if there any difference between the age groups. Looking at the density plot of the PSS and JND across the different conditions paints a much clearer image.</p>
-<p><img src="051-bayesian-workflow_files/figure-html/ch051-Discarded%20Torpedo-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="041-bayesian-workflow_files/figure-html/ch041-Discarded%20Torpedo-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>Using ocular analysis<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> we can see that recalibration has a significant affect on the just noticeable difference for each age group; specifically recalibration heightens temporal sensitivity and thus reduces the just noticeable difference. Comparing between age groups, the young and middle age groups are very similar in both the pre- and post-adaptation trials, and temporal sensitivity is lower in the older age group.</p>
 <p>The point of subjective simultaneity between trials is not as well separated, but the model still consistently estimates that the subjects will perceive simultaneity at a value closer to zero post-adaptation.</p>
 
@@ -858,10 +856,10 @@ generated quantities {
 </div>
 <div id="iter3-post-retro" class="section level3">
 <h3><span class="header-section-number">4.3.3</span> Posterior retrodictive checks</h3>
-<p><img src="052-bayesian-workflow_files/figure-html/ch052-Leather%20Lucky-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<p><img src="052-bayesian-workflow_files/figure-html/ch052-Forsaken%20Purple%20Moose-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="042-bayesian-workflow_files/figure-html/ch042-Leather%20Lucky-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="042-bayesian-workflow_files/figure-html/ch042-Forsaken%20Purple%20Moose-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>It’s difficult to determine from this graph if there any difference between the age groups. Looking at the density plot of the PSS and JND across the different conditions paints a much clearer image.</p>
-<p><img src="052-bayesian-workflow_files/figure-html/ch052-Severe%20Lion-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="042-bayesian-workflow_files/figure-html/ch042-Severe%20Lion-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>Okay what gives? The differences within and between age groups is not a separated as it was in the previous iteration. This is due to the fact that the previous model averaged over the variation at the subject level. We’ll consider the task of making predictions at the different levels in the hierarchical model.</p>
 
 </div>
@@ -883,8 +881,8 @@ generated quantities {
 <p><span class="math display">\[
 \Psi(x; \alpha, \beta, \lambda, \gamma) = \lambda + (1 - \lambda - \gamma) F(x; \alpha, \beta)
 \]</span></p>
-<div class="figure" style="text-align: center"><span id="fig:ch053-plot-pf-with-lapse"></span>
-<img src="053-bayesian-workflow_files/figure-html/ch053-plot-pf-with-lapse-1.png" alt="Psychometric function with lower and upper performance bounds." width="70%" />
+<div class="figure" style="text-align: center"><span id="fig:ch043-plot-pf-with-lapse"></span>
+<img src="043-bayesian-workflow_files/figure-html/ch043-plot-pf-with-lapse-1.png" alt="Psychometric function with lower and upper performance bounds." width="70%" />
 <p class="caption">
 Figure 4.3: Psychometric function with lower and upper performance bounds.
 </p>
@@ -914,9 +912,9 @@ Figure 4.3: Psychometric function with lower and upper performance bounds.
 </div>
 <div id="iter4-post-retro" class="section level3">
 <h3><span class="header-section-number">4.4.5</span> Posterior retrodictive checks</h3>
-<p><img src="053-bayesian-workflow_files/figure-html/ch053-Furious%20Ninth%20Xylophone-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<p><img src="053-bayesian-workflow_files/figure-html/ch053-Bulldozer%20Cold-1.png" width="70%" style="display: block; margin: auto;" /></p>
-<p><img src="053-bayesian-workflow_files/figure-html/ch053-Discarded%20Firecracker-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="043-bayesian-workflow_files/figure-html/ch043-Furious%20Ninth%20Xylophone-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="043-bayesian-workflow_files/figure-html/ch043-Bulldozer%20Cold-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="043-bayesian-workflow_files/figure-html/ch043-Discarded%20Firecracker-1.png" width="70%" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
@@ -977,7 +975,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/adknudson/thesis/blob/master/050-bayesian-workflow.Rmd",
+"link": "https://github.com/adknudson/thesis/blob/master/040-bayesian-workflow.Rmd",
 "text": null
 },
 "download": ["adknudson-thesis.pdf"],
