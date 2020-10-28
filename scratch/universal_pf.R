@@ -1,11 +1,10 @@
 library(FangPsychometric)
 library(dplyr)
-library(ggplot2)
-library(patchwork)
 library(rstan)
 
 options(mc.cores = parallel::detectCores())
 rstan_options(auto_write = TRUE)
+m <- stan_model(file = "scratch/universal_pf.stan")
 
 logit <- function(p) qlogis(p)
 inv_logit <- function(x) plogis(x)
@@ -25,26 +24,6 @@ obs_dat <- function(data) {
   dat$N_S <- length(levels(dat$sid))
   dat$N_T <- length(levels(dat$trial))
   dat
-}
-
-plot_pf <- function(n, post, age_group, trt, xlim = c(-0.5, 0.5)) {
-  n_smp <- 100
-  idx <- sample(1:length(post$a), n_smp, replace = TRUE)
-
-  alpha <- with(post, a[idx] + aG[idx, age_group] + aT[idx, trt])
-  beta <- with(post, exp(b[idx] + bG[idx, age_group] + bT[idx, trt]))
-
-  p <- tibble(x = xlim, y = c(0, 1)) %>%
-    ggplot(aes(x, y)) +
-    scale_x_continuous(breaks = seq(xlim[1], xlim[2], 0.1)) +
-    scale_y_continuous(breaks = c(0, 0.5, 1))
-  for (i in 1:n_smp) {
-    p <- p + geom_line(stat = "function", fun = fn,
-                       args = list(a = alpha[i],
-                                   b = beta[i]),
-                       alpha = 0.05)
-  }
-  p
 }
 
 stan_summary <- function(object, ...) {
@@ -68,7 +47,6 @@ stan_dat <- with(dat, list(
 
 keep_pars <- c(
   "a", "b", "lG",
-  "pss", "jnd",
   "aG", "bG",
   "aT", "bT",
   "aGT", "bGT",
@@ -79,7 +57,7 @@ keep_pars <- c(
   "sd_aS", "sd_bS"
 )
 
-n_chains <- 4L
+n_chains <- 2L
 
 init <- replicate(n_chains, list(
   a_raw = rnorm(1),
@@ -103,16 +81,14 @@ init <- replicate(n_chains, list(
   lG = runif(dat$N_G, 0, 0.05)),
 simplify = FALSE)
 
-m <- stan_model(file = "scratch/universal_pf.stan")
-
 f <- sampling(
   object = m,
   data = stan_dat,
   chains = n_chains,
   cores = n_chains,
-  iter = 7000,
+  iter = 4000,
   warmup = 2000,
-  refresh = 500,
+  refresh = 100,
   init = init,
   control = list(adapt_delta = 0.95),
   pars = keep_pars
@@ -131,3 +107,30 @@ stan_summary(f, "aS")
 stan_summary(f, "bS")
 
 post <- extract(f)
+hist(post$lG[,3] - post$lG[,1], breaks = 50)
+hist(post$lG[,3] - post$lG[,2], breaks = 50)
+hist(post$lG[,1] - post$lG[,2], breaks = 50)
+
+simulate_new_subject <- function(post, G, trt, method = c("average", "random")) {
+  method <- match.arg(method)
+
+  mu_alpha <- with(post, a + aG[,G] + aT[,trt] + aGT[,G,trt])
+  mu_beta <- with(post, b + bG[,G] + bT[,trt] + bGT[,G,trt])
+
+  if (method == "average") {
+    alpha <- mu_alpha
+    beta <- mu_beta
+  } else {
+    alpha <- rnorm(length(mu_alpha), mu_alpha, post$sd_aS)
+    beta <- rnorm(length(mu_beta), mu_beta, post$sd_bS)
+  }
+
+  lambda <- with(post, lG[,G])
+
+  list(alpha = alpha, beta = beta, lambda = lambda)
+}
+
+pre <- simulate_new_subject(post, 1, 1)
+pos <- simulate_new_subject(post, 1, 2)
+round(summary(pre$alpha), 4)
+round(summary(pos$alpha), 4)

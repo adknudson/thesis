@@ -18,7 +18,7 @@ parameters {
   real<lower=machine_precision(),upper=pi()/2> aS_unif;
   vector[N_G] aG_raw;
   vector[N_T] aT_raw;
-  real aGT_raw[N_G, N_T];
+  matrix[N_G, N_T] aGT_raw;
   vector[N_S] aS_raw;
 
   real b_raw;
@@ -28,7 +28,7 @@ parameters {
   real<lower=machine_precision(),upper=pi()/2> bS_unif;
   vector[N_G] bG_raw;
   vector[N_T] bT_raw;
-  real bGT_raw[N_G, N_T];
+  matrix[N_G, N_T] bGT_raw;
   vector[N_S] bS_raw;
 
   vector[N_G] lG;
@@ -102,12 +102,8 @@ model {
 
   lG ~ beta(4, 96);
 
-  for (i in 1:N_G) {
-    for (j in 1:N_T) {
-      bGT_raw[i, j] ~ std_normal();
-      aGT_raw[i, j] ~ std_normal();
-    }
-  }
+  to_vector(aGT_raw) ~ std_normal();
+  to_vector(bGT_raw) ~ std_normal();
 
   // Compute probability values
   for (i in 1:N) {
@@ -117,4 +113,17 @@ model {
   }
 
   k ~ binomial(n, theta);
+}
+generated quantities {
+  vector[N] log_lik;
+
+  for (i in 1:N) {
+    real beta = exp(b + bG[G[i]] + bT[trt[i]] + bGT[G[i], trt[i]] + bS[S[i]]);
+    real alpha = a + aG[G[i]] + aT[trt[i]] + aGT[G[i], trt[i]] + aS[S[i]];
+    real lambda = lG[G[i]];
+
+    real p = lambda + (1 - 2*lambda) * inv_logit(beta * (x[i] - alpha));
+
+    log_lik[i] = binomial_lpmf(k[i] | n[i], p);
+  }
 }
