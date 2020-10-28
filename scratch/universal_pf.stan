@@ -1,8 +1,3 @@
-functions {
-  real inv_Psi(real p, real a, real b, real l) {
-    return logit((p - l) / (1 - 2 * l)) / b + a;
-  }
-}
 data {
   int N;        // Number of observations
   int N_G;      // Number of age groups
@@ -122,18 +117,4 @@ model {
   }
 
   k ~ binomial(n, theta);
-}
-generated quantities {
-  real pss[N_G, N_T];
-  real jnd[N_G, N_T];
-
-  for (i in 1:N_G) {
-    for (j in 1:N_T) {
-      real mu_b = exp(b + bG[i] + bT[j] + bGT[i, j]);
-      real mu_a = a + aG[i] + aT[j] + aGT[i, j];
-      real mu_l = lG[i];
-      pss[i, j] = inv_Psi(0.50, mu_a, mu_b, mu_l);
-      jnd[i, j] = inv_Psi(0.84, mu_a, mu_b, mu_l) - pss[i, j];
-    }
-  }
 }

@@ -1,0 +1,306 @@
+```{r ch042-setup, include=FALSE}
+library(FangPsychometric)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+library(rstan)
+
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+av_dat <- local({
+  dat <- audiovisual_binomial %>%
+    filter(trial %in% c("pre", "post1"),
+           rid != "av-post1-O-f-CE") %>%
+    mutate(x = soa / 1000,
+           rid = factor(rid),
+           sid = factor(sid),
+           trial = factor(trial)) %>%
+    as.list()
+  dat$N <- length(dat$x)
+  dat$N_G <- length(levels(dat$age_group))
+  dat$N_S <- length(levels(dat$sid))
+  dat$N_T <- length(levels(dat$trial))
+  dat
+})
+```
+
+
+## Iteration 3 (The one for Me) {#iter3}
+
+In this iteration of the model building process, we are going to add the individual subjects into the multilevel model, and because this is a simple addition, we are going to skip the prior predictive simulations.
+
+### Model Development {#iter3-model-dev}
+
+
+```{stan ch042-Forsaken Confidential Ostrich, output.var="av_iter3_obs_fit", echo=TRUE}
+data {
+  int N;
+  int N_G;
+  int N_T;
+  int N_S;
+  int n[N];
+  int k[N];
+  vector[N] x;
+  int G[N];
+  int trt[N];
+  int S[N];
+}
+parameters {
+  real a_raw;
+  real<lower=machine_precision(),upper=pi()/2> aG_unif;
+  real<lower=machine_precision(),upper=pi()/2> aT_unif;
+  real<lower=machine_precision(),upper=pi()/2> aS_unif;
+  vector[N_G] aG_raw;
+  vector[N_T] aT_raw;
+  vector[N_S] aS_raw;
+
+  real b_raw;
+  real<lower=machine_precision(),upper=pi()/2> bG_unif;
+  real<lower=machine_precision(),upper=pi()/2> bT_unif;
+  real<lower=machine_precision(),upper=pi()/2> bS_unif;
+  vector[N_G] bG_raw;
+  vector[N_T] bT_raw;
+  vector[N_S] bS_raw;
+}
+transformed parameters {
+  real a;
+  vector[N_G] aG;
+  vector[N_T] aT;
+  vector[N_S] aS;
+  real sd_aG;
+  real sd_aT;
+  real sd_aS;
+  
+  real b;
+  vector[N_G] bG;
+  vector[N_T] bT;
+  vector[N_S] bS;
+  real sd_bG;
+  real sd_bT;
+  real sd_bS;
+  
+  // Z * sigma ~ N(0, sigma^2)
+  a = a_raw * 0.05;
+  
+  // mu + tau * tan(U) ~ cauchy(mu, tau)
+  sd_aG = 0.01 * tan(aG_unif);
+  sd_aT = 0.01 * tan(aT_unif);
+  sd_aS = 0.05 * tan(aS_unif);
+  
+  aG = aG_raw * sd_aG;
+  aT = aT_raw * sd_aT;
+  aS = aS_raw * sd_aS;
+  
+  // mu + Z * sigma ~ N(mu, sigma^2)
+  b = 3.0 + b_raw * 1.5;
+  
+  // mu + tau * tan(U) ~ cauchy(mu, tau)
+  sd_bG = 0.5 * tan(bG_unif);
+  sd_bT = 0.5 * tan(bT_unif);
+  sd_bS = 0.5 * tan(bS_unif);
+  
+  bG = bG_raw * sd_bG;
+  bT = bT_raw * sd_bT;
+  bS = bS_raw * sd_bS;
+}
+model {
+  vector[N] theta;
+
+  a_raw ~ std_normal();
+  aG_raw ~ std_normal();
+  aT_raw ~ std_normal();
+  aS_raw ~ std_normal();
+
+  b_raw ~ std_normal();
+  bG_raw ~ std_normal();
+  bT_raw ~ std_normal();
+  bS_raw ~ std_normal();
+
+  for (i in 1:N) {
+    real mu_b = exp(b + bG[G[i]] + bT[trt[i]] + bS[S[i]]);
+    real mu_a = a + aG[G[i]] + aT[trt[i]] + aS[S[i]];
+    theta[i] = mu_b * (x[i] - mu_a);
+  }
+
+  k ~ binomial_logit(n, theta);
+}
+generated quantities {
+  int y_post_pred[N];
+  matrix[N_G, N_T] pss;
+  matrix[N_G, N_T] jnd;
+
+  for (i in 1:N_G) {
+    for (j in 1:N_T) {
+      real mu_b = exp(b + bG[i] + bT[j]);
+      real mu_a = a + aG[i] + aT[j];
+      pss[i, j] = mu_a;
+      jnd[i, j] = logit(0.84) / mu_b;
+    }
+  }
+
+  for (i in 1:N) {
+    real mu_b = exp(b + bG[G[i]] + bT[trt[i]] + bS[S[i]]);
+    real mu_a = a + aG[G[i]] + aT[trt[i]] + aS[S[i]];
+    real theta = inv_logit(mu_b * (x[i] - mu_a));
+    y_post_pred[i] = binomial_rng(n[i], theta);
+  }
+}
+```
+
+
+```{r ch042-Quality Lama}
+obs_dat <- with(av_dat, list(
+  N = N,
+  N_G = N_G,
+  N_T = N_T,
+  N_S = N_S,
+  x = x,
+  k = k,
+  n = n,
+  G = as.integer(av_dat$age_group),
+  trt = as.integer(av_dat$trial),
+  S = as.integer(av_dat$sid)
+))
+
+keep_pars <- c(
+  "a", "b",
+  "pss", "jnd",
+  "aG", "bG",
+  "aT", "bT",
+  "aS", "bS",
+  "sd_aG", "sd_bG", 
+  "sd_aT", "sd_bT", 
+  "sd_aS", "sd_bS",
+  "y_post_pred"
+)
+
+m5_3_1 <- sampling(av_iter3_obs_fit, data = obs_dat, 
+                   chains = 4, cores = 4,
+                   iter = 7000, warmup = 2000,
+                   refresh = 0, pars = keep_pars,
+                   control = list(adapt_delta = 0.95),
+                   seed = 3)
+```
+
+### Diagnose posterior fit {#iter3-diagnose-post}
+
+```{r ch042-Dreaded Elastic Metaphor, message=TRUE}
+check_hmc_diagnostics(m5_3_1)
+```
+
+
+```{r ch042-Anaconda Liquid}
+stan_summary(m5_3_1, c("a", "aG", "aT"))
+stan_summary(m5_3_1, c("b", "bG", "bT"))
+stan_summary(m5_3_1, c("pss"))
+stan_summary(m5_3_1, c("jnd"))
+```
+
+
+```{r ch042-Cold Bird}
+stan_summary(m5_3_1, pars = paste0("sd_a", c("G", "T", "S")))
+stan_summary(m5_3_1, pars = paste0("sd_b", c("G", "T", "S")))
+```
+
+
+The number of effective samples and the R-hat indicate that there is no problem with the posterior samples.
+
+### Posterior retrodictive checks {#iter3-post-retro}
+
+```{r ch042-Eastern Mustard}
+post5_3_1 <- extract(m5_3_1)
+post5_3_1_k_pred <- t(apply(post5_3_1$y_post_pred, 2, quantile,
+                          probs = c(1.5, 5.5, 50, 94.5, 98.5) / 100))
+
+idx <- sample(1:nrow(post5_3_1$y_post_pred), 1)
+
+m5_3_1_pred <- cbind(post5_3_1_k_pred,
+                 post_mean = colMeans(post5_3_1$y_post_pred),
+                 post_rand = post5_3_1$y_post_pred[idx,]) %>%
+  sweep(1, obs_dat$n, FUN = "/") %>%
+  bind_cols(obs_dat, trial = av_dat$trial, age_group = av_dat$age_group) %>%
+  select(-N) %>%
+  mutate(p = k / n)
+```
+
+
+```{r ch042-Leather Lucky}
+m5_3_1_pred %>%
+  ggplot(aes(x, p)) +
+  scale_x_continuous(breaks = seq(-0.5, 0.5, 0.25)) +
+  scale_y_continuous(breaks = c(0, 0.5, 1)) +
+  geom_jitter(width = 0.0125, height = 0.01,
+              col = rgb(123, 28, 212, maxColorValue = 255)) +
+  geom_jitter(aes(y = post_rand),
+              col = rgb(28, 214, 68, 120, maxColorValue = 255),
+              width = 0.0125, height = 0.01) +
+  facet_grid(age_group ~ trial)
+```
+
+
+```{r ch042-Dreaded Monkey}
+plot_pf <- function(n, post, age_group, trt) {
+  n_smp <- 100
+  idx <- sample(1:length(post$a), n_smp, replace = TRUE)
+  
+  alpha <- with(post, a[idx] + aG[idx, age_group] + aT[idx, trt])
+  beta <- with(post, exp(b[idx] + bG[idx, age_group] + bT[idx, trt]))
+  
+  p <- tibble(x = c(-0.5, 0.5), y = c(0, 1)) %>%
+    ggplot(aes(x, y)) +
+    scale_x_continuous(breaks = seq(-0.5, 0.5, 0.1)) +
+    scale_y_continuous(breaks = c(0, 0.5, 1))
+  for (i in 1:n_smp) {
+    p <- p + geom_line(stat = "function", fun = fn, 
+                       args = list(a = alpha[i],
+                                   b = beta[i]),
+                       alpha = 0.05)
+  }
+  p
+}
+```
+
+
+```{r ch042-Forsaken Purple Moose}
+ypre <- plot_pf(100, post5_3_1, 1, 1)
+ypos <- plot_pf(100, post5_3_1, 1, 2)
+mpre <- plot_pf(100, post5_3_1, 2, 1)
+mpos <- plot_pf(100, post5_3_1, 2, 2)
+opre <- plot_pf(100, post5_3_1, 3, 1)
+opos <- plot_pf(100, post5_3_1, 3, 2)
+
+(ypre + ypos) / (mpre + mpos) / (opre + opos)
+```
+
+
+It's difficult to determine from this graph if there any difference between the age groups. Looking at the density plot of the PSS and JND across the different conditions paints a much clearer image.
+
+
+```{r ch042-Severe Lion}
+age_trt <- expand.grid(a = 1:3, t = 1:2)
+
+dat_pssjnd <- lapply(1:nrow(age_trt), function(i) {
+  a <- age_trt$a[i]
+  t <- age_trt$t[i]
+  tibble(PSS = post5_3_1$pss[,a,t],
+         JND = post5_3_1$jnd[,a,t],
+         a = a,
+         t = t)
+}) %>% do.call(what = bind_rows) %>%
+  mutate(a = factor(a, levels = 1:3, labels = levels(av_dat$age_group)),
+         t = factor(t, levels = 1:2, labels = levels(av_dat$trial))) %>%
+  rename(age_group = a, trial = t) %>%
+  tidyr::pivot_longer(c("PSS", "JND"), names_to = "Name", values_to = "Seconds")
+
+dat_pssjnd %>%
+  ggplot(aes(Seconds, fill = trial)) +
+  geom_density() +
+  scale_fill_manual("trial",
+                    values = c(rgb(29/255, 149/255, 219/255, 0.5),
+                               rgb(143/255, 19/255, 19/255, 0.5))) +
+  facet_grid(age_group ~ Name, scales = "free_x")
+```
+
+Okay what gives? The differences within and between age groups is not a separated as it was in the previous iteration. This is due to the fact that the previous model averaged over the variation at the subject level. We'll consider the task of making predictions at the different levels in the hierarchical model.
+

@@ -1,3 +1,0 @@
-# Discussion
-
-Subjective conclusions
