@@ -1,0 +1,41 @@
+```{r ch030-setup, include=FALSE}
+library(FangPsychometric)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+library(rstan)
+
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+av_dat <- local({
+  dat <- audiovisual_binomial %>%
+    filter(trial %in% c("pre", "post1"),
+           rid != "av-post1-O-f-CE") %>%
+    mutate(x = soa / 1000,
+           rid = factor(rid),
+           sid = factor(sid),
+           trial = factor(trial)) %>%
+    as.list()
+  dat$N <- length(dat$x)
+  dat$N_G <- length(levels(dat$age_group))
+  dat$N_S <- length(levels(dat$sid))
+  dat$N_T <- length(levels(dat$trial))
+  dat
+})
+```
+
+# Principled Bayesian Workflow {#workflow}
+
+- discuss what a principled workflow is
+- list the steps/flowchart
+  - pre-model, pre-data
+  - post-model, pre-data
+  - post-model, post-data
+
+## Iteration 1 (journey of a thousand miles) {#iter1}
+## Iteration 2 (electric boogaloo) {#iter2}
+## Iteration 3 (the one for me){#iter3}
+## Iteration 4 (what's one more) {#iter4}
+## Iteration 5 (final_final_draft_2.pdf) {#iter5}
+

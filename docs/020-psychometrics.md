@@ -47,7 +47,7 @@ Our experiences in life as we age shape the mechanisms of processing multisensor
 
 
 <div class="figure" style="text-align: center">
-<img src="020-motivating-data_files/figure-html/ch020-plot-ref-pf-1.png" alt="The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise." width="70%" />
+<img src="020-psychometrics_files/figure-html/ch020-plot-ref-pf-1.png" alt="The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise." width="70%" />
 <p class="caption">(\#fig:ch020-plot-ref-pf)The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise.</p>
 </div>
 
@@ -246,7 +246,7 @@ The dependent variable in these experiments is the perceived response which is e
 
 
 <div class="figure" style="text-align: center">
-<img src="020-motivating-data_files/figure-html/ch020-simple-response-soa-plot-1.png" alt="Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency." width="70%" />
+<img src="020-psychometrics_files/figure-html/ch020-simple-response-soa-plot-1.png" alt="Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency." width="70%" />
 <p class="caption">(\#fig:ch020-simple-response-soa-plot)Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency.</p>
 </div>
 
@@ -315,21 +315,21 @@ Subjectively the right plot in figure \@ref(fig:ch020-simple-response-soa-plot) 
 Other quirks about the data pertain to the subjects. There is one younger subject that did not complete the audiovisual task, and one younger subject that did not complete the duration task. Additionally there is one older subject who's response data for the post-adaptation audiovisual task is unreasonable^[By unreasonable, I mean that it is extremely unlikely that the data represents genuine responses.] (see figure \@ref(fig:ch020-av-post1-O-f-CE-plot)).
 
 <div class="figure" style="text-align: center">
-<img src="020-motivating-data_files/figure-html/ch020-av-post1-O-f-CE-plot-1.png" alt="Post-adaptation response data for O-f-CE" width="70%" />
+<img src="020-psychometrics_files/figure-html/ch020-av-post1-O-f-CE-plot-1.png" alt="Post-adaptation response data for O-f-CE" width="70%" />
 <p class="caption">(\#fig:ch020-av-post1-O-f-CE-plot)Post-adaptation response data for O-f-CE</p>
 </div>
 
 It is unreasonable because, of all the negative SOAs, there were only two correct responses^[Correct in the sense that the perceived order matches the actual order.]. If a subject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject's proportion of correct responses is above 0.5, then they are doing better than random guessing. In figure \@ref(fig:ch020-av-post-neg-trials) it is seen that subject O-f-CE is the only one who's proportion is below 0.5 (and by a considerable amount).
 
 <div class="figure" style="text-align: center">
-<img src="020-motivating-data_files/figure-html/ch020-av-post-neg-trials-1.png" alt="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment." width="70%" />
+<img src="020-psychometrics_files/figure-html/ch020-av-post-neg-trials-1.png" alt="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment." width="70%" />
 <p class="caption">(\#fig:ch020-av-post-neg-trials)Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment.</p>
 </div>
 
 The consequences of leaving in this experimental block in the data is considered in the [Chapter 5](#workflow), but it is a clear outlier that must be noted. When this method of detecting outliers is repeated for all tasks and blocks, then I end up with 17 records in total (see figure \@ref(fig:ch020-naive-prop-outliers)), one of which is the aforementioned subject.
 
 <div class="figure" style="text-align: center">
-<img src="020-motivating-data_files/figure-html/ch020-naive-prop-outliers-1.png" alt="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs." width="70%" />
+<img src="020-psychometrics_files/figure-html/ch020-naive-prop-outliers-1.png" alt="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs." width="70%" />
 <p class="caption">(\#fig:ch020-naive-prop-outliers)Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs.</p>
 </div>
 

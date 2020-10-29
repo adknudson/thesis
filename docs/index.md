@@ -1,8 +1,8 @@
 ---
-title: "Contributions to Modern Bayesian Multilevel Modeling"
-author: "Alexander Knudson"
+title: "Application of a Principaled Bayesian Workflow to Multilevel Modeling"
+author: "Alexander D. Knudson"
 advisor: "A.G. Schissler"
-date: "August, 2020"
+date: "December, 2020"
 site: bookdown::bookdown_site
 bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
@@ -12,44 +12,48 @@ github-repo: adkudson/thesis
 
 
 
-# Introduction
+# Introduction {#intro}
 
 With the advances in computational power and high-level programming languages like Python, R, and Julia, statistical methods have evolved to be more flexible and expressive. No longer must we be subjugated by p-values and step-wise regression techniques. Gone are the days of using clever modeling techniques to tame misbehaved data. Now is the time for principled and informed decisions to create bespoke models and domain-motivated analyses. We have the shoulders of giants to stand upon and look out at the vast sea of data science.
 
 I want to talk about how the advances in computational power have lead to a sort of mini revolution - resurrection - in statistics where Bayesian modeling has gained an incredible following thanks to projects like Stan. The steady adoption of computer aided statistical workflows also brings the need for multidisciplinary techniques from numerical analysis, probability theory, statistics, computer science, visualizations, and more. And with the age of computers, there is a strong push towards reproducibility. Concepts of modular design, workflows, project history and versioning, virtual environments, and human readable code all contribute to reproducible analyses. And somehow I also want to tie in how data is immutable - raw data should (must) be treated as a constant and unchangeable entity, and merely touching it will cause data mitosis.
 
+I will now segue into introducing the intent of this paper. I believe that utilizing the computational ability of modern computers helps strengthen the validity of an analysis. This is achieved by using powerful but expressive tools like Stan to write models that visually match written mathematical models. Classical statistical tools, while fast, require clever mathematics to perform certain routines such as fitting mixed effects models or the interpretation of cryptic p-values to determine if a model is "good". Instead I believe we should be moving towards probabilistic programming languages like Stan to carry out Statistical analyses.
 
+This paper is motivated by an experiment in psychometrics ([chapter 2](#motivating-data)), and by highlighting a principled workflow I seek to convince the reader that Bayesian multilevel modeling should be the default tool for modeling psychometric experiments. In the next section of this introduction, I will list classical tools for statistical modeling [of psychometric experiments] and touch on the limitations of such tools. Following that section, I will introduce the methods I use for building a model that deviate from classical methods. Throughout the paper, when appropriate, I will highlight specific examples of where classical techniques are typically applied, and how they may fall short.
 
-- Overview of classical modeling methods
-  - classical approaches to data analysis usually adhere to the flexibility-interpretability trade-off
-  - generally inflexible (parametric) to be more interpretable and computationally easier
-  - sometimes a model is too flexible (non-parametric) and loses crucial inferential power
-  - sometimes our assumptions about the data are invalid
-    - normality, independence, heteroskedacity, etc.
-  - often limited when it comes to statistical summaries and confidence intervals
+## Everything can be Blamed on Fisher {#ch010-classical-methods}
 
-Computational Power 
-  --> Importance of reproducibility and workflows
-  --> Classical modeling methods 
-    --> Problems with classical methods
-  --> Proposed solutions
+*... or Pearson, or Gauss, or ...*
 
-- Solutions or alternatives when classical models fail
-  - Bayesian inference is a powerful, descriptive, and flexible modeling framework
-  - Bayes theorem is a simple model of incorporating prior information and data to produce a posterior probability or distribution
-  - $P(\theta | X) \propto P(X | \theta) * P(\theta)$ or $posterior \propto prior \times likelihood$
-    - The prior is some distribution over the parameter space
-    - The likelihood is the probability of an outcome in the sample space given a value in the parameter space
-    - The posterior is the likelihood of values in the parameter space after observing values from the sample space
-  - Bayesian statistics, when described without math, actually feels natural to most people
-    - you hear hoof beats, you think horses, not zebras [unless you're in Africa, but that's prior information ;)]
-  - The catch is that the model is not complete as written above
-  - There is actually a denominator in Bayes' Theorem
-    - $P(\theta | X) = \frac{P(X | \theta)\cdot P(\theta)}{\sum_i P(X | \theta_i)} = \frac{P(X | \theta)\cdot P(\theta)}{\int_\Omega P(X | \theta)d\theta}$
-    - In general, the denominator is not known, or is not not easy (or possible) to calculate, but it always evaluates to a constant (hence the "proportional to")
-    - The denominator acts as a scaling value that forces $P(\theta|X)$ to be a probability distribution (i.e. area under PDF is equal to 1)
-    - There are simulation-based techniques that let one approximate the posterior distribution without needing to know the analytic solution to the denominator
+When I hear the term "regression", I instantly think about maximum likelihood estimation (MLE) of parameters. And why not? There is an endless wealth of literature on the subject of linear regression and MLE [@johnson2002applied; @larsen2005introduction; @sheather2009modern; @navidi2015statistics]. Most introductory courses on statistics and regression center around classical techniques such as MLE, hypothesis testing, and residual analysis. For the common student, learning statistical modeling in classical way can feel sterilized and mechanic. Check that the data are normal. Check that the coefficients are significantly different from zero. Check that the residuals are normal. Etc. I'm not trying to say that these methods are not important or that they are deeply flawed - it would be bad for modern society if we were just now finding out that the models are wrong. Instead, I am arguing that because they are so common and easy to apply that they are used without much extra thought.
 
+Take variable selection as an example. In a data set where there are a dozen predictors, how does one go about selecting which parameters produce the best model? Without thought, one may reach for a step-wise selection algorithm, and confidently conclude that variables $x$, $y$, and $z$ are *significant* because the p-values say so. This method does fall apart quickly because as the number of parameters grow, so too does the number of steps needed to find the best subset of variables^[The number of subsets grows exponentially with the number of parameters. Forward and backward selection steps grows quadratically.], and there is no guarantee that the algorithm actually selects the best^[I'm being intentionally vague about what I mean by "best" because what is best is determined by the application] subset. But even if the best subset of variables is found, one still needs to consider if the variables have a practical effect or if the model omitted an important variable of interest.
 
+Sure, the type of analysis is important to the techniques used. Variable selection through step-wise algorithms or penalized maximum likelihood estimation [@hoerl1970ridge; @tibshirani1996regression] may be appropriate in an exploratory data analysis, but improper for causal inference and other scientifically motivated experiments.
 
-I have organized this thesis as follows. In [Chapter 2](#motivating-data) I introduce the data set that drives the narrative and that motivates the adoption of Bayesian multilevel modeling. In [Chapter 3](#background) there is a review of common approaches approaches to modeling with psychometric data, and the benefits and drawbacks of such techniques. [Chapter 4](#bayesian-modeling) introduces Bayesian hierarchical modeling and programming frameworks for Bayesian inference. In [Chapter 5](#workflow) I describe and work through a principled Bayesian workflow for multilevel modeling. [Chapter 6](#model-checking) goes into more depth on checking the model goodness of fit and model diagnostics in a Bayesian setting. Finally in [Chapter 7](#predictive-inference) I demonstrate how to use the Bayesian model from the principled workflow for predictive inference, and use posterior predictive distributions to plot and compare models.
+<!-- TODO -->
+
+Which brings me to talk next about p-values, confidence intervals, and hypothesis testing. The concept of basing scientific results on the falsifiability [@popper1959logic] or refutability of a claim is a strong foundation for the scientific method, and is arguably much better than the previous grounds of verifiability -- just because something has been true for a very long time, doesn't mean it will always be true in the future. Hypothesis testing was developed by Pearson and Neyman
+
+Should we scrap these principals/tools? No, but we can modify them, define them, and apply them but in a Bayesian framework.
+
+<!-- End TODO -->
+
+## Proposal of New Methods {#ch010-new-methods}
+
+<!-- TODO -->
+
+- building a model by a set of principals
+- letting domain expertise motivate modeling decisions
+- utilize the computational power of Bayesian statistics
+  - flexibility
+  - inferential power
+- let multilevel models be the default
+- use the expected utility motivate decisions rather than p-values
+
+<!-- End TODO -->
+
+## Organization {#ch010-organization}
+
+I have organized this thesis as follows. In [Chapter 2](#motivating-data) I introduce the data set that drives the narrative and that motivates the adoption of Bayesian multilevel modeling. In [Chapter 3](#workflow) I describe and work through a principled Bayesian workflow for multilevel modeling. [Chapter 4](#model-checking) goes into more depth on checking the model goodness of fit and model diagnostics in a Bayesian setting. In [Chapter 5](#predictive-inference) I demonstrate how to use the Bayesian model from the principled workflow for predictive inference, and use posterior predictive distributions to plot and compare models. Chapters [5](#) and [6](#) go over the quantitative results and discuss the qualitative choices in the workflow. Then I conclude this paper in [Chapter 7](#conclusion).

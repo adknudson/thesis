@@ -1,6 +1,6 @@
 # Background and Motivating Data {#motivating-data}
 
-```{r ch020-setup, include=FALSE, cache=FALSE}
+```{r ch020-setup, include=FALSE}
 library(FangPsychometric)
 library(tidyverse)
 library(patchwork)
