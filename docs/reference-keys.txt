@@ -7,6 +7,7 @@ tab:ch020-av-bin-sample
 fig:ch020-av-post1-O-f-CE-plot
 fig:ch020-av-post-neg-trials
 fig:ch020-naive-prop-outliers
+eq:bayesthm
 intro
 ch010-classical-methods
 ch010-new-methods

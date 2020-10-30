@@ -178,9 +178,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="workflow" class="section level1">
 <h1><span class="header-section-number">3</span> Principled Bayesian Workflow</h1>
 <p><em>The meat, the cheese, the entire sandwich</em></p>
-<p>Leading up to now, I haven’t discussed what is a principled Bayesian workflow, nor what multilevel modeling is. I was hoping to build up the suspense. Well I hope you’re now ready for the answer. A principled Bayesian workflow is a method of employing domain expertise and statistical knowledge to iteratively build a statistical model that satisfies the constraints and goals set forth by the researcher. Oh, and Bayesian techniques are used in exchange for classical ones.</p>
+<p>Leading up to now, I haven’t discussed what is a principled Bayesian workflow, nor what multilevel modeling is. I was hoping to build up the suspense. Well I hope you’re now ready for the answer. A principled Bayesian workflow is a method of employing domain expertise and statistical knowledge to iteratively build a statistical model that satisfies the constraints and goals set forth by the researcher. Oh, and Bayesian techniques are used in exchange for classical ones. Maybe not worth the suspense, but the simple idea spawns a creative and descriptive way to analyze data.</p>
 <p>What about the multilevel aspect? While I get into that more in the following sections, the concept is simple. Multilevel models should be the default. The alternatives are models with complete pooling, or models with no pooling. Pooling vs. no pooling is a fancy way of saying that all the data is modeled as a whole, or the smallest component (group) is modeled individually. The former implies that the variation between groups is zero (all groups are the same), and the latter implies that the variation between groups is infinite (no groups are the same). Multilevel models assume that the truth is somewhere in the middle of zero and infinity. That’s not a difficult thing to posit.</p>
 <p>Hierarchical models are a specific kind of multilevel model where one or more groups are nested within a larger one. In the case of the psychometric data, there are three age groups, and within each age group are individual subjects. Multilevel modeling provides a way to quantify and apportion the variation within the data to each level in the model. For an in-depth introduction to multilevel modeling, see <span class="citation">Gelman and Hill (<a href="#ref-gelman2006data" role="doc-biblioref">2006</a>)</span>.</p>
+<p>There are many great resources out there for following along with an analysis of some data or problem, and much more is the abundance of tips, tricks, techniques, and testimonies to good modeling practices. The problem is that many of these prescriptions are given without context for when they are appropriate to be taken. According to <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span>, this leaves “practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics.” The concept of a principled workflow is that for any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather great consideration must be given to domain expertise and the questions that one is trying to answer with the data.</p>
+<p>Since everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in how consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by:</p>
+<ol style="list-style-type: decimal">
+<li>Domain Expertise Consistency - Is our model consistent with our domain expertise?</li>
+<li>Computational Faithfulness - Will our computational tools be sufficient to accurately fit our posteriors?</li>
+<li>Inferential Adequacy - Will our inferences provide enough information to answer our questions?</li>
+<li>Model Adequacy - Is our model rich enough to capture the relevant structure of the true data generating process?</li>
+</ol>
+<p>Like any good Bayesian<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>, much work is done before seeing the data or building a model. This may include talking with experts to gain domain knowledge or to <em>elicit priors</em>. Experts may know something about a particular measure, perhaps the mean or variability of the data from years of research, and different experts may provide different estimates of a measure. The benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the <em>posterior distribution</em>. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints. Consistency is key.</p>
+<p>The computational tool I will be using to estimate the posterior is a probabilistic programming language (PPL) called Stan <span class="citation">(Guo et al. <a href="#ref-R-rstan" role="doc-biblioref">2020</a>)</span>. Stan uses the No U-Turn Sampler (NUTS) version of Hamiltonian Monte Carlo (HMC). For a gentle introduction to Bayesian statistics and sampling methods, see <span class="citation">Bolstad and Curran (<a href="#ref-bolstad2016introduction" role="doc-biblioref">2016</a>)</span>, and for an in-depth review of HMC see <span class="citation">Betancourt (<a href="#ref-betancourt2017conceptual" role="doc-biblioref">2017</a>)</span>.</p>
+<p>Why do we need a sampler at all? Bayesian statistics and modeling stems from Bayes theorem (Equation <a href="workflow.html#eq:bayesthm">(3.1)</a>). The prior <span class="math inline">\(P(\theta)\)</span> is some distribution over the parameter space and the likelihood <span class="math inline">\(P(X | \theta)\)</span> is the probability of an outcome in the sample space given a value in the parameter space. To keep things simple, we generally say that the posterior is proportional to the prior times the likelihood. Why proportional? The posterior distribution is a probability distribution, which means that the sum or integral over the parameter space must evaluate to one. Because of this constraint, the denominator in <a href="workflow.html#eq:bayesthm">(3.1)</a> acts as a scale factor to ensure that the posterior is valid. Often it happens that the integral in the denominator is complex or of a high dimension. In the former situation, the integral may not be possible to evaluate, and in the latter there may not be enough computational resources in the world to perform a simple grid approximation.</p>
+<p><span class="math display" id="eq:bayesthm">\[\begin{equation}
+  P(\theta | X) = \frac{P(X | \theta)\cdot P(\theta)}{\sum_i P(X | \theta_i)} =   \frac{P(X | \theta)\cdot P(\theta)}{\int_\Omega P(X | \theta)d\theta}
+  \tag{3.1}
+\end{equation}\]</span></p>
+<p>The solution is to use Markov Chain Monte Carlo (MCMC). The idea is that we can <em>draw samples</em> from the posterior distribution in a way that samples proportionally to the density. This sampling is a form of approximation to the area under the curve (i.e. an approximation to the denominator in <a href="workflow.html#eq:bayesthm">(3.1)</a>). Rejection sampling <span class="citation">(Gilks and Wild <a href="#ref-gilks1992adaptive" role="doc-biblioref">1992</a>)</span> and slice sampling <span class="citation">(Neal <a href="#ref-neal2003slice" role="doc-biblioref">2003</a>)</span> are basic methods for sampling from a target distribution, however they can often be inefficient<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>. NUTS is a much more complex algorithm that can be compared to a physics simulation. A massless “particle” is flicked in a random direction with some amount of kinetic energy in a probability field, and is stopped randomly. The stopping point is the new proposal sample. The No U-Turn part means that when the algorithm detects that the particle is turning around, it will stop so as not to return to the starting position. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that let us know when the sampler is having trouble efficiently exploring the posterior.</p>
 <!-- TODO -->
 <ul>
 <li>discuss what a principled workflow is</li>
@@ -211,9 +227,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <h3>References</h3>
 <div id="refs" class="references">
+<div id="ref-betancourt2017conceptual">
+<p>Betancourt, Michael. 2017. “A Conceptual Introduction to Hamiltonian Monte Carlo.” <em>arXiv Preprint arXiv: 1701.02434</em>.</p>
+</div>
+<div id="ref-betancourt2020">
+<p>Betancourt, Michael. 2020. “Towards a Principled Bayesian Workflow.” <em>Betanalpha</em>. <a href="betanalpha.github.io">betanalpha.github.io</a>.</p>
+</div>
+<div id="ref-bolstad2016introduction">
+<p>Bolstad, William M, and James M Curran. 2016. <em>Introduction to Bayesian Statistics</em>. John Wiley &amp; Sons.</p>
+</div>
 <div id="ref-gelman2006data">
 <p>Gelman, Andrew, and Jennifer Hill. 2006. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. Cambridge university press.</p>
 </div>
+<div id="ref-gilks1992adaptive">
+<p>Gilks, Walter R, and Pascal Wild. 1992. “Adaptive Rejection Sampling for Gibbs Sampling.” <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em> 41 (2): 337–48.</p>
+</div>
+<div id="ref-R-rstan">
+<p>Guo, Jiqiang, Jonah Gabry, Ben Goodrich, and Sebastian Weber. 2020. <em>Rstan: R Interface to Stan</em>. <a href="https://CRAN.R-project.org/package=rstan">https://CRAN.R-project.org/package=rstan</a>.</p>
+</div>
+<div id="ref-neal2003slice">
+<p>Neal, Radford M. 2003. “Slice Sampling.” <em>Annals of Statistics</em>, 705–41.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="6">
+<li id="fn6"><p>The opposite of a Frequentist.<a href="workflow.html#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>Efficiency of a sampler is related to the proportion of proposal samples that get accepted.<a href="workflow.html#fnref7" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
