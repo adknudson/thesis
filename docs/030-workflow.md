@@ -2,11 +2,15 @@
 
 # Principled Bayesian Workflow {#workflow}
 
+<!-- TODO -->
+
 - discuss what a principled workflow is
 - list the steps/flowchart
   - pre-model, pre-data
   - post-model, pre-data
   - post-model, post-data
+
+<!-- END TODO -->
 
 ## Iteration 1 (journey of a thousand miles) {#iter1}
 ## Iteration 2 (electric boogaloo) {#iter2}

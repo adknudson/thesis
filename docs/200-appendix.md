@@ -52,7 +52,6 @@ data{
     int k[N];
     int G1[N];
     int G2[N];
-    int trt[N];
     vector[N] x;
 }
 parameters{
@@ -79,7 +78,7 @@ model{
     sd_aG2 ~ cauchy(0, 10);
     sd_bG1 ~ cauchy(0, 10);
     sd_bG2 ~ cauchy(0, 10);
-    for ( i in 1:N ) {
+    for (i in 1:N) {
         p[i] = (a + aG1[G1[i]] + aG2[G2[i]]) + (b + bG1[G1[i]] + bG2[G2[i]]) * x[i];
     }
     k ~ binomial_logit(n , p);
