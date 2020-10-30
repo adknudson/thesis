@@ -38,77 +38,46 @@ The question of inferential adequacy depends on the set of questions that we are
 
 For the last question, model adequacy, I will be following a set of steps proposed in @betancourt2020. The purpose of laying out these steps is not to again blindly check them off, but to force the analyst to carefully consider each point and make an _informed_ decision whether the step is necessary or to craft the specifics of how the step should be completed. The steps are listed in table \@ref(tab:ch030-workflow-steps). These steps are also not meant to be followed linearly. If at any point it is discovered that there is an issue in conceptual understanding or model adequacy or something else, then it is encouraged to go back to a previous step and start with a new understanding.
 
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:ch030-workflow-steps)Principled workflow</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Part </th>
-   <th style="text-align:left;"> Step </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="3"> Pre-Model, Pre-Data </td>
-   <td style="text-align:left;"> conceptual analysis </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> define observational space </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> construct summary statistics </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="8"> Post-Model, Pre-Data </td>
-   <td style="text-align:left;"> develop model </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> construct summary functions </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> simulate Bayesian ensemble </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> prior checks </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> configure algorithm </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> fit simulated ensemble </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> algorithmic calibration </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> inferential calibration </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> Post-Model, Post-Data </td>
-   <td style="text-align:left;"> fit observed data </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> diagnose posterior fit </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> posterior retrodictive checks </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> celebrate </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}[!h]
+
+\caption{(\#tab:ch030-workflow-steps)Principled workflow}
+\centering
+\begin{tabular}[t]{ll}
+\toprule
+Part & Step\\
+\midrule
+ & conceptual analysis\\
+\cmidrule{2-2}
+ & define observational space\\
+\cmidrule{2-2}
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Pre-Model, Pre-Data} & construct summary statistics\\
+\cmidrule{1-2}
+ & develop model\\
+\cmidrule{2-2}
+ & construct summary functions\\
+\cmidrule{2-2}
+ & simulate Bayesian ensemble\\
+\cmidrule{2-2}
+ & prior checks\\
+\cmidrule{2-2}
+ & configure algorithm\\
+\cmidrule{2-2}
+ & fit simulated ensemble\\
+\cmidrule{2-2}
+ & algorithmic calibration\\
+\cmidrule{2-2}
+\multirow[t]{-8}{*}{\raggedright\arraybackslash Post-Model, Pre-Data} & inferential calibration\\
+\cmidrule{1-2}
+ & fit observed data\\
+\cmidrule{2-2}
+ & diagnose posterior fit\\
+\cmidrule{2-2}
+ & posterior retrodictive checks\\
+\cmidrule{2-2}
+\multirow[t]{-4}{*}{\raggedright\arraybackslash Post-Model, Post-Data} & celebrate\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 I'll talk about each step in the first iteration, but may choose to omit steps in subsequent iterations if there are no changes. For the purposes of building a model and being concise, I will focus around the audiovisual TOJ task in this chapter, but the final model will apply similarly to the visual and duration tasks. For the sensorimotor task, the model will be modified to accept Bernoulli data as apposed to aggregated Binomial counts (described more in the next section).
 
@@ -190,18 +159,28 @@ In order to effectively challenge the validity of the model, a set of summary st
 
 By the experimental setup and recording process, it is impossible that a properly conducted block would result in a JND less than 0 (i.e. the psychometric function is always non-decreasing), so that can be a lower limit for its threshold. On the other end it is unlikely that it will be beyond the limits of the SOA values, but even more concrete, it seems unlikely (though not impossible) that the just noticeable difference would be more than a second.
 
-The lower bound on the JND can be further refined if we draw information from other sources. Some studies show that we cannot perceive time differences below 30 ms, and others show that an input lag as small as 100ms can impair a person's typing ability. Then according to these studies, a time delay of 100ms is enough to notice, and so a just noticeable difference should be much less than one second.
+The lower bound on the JND can be further refined if we draw information from other sources. Some studies show that we cannot perceive time differences below 30 ms, and others show that an input lag as small as 100ms can impair a person's typing ability. Then according to these studies, a time delay of 100ms is enough to notice, and so a just noticeable difference should be much less than one second -- much closer to 100ms. I'll continue to use one second as an extreme estimate indicator, but will incorporate this knowledge when it comes to selecting priors.
 
 As for the point of subjective simultaneity, it can be either positive or negative, with the belief that larger values are more rare. Some studies suggest that for audio-visual TOJ tasks, the separation between stimuli need to be as little as 20 milliseconds for subjects to be able to determine which modality came first [@vatakis2007influence]. Other studies suggest that our brains can detect temporal differences as small as 30 milliseconds. If these values are to be believed then we should be skeptical of PSS estimates larger than say 150 milliseconds in absolute value, just to be safe.
 
-A histogram of computed PSS and JND values will suffice for summary statistics. We can estimate the proportion of values that fall outside of our limits defined above, and use them as indications of problems with the model fitting or our conceptual understanding.
-
-
-
+A histogram of computed PSS and JND values will suffice for summary statistics. We can estimate the proportion of values that fall outside of our limits defined above, and use them as indications of problems with the model fitting or conceptual understanding.
 
 **post-model, pre-data**
 
+It is now time to define priors for the model, while still not having looked at the [distribution of] data. The priors should be motivated by domain expertise and *prior knowledge*, not the data. There are also many choices when it comes to selecting a psychometric (sigmoid) function. Common ones are logistic, Gaussian, and Weibull.
+
+
+
+\begin{center}\includegraphics[width=0.7\linewidth]{030-workflow_files/figure-latex/ch031-Eastern Needless Autopsy-1} \end{center}
+
+
+The Weibull psychometric function is more common when it comes to 2-AFC psychometric experiments where the independent variable is a stimulus intensity (non-negative) and the goal is signal detection. The data in this paper includes both positive and negative SOA values, so the Weibull is not a natural choice. In fact, because this is essentially a model for logistic regression, my first choice is the logistic function as it is the canonical choice for Binomial data. Additionally, the data in this study are reversible. The label of a positive response can be swapped with the label of a negative response and the inferences should remain the same. Since there is no natural ordering, it makes more sense for the psychometric function to be symmetric, e.g. the logistic and Gaussian. I use symmetric loosely to mean that probability density function (PDF) is symmetric about its middle. More specifically, the distribution has zero skewness.
+
+In practice, there is little difference in inference between the _logit_ and _probit_ links, but computationally the logit link is more efficient. I am also more familiar with working on the log-odds scale compared to the probit scale, so I make the decision to go forward with the logistic function. In [chapter 4](#model-checking) I will show how even with a mis-specified link function, we can still achieve accurate predictions.
+
 _develop model_
+
+
 
 _construct summary functions_
 

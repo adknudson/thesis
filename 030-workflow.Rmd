@@ -131,7 +131,7 @@ Then there are also three categorical variables -- age group, subject ID, and tr
 Age groups and individual subjects can be indexed in the same way that number of trials is indexed. $S_i$ refers to the subject in record $i$, and similarly $G_i$ refers to the age group of that subject. Observation 63 is for record ID `r FangPsychometric::audiovisual_binomial$rid[63]`, so then $S_{63}$ is `r FangPsychometric::audiovisual_binomial$sid[63]` and $G_{63}$ is `r FangPsychometric::audiovisual_binomial$age_group[63]`. Under the hood of R, these factor levels are represented as integers (e.g. middle age group level is stored internally as the number 2).
 
 
-```{r ch030-Olive Longitude, echo=TRUE}
+```{r ch031-Olive Longitude, echo=TRUE}
 (x <- factor(c("a", "a", "b", "c")))
 storage.mode(x)
 ```
@@ -167,18 +167,38 @@ In order to effectively challenge the validity of the model, a set of summary st
 
 By the experimental setup and recording process, it is impossible that a properly conducted block would result in a JND less than 0 (i.e. the psychometric function is always non-decreasing), so that can be a lower limit for its threshold. On the other end it is unlikely that it will be beyond the limits of the SOA values, but even more concrete, it seems unlikely (though not impossible) that the just noticeable difference would be more than a second.
 
-The lower bound on the JND can be further refined if we draw information from other sources. Some studies show that we cannot perceive time differences below 30 ms, and others show that an input lag as small as 100ms can impair a person's typing ability. Then according to these studies, a time delay of 100ms is enough to notice, and so a just noticeable difference should be much less than one second.
+The lower bound on the JND can be further refined if we draw information from other sources. Some studies show that we cannot perceive time differences below 30 ms, and others show that an input lag as small as 100ms can impair a person's typing ability. Then according to these studies, a time delay of 100ms is enough to notice, and so a just noticeable difference should be much less than one second -- much closer to 100ms. I'll continue to use one second as an extreme estimate indicator, but will incorporate this knowledge when it comes to selecting priors.
 
 As for the point of subjective simultaneity, it can be either positive or negative, with the belief that larger values are more rare. Some studies suggest that for audio-visual TOJ tasks, the separation between stimuli need to be as little as 20 milliseconds for subjects to be able to determine which modality came first [@vatakis2007influence]. Other studies suggest that our brains can detect temporal differences as small as 30 milliseconds. If these values are to be believed then we should be skeptical of PSS estimates larger than say 150 milliseconds in absolute value, just to be safe.
 
-A histogram of computed PSS and JND values will suffice for summary statistics. We can estimate the proportion of values that fall outside of our limits defined above, and use them as indications of problems with the model fitting or our conceptual understanding.
-
-
-
+A histogram of computed PSS and JND values will suffice for summary statistics. We can estimate the proportion of values that fall outside of our limits defined above, and use them as indications of problems with the model fitting or conceptual understanding.
 
 **post-model, pre-data**
 
+It is now time to define priors for the model, while still not having looked at the [distribution of] data. The priors should be motivated by domain expertise and *prior knowledge*, not the data. There are also many choices when it comes to selecting a psychometric (sigmoid) function. Common ones are logistic, Gaussian, and Weibull.
+
+
+```{r ch031-Eastern Needless Autopsy}
+ggplot(data.frame(x = c(-6, 6), y = c(0, 1)), aes(x, y)) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.17, 0.75)) +
+  stat_function(aes(linetype = "Logistic"), fun = plogis) +
+  stat_function(aes(linetype = "Gaussian"), fun = pnorm) +
+  stat_function(aes(linetype = "Weibull"), 
+                fun = pweibull, args = list(shape = 3)) +
+  labs(title = "Assortment of Psychometric Functions") 
+```
+
+
+The Weibull psychometric function is more common when it comes to 2-AFC psychometric experiments where the independent variable is a stimulus intensity (non-negative) and the goal is signal detection. The data in this paper includes both positive and negative SOA values, so the Weibull is not a natural choice. In fact, because this is essentially a model for logistic regression, my first choice is the logistic function as it is the canonical choice for Binomial data. Additionally, the data in this study are reversible. The label of a positive response can be swapped with the label of a negative response and the inferences should remain the same. Since there is no natural ordering, it makes more sense for the psychometric function to be symmetric, e.g. the logistic and Gaussian. I use symmetric loosely to mean that probability density function (PDF) is symmetric about its middle. More specifically, the distribution has zero skewness.
+
+In practice, there is little difference in inference between the _logit_ and _probit_ links, but computationally the logit link is more efficient. I am also more familiar with working on the log-odds scale compared to the probit scale, so I make the decision to go forward with the logistic function. In [chapter 4](#model-checking) I will show how even with a mis-specified link function, we can still achieve accurate predictions.
+
 _develop model_
+
+
 
 _construct summary functions_
 
