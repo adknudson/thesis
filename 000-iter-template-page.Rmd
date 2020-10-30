@@ -1,0 +1,37 @@
+## Iteration k () {#iterk}
+
+**pre-model, pre-data**
+
+_conceptual analysis_
+
+_define observational space_
+
+_construct summary statistics_
+
+**post-model, pre-data**
+
+_develop model_
+
+_construct summary functions_
+
+_simulate Bayesian ensemble_
+
+_prior checks_
+
+_configure algorithm_
+
+_fit simulated ensemble_
+
+_algorithmic calibration_
+
+_inferential calibration_
+
+**post-model, post-data**
+
+_fit observed data_
+
+_diagnose posterior fit_
+
+_posterior retrodictive checks_
+
+_celebrate_

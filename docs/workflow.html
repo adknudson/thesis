@@ -149,6 +149,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.3" data-path="workflow.html"><a href="workflow.html#iter3"><i class="fa fa-check"></i><b>3.3</b> Iteration 3 (the one for me)</a></li>
 <li class="chapter" data-level="3.4" data-path="workflow.html"><a href="workflow.html#iter4"><i class="fa fa-check"></i><b>3.4</b> Iteration 4 (what’s one more)</a></li>
 <li class="chapter" data-level="3.5" data-path="workflow.html"><a href="workflow.html#iter5"><i class="fa fa-check"></i><b>3.5</b> Iteration 5 (final_final_draft_2.pdf)</a></li>
+<li class="chapter" data-level="3.6" data-path="workflow.html"><a href="workflow.html#celebrate"><i class="fa fa-check"></i><b>3.6</b> Celebrate</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>4</b> Model Checking</a></li>
 <li class="chapter" data-level="5" data-path="predictive-inferences.html"><a href="predictive-inferences.html"><i class="fa fa-check"></i><b>5</b> Predictive Inference</a></li>
@@ -190,38 +191,263 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Model Adequacy - Is our model rich enough to capture the relevant structure of the true data generating process?</li>
 </ol>
 <p>Like any good Bayesian<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>, much work is done before seeing the data or building a model. This may include talking with experts to gain domain knowledge or to <em>elicit priors</em>. Experts may know something about a particular measure, perhaps the mean or variability of the data from years of research, and different experts may provide different estimates of a measure. The benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the <em>posterior distribution</em>. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints. Consistency is key.</p>
-<p>The computational tool I will be using to estimate the posterior is a probabilistic programming language (PPL) called Stan <span class="citation">(Guo et al. <a href="#ref-R-rstan" role="doc-biblioref">2020</a>)</span>. Stan uses the No U-Turn Sampler (NUTS) version of Hamiltonian Monte Carlo (HMC). For a gentle introduction to Bayesian statistics and sampling methods, see <span class="citation">Bolstad and Curran (<a href="#ref-bolstad2016introduction" role="doc-biblioref">2016</a>)</span>, and for an in-depth review of HMC see <span class="citation">Betancourt (<a href="#ref-betancourt2017conceptual" role="doc-biblioref">2017</a>)</span>.</p>
+<p>The computational tool I will be using to estimate the posterior is a probabilistic programming language (PPL) called Stan <span class="citation">(Guo et al. <a href="#ref-R-rstan" role="doc-biblioref">2020</a>)</span> within the R programming language. Stan uses the No U-Turn Sampler (NUTS) version of Hamiltonian Monte Carlo (HMC). For a gentle introduction to Bayesian statistics and sampling methods, see <span class="citation">Bolstad and Curran (<a href="#ref-bolstad2016introduction" role="doc-biblioref">2016</a>)</span>, and for an in-depth review of HMC see <span class="citation">Betancourt (<a href="#ref-betancourt2017conceptual" role="doc-biblioref">2017</a>)</span>.</p>
 <p>Why do we need a sampler at all? Bayesian statistics and modeling stems from Bayes theorem (Equation <a href="workflow.html#eq:bayesthm">(3.1)</a>). The prior <span class="math inline">\(P(\theta)\)</span> is some distribution over the parameter space and the likelihood <span class="math inline">\(P(X | \theta)\)</span> is the probability of an outcome in the sample space given a value in the parameter space. To keep things simple, we generally say that the posterior is proportional to the prior times the likelihood. Why proportional? The posterior distribution is a probability distribution, which means that the sum or integral over the parameter space must evaluate to one. Because of this constraint, the denominator in <a href="workflow.html#eq:bayesthm">(3.1)</a> acts as a scale factor to ensure that the posterior is valid. Often it happens that the integral in the denominator is complex or of a high dimension. In the former situation, the integral may not be possible to evaluate, and in the latter there may not be enough computational resources in the world to perform a simple grid approximation.</p>
 <p><span class="math display" id="eq:bayesthm">\[\begin{equation}
   P(\theta | X) = \frac{P(X | \theta)\cdot P(\theta)}{\sum_i P(X | \theta_i)} =   \frac{P(X | \theta)\cdot P(\theta)}{\int_\Omega P(X | \theta)d\theta}
   \tag{3.1}
 \end{equation}\]</span></p>
-<p>The solution is to use Markov Chain Monte Carlo (MCMC). The idea is that we can <em>draw samples</em> from the posterior distribution in a way that samples proportionally to the density. This sampling is a form of approximation to the area under the curve (i.e. an approximation to the denominator in <a href="workflow.html#eq:bayesthm">(3.1)</a>). Rejection sampling <span class="citation">(Gilks and Wild <a href="#ref-gilks1992adaptive" role="doc-biblioref">1992</a>)</span> and slice sampling <span class="citation">(Neal <a href="#ref-neal2003slice" role="doc-biblioref">2003</a>)</span> are basic methods for sampling from a target distribution, however they can often be inefficient<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>. NUTS is a much more complex algorithm that can be compared to a physics simulation. A massless “particle” is flicked in a random direction with some amount of kinetic energy in a probability field, and is stopped randomly. The stopping point is the new proposal sample. The No U-Turn part means that when the algorithm detects that the particle is turning around, it will stop so as not to return to the starting position. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that let us know when the sampler is having trouble efficiently exploring the posterior.</p>
-<!-- TODO -->
-<ul>
-<li>discuss what a principled workflow is</li>
-<li>list the steps/flowchart
-<ul>
-<li>pre-model, pre-data</li>
-<li>post-model, pre-data</li>
-<li>post-model, post-data</li>
-</ul></li>
-</ul>
-<!-- END TODO -->
+<p>The solution is to use Markov Chain Monte Carlo (MCMC). The idea is that we can <em>draw samples</em> from the posterior distribution in a way that samples proportionally to the density. This sampling is a form of approximation to the area under the curve (i.e. an approximation to the denominator in <a href="workflow.html#eq:bayesthm">(3.1)</a>). Rejection sampling <span class="citation">(Gilks and Wild <a href="#ref-gilks1992adaptive" role="doc-biblioref">1992</a>)</span> and slice sampling <span class="citation">(Neal <a href="#ref-neal2003slice" role="doc-biblioref">2003</a>)</span> are basic methods for sampling from a target distribution, however they can often be inefficient<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>. NUTS is a much more complex algorithm that can be compared to a physics simulation. A massless “particle” is flicked in a random direction with some amount of kinetic energy in a probability field, and is stopped randomly. The stopping point is the new proposal sample. The No U-Turn part means that when the algorithm detects that the particle is turning around, it will stop so as not to return to the starting position. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that let us know when the sampler is having trouble efficiently exploring the posterior. I’ll talk more about these diagnostic tools throughout the remaining sections and in <a href="model-checking.html#model-checking">chapter 4</a>.</p>
+<p>The question of inferential adequacy depends on the set of questions that we are seeking to answer with the data from the psychometric experiment. The broad objective is to determine if there are any significant differences between age groups when it comes to temporal sensitivity, perceptual synchrony, and temporal recalibration, and if the task influences the results as well. The specific goals are to estimate and compare the PSS an JND across all age groups, conditions, and tasks, and determine the affect of recalibration between age groups.</p>
+<p>For the last question, model adequacy, I will be following a set of steps proposed in <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span>. The purpose of laying out these steps is not to again blindly check them off, but to force the analyst to carefully consider each point and make an <em>informed</em> decision whether the step is necessary or to craft the specifics of how the step should be completed. The steps are listed in table <a href="workflow.html#tab:ch030-workflow-steps">3.1</a>. These steps are also not meant to be followed linearly. If at any point it is discovered that there is an issue in conceptual understanding or model adequacy or something else, then it is encouraged to go back to a previous step and start with a new understanding.</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:ch030-workflow-steps">Table 3.1: </span>Principled workflow
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Part
+</th>
+<th style="text-align:left;">
+Step
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;vertical-align: top !important;" rowspan="3">
+Pre-Model, Pre-Data
+</td>
+<td style="text-align:left;">
+conceptual analysis
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+define observational space
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+construct summary statistics
+</td>
+</tr>
+<tr>
+<td style="text-align:left;vertical-align: top !important;" rowspan="8">
+Post-Model, Pre-Data
+</td>
+<td style="text-align:left;">
+develop model
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+construct summary functions
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+simulate Bayesian ensemble
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+prior checks
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+configure algorithm
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+fit simulated ensemble
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+algorithmic calibration
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+inferential calibration
+</td>
+</tr>
+<tr>
+<td style="text-align:left;vertical-align: top !important;" rowspan="4">
+Post-Model, Post-Data
+</td>
+<td style="text-align:left;">
+fit observed data
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+diagnose posterior fit
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+posterior retrodictive checks
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+celebrate
+</td>
+</tr>
+</tbody>
+</table>
+<p>I’ll talk about each step in the first iteration, but may choose to omit steps in subsequent iterations if there are no changes. For the purposes of building a model and being concise, I will focus around the audiovisual TOJ task in this chapter, but the final model will apply similarly to the visual and duration tasks. For the sensorimotor task, the model will be modified to accept Bernoulli data as apposed to aggregated Binomial counts (described more in the next section).</p>
 <div id="iter1" class="section level2">
 <h2><span class="header-section-number">3.1</span> Iteration 1 (journey of a thousand miles)</h2>
+<p><strong>pre-model, pre-data</strong></p>
+<p>I begin the modeling process by modeling the experiment according to the description of how it occurred and how the data were collected. This first part consists of conceptual analysis, defining the observational space, and constructing summary statistics that can help us to identify issues in the model specification.</p>
+<p><em>conceptual analysis</em></p>
+<p>In section <a href="motivating-data.html#toj-task">2.2</a> I discussed the experimental setup and data collection. To reiterate, subjects are presented with two stimuli separated by some temporal delay, and they are asked to respond as to their perception of the temporal order. There are 45 subjects with 15 each in the young, middle, and older age groups. As the SOA becomes larger in the positive direction, subjects are expected to give more “positive” responses, and as the SOA becomes larger in the negative direction, more “negative” responses are expected. By the way the experiment and responses are constructed, there is no expectation to see a reversal of this trend unless there was an issue with the subject’s understanding of the directions given to them or an error in the recording device.</p>
+<p>After the first experimental block the subjects go through a recalibration period, and repeat the experiment again. The interest is in seeing if the recalibration has an effect on temporal sensitivity and perceptual synchrony, and if the effect is different for each age group.</p>
+<p><em>define observational space</em></p>
+<p>The response that subjects give during a TOJ task is recorded as a zero or a one (see section <a href="motivating-data.html#toj-task">2.2</a>), and their relative performance is determined by the SOA value. Let <span class="math inline">\(y\)</span> represent the binary outcome of a trial and let <span class="math inline">\(x\)</span> be the SOA value.</p>
+<p><span class="math display">\[\begin{align*}
+y_i &amp;\in \lbrace 0, 1\rbrace \\
+x_i &amp;\in \mathbb{R}
+\end{align*}\]</span></p>
+<p>If the SOA values are fixed like in the audiovisual task, then the responses can be aggregated into binomial counts, <span class="math inline">\(k\)</span>.</p>
+<p><span class="math display">\[
+k_i, n_i \in \mathbb{Z}_0^+, k_i \le n_i
+\]</span></p>
+<p>In the above expression, <span class="math inline">\(\mathbb{Z}_0^+\)</span> represents the set of non-negative integers. Notice that the number of trials <span class="math inline">\(n\)</span> has an index variable <span class="math inline">\(i\)</span>. This is because the number of trials per SOA is not fixed between blocks. In the pre-adaptation block, there are five trials per SOA compared to three in the post-adaptation block. So if observation 32 is recorded during a “pre” block, <span class="math inline">\(n_{32} = 5\)</span>, and if observation 1156 is during a “post” block, <span class="math inline">\(n_{1156} = 3\)</span>. Of course this is assuming that each subject completed all trials in the block, but the flexibility of the indexing can manage even if they didn’t.</p>
+<p>Then there are also three categorical variables – age group, subject ID, and trial (block). The first two are treated as factor variables<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>. Rather than using one-hot encoding or dummy variables, the age levels are left as categories and a coefficient is fit for each level. Among the benefits of this approach is the ease of interpretation and ease of working with the data programmatically. This is especially true at the subject level. If a dummy variables was used for all 45 subjects, we would have 44 different dummy variables to work with times the number of coefficients that make estimates at the subject level. The number of parameters in the model grows rapidly as the model complexity grows.</p>
+<p>Age groups and individual subjects can be indexed in the same way that number of trials is indexed. <span class="math inline">\(S_i\)</span> refers to the subject in record <span class="math inline">\(i\)</span>, and similarly <span class="math inline">\(G_i\)</span> refers to the age group of that subject. Observation 63 is for record ID av-post1-M-f-HG, so then <span class="math inline">\(S_{63}\)</span> is M-f-HG and <span class="math inline">\(G_{63}\)</span> is middle_age. Under the hood of R, these factor levels are represented as integers (e.g. middle age group level is stored internally as the number 2).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="workflow.html#cb1-1"></a>(x &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>)))</span>
+<span id="cb1-2"><a href="workflow.html#cb1-2"></a><span class="co">#&gt; [1] a a b c</span></span>
+<span id="cb1-3"><a href="workflow.html#cb1-3"></a><span class="co">#&gt; Levels: a b c</span></span>
+<span id="cb1-4"><a href="workflow.html#cb1-4"></a><span class="kw">storage.mode</span>(x)</span>
+<span id="cb1-5"><a href="workflow.html#cb1-5"></a><span class="co">#&gt; [1] &quot;integer&quot;</span></span></code></pre></div>
+<p>This data storage representation can later be exploited for the Stan model.</p>
+<p>The pre- and post-adaptation categories are treated as a binary indicator referred to as <span class="math inline">\(trt\)</span> (short for treatment) since there are only two levels in the category. In this setup, a value of 1 indicates a post-adaptation block. I chose this encoding over the reverse because the pre-adaptation block is like the baseline performance, and it seemed more appropriate to interpret the post-adaptation block as turning on some effect. Using a binary indicator in a regression setting may not be the best practice as I discuss in section <a href="workflow.html#iter2">3.2</a>.</p>
+<p>In the Stan modeling language, data for a binomial model with subject and age group levels and treatment is specified as</p>
+
+<pre><code>data {
+  int N;        // Number of observations
+  int N_S;      // Number of subject levels
+  int N_G;      // Number of age group levels
+  int N_T;      // Number of treatment/control groups
+  int n[N];     // Trials per SOA
+  int k[N];     // binomial counts
+  vector[N] x;  // SOA values
+  int S[N];     // Subject identifier
+  int G[N];     // Age group identifier
+  int trt[N];   // Treatment indicator
+}</code></pre>
+
+<p>In Stan (and unlike in R), data types must be statically declared. While sometimes a nuisance, this requirement aids in something called <em>type inference</em>, and also lets Stan optimize certain parts of the model.</p>
+<p><em>construct summary statistics</em></p>
+<p>In order to effectively challenge the validity of the model, a set of summary statistics are constructed that help answer the questions of domain expertise consistency and model adequacy. We are studying the affects of age and temporal recalibration through the PSS and JND (see section <a href="motivating-data.html#psycho-experiments">2.1</a>), so it is natural to define summary statistics around these quantities to verify model consistency. Additionally the PSS and JND can be computed regardless of the model parameterization or chosen psychometric function.</p>
+<p>By the experimental setup and recording process, it is impossible that a properly conducted block would result in a JND less than 0 (i.e. the psychometric function is always non-decreasing), so that can be a lower limit for its threshold. On the other end it is unlikely that it will be beyond the limits of the SOA values, but even more concrete, it seems unlikely (though not impossible) that the just noticeable difference would be more than a second.</p>
+<p>The lower bound on the JND can be further refined if we draw information from other sources. Some studies show that we cannot perceive time differences below 30 ms, and others show that an input lag as small as 100ms can impair a person’s typing ability. Then according to these studies, a time delay of 100ms is enough to notice, and so a just noticeable difference should be much less than one second.</p>
+<p>As for the point of subjective simultaneity, it can be either positive or negative, with the belief that larger values are more rare. Some studies suggest that for audio-visual TOJ tasks, the separation between stimuli need to be as little as 20 milliseconds for subjects to be able to determine which modality came first <span class="citation">(Vatakis et al. <a href="#ref-vatakis2007influence" role="doc-biblioref">2007</a>)</span>. Other studies suggest that our brains can detect temporal differences as small as 30 milliseconds. If these values are to be believed then we should be skeptical of PSS estimates larger than say 150 milliseconds in absolute value, just to be safe.</p>
+<p>A histogram of computed PSS and JND values will suffice for summary statistics. We can estimate the proportion of values that fall outside of our limits defined above, and use them as indications of problems with the model fitting or our conceptual understanding.</p>
+<p><strong>post-model, pre-data</strong></p>
+<p><em>develop model</em></p>
+<p><em>construct summary functions</em></p>
+<p><em>simulate Bayesian ensemble</em></p>
+<p><em>prior checks</em></p>
+<p><em>configure algorithm</em></p>
+<p><em>fit simulated ensemble</em></p>
+<p><em>algorithmic calibration</em></p>
+<p><em>inferential calibration</em></p>
+<p><strong>post-model, post-data</strong></p>
+<p><em>fit observed data</em></p>
+<p><em>diagnose posterior fit</em></p>
+<p><em>posterior retrodictive checks</em></p>
 </div>
 <div id="iter2" class="section level2">
 <h2><span class="header-section-number">3.2</span> Iteration 2 (electric boogaloo)</h2>
+<p><strong>pre-model, pre-data</strong></p>
+<p><em>conceptual analysis</em></p>
+<p><em>define observational space</em></p>
+<p><em>construct summary statistics</em></p>
+<p><strong>post-model, pre-data</strong></p>
+<p><em>develop model</em></p>
+<p><em>construct summary functions</em></p>
+<p><em>simulate Bayesian ensemble</em></p>
+<p><em>prior checks</em></p>
+<p><em>configure algorithm</em></p>
+<p><em>fit simulated ensemble</em></p>
+<p><em>algorithmic calibration</em></p>
+<p><em>inferential calibration</em></p>
+<p><strong>post-model, post-data</strong></p>
+<p><em>fit observed data</em></p>
+<p><em>diagnose posterior fit</em></p>
+<p><em>posterior retrodictive checks</em></p>
 </div>
 <div id="iter3" class="section level2">
 <h2><span class="header-section-number">3.3</span> Iteration 3 (the one for me)</h2>
+<p><strong>pre-model, pre-data</strong></p>
+<p><em>conceptual analysis</em></p>
+<p><em>define observational space</em></p>
+<p><em>construct summary statistics</em></p>
+<p><strong>post-model, pre-data</strong></p>
+<p><em>develop model</em></p>
+<p><em>construct summary functions</em></p>
+<p><em>simulate Bayesian ensemble</em></p>
+<p><em>prior checks</em></p>
+<p><em>configure algorithm</em></p>
+<p><em>fit simulated ensemble</em></p>
+<p><em>algorithmic calibration</em></p>
+<p><em>inferential calibration</em></p>
+<p><strong>post-model, post-data</strong></p>
+<p><em>fit observed data</em></p>
+<p><em>diagnose posterior fit</em></p>
+<p><em>posterior retrodictive checks</em></p>
 </div>
 <div id="iter4" class="section level2">
 <h2><span class="header-section-number">3.4</span> Iteration 4 (what’s one more)</h2>
+<p><strong>pre-model, pre-data</strong></p>
+<p><em>conceptual analysis</em></p>
+<p><em>define observational space</em></p>
+<p><em>construct summary statistics</em></p>
+<p><strong>post-model, pre-data</strong></p>
+<p><em>develop model</em></p>
+<p><em>construct summary functions</em></p>
+<p><em>simulate Bayesian ensemble</em></p>
+<p><em>prior checks</em></p>
+<p><em>configure algorithm</em></p>
+<p><em>fit simulated ensemble</em></p>
+<p><em>algorithmic calibration</em></p>
+<p><em>inferential calibration</em></p>
+<p><strong>post-model, post-data</strong></p>
+<p><em>fit observed data</em></p>
+<p><em>diagnose posterior fit</em></p>
+<p><em>posterior retrodictive checks</em></p>
 </div>
 <div id="iter5" class="section level2">
 <h2><span class="header-section-number">3.5</span> Iteration 5 (final_final_draft_2.pdf)</h2>
+<p><strong>pre-model, pre-data</strong></p>
+<p><em>conceptual analysis</em></p>
+<p><em>define observational space</em></p>
+<p><em>construct summary statistics</em></p>
+<p><strong>post-model, pre-data</strong></p>
+<p><em>develop model</em></p>
+<p><em>construct summary functions</em></p>
+<p><em>simulate Bayesian ensemble</em></p>
+<p><em>prior checks</em></p>
+<p><em>configure algorithm</em></p>
+<p><em>fit simulated ensemble</em></p>
+<p><em>algorithmic calibration</em></p>
+<p><em>inferential calibration</em></p>
+<p><strong>post-model, post-data</strong></p>
+<p><em>fit observed data</em></p>
+<p><em>diagnose posterior fit</em></p>
+<p><em>posterior retrodictive checks</em></p>
+</div>
+<div id="celebrate" class="section level2">
+<h2><span class="header-section-number">3.6</span> Celebrate</h2>
+<p><em>celebrate</em></p>
 
 </div>
 </div>
@@ -248,12 +474,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="ref-neal2003slice">
 <p>Neal, Radford M. 2003. “Slice Sampling.” <em>Annals of Statistics</em>, 705–41.</p>
 </div>
+<div id="ref-vatakis2007influence">
+<p>Vatakis, Argiro, Linda Bayliss, Massimiliano Zampini, and Charles Spence. 2007. “The Influence of Synchronous Audiovisual Distractors on Audiovisual Temporal Order Judgments.” <em>Perception &amp; Psychophysics</em> 69 (2): 298–309.</p>
+</div>
 </div>
 <div class="footnotes">
 <hr />
 <ol start="6">
 <li id="fn6"><p>The opposite of a Frequentist.<a href="workflow.html#fnref6" class="footnote-back">↩︎</a></p></li>
 <li id="fn7"><p>Efficiency of a sampler is related to the proportion of proposal samples that get accepted.<a href="workflow.html#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>Factor variables also go by the name index variable or categorical variable<a href="workflow.html#fnref8" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

@@ -8,6 +8,7 @@ fig:ch020-av-post1-O-f-CE-plot
 fig:ch020-av-post-neg-trials
 fig:ch020-naive-prop-outliers
 eq:bayesthm
+tab:ch030-workflow-steps
 intro
 ch010-classical-methods
 ch010-new-methods
@@ -22,6 +23,7 @@ iter2
 iter3
 iter4
 iter5
+celebrate
 model-checking
 predictive-inferences
 results
