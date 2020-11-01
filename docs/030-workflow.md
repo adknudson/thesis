@@ -38,46 +38,77 @@ The question of inferential adequacy depends on the set of questions that we are
 
 For the last question, model adequacy, I will be following a set of steps proposed in @betancourt2020. The purpose of laying out these steps is not to again blindly check them off, but to force the analyst to carefully consider each point and make an _informed_ decision whether the step is necessary or to craft the specifics of how the step should be completed. The steps are listed in table \@ref(tab:ch030-workflow-steps). These steps are also not meant to be followed linearly. If at any point it is discovered that there is an issue in conceptual understanding or model adequacy or something else, then it is encouraged to go back to a previous step and start with a new understanding.
 
-\begin{table}[!h]
-
-\caption{(\#tab:ch030-workflow-steps)Principled workflow}
-\centering
-\begin{tabular}[t]{ll}
-\toprule
-Part & Step\\
-\midrule
- & conceptual analysis\\
-\cmidrule{2-2}
- & define observational space\\
-\cmidrule{2-2}
-\multirow[t]{-3}{*}{\raggedright\arraybackslash Pre-Model, Pre-Data} & construct summary statistics\\
-\cmidrule{1-2}
- & develop model\\
-\cmidrule{2-2}
- & construct summary functions\\
-\cmidrule{2-2}
- & simulate Bayesian ensemble\\
-\cmidrule{2-2}
- & prior checks\\
-\cmidrule{2-2}
- & configure algorithm\\
-\cmidrule{2-2}
- & fit simulated ensemble\\
-\cmidrule{2-2}
- & algorithmic calibration\\
-\cmidrule{2-2}
-\multirow[t]{-8}{*}{\raggedright\arraybackslash Post-Model, Pre-Data} & inferential calibration\\
-\cmidrule{1-2}
- & fit observed data\\
-\cmidrule{2-2}
- & diagnose posterior fit\\
-\cmidrule{2-2}
- & posterior retrodictive checks\\
-\cmidrule{2-2}
-\multirow[t]{-4}{*}{\raggedright\arraybackslash Post-Model, Post-Data} & celebrate\\
-\bottomrule
-\end{tabular}
-\end{table}
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>(\#tab:ch030-workflow-steps)Principled workflow</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Part </th>
+   <th style="text-align:left;"> Step </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="3"> Pre-Model, Pre-Data </td>
+   <td style="text-align:left;"> conceptual analysis </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> define observational space </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> construct summary statistics </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="8"> Post-Model, Pre-Data </td>
+   <td style="text-align:left;"> develop model </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> construct summary functions </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> simulate Bayesian ensemble </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> prior checks </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> configure algorithm </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> fit simulated ensemble </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> algorithmic calibration </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> inferential calibration </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> Post-Model, Post-Data </td>
+   <td style="text-align:left;"> fit observed data </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> diagnose posterior fit </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> posterior retrodictive checks </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> celebrate </td>
+  </tr>
+</tbody>
+</table>
 
 I'll talk about each step in the first iteration, but may choose to omit steps in subsequent iterations if there are no changes. For the purposes of building a model and being concise, I will focus around the audiovisual TOJ task in this chapter, but the final model will apply similarly to the visual and duration tasks. For the sensorimotor task, the model will be modified to accept Bernoulli data as apposed to aggregated Binomial counts (described more in the next section).
 
@@ -170,8 +201,10 @@ A histogram of computed PSS and JND values will suffice for summary statistics. 
 It is now time to define priors for the model, while still not having looked at the [distribution of] data. The priors should be motivated by domain expertise and *prior knowledge*, not the data. There are also many choices when it comes to selecting a psychometric (sigmoid) function. Common ones are logistic, Gaussian, and Weibull.
 
 
-
-\begin{center}\includegraphics[width=0.7\linewidth]{030-workflow_files/figure-latex/ch031-Eastern Needless Autopsy-1} \end{center}
+<div class="figure" style="text-align: center">
+<img src="030-workflow_files/figure-html/ch031-pf-assortment-1.png" alt="Assortment of psychometric functions." width="70%" />
+<p class="caption">(\#fig:ch031-pf-assortment)Assortment of psychometric functions.</p>
+</div>
 
 
 The Weibull psychometric function is more common when it comes to 2-AFC psychometric experiments where the independent variable is a stimulus intensity (non-negative) and the goal is signal detection. The data in this paper includes both positive and negative SOA values, so the Weibull is not a natural choice. In fact, because this is essentially a model for logistic regression, my first choice is the logistic function as it is the canonical choice for Binomial data. Additionally, the data in this study are reversible. The label of a positive response can be swapped with the label of a negative response and the inferences should remain the same. Since there is no natural ordering, it makes more sense for the psychometric function to be symmetric, e.g. the logistic and Gaussian. I use symmetric loosely to mean that probability density function (PDF) is symmetric about its middle. More specifically, the distribution has zero skewness.
@@ -180,7 +213,221 @@ In practice, there is little difference in inference between the _logit_ and _pr
 
 _develop model_
 
+Before moving on to specifying priors, I think it is appropriate to provide a little more background into generalized linear models (GLMs) and their role in working with psychometric functions. A GLM allows the linear model to be related to the outcome variable via a _link_ function. An example of this is the logit link - the inverse of the logistic function. The logistic function, $F$, takes $x \in \mathbb{R}$ and constrains the output to be in $(0, 1)$.
 
+$$
+\begin{equation}
+  F(\theta) = \frac{1}{1 + \exp\left(-\theta\right)}
+  (\#eq:logistic)
+\end{equation}
+$$
+
+Since $F$ is a strictly increasing and continuous function, it has an inverse, and the link for \@ref(eq:logistic) is the log-odds or logit function.
+
+$$
+\begin{equation}
+  F^{-1}(\pi) = \mathrm{logit}(\pi) = \ln\left(\frac{\pi}{1 - \pi}\right)
+  (\#eq:logit)
+\end{equation}
+$$
+
+By taking $(F^{-1} \circ F)(\theta)$ we can arrive at a relationship that is linear in $\theta$.
+
+$$
+\begin{align*}
+  \pi = F(\theta) \Longleftrightarrow F^{-1}(\pi) &= F^{-1}(F(\theta)) \\
+  & = \ln\left(\frac{F(\theta)}{1 - F(\theta)}\right) \\
+  &= \ln(F(\theta)) - \ln(1 - F(\theta)) \\
+  &= \ln\left(\frac{1}{1 + \exp(-\theta)}\right) - \ln\left(\frac{\exp(-\theta)}{1 + \exp(-\theta)}\right) \\
+  &= - \ln(1 + \exp(-\theta)) - \ln(\exp(-\theta)) + \ln(1 + \exp(-\theta)) \\
+  &= - \ln(\exp(-\theta)) \\
+  &= \theta
+\end{align*}
+$$
+
+The purpose of all this setup is to show that a model for the psychometric function can be specified using a linear predictor, $\theta$. Given a simple slope-intercept model, one would typically write the linear predictor as
+
+$$
+\begin{equation}
+  \theta = \alpha + \beta x
+  (\#eq:linearform1)
+\end{equation}
+$$
+
+This isn't the only acceptable form; it could be written in the centered parameterization
+
+$$
+\begin{equation}
+  \theta = \beta(x - a)
+  (\#eq:linearform2)
+\end{equation}
+$$
+
+Both parameterizations will describe the same geometry, so why should it matter which form is chosen? Clearly the interpretation of the parameters change between the two models, but the reason becomes clear when you consider how the linear model relates back to the physical properties that the psychometric model describes. Take equation \@ref(eq:linearform1), substitute it in to \@ref(eq:logistic), and then take the logit of both sides
+
+$$
+\begin{equation}
+  \mathrm{logit}(\pi) = \alpha+\beta x
+  (\#eq:pfform1)
+\end{equation}
+$$
+
+Now recall that the PSS is defined as the SOA values such that the response probability, $\pi$, is $0.5$. Substituting $\pi = 0.5$ into \@ref(eq:pfform1) and solving for $x$ yields
+
+$$
+pss = -\frac{\alpha}{\beta}
+$$
+
+Similarly, the JND is defined as the difference between the SOA value at the 84% level and the PSS. Substituting $\pi = 0.84$ into \@ref(eq:pfform1), solving for $x$, and subtracting off the pss yields
+
+$$
+\begin{equation}
+  jnd = \frac{\mathrm{logit}(0.84)}{\beta}
+  (\#eq:jnd1)
+\end{equation}
+$$
+
+From the conceptual analysis, it is easy to define priors for the PSS and JND, but then how does one set the priors for $\alpha$ and $\beta$? Let's say the prior for the just noticeable difference is $jnd \sim \pi_j$. Then the prior for $\beta$ would be
+
+$$
+\beta \sim \frac{\mathrm{logit}(0.84)}{\pi_j}
+$$
+
+The log-normal distribution has a nice property where its multiplicative inverse is still a log-normal distribution. We could let $\pi_j = \mathrm{Lognormal}(\mu, \sigma^2)$ and then $\beta$ would be distributed as
+
+$$
+\beta \sim \mathrm{Lognormal}(-\mu + \ln(\mathrm{logit}(0.84)), \sigma^2)
+$$
+
+This is acceptable, as it was determined last chapter that the slope must always be positive, and a log-normal distribution constrains the support to postive real numbers. Next suppose that the prior distribution for the PSS is $pss \sim \pi_p$. Then the prior for $\alpha$ is 
+
+$$
+\alpha \sim -\pi_p \cdot \beta
+$$
+
+If $\pi_p$ is set to a log-normal distribution as well, then $\pi_p \cdot \beta$ would also be log-normal, but there is still the problem of the negative sign. If $\alpha$ is always negative, then the PSS will also always be negative, which is certainly not always true. Furthermore, I don't want to _a priori_ put more weight on positive PSS values compared to negative ones, for which a lognormal distribution would not do.
+
+Let's now go back and consider using equation \@ref(eq:linearform2) and repeat the above process.
+
+$$
+\begin{equation}
+  \mathrm{logit}(\pi) = \beta(x - a)
+  (\#eq:pfform2)
+\end{equation}
+$$
+
+The just noticeable difference is still given by \@ref(eq:jnd1) and so the same method for choosing a prior can be used, but the PSS is now given by
+
+$$
+pss = \alpha
+$$
+
+This is a fortunate consequence of using \@ref(eq:linearform2) because now the JND only depends on $\beta$ and the PSS only depends on $\alpha$, and now $\alpha$ can literally be interpreted as the PSS of the estimated psychometric function! Also thrown in is the ability to set a prior for $\alpha$ that is symmetric around $0$ like a Gaussian distribution.
+
+This also brings me to point out the first benefit of using a modeling language like Stan over others. For fitting GLMs in R, there are a handful of functions that utilize MLE like `stats::glm` and others that use Bayesian methods like `rstanarm::stan_glm` and `arm::bayesglm` [@R-rstanarm; @R-arm]. Each of these functions requires the linear predictor to be in the form of \@ref(eq:linearform1). The `stan_glm` function actually uses Stan in the backend to fit a model, but is limited to priors from the Student t family of distributions. By writing the model directly in Stan, the linear model can be parameterized in any way and with any prior distribution, and so allows for much more expressive modeling - a key aspect of this principled workflow.
+
+For the first iteration of this model, I am going to start with the simplest model that captures the structure of the data without including information about age group, treatment, or subject. Here is a simple model that draws information from the conceptual analysis. 
+
+$$
+\begin{align*}
+  k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+  \mathrm{logit}(p_i) &= \beta ( x_i - \alpha )
+\end{align*}
+$$
+
+Since I am using the linear model from \@ref(eq:linearform2), setting the priors for $\alpha$ and $\beta$ is relatively straightforward. The PSS can be positive or negative without any expected bias towards either, so a symmetric distribution like the Gaussian is a fine choice for $\alpha$ without having any other knowledge about the distribution of PSS values. Since I said earlier that a PSS value more than 150ms in absolute value is unlikely, I can define a Gaussian prior such that $P(|pss| > 0.150) \approx 0.01$. Since the prior does not need to be exact, the following mean and variance suffice
+
+$$
+pss \sim \mathcal{N}(0, 0.06^2) \Longleftrightarrow \alpha \sim \mathcal{N}(0, 0.06^2)
+$$
+
+For the just noticeable difference, I will continue to use the log-normal distribution because it is constrained to positive values and has the nice reciprocal property. The JND is expected to be close to 100ms and extremely unlikely to exceed 1 second. This implies a prior such that the mean is around 100ms and the bulk of the distribution is below 1 second - i.e. $E[X] \approx 0.100$ and $P(X < 1) \approx 0.99$. This requires solving a system of nonlinear equations in two variables
+
+$$
+\begin{cases}
+E[X] = 0.100 = \exp\left(\mu + \sigma^2 / 2\right) \\
+P(X < 1) = 0.99 = 0.5 + 0.5 \cdot \mathrm{erf}\left[\frac{\ln (1) - \mu}{\sqrt{2} \cdot \sigma}\right]
+\end{cases}
+$$
+
+This nonlinear system can be solved using Stan's algebraic solver.
+
+
+```stan
+functions {
+  vector system(vector y, vector theta, real[] x_r, int[] x_i) {
+    vector[2] z;
+    z[1] = exp(y[1] + y[2]^2 / 2) - theta[1];
+    z[2] = 0.5 + 0.5 * erf(-y[1] / (sqrt(2) * y[2])) - theta[2];
+    return z;
+  }
+}
+transformed data {
+  vector[2] y_guess = [1, 1]';
+  real x_r[0];
+  int x_i[0];
+}
+transformed parameters {
+  vector[2] theta = [0.100, 0.99]';
+  vector[2] y;
+  y = algebra_solver(system, y_guess, theta, x_r, x_i);
+}
+```
+
+
+
+```r
+fit <- sampling(prior_jnd, iter=1, warmup=0, chains=1, refresh=0,
+                seed=31, algorithm="Fixed_param")
+sol <- extract(fit)
+sol$y
+#>           
+#> iterations   [,1]  [,2]
+#>       [1,] -7.501 3.225
+```
+
+The solver has determined that $\mathrm{Lognormal}(-7.5, 3.2^2)$ is the appropriate prior. However, simulating some values from this distribution produces a lot of extremely small values ($<10^{-5}$) and a few extremely large values ($\approx 10^2$). This is because the expected value of a log-normal random variable depends on both the mean and standard deviation. If the median is used in place for the mean, then a more acceptable prior may be determined.
+
+
+
+
+
+
+```r
+fit <- sampling(prior_jnd_using_median, iter=1, warmup=0, chains=1, refresh=0,
+                seed=31, algorithm="Fixed_param")
+sol <- extract(fit)
+sol$y
+#>           
+#> iterations   [,1]   [,2]
+#>       [1,] -2.303 0.9898
+```
+
+Sampling from a log-normal distribution with these parameters and plotting the histogram shows no inconsistency with the domain expertise.
+
+<img src="030-workflow_files/figure-html/ch031-Risky-Lion-1.png" width="70%" style="display: block; margin: auto;" />
+
+So now with a prior for the JND, the prior for $\beta$ can be determined.
+
+$$
+jnd \sim \mathrm{Lognormal}(-2.3, 0.99^2) \Longleftrightarrow \frac{1}{jnd} \sim \mathrm{Lognormal}(2.3, 0.99^2)
+$$
+and 
+
+$$
+\beta = \frac{\mathrm{logit}(0.84)}{jnd} \sim \mathrm{Lognormal}(2.8, 0.99^2)
+$$
+
+The priors do not need to be too exact. Rounding the parameters for $\beta$, the simple model is written below.
+
+$$
+\begin{align*}
+  k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+  \mathrm{logit}(p_i) &= \beta ( x_i - \alpha ) \\
+  \alpha &\sim \mathcal{N}(0, 0.06^2) \\
+  \beta &\sim \mathrm{Lognormal}(3, 1^2)
+\end{align*}
+$$
 
 _construct summary functions_
 

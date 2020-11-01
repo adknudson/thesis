@@ -11,8 +11,9 @@ github-repo: adkudson/thesis
 ---
 
 ```{r ch010-setup, include=FALSE}
-knitr::write_bib(c('knitr', 'bookdown', 'rstan', 'rethinking'), 
-                 'packages.bib', width = 80)
+knitr::write_bib(c(
+  'knitr', 'bookdown', 'rstan', 'rethinking', 'rstanarm', 'stats', 'arm'
+), 'packages.bib', width = 80)
 ```
 
 # Introduction {#intro}

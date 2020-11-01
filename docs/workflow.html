@@ -353,10 +353,170 @@ k_i, n_i \in \mathbb{Z}_0^+, k_i \le n_i
 <p>A histogram of computed PSS and JND values will suffice for summary statistics. We can estimate the proportion of values that fall outside of our limits defined above, and use them as indications of problems with the model fitting or conceptual understanding.</p>
 <p><strong>post-model, pre-data</strong></p>
 <p>It is now time to define priors for the model, while still not having looked at the [distribution of] data. The priors should be motivated by domain expertise and <em>prior knowledge</em>, not the data. There are also many choices when it comes to selecting a psychometric (sigmoid) function. Common ones are logistic, Gaussian, and Weibull.</p>
-<p><img src="030-workflow_files/figure-html/ch031-Eastern%20Needless%20Autopsy-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<div class="figure" style="text-align: center"><span id="fig:ch031-pf-assortment"></span>
+<img src="030-workflow_files/figure-html/ch031-pf-assortment-1.png" alt="Assortment of psychometric functions." width="70%" />
+<p class="caption">
+Figure 3.1: Assortment of psychometric functions.
+</p>
+</div>
 <p>The Weibull psychometric function is more common when it comes to 2-AFC psychometric experiments where the independent variable is a stimulus intensity (non-negative) and the goal is signal detection. The data in this paper includes both positive and negative SOA values, so the Weibull is not a natural choice. In fact, because this is essentially a model for logistic regression, my first choice is the logistic function as it is the canonical choice for Binomial data. Additionally, the data in this study are reversible. The label of a positive response can be swapped with the label of a negative response and the inferences should remain the same. Since there is no natural ordering, it makes more sense for the psychometric function to be symmetric, e.g. the logistic and Gaussian. I use symmetric loosely to mean that probability density function (PDF) is symmetric about its middle. More specifically, the distribution has zero skewness.</p>
 <p>In practice, there is little difference in inference between the <em>logit</em> and <em>probit</em> links, but computationally the logit link is more efficient. I am also more familiar with working on the log-odds scale compared to the probit scale, so I make the decision to go forward with the logistic function. In <a href="model-checking.html#model-checking">chapter 4</a> I will show how even with a mis-specified link function, we can still achieve accurate predictions.</p>
 <p><em>develop model</em></p>
+<p>Before moving on to specifying priors, I think it is appropriate to provide a little more background into generalized linear models (GLMs) and their role in working with psychometric functions. A GLM allows the linear model to be related to the outcome variable via a <em>link</em> function. An example of this is the logit link - the inverse of the logistic function. The logistic function, <span class="math inline">\(F\)</span>, takes <span class="math inline">\(x \in \mathbb{R}\)</span> and constrains the output to be in <span class="math inline">\((0, 1)\)</span>.</p>
+<p><span class="math display" id="eq:logistic">\[
+\begin{equation}
+  F(\theta) = \frac{1}{1 + \exp\left(-\theta\right)}
+  \tag{3.2}
+\end{equation}
+\]</span></p>
+<p>Since <span class="math inline">\(F\)</span> is a strictly increasing and continuous function, it has an inverse, and the link for <a href="workflow.html#eq:logistic">(3.2)</a> is the log-odds or logit function.</p>
+<p><span class="math display" id="eq:logit">\[
+\begin{equation}
+  F^{-1}(\pi) = \mathrm{logit}(\pi) = \ln\left(\frac{\pi}{1 - \pi}\right)
+  \tag{3.3}
+\end{equation}
+\]</span></p>
+<p>By taking <span class="math inline">\((F^{-1} \circ F)(\theta)\)</span> we can arrive at a relationship that is linear in <span class="math inline">\(\theta\)</span>.</p>
+<p><span class="math display">\[
+\begin{align*}
+  \pi = F(\theta) \Longleftrightarrow F^{-1}(\pi) &amp;= F^{-1}(F(\theta)) \\
+  &amp; = \ln\left(\frac{F(\theta)}{1 - F(\theta)}\right) \\
+  &amp;= \ln(F(\theta)) - \ln(1 - F(\theta)) \\
+  &amp;= \ln\left(\frac{1}{1 + \exp(-\theta)}\right) - \ln\left(\frac{\exp(-\theta)}{1 + \exp(-\theta)}\right) \\
+  &amp;= - \ln(1 + \exp(-\theta)) - \ln(\exp(-\theta)) + \ln(1 + \exp(-\theta)) \\
+  &amp;= - \ln(\exp(-\theta)) \\
+  &amp;= \theta
+\end{align*}
+\]</span></p>
+<p>The purpose of all this setup is to show that a model for the psychometric function can be specified using a linear predictor, <span class="math inline">\(\theta\)</span>. Given a simple slope-intercept model, one would typically write the linear predictor as</p>
+<p><span class="math display" id="eq:linearform1">\[
+\begin{equation}
+  \theta = \alpha + \beta x
+  \tag{3.4}
+\end{equation}
+\]</span></p>
+<p>This isn’t the only acceptable form; it could be written in the centered parameterization</p>
+<p><span class="math display" id="eq:linearform2">\[
+\begin{equation}
+  \theta = \beta(x - a)
+  \tag{3.5}
+\end{equation}
+\]</span></p>
+<p>Both parameterizations will describe the same geometry, so why should it matter which form is chosen? Clearly the interpretation of the parameters change between the two models, but the reason becomes clear when you consider how the linear model relates back to the physical properties that the psychometric model describes. Take equation <a href="workflow.html#eq:linearform1">(3.4)</a>, substitute it in to <a href="workflow.html#eq:logistic">(3.2)</a>, and then take the logit of both sides</p>
+<p><span class="math display" id="eq:pfform1">\[
+\begin{equation}
+  \mathrm{logit}(\pi) = \alpha+\beta x
+  \tag{3.6}
+\end{equation}
+\]</span></p>
+<p>Now recall that the PSS is defined as the SOA values such that the response probability, <span class="math inline">\(\pi\)</span>, is <span class="math inline">\(0.5\)</span>. Substituting <span class="math inline">\(\pi = 0.5\)</span> into <a href="workflow.html#eq:pfform1">(3.6)</a> and solving for <span class="math inline">\(x\)</span> yields</p>
+<p><span class="math display">\[
+pss = -\frac{\alpha}{\beta}
+\]</span></p>
+<p>Similarly, the JND is defined as the difference between the SOA value at the 84% level and the PSS. Substituting <span class="math inline">\(\pi = 0.84\)</span> into <a href="workflow.html#eq:pfform1">(3.6)</a>, solving for <span class="math inline">\(x\)</span>, and subtracting off the pss yields</p>
+<p><span class="math display" id="eq:jnd1">\[
+\begin{equation}
+  jnd = \frac{\mathrm{logit}(0.84)}{\beta}
+  \tag{3.7}
+\end{equation}
+\]</span></p>
+<p>From the conceptual analysis, it is easy to define priors for the PSS and JND, but then how does one set the priors for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>? Let’s say the prior for the just noticeable difference is <span class="math inline">\(jnd \sim \pi_j\)</span>. Then the prior for <span class="math inline">\(\beta\)</span> would be</p>
+<p><span class="math display">\[
+\beta \sim \frac{\mathrm{logit}(0.84)}{\pi_j}
+\]</span></p>
+<p>The log-normal distribution has a nice property where its multiplicative inverse is still a log-normal distribution. We could let <span class="math inline">\(\pi_j = \mathrm{Lognormal}(\mu, \sigma^2)\)</span> and then <span class="math inline">\(\beta\)</span> would be distributed as</p>
+<p><span class="math display">\[
+\beta \sim \mathrm{Lognormal}(-\mu + \ln(\mathrm{logit}(0.84)), \sigma^2)
+\]</span></p>
+<p>This is acceptable, as it was determined last chapter that the slope must always be positive, and a log-normal distribution constrains the support to postive real numbers. Next suppose that the prior distribution for the PSS is <span class="math inline">\(pss \sim \pi_p\)</span>. Then the prior for <span class="math inline">\(\alpha\)</span> is</p>
+<p><span class="math display">\[
+\alpha \sim -\pi_p \cdot \beta
+\]</span></p>
+<p>If <span class="math inline">\(\pi_p\)</span> is set to a log-normal distribution as well, then <span class="math inline">\(\pi_p \cdot \beta\)</span> would also be log-normal, but there is still the problem of the negative sign. If <span class="math inline">\(\alpha\)</span> is always negative, then the PSS will also always be negative, which is certainly not always true. Furthermore, I don’t want to <em>a priori</em> put more weight on positive PSS values compared to negative ones, for which a lognormal distribution would not do.</p>
+<p>Let’s now go back and consider using equation <a href="workflow.html#eq:linearform2">(3.5)</a> and repeat the above process.</p>
+<p><span class="math display" id="eq:pfform2">\[
+\begin{equation}
+  \mathrm{logit}(\pi) = \beta(x - a)
+  \tag{3.8}
+\end{equation}
+\]</span></p>
+<p>The just noticeable difference is still given by <a href="workflow.html#eq:jnd1">(3.7)</a> and so the same method for choosing a prior can be used, but the PSS is now given by</p>
+<p><span class="math display">\[
+pss = \alpha
+\]</span></p>
+<p>This is a fortunate consequence of using <a href="workflow.html#eq:linearform2">(3.5)</a> because now the JND only depends on <span class="math inline">\(\beta\)</span> and the PSS only depends on <span class="math inline">\(\alpha\)</span>, and now <span class="math inline">\(\alpha\)</span> can literally be interpreted as the PSS of the estimated psychometric function! Also thrown in is the ability to set a prior for <span class="math inline">\(\alpha\)</span> that is symmetric around <span class="math inline">\(0\)</span> like a Gaussian distribution.</p>
+<p>This also brings me to point out the first benefit of using a modeling language like Stan over others. For fitting GLMs in R, there are a handful of functions that utilize MLE like <code>stats::glm</code> and others that use Bayesian methods like <code>rstanarm::stan_glm</code> and <code>arm::bayesglm</code> <span class="citation">(Gabry and Goodrich <a href="#ref-R-rstanarm" role="doc-biblioref">2020</a>; Gelman and Su <a href="#ref-R-arm" role="doc-biblioref">2020</a>)</span>. Each of these functions requires the linear predictor to be in the form of <a href="workflow.html#eq:linearform1">(3.4)</a>. The <code>stan_glm</code> function actually uses Stan in the backend to fit a model, but is limited to priors from the Student t family of distributions. By writing the model directly in Stan, the linear model can be parameterized in any way and with any prior distribution, and so allows for much more expressive modeling - a key aspect of this principled workflow.</p>
+<p>For the first iteration of this model, I am going to start with the simplest model that captures the structure of the data without including information about age group, treatment, or subject. Here is a simple model that draws information from the conceptual analysis.</p>
+<p><span class="math display">\[
+\begin{align*}
+  k_i &amp;\sim \mathrm{Binomial}(n_i, p_i) \\
+  \mathrm{logit}(p_i) &amp;= \beta ( x_i - \alpha )
+\end{align*}
+\]</span></p>
+<p>Since I am using the linear model from <a href="workflow.html#eq:linearform2">(3.5)</a>, setting the priors for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> is relatively straightforward. The PSS can be positive or negative without any expected bias towards either, so a symmetric distribution like the Gaussian is a fine choice for <span class="math inline">\(\alpha\)</span> without having any other knowledge about the distribution of PSS values. Since I said earlier that a PSS value more than 150ms in absolute value is unlikely, I can define a Gaussian prior such that <span class="math inline">\(P(|pss| &gt; 0.150) \approx 0.01\)</span>. Since the prior does not need to be exact, the following mean and variance suffice</p>
+<p><span class="math display">\[
+pss \sim \mathcal{N}(0, 0.06^2) \Longleftrightarrow \alpha \sim \mathcal{N}(0, 0.06^2)
+\]</span></p>
+<p>For the just noticeable difference, I will continue to use the log-normal distribution because it is constrained to positive values and has the nice reciprocal property. The JND is expected to be close to 100ms and extremely unlikely to exceed 1 second. This implies a prior such that the mean is around 100ms and the bulk of the distribution is below 1 second - i.e. <span class="math inline">\(E[X] \approx 0.100\)</span> and <span class="math inline">\(P(X &lt; 1) \approx 0.99\)</span>. This requires solving a system of nonlinear equations in two variables</p>
+<p><span class="math display">\[
+\begin{cases}
+E[X] = 0.100 = \exp\left(\mu + \sigma^2 / 2\right) \\
+P(X &lt; 1) = 0.99 = 0.5 + 0.5 \cdot \mathrm{erf}\left[\frac{\ln (1) - \mu}{\sqrt{2} \cdot \sigma}\right]
+\end{cases}
+\]</span></p>
+<p>This nonlinear system can be solved using Stan’s algebraic solver.</p>
+<pre class="stan"><code>functions {
+  vector system(vector y, vector theta, real[] x_r, int[] x_i) {
+    vector[2] z;
+    z[1] = exp(y[1] + y[2]^2 / 2) - theta[1];
+    z[2] = 0.5 + 0.5 * erf(-y[1] / (sqrt(2) * y[2])) - theta[2];
+    return z;
+  }
+}
+transformed data {
+  vector[2] y_guess = [1, 1]&#39;;
+  real x_r[0];
+  int x_i[0];
+}
+transformed parameters {
+  vector[2] theta = [0.100, 0.99]&#39;;
+  vector[2] y;
+  y = algebra_solver(system, y_guess, theta, x_r, x_i);
+}</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="workflow.html#cb4-1"></a>fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(prior_jnd, <span class="dt">iter=</span><span class="dv">1</span>, <span class="dt">warmup=</span><span class="dv">0</span>, <span class="dt">chains=</span><span class="dv">1</span>, <span class="dt">refresh=</span><span class="dv">0</span>,</span>
+<span id="cb4-2"><a href="workflow.html#cb4-2"></a>                <span class="dt">seed=</span><span class="dv">31</span>, <span class="dt">algorithm=</span><span class="st">&quot;Fixed_param&quot;</span>)</span>
+<span id="cb4-3"><a href="workflow.html#cb4-3"></a>sol &lt;-<span class="st"> </span><span class="kw">extract</span>(fit)</span>
+<span id="cb4-4"><a href="workflow.html#cb4-4"></a>sol<span class="op">$</span>y</span>
+<span id="cb4-5"><a href="workflow.html#cb4-5"></a><span class="co">#&gt;           </span></span>
+<span id="cb4-6"><a href="workflow.html#cb4-6"></a><span class="co">#&gt; iterations   [,1]  [,2]</span></span>
+<span id="cb4-7"><a href="workflow.html#cb4-7"></a><span class="co">#&gt;       [1,] -7.501 3.225</span></span></code></pre></div>
+<p>The solver has determined that <span class="math inline">\(\mathrm{Lognormal}(-7.5, 3.2^2)\)</span> is the appropriate prior. However, simulating some values from this distribution produces a lot of extremely small values (<span class="math inline">\(&lt;10^{-5}\)</span>) and a few extremely large values (<span class="math inline">\(\approx 10^2\)</span>). This is because the expected value of a log-normal random variable depends on both the mean and standard deviation. If the median is used in place for the mean, then a more acceptable prior may be determined.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="workflow.html#cb5-1"></a>fit &lt;-<span class="st"> </span><span class="kw">sampling</span>(prior_jnd_using_median, <span class="dt">iter=</span><span class="dv">1</span>, <span class="dt">warmup=</span><span class="dv">0</span>, <span class="dt">chains=</span><span class="dv">1</span>, <span class="dt">refresh=</span><span class="dv">0</span>,</span>
+<span id="cb5-2"><a href="workflow.html#cb5-2"></a>                <span class="dt">seed=</span><span class="dv">31</span>, <span class="dt">algorithm=</span><span class="st">&quot;Fixed_param&quot;</span>)</span>
+<span id="cb5-3"><a href="workflow.html#cb5-3"></a>sol &lt;-<span class="st"> </span><span class="kw">extract</span>(fit)</span>
+<span id="cb5-4"><a href="workflow.html#cb5-4"></a>sol<span class="op">$</span>y</span>
+<span id="cb5-5"><a href="workflow.html#cb5-5"></a><span class="co">#&gt;           </span></span>
+<span id="cb5-6"><a href="workflow.html#cb5-6"></a><span class="co">#&gt; iterations   [,1]   [,2]</span></span>
+<span id="cb5-7"><a href="workflow.html#cb5-7"></a><span class="co">#&gt;       [1,] -2.303 0.9898</span></span></code></pre></div>
+<p>Sampling from a log-normal distribution with these parameters and plotting the histogram shows no inconsistency with the domain expertise.</p>
+<p><img src="030-workflow_files/figure-html/ch031-Risky-Lion-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p>So now with a prior for the JND, the prior for <span class="math inline">\(\beta\)</span> can be determined.</p>
+<p><span class="math display">\[
+jnd \sim \mathrm{Lognormal}(-2.3, 0.99^2) \Longleftrightarrow \frac{1}{jnd} \sim \mathrm{Lognormal}(2.3, 0.99^2)
+\]</span>
+and</p>
+<p><span class="math display">\[
+\beta = \frac{\mathrm{logit}(0.84)}{jnd} \sim \mathrm{Lognormal}(2.8, 0.99^2)
+\]</span></p>
+<p>The priors do not need to be too exact. Rounding the parameters for <span class="math inline">\(\beta\)</span>, the simple model is written below.</p>
+<p><span class="math display">\[
+\begin{align*}
+  k_i &amp;\sim \mathrm{Binomial}(n_i, p_i) \\
+  \mathrm{logit}(p_i) &amp;= \beta ( x_i - \alpha ) \\
+  \alpha &amp;\sim \mathcal{N}(0, 0.06^2) \\
+  \beta &amp;\sim \mathrm{Lognormal}(3, 1^2)
+\end{align*}
+\]</span></p>
 <p><em>construct summary functions</em></p>
 <p><em>simulate Bayesian ensemble</em></p>
 <p><em>prior checks</em></p>
@@ -466,8 +626,14 @@ k_i, n_i \in \mathbb{Z}_0^+, k_i \le n_i
 <div id="ref-bolstad2016introduction">
 <p>Bolstad, William M, and James M Curran. 2016. <em>Introduction to Bayesian Statistics</em>. John Wiley &amp; Sons.</p>
 </div>
+<div id="ref-R-rstanarm">
+<p>Gabry, Jonah, and Ben Goodrich. 2020. <em>Rstanarm: Bayesian Applied Regression Modeling via Stan</em>. <a href="https://CRAN.R-project.org/package=rstanarm">https://CRAN.R-project.org/package=rstanarm</a>.</p>
+</div>
 <div id="ref-gelman2006data">
 <p>Gelman, Andrew, and Jennifer Hill. 2006. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. Cambridge university press.</p>
+</div>
+<div id="ref-R-arm">
+<p>Gelman, Andrew, and Yu-Sung Su. 2020. <em>Arm: Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. <a href="https://CRAN.R-project.org/package=arm">https://CRAN.R-project.org/package=arm</a>.</p>
 </div>
 <div id="ref-gilks1992adaptive">
 <p>Gilks, Walter R, and Pascal Wild. 1992. “Adaptive Rejection Sampling for Gibbs Sampling.” <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em> 41 (2): 337–48.</p>

@@ -181,28 +181,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>One model, Three Implementations. There are a few ways to specify a hierarchical model in R. Below I describe three common frameworks that require varying levels of mathematical and programmatic competence. Frameworks with lower barriers for entry are great for researchers in many fields, but they lack fine control over the parameters in a model. As the framework complexity increases, so too does the ability to generate complex models that are typically not possible.</p>
 <p>Novice
 </p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="supplementary-code.html#cb3-1"></a><span class="kw">library</span>(rstanarm)</span>
-<span id="cb3-2"><a href="supplementary-code.html#cb3-2"></a><span class="kw">stan_glmer</span>(<span class="kw">cbind</span>(k, n<span class="op">-</span>k) <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>x <span class="op">|</span><span class="st"> </span>G1) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>x <span class="op">|</span><span class="st"> </span>G2), </span>
-<span id="cb3-3"><a href="supplementary-code.html#cb3-3"></a>           <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</span>
-<span id="cb3-4"><a href="supplementary-code.html#cb3-4"></a>           <span class="dt">data =</span> dat)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="supplementary-code.html#cb6-1"></a><span class="kw">library</span>(rstanarm)</span>
+<span id="cb6-2"><a href="supplementary-code.html#cb6-2"></a><span class="kw">stan_glmer</span>(<span class="kw">cbind</span>(k, n<span class="op">-</span>k) <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>x <span class="op">|</span><span class="st"> </span>G1) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>x <span class="op">|</span><span class="st"> </span>G2), </span>
+<span id="cb6-3"><a href="supplementary-code.html#cb6-3"></a>           <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</span>
+<span id="cb6-4"><a href="supplementary-code.html#cb6-4"></a>           <span class="dt">data =</span> dat)</span></code></pre></div>
 
 <p>Intermediate</p>
 
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="supplementary-code.html#cb4-1"></a><span class="kw">library</span>(rethinking)</span>
-<span id="cb4-2"><a href="supplementary-code.html#cb4-2"></a><span class="kw">ulam</span>(<span class="kw">alist</span>(</span>
-<span id="cb4-3"><a href="supplementary-code.html#cb4-3"></a>  k <span class="op">~</span><span class="st"> </span><span class="kw">binomial</span>(n, pi)</span>
-<span id="cb4-4"><a href="supplementary-code.html#cb4-4"></a>  <span class="kw">logit</span>(pi) &lt;-<span class="st"> </span>(a <span class="op">+</span><span class="st"> </span>aG1[G1] <span class="op">+</span><span class="st"> </span>aG2[G2]) <span class="op">+</span><span class="st"> </span>(b <span class="op">+</span><span class="st"> </span>bG1[G1] <span class="op">+</span><span class="st"> </span>bG2[G2]) <span class="op">*</span><span class="st"> </span>x,</span>
-<span id="cb4-5"><a href="supplementary-code.html#cb4-5"></a>  </span>
-<span id="cb4-6"><a href="supplementary-code.html#cb4-6"></a>  a <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, <span class="dv">10</span>),</span>
-<span id="cb4-7"><a href="supplementary-code.html#cb4-7"></a>  aG1[G1] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_aG1),</span>
-<span id="cb4-8"><a href="supplementary-code.html#cb4-8"></a>  aG2[G2] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_aG2),</span>
-<span id="cb4-9"><a href="supplementary-code.html#cb4-9"></a>  <span class="kw">c</span>(sd_aG1, sd_aG2) <span class="op">~</span><span class="st"> </span><span class="kw">half_cauchy</span>(<span class="dv">0</span>, <span class="dv">10</span>),</span>
-<span id="cb4-10"><a href="supplementary-code.html#cb4-10"></a></span>
-<span id="cb4-11"><a href="supplementary-code.html#cb4-11"></a>  b <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, <span class="dv">10</span>),</span>
-<span id="cb4-12"><a href="supplementary-code.html#cb4-12"></a>  bG1[G1] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_bG1),</span>
-<span id="cb4-13"><a href="supplementary-code.html#cb4-13"></a>  bG2[G2] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_bG2),</span>
-<span id="cb4-14"><a href="supplementary-code.html#cb4-14"></a>  <span class="kw">c</span>(sd_bG1, sd_bG2) <span class="op">~</span><span class="st"> </span><span class="kw">half_cauchy</span>(<span class="dv">0</span>, <span class="dv">10</span>)</span>
-<span id="cb4-15"><a href="supplementary-code.html#cb4-15"></a>), <span class="dt">data =</span> dat, <span class="dt">log_lik =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="supplementary-code.html#cb7-1"></a><span class="kw">library</span>(rethinking)</span>
+<span id="cb7-2"><a href="supplementary-code.html#cb7-2"></a><span class="kw">ulam</span>(<span class="kw">alist</span>(</span>
+<span id="cb7-3"><a href="supplementary-code.html#cb7-3"></a>  k <span class="op">~</span><span class="st"> </span><span class="kw">binomial</span>(n, pi)</span>
+<span id="cb7-4"><a href="supplementary-code.html#cb7-4"></a>  <span class="kw">logit</span>(pi) &lt;-<span class="st"> </span>(a <span class="op">+</span><span class="st"> </span>aG1[G1] <span class="op">+</span><span class="st"> </span>aG2[G2]) <span class="op">+</span><span class="st"> </span>(b <span class="op">+</span><span class="st"> </span>bG1[G1] <span class="op">+</span><span class="st"> </span>bG2[G2]) <span class="op">*</span><span class="st"> </span>x,</span>
+<span id="cb7-5"><a href="supplementary-code.html#cb7-5"></a>  </span>
+<span id="cb7-6"><a href="supplementary-code.html#cb7-6"></a>  a <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, <span class="dv">10</span>),</span>
+<span id="cb7-7"><a href="supplementary-code.html#cb7-7"></a>  aG1[G1] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_aG1),</span>
+<span id="cb7-8"><a href="supplementary-code.html#cb7-8"></a>  aG2[G2] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_aG2),</span>
+<span id="cb7-9"><a href="supplementary-code.html#cb7-9"></a>  <span class="kw">c</span>(sd_aG1, sd_aG2) <span class="op">~</span><span class="st"> </span><span class="kw">half_cauchy</span>(<span class="dv">0</span>, <span class="dv">10</span>),</span>
+<span id="cb7-10"><a href="supplementary-code.html#cb7-10"></a></span>
+<span id="cb7-11"><a href="supplementary-code.html#cb7-11"></a>  b <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, <span class="dv">10</span>),</span>
+<span id="cb7-12"><a href="supplementary-code.html#cb7-12"></a>  bG1[G1] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_bG1),</span>
+<span id="cb7-13"><a href="supplementary-code.html#cb7-13"></a>  bG2[G2] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_bG2),</span>
+<span id="cb7-14"><a href="supplementary-code.html#cb7-14"></a>  <span class="kw">c</span>(sd_bG1, sd_bG2) <span class="op">~</span><span class="st"> </span><span class="kw">half_cauchy</span>(<span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb7-15"><a href="supplementary-code.html#cb7-15"></a>), <span class="dt">data =</span> dat, <span class="dt">log_lik =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 
 <p>Advanced</p>
 
