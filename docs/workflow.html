@@ -363,22 +363,17 @@ Figure 3.1: Assortment of psychometric functions.
 <p>In practice, there is little difference in inference between the <em>logit</em> and <em>probit</em> links, but computationally the logit link is more efficient. I am also more familiar with working on the log-odds scale compared to the probit scale, so I make the decision to go forward with the logistic function. In <a href="model-checking.html#model-checking">chapter 4</a> I will show how even with a mis-specified link function, we can still achieve accurate predictions.</p>
 <p><em>develop model</em></p>
 <p>Before moving on to specifying priors, I think it is appropriate to provide a little more background into generalized linear models (GLMs) and their role in working with psychometric functions. A GLM allows the linear model to be related to the outcome variable via a <em>link</em> function. An example of this is the logit link - the inverse of the logistic function. The logistic function, <span class="math inline">\(F\)</span>, takes <span class="math inline">\(x \in \mathbb{R}\)</span> and constrains the output to be in <span class="math inline">\((0, 1)\)</span>.</p>
-<p><span class="math display" id="eq:logistic">\[
-\begin{equation}
+<p><span class="math display" id="eq:logistic">\[\begin{equation}
   F(\theta) = \frac{1}{1 + \exp\left(-\theta\right)}
   \tag{3.2}
-\end{equation}
-\]</span></p>
+\end{equation}\]</span></p>
 <p>Since <span class="math inline">\(F\)</span> is a strictly increasing and continuous function, it has an inverse, and the link for <a href="workflow.html#eq:logistic">(3.2)</a> is the log-odds or logit function.</p>
-<p><span class="math display" id="eq:logit">\[
-\begin{equation}
+<p><span class="math display" id="eq:logit">\[\begin{equation}
   F^{-1}(\pi) = \mathrm{logit}(\pi) = \ln\left(\frac{\pi}{1 - \pi}\right)
   \tag{3.3}
-\end{equation}
-\]</span></p>
+\end{equation}\]</span></p>
 <p>By taking <span class="math inline">\((F^{-1} \circ F)(\theta)\)</span> we can arrive at a relationship that is linear in <span class="math inline">\(\theta\)</span>.</p>
-<p><span class="math display">\[
-\begin{align*}
+<p><span class="math display">\[\begin{align*}
   \pi = F(\theta) \Longleftrightarrow F^{-1}(\pi) &amp;= F^{-1}(F(\theta)) \\
   &amp; = \ln\left(\frac{F(\theta)}{1 - F(\theta)}\right) \\
   &amp;= \ln(F(\theta)) - \ln(1 - F(\theta)) \\
@@ -386,40 +381,31 @@ Figure 3.1: Assortment of psychometric functions.
   &amp;= - \ln(1 + \exp(-\theta)) - \ln(\exp(-\theta)) + \ln(1 + \exp(-\theta)) \\
   &amp;= - \ln(\exp(-\theta)) \\
   &amp;= \theta
-\end{align*}
-\]</span></p>
+\end{align*}\]</span></p>
 <p>The purpose of all this setup is to show that a model for the psychometric function can be specified using a linear predictor, <span class="math inline">\(\theta\)</span>. Given a simple slope-intercept model, one would typically write the linear predictor as</p>
-<p><span class="math display" id="eq:linearform1">\[
-\begin{equation}
+<p><span class="math display" id="eq:linearform1">\[\begin{equation}
   \theta = \alpha + \beta x
   \tag{3.4}
-\end{equation}
-\]</span></p>
+\end{equation}\]</span></p>
 <p>This isn’t the only acceptable form; it could be written in the centered parameterization</p>
-<p><span class="math display" id="eq:linearform2">\[
-\begin{equation}
+<p><span class="math display" id="eq:linearform2">\[\begin{equation}
   \theta = \beta(x - a)
   \tag{3.5}
-\end{equation}
-\]</span></p>
+\end{equation}\]</span></p>
 <p>Both parameterizations will describe the same geometry, so why should it matter which form is chosen? Clearly the interpretation of the parameters change between the two models, but the reason becomes clear when you consider how the linear model relates back to the physical properties that the psychometric model describes. Take equation <a href="workflow.html#eq:linearform1">(3.4)</a>, substitute it in to <a href="workflow.html#eq:logistic">(3.2)</a>, and then take the logit of both sides</p>
-<p><span class="math display" id="eq:pfform1">\[
-\begin{equation}
+<p><span class="math display" id="eq:pfform1">\[\begin{equation}
   \mathrm{logit}(\pi) = \alpha+\beta x
   \tag{3.6}
-\end{equation}
-\]</span></p>
+\end{equation}\]</span></p>
 <p>Now recall that the PSS is defined as the SOA values such that the response probability, <span class="math inline">\(\pi\)</span>, is <span class="math inline">\(0.5\)</span>. Substituting <span class="math inline">\(\pi = 0.5\)</span> into <a href="workflow.html#eq:pfform1">(3.6)</a> and solving for <span class="math inline">\(x\)</span> yields</p>
 <p><span class="math display">\[
 pss = -\frac{\alpha}{\beta}
 \]</span></p>
 <p>Similarly, the JND is defined as the difference between the SOA value at the 84% level and the PSS. Substituting <span class="math inline">\(\pi = 0.84\)</span> into <a href="workflow.html#eq:pfform1">(3.6)</a>, solving for <span class="math inline">\(x\)</span>, and subtracting off the pss yields</p>
-<p><span class="math display" id="eq:jnd1">\[
-\begin{equation}
+<p><span class="math display" id="eq:jnd1">\[\begin{equation}
   jnd = \frac{\mathrm{logit}(0.84)}{\beta}
   \tag{3.7}
-\end{equation}
-\]</span></p>
+\end{equation}\]</span></p>
 <p>From the conceptual analysis, it is easy to define priors for the PSS and JND, but then how does one set the priors for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>? Let’s say the prior for the just noticeable difference is <span class="math inline">\(jnd \sim \pi_j\)</span>. Then the prior for <span class="math inline">\(\beta\)</span> would be</p>
 <p><span class="math display">\[
 \beta \sim \frac{\mathrm{logit}(0.84)}{\pi_j}
@@ -434,12 +420,10 @@ pss = -\frac{\alpha}{\beta}
 \]</span></p>
 <p>If <span class="math inline">\(\pi_p\)</span> is set to a log-normal distribution as well, then <span class="math inline">\(\pi_p \cdot \beta\)</span> would also be log-normal, but there is still the problem of the negative sign. If <span class="math inline">\(\alpha\)</span> is always negative, then the PSS will also always be negative, which is certainly not always true. Furthermore, I don’t want to <em>a priori</em> put more weight on positive PSS values compared to negative ones, for which a lognormal distribution would not do.</p>
 <p>Let’s now go back and consider using equation <a href="workflow.html#eq:linearform2">(3.5)</a> and repeat the above process.</p>
-<p><span class="math display" id="eq:pfform2">\[
-\begin{equation}
+<p><span class="math display" id="eq:pfform2">\[\begin{equation}
   \mathrm{logit}(\pi) = \beta(x - a)
   \tag{3.8}
-\end{equation}
-\]</span></p>
+\end{equation}\]</span></p>
 <p>The just noticeable difference is still given by <a href="workflow.html#eq:jnd1">(3.7)</a> and so the same method for choosing a prior can be used, but the PSS is now given by</p>
 <p><span class="math display">\[
 pss = \alpha
@@ -447,12 +431,10 @@ pss = \alpha
 <p>This is a fortunate consequence of using <a href="workflow.html#eq:linearform2">(3.5)</a> because now the JND only depends on <span class="math inline">\(\beta\)</span> and the PSS only depends on <span class="math inline">\(\alpha\)</span>, and now <span class="math inline">\(\alpha\)</span> can literally be interpreted as the PSS of the estimated psychometric function! Also thrown in is the ability to set a prior for <span class="math inline">\(\alpha\)</span> that is symmetric around <span class="math inline">\(0\)</span> like a Gaussian distribution.</p>
 <p>This also brings me to point out the first benefit of using a modeling language like Stan over others. For fitting GLMs in R, there are a handful of functions that utilize MLE like <code>stats::glm</code> and others that use Bayesian methods like <code>rstanarm::stan_glm</code> and <code>arm::bayesglm</code> <span class="citation">(Gabry and Goodrich <a href="#ref-R-rstanarm" role="doc-biblioref">2020</a>; Gelman and Su <a href="#ref-R-arm" role="doc-biblioref">2020</a>)</span>. Each of these functions requires the linear predictor to be in the form of <a href="workflow.html#eq:linearform1">(3.4)</a>. The <code>stan_glm</code> function actually uses Stan in the backend to fit a model, but is limited to priors from the Student t family of distributions. By writing the model directly in Stan, the linear model can be parameterized in any way and with any prior distribution, and so allows for much more expressive modeling - a key aspect of this principled workflow.</p>
 <p>For the first iteration of this model, I am going to start with the simplest model that captures the structure of the data without including information about age group, treatment, or subject. Here is a simple model that draws information from the conceptual analysis.</p>
-<p><span class="math display">\[
-\begin{align*}
+<p><span class="math display">\[\begin{align*}
   k_i &amp;\sim \mathrm{Binomial}(n_i, p_i) \\
   \mathrm{logit}(p_i) &amp;= \beta ( x_i - \alpha )
-\end{align*}
-\]</span></p>
+\end{align*}\]</span></p>
 <p>Since I am using the linear model from <a href="workflow.html#eq:linearform2">(3.5)</a>, setting the priors for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> is relatively straightforward. The PSS can be positive or negative without any expected bias towards either, so a symmetric distribution like the Gaussian is a fine choice for <span class="math inline">\(\alpha\)</span> without having any other knowledge about the distribution of PSS values. Since I said earlier that a PSS value more than 150ms in absolute value is unlikely, I can define a Gaussian prior such that <span class="math inline">\(P(|pss| &gt; 0.150) \approx 0.01\)</span>. Since the prior does not need to be exact, the following mean and variance suffice</p>
 <p><span class="math display">\[
 pss \sim \mathcal{N}(0, 0.06^2) \Longleftrightarrow \alpha \sim \mathcal{N}(0, 0.06^2)
@@ -503,21 +485,37 @@ transformed parameters {
 <p>So now with a prior for the JND, the prior for <span class="math inline">\(\beta\)</span> can be determined.</p>
 <p><span class="math display">\[
 jnd \sim \mathrm{Lognormal}(-2.3, 0.99^2) \Longleftrightarrow \frac{1}{jnd} \sim \mathrm{Lognormal}(2.3, 0.99^2)
-\]</span>
-and</p>
+\]</span></p>
+<p>and</p>
 <p><span class="math display">\[
 \beta = \frac{\mathrm{logit}(0.84)}{jnd} \sim \mathrm{Lognormal}(2.8, 0.99^2)
 \]</span></p>
 <p>The priors do not need to be too exact. Rounding the parameters for <span class="math inline">\(\beta\)</span>, the simple model is written below.</p>
-<p><span class="math display">\[
-\begin{align*}
+<p><span class="math display">\[\begin{align*}
   k_i &amp;\sim \mathrm{Binomial}(n_i, p_i) \\
   \mathrm{logit}(p_i) &amp;= \beta ( x_i - \alpha ) \\
   \alpha &amp;\sim \mathcal{N}(0, 0.06^2) \\
   \beta &amp;\sim \mathrm{Lognormal}(3, 1^2)
-\end{align*}
-\]</span></p>
+\end{align*}\]</span></p>
+<p>As a final check before moving on to the next step, I can simulate values from <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> and plot the distribution of psychometric functions. This check is valuable as the interaction between the two isn’t always predictable.</p>
+<div class="figure" style="text-align: center"><span id="fig:ch030-prior-pf-plot"></span>
+<img src="030-workflow_files/figure-html/ch030-prior-pf-plot-1.png" alt="Prior distribution of psychometric functions using the priors for alpha and beta." width="70%" />
+<p class="caption">
+Figure 3.2: Prior distribution of psychometric functions using the priors for alpha and beta.
+</p>
+</div>
+<p>Figure <a href="workflow.html#fig:ch030-prior-pf-plot">3.2</a> shows the distribution of prior psychometric functions. There are a few very steep and very shallow curves, but the majority fall within a range that appears likely. Additionally most of the PSS values are within <span class="math inline">\(\pm 0.1\)</span> with room to allow for some larger values.</p>
 <p><em>construct summary functions</em></p>
+<p>Whew! that was a lot of work to define the priors for just two parameters. Thankfully going forward not as much work will need to be done to expand the model. The next step is to construct any relevant summary functions. Since the distribution of posterior PSS and JND values are needed for the summary statistics, it will be nice to have a function that can take in the posterior samples for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> and return the PSS and JND values. I’ll define <span class="math inline">\(Q\)</span> as a more general function that takes in the two parameters and a probability, <span class="math inline">\(\pi\)</span>, and returns the distribution of SOA values at <span class="math inline">\(\pi\)</span>.</p>
+<p><span class="math display" id="eq:summfun1">\[\begin{equation}
+  Q(\pi; \alpha, \beta) = \frac{\mathrm{logit(\pi)}}{\beta} + \alpha
+  \tag{3.9}
+\end{equation}\]</span></p>
+<p>With <span class="math inline">\(Q\)</span>, the PSS and JND can be calculated as</p>
+<p><span class="math display">\[\begin{align}
+  pss &amp;= Q(0.5) \\
+  jnd &amp;= Q(0.84) - Q(0.5)
+\end{align}\]</span></p>
 <p><em>simulate Bayesian ensemble</em></p>
 <p><em>prior checks</em></p>
 <p><em>configure algorithm</em></p>
