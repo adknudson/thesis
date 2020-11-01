@@ -435,7 +435,7 @@ The priors do not need to be too exact. Rounding the parameters for $\beta$, the
 and in Stan, the model code is
 
 \setstretch{1.0}
-```{stan ch031-Maroon Vulture, output.var="m031", echo=TRUE}
+```{stan ch031-Maroon Vulture, output.var="m031_stan", echo=TRUE}
 data {
   int N;
   int n[N];
@@ -563,34 +563,194 @@ Nothing to say here. Only code.
 
 ```{r ch031-Minimum Artificial, echo=TRUE}
 sim_dat <- with(av_dat, list(N = N, x = x, n = n, k = sim_k)) 
-m031 <- sampling(m031, data = sim_dat, 
+m031 <- sampling(m031_stan, data = sim_dat, 
                  chains = 4, cores = 4, refresh = 0)
 ```
 
 _Algorithmic Calibration_
 
+One benefit of using HMC over other samplers like Gibbs sampling is that HMC offers diagnostic tools for the health of chains and the ability to check for _divergent transitions_. Recall that the HMC and NUTS algorithm can be imagined as a physics simulation of a particle in a potential energy field, and a random momentum is imparted on the particle. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle (@stanref). The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called _leapfrog steps_ (see @leimkuhler2004simulating for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.
 
+To check the basic diagnostics of the model, I run the following code.
 
 \setstretch{1.0}
-```{r ch040-Persistent Hook, message=TRUE}
+```{r ch031-Persistent Hook, message=TRUE, echo=TRUE}
 check_hmc_diagnostics(m031)
 ```
 \setstretch{2.0}
 
+There is no undesirable behavior from this model, so next I check the summary statistics of the estimated parameters. The $\hat{R}$ statistic is a comparison of the measure of variance within chains and between chains. When chains have converged to a stationary distribution, the variance within and between chains is the same, and the ratio is one. Values of $\hat{R} > 1.1$ are usually indicative of chains that have not converged to a common distribution. Lastly there is the effective sample size ($N_{\mathrm{eff}}$) which is a loose measure for the autocorrelation within the parameter samples. As autocorrelation generally decreases as the lag increases, one can achieve a higher $N_{\mathrm{eff}}$ by running a chain with more samples and then _thinning_ the samples, i.e. saving only every $n^{th}$ sample.
 
-```{r ch040-Cloudy Toupee}
-stan_summary(m031, c("alpha", "beta"))
+
+```{r ch031-Cloudy-Toupee}
+stan_summary(m031, c("alpha", "beta")) %>%
+  as_tibble(rownames = "parameter") %>%
+  kable(digits = 4, booktabs = TRUE,
+        caption = "Summary statistics of the fitted Bayesian ensemble.") %>%
+  kable_styling(latex_options = c("hold_position"))
 ```
 
+Both the $\hat{R}$ and $N_{\mathrm{eff}}$ look fine for both $\alpha$ and $\beta$, thought it is slightly concerning that $\alpha$ is centered relatively far from zero. This could just be due to sampling variance, so I will continue on to the next step.
+
 _Inferential Calibration_
+
+
 
 **Post-Model, Post-Data**
 
 _Fit Observed Data_
 
+All of the work up until now has been done without peaking at the observed data. Satisfied with the model so far, I can now go ahead and run the data through.
+
+
+```{r ch031-Homeless Tea, echo=TRUE}
+obs_dat <- with(av_dat, list(N = N, x = x, n = n, k = k)) 
+m031 <- sampling(m031_stan, data = obs_dat, 
+                 chains = 4, cores = 4, refresh = 0)
+```
+
+
 _Diagnose Posterior Fit_
 
+Here I repeat the diagnostic checks that I used after fitting the simulated Bayesian ensemble. 
+
+\setstretch{1.0}
+```{r ch031-Risky Winter, message=TRUE, echo=TRUE}
+check_hmc_diagnostics(m031)
+```
+\setstretch{2.0}
+
+```{r ch031-Maroon-Oyster}
+stan_summary(m031, c("alpha", "beta")) %>%
+  as_tibble(rownames = "parameter") %>%
+  kable(digits = 4, booktabs = TRUE,
+        caption = "Summary statistics of the fitted Bayesian ensemble.") %>%
+  kable_styling(latex_options = c("hold_position"))
+```
+
+No indications of an ill-behaved posterior fit! Let's also check the posterior distribution of $\alpha$ and $\beta$ against the prior density (\@ref(fig:ch031-m031-posterior-alpha-beta)).
+
+
+```{r ch031-m031-posterior-alpha-beta, fig.cap="Comparison of posterior distributions for alpha and beta to their respective prior distributions."}
+p031 <- extract(m031)
+pa <- tibble(x = p031$alpha) %>%
+  ggplot(aes(x = x, y = ..density..)) +
+  geom_density(aes(color = "Posterior")) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 0.06),
+                inherit.aes = FALSE, aes(color = "Prior")) +
+  scale_x_continuous(limits = c(-0.15, 0.15)) +
+  scale_color_manual(values = c("steelblue4", "orangered3")) +
+  theme(legend.title = element_blank(),
+        legend.position = c(0.25, 0.8),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank()) +
+  labs(title = "alpha")
+
+pb <- tibble(x = p031$beta) %>%
+  ggplot(aes(x = x, y = ..density..)) +
+  geom_density(aes(color = "Posterior")) +
+  stat_function(fun = dlnorm, args = list(meanlog=3, sdlog=1),
+                inherit.aes = FALSE, aes(color = "Prior")) +
+  scale_x_continuous(limits = c(0, 15)) +
+  scale_color_manual(values = c("steelblue4", "orangered3")) +
+  theme(legend.title = element_blank(),
+        legend.position = c(0.25, 0.8),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank()) +
+  labs(title = "beta")
+
+pa + pb
+```
+
+The posterior distributions for $\alpha$ and $\beta$ are well within the range determined by domain knowledge, and highly concentrated due to both the large amount of data and the fact that this is a completely pooled model - no stratification. As expected, the prior for the JND could have been tighter with more weight below half a second compared to the one second limit used, but this is not prior information, so it is not prudent to change the prior in this manner after having seen the posterior. As a rule of thumb, priors should only be updated as motivated by domain expertise and not by posterior distributions.
+
 _Posterior Retrodictive Checks_
+
+Finally it is time to run the posterior samples through the summary functions and then perform _retrodictive_ checks. A retrodiction is using the posterior model to predict and compare to the observed data. This is simply done by drawing samples from the posterior and feeding in the observational data. This may be repeated to gain a retrodictive distribution.
+
+
+```{r ch031-Donut Maximum, echo=TRUE}
+posterior_pss <- Q(0.5, p031$alpha, p031$beta)
+posterior_jnd <- Q(0.84, p031$alpha, p031$beta) - posterior_pss
+```
+
+
+```{r ch031-posterior-pss-jnd-plot, fig.cap="Posterior distribution of the PSS and JND."}
+p_pss <- ggplot(data.frame(x = 1000*posterior_pss), aes(x = x, y = ..density..)) +
+  geom_histogram(bins = 50) +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  labs(x = "milliseconds",
+       title = "Posterior Distribution for the PSS")
+
+p_jnd <- ggplot(data.frame(x = 1000*posterior_jnd), aes(x = x, y = ..density..)) +
+  geom_histogram(bins = 50) +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  labs(x = "milliseconds",
+       title = "Posterior Distribution for the JND")
+
+p_pss + p_jnd
+```
+
+Neither of the posterior estimates for the PSS or JND exceed the extreme cutoffs set in the earlier steps, so I can be confident that the model is consistent with domain expertise. Let's also take a second to appreciate how simple it is to visualize and summarize the distribution of values for these measures. Using classical techniques like MLE might require using bootstrap methods to estimate the distribution of parameter values, or one might approximate the parameter distributions using the mean and standard error of the mean to simulate new values. Since we have the entire posterior distribution we can calculate the distribution of transformed parameters by working directly with the posterior samples and be sure that the intervals are credible.
+
+Next is to actually do the posterior retrodictions. I will do this in two steps to better show how the distribution of posterior psychometric functions relates to the observed data, and then compare the observed data to the retrodictions. Figure \@ref(fig:ch031-posterior-pf-plot) shows the result of the first step.
+
+```{r ch031-posterior-pf-plot, fig.cap="Posterior distribution of psychometric functions using pooled observations."}
+set.seed(124)
+n <- 100
+idx <- sample(1:length(p031$alpha), n, replace = TRUE)
+a2 <- p031$alpha[idx]
+b2 <- p031$beta[idx]
+
+p <- data.frame(x = c(-0.5, 0.5), y = c(0, 1)) %>% ggplot(aes(x, y)) +
+  labs(x = "SOA (seconds)", title = "Posterior distribution of Psychometric Functions") +
+  theme(axis.title.y = element_blank())
+for (i in 1:n) {
+  p <- p +
+    geom_function(fun = fn, args = list(a = a2[i], b = b2[i]),
+                  color = "steelblue4", alpha = 0.15)
+}
+
+df <- with(av_dat, data.frame(x = x, y = k/n))
+
+p +
+  geom_point(data = df, aes(x = x, y = y), inherit.aes = FALSE,
+             alpha = 0.25)
+```
+
+Next I sample parameter values from the posterior distribution and use them to simulate a new data set. In the next iteration I will show how I can get Stan to automatically produce retrodictions for me in the model fitting step. The results of the posterior retrodictions are shown in figure \@ref(fig:ch031-obs-vs-retro-plot).
+
+
+```{r ch031-Intensive Trendy, echo=TRUE}
+alpha <- sample(p031$alpha, n_obs, replace = TRUE)
+beta  <- sample(p031$beta, n_obs, replace = TRUE)
+logodds <- beta * (av_dat$x - alpha)
+probs <- logistic(logodds)
+sim_k <- rbinom(n_obs, av_dat$n, probs)
+```
+
+
+```{r ch031-obs-vs-retro-plot, fig.cap="Observed data compared to the posterior retrodictions. The data is post-stratified by block for easier visualization."}
+bind_rows(tibble(x = av_dat$x, n = av_dat$n, k = sim_k, p = k/n, 
+                 trial = av_dat$trial, Data = "Retrodictions"),
+          tibble(x = av_dat$x, n = av_dat$n, k = av_dat$k, p = k/n,
+                 trial = av_dat$trial, Data = "Observations")) %>%
+  ggplot(aes(x = x, y = p)) +
+  geom_point(alpha = 0.25) +
+  scale_x_continuous(limits = c(-0.5, 0.5), breaks = seq(-0.5, 0.5, 0.25)) +
+  scale_y_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1)) +
+  labs(x = "SOA (seconds)", y = "response probability",
+       title = "Observed Data with Posterior Retrodictions") +
+  facet_grid(trial ~ Data)
+```
+
+I want to make it clear exactly what the first iteration of this model tells us. It is the average distribution of underlying psychometric functions across all subjects and trials. It cannot tell us what the differences are between pre- and post-adaptation blocks are, or even what the variation between subjects is. As such, it is only useful in determining if the average value for the PSS is different from 0 or if the average JND is different from some other predetermined level. This model is still useful given the right question, but this model cannot answer questions about group-level effects.
+
+Figure \@ref(fig:ch031-obs-vs-retro-plot) shows that the model captures the broad structure of the observed data, but is perhaps a bit under-dispersed in the tail ends of the SOA values. Besides this one issue, I am satisfied with the first iteration of this model and am ready to proceed to the next iteration.
 
 ## Iteration 2 (electric boogaloo) {#iter2}
 
