@@ -748,37 +748,215 @@ bind_rows(tibble(x = av_dat$x, n = av_dat$n, k = sim_k, p = k/n,
   facet_grid(trial ~ Data)
 ```
 
-I want to make it clear exactly what the first iteration of this model tells us. It is the average distribution of underlying psychometric functions across all subjects and trials. It cannot tell us what the differences are between pre- and post-adaptation blocks are, or even what the variation between subjects is. As such, it is only useful in determining if the average value for the PSS is different from 0 or if the average JND is different from some other predetermined level. This model is still useful given the right question, but this model cannot answer questions about group-level effects.
+I want to make it clear exactly what the first iteration of this model tells us. It is the average distribution of underlying psychometric functions across all subjects and blocks. It cannot tell us what the differences are between pre- and post-adaptation blocks are, or even what the variation between subjects is. As such, it is only useful in determining if the average value for the PSS is different from 0 or if the average JND is different from some other predetermined level. This model is still useful given the right question, but this model cannot answer questions about group-level effects.
 
 Figure \@ref(fig:ch031-obs-vs-retro-plot) shows that the model captures the broad structure of the observed data, but is perhaps a bit under-dispersed in the tail ends of the SOA values. Besides this one issue, I am satisfied with the first iteration of this model and am ready to proceed to the next iteration.
 
 ## Iteration 2 (electric boogaloo) {#iter2}
 
-**Pre-Model, Pre-Data**
-
-_Conceptual Analysis_
-
-_Define Observational Space_
-
-_Construct Summary Statistics_
+In this iteration I will be adding in the treatment and age groups into the model. There are no changes with the conceptual understanding of the experiment, and nothing to change with the observational space. As such I will be skipping the first three steps and go straight to the model development step. As I build the model, the number of changes from one iteration to the next should go to zero as the model _expands_ to become only as complex as necessary to answer the research questions.
 
 **Post-Model, Pre-Data**
 
 _Develop Model_
 
-_Construct Summary Functions_
+To start, let's add in the treatment indicator and put off consideration of adding in the age group levels. In classical statistics, it is added as an indicator variable (zero or one) for both the slope and intercept (varying slopes, varying intercepts model). Let $trt$ be $0$ if it is the pre-adaptation block and $1$ if the observation comes from the post-adaptation block.
 
-_Simulate Bayesian Ensemble_
+$$
+\theta = \alpha + \alpha_{trt} \times trt + \beta \times x + \beta_{trt}\times trt \times x
+$$
 
-_Prior Checks_
+Now when an observation comes from the pre-adaptation block ($trt=0$) the linear predictor is given by
 
-_Configure Algorithm_
+$$
+\theta_{pre} = \alpha + \beta \times x
+$$
 
-_Fit Simulated Ensemble_
+and when an observation comes from the post-adaptation block ($trt=1$) the linear predictor is
 
-_Algorithmic Calibration_
+$$
+\theta_{post} = (\alpha + \alpha_{trt}) + (\beta + \beta_{trt}) \times x
+$$
 
-_Inferential Calibration_
+This might seem like a natural way to introduce an indicator variable, but it comes with serious implications. This model implies that there is more uncertainty about the post-adaptation block compared to the baseline block, and this is not necessarily true. 
+
+\begin{align*}
+\mathrm{Var}(\theta_{post}) &= \mathrm{Var}((\alpha + \alpha_{trt}) + (\beta + \beta_{trt}) \times x) \\
+&= \mathrm{Var}(\alpha) + \mathrm{Var}(\alpha_{trt}) + x^2 \mathrm{Var}(\beta) + x^2\mathrm{Var}(\beta_{trt})
+\end{align*}
+
+
+On the other hand, the variance of $\theta_{pre}$ is
+
+$$
+\mathrm{Var}(\theta_{pre}) = \mathrm{Var}(\alpha) + x^2 \mathrm{Var}(\beta) \le \mathrm{Var}(\theta_{post})
+$$
+
+Furthermore, the intercept, $\alpha$, is no longer the average response probability at $x=0$ for the entire data set, but is instead exclusively the average for the pre-adaptation block. This may not matter in certain analyses, but one nice property of multilevel models is the separation of population level estimates and group level estimates (fixed vs. mixed effects).
+
+So instead the treatment variable is introduced into the linear model as a factor variable. This essentially means that each level in the treatment gets its own parameter estimate, and this also makes it easier to set priors when there are many levels in a group (such as for the subject level). The linear model, using equation \@ref(eq:linearform2), with the treatment is written as
+
+
+\begin{equation}
+  \theta = (\beta + \beta_{trt[i]}) \left[x_i - (\alpha + \alpha_{trt[i]})\right]
+  (\#eq:linearmodel2)
+\end{equation}
+
+
+As I add in more predictors and groups, equation \@ref(eq:linearmodel2) will start to be more difficult to read. What I can do is break up the slope and intercept parameters and write the linear model as
+
+
+\begin{align*}
+\mu_\alpha &= \alpha + \alpha_{trt[i]} \\
+\mu_\beta &= \beta + \beta_{trt[i]} \\
+\theta &= \mu_\beta (x - \mu_\alpha)
+\end{align*}
+
+
+In this way the combined parameters can be considered separately from the linear parameterization. Which leads me to consider the priors for $\alpha_{trt}$ and $\beta_{trt}$. The way that we can turn an normal model with categorical predictors into a multilevel model is by allowing the priors to borrow information from other groups. This is accomplished by putting priors on priors. It is easier to write down the model first before explaining how it works.
+
+
+\begin{align*}
+k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+\mu_\alpha &= \alpha + \alpha_{trt[i]} \\
+\mu_\beta &= \beta + \beta_{trt[i]} \\
+\mathrm{logit}(p_i) &= \mu_\beta (x_i - \mu_\alpha) \\
+\alpha &\sim \mathcal{N}(0, 0.06^2) \\
+\alpha_{trt} &\sim \mathcal{N}(0, \sigma_{trt}^2) \\
+\sigma_{trt} &\sim \textrm{to be defined}
+\end{align*}
+
+
+In the above model, $\alpha$ gets a fixed prior (the same as in the first iteration), and $\alpha_{trt}$ gets a Gaussian prior with an adaptive variance term that is allowed to be learned from the data. This notation is compact, but $\alpha_{trt}$ is actually two parameters - one each for pre- and post-adaptation block - but they both share the same variance term $\sigma_{trt}$. This produces a _regularizing_ effect where both treatment estimates are shrunk towards the mean, $\alpha$.
+
+I'll discuss selecting a prior for the variance term shortly, but now I want to discuss setting the prior for the slope terms. Instead of modeling $\beta$ with a log-normal prior, I can sample from a normal distribution and take the exponential of it to produce a log-normal distribution. I.e.
+
+$$
+X \sim \mathcal{N}(3, 1^2) \\
+Y = \exp\left\lbrace X \right\rbrace \Longleftrightarrow Y \sim \mathrm{Lognormal(3, 1^2)}
+$$
+
+The motivation behind this transformation is that it is now easier to include new slope variables as an additive affect. If both $\beta$ and $\beta_{trt}$ are specified with Gaussian priors, then the exponential of the sum will be a log-normal distribution! So now the model is
+
+
+\begin{align*}
+k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+\mu_\alpha &= \alpha + \alpha_{trt[i]} \\
+\mu_\beta &= \beta + \beta_{trt[i]} \\
+\mathrm{logit}(p_i) &= \exp(\mu_\beta) (x_i - \mu_\alpha) \\
+\alpha &\sim \mathcal{N}(0, 0.06^2) \\
+\alpha_{trt} &\sim \mathcal{N}(0, \sigma_{trt}^2) \\
+\beta &\sim \mathcal{N}(3, 1^2) \\
+\beta_{trt} &\sim \mathcal{N}(0, \gamma_{trt}^2) \\
+\sigma_{trt} &\sim \textrm{to be defined} \\
+\gamma_{trt} &\sim \textrm{to be defined}
+\end{align*}
+
+
+Deciding on priors for the variance term requires some careful consideration. In one sense, the variance term is the within group variance, but with non-linear models like logistic regression, the logit link can have undesirable or unpredictable floor and ceiling effects. @gelman2006prior recommends that for multilevel models with groups with less than say 5 levels to use a half Cauchy prior with a larger scale parameter. This weakly informative prior still has a regularizing affect and dissuades larger variance estimates. Even though the treatment group only has two levels, there is still value in specifying an adaptive prior for them, and there is also a lot of data for each treatment so partial pooling won't make a difference anyway.
+
+
+\begin{align*}
+\sigma_{trt} &\sim \mathrm{HalfCauchy}(0, 25) \\
+\gamma_{trt} &\sim \mathrm{HalfCauchy}(0, 25)
+\end{align*}
+
+
+Finally I can add in the age group level effects and specify the variance terms.
+
+
+\begin{align*}
+k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+\mu_\alpha &= \alpha + \alpha_{trt[i]} + \alpha_{G[i]} \\
+\mu_\beta &= \beta + \beta_{trt[i]} + \beta_{G[i]} \\
+\mathrm{logit}(p_i) &= \exp(\mu_\beta) (x_i - \mu_\alpha) \\
+\alpha &\sim \mathcal{N}(0, 0.06^2) \\
+\alpha_{trt} &\sim \mathcal{N}(0, \sigma_{trt}^2) \\
+\alpha_{G} &\sim \mathcal{N}(0, \tau_{G}^2)\\
+\beta &\sim \mathcal{N}(3, 1^2) \\
+\beta_{trt} &\sim \mathcal{N}(0, \gamma_{trt}^2) \\
+\beta_{G} &\sim \mathcal{N}(0, \nu_{G}^2) \\
+\sigma_{trt} &\sim \mathrm{HalfCauchy}(0, 25) \\
+\gamma_{trt} &\sim \mathrm{HalfCauchy}(0, 25) \\
+\tau_{G} &\sim \mathrm{HalfCauchy}(0, 25) \\
+\nu_{G} &\sim \mathrm{HalfCauchy}(0, 25)
+\end{align*}
+
+
+Here is the corresponding Stan code that also computes the posterior retrodictions and JND and PSS estimates.
+
+
+\setstretch{1.0}
+```{stan ch032-Iron Forgotten, output.var="m032_stan", echo=TRUE}
+data {
+  int N;
+  int N_G;
+  int N_T;
+  int n[N];
+  int k[N];
+  vector[N] x;
+  int G[N];
+  int trt[N];
+}
+parameters {
+  real a;
+  real<lower=machine_precision()> sd_aG;
+  real<lower=machine_precision()> sd_aT;
+  real aG[N_G];
+  real aT[N_T];
+
+  real b;
+  real<lower=machine_precision()> sd_bG;
+  real<lower=machine_precision()> sd_bT;
+  real bG[N_G];
+  real bT[N_T];
+}
+model {
+  vector[N] theta;
+
+  a  ~ normal(0, 0.06);
+  aG ~ normal(0, sd_aG);
+  aT ~ normal(0, sd_aT);
+  sd_aG ~ cauchy(0, 25);
+  sd_aT ~ cauchy(0, 25);
+
+  b  ~ normal(3.0, 1.0);
+  bG ~ normal(0, sd_bG);
+  bT ~ normal(0, sd_bT);
+  sd_bG ~ cauchy(0, 25);
+  sd_bT ~ cauchy(0, 25);
+
+  for (i in 1:N) {
+    real mu_a = a + aT[trt[i]] + aG[G[i]];
+    real mu_b = b + bT[trt[i]] + bG[G[i]];
+    theta[i] = exp(mu_b) * (x[i] - mu_a);
+  }
+
+  k ~ binomial_logit(n, theta);
+}
+generated quantities {
+  matrix[N_G, N_T] pss;
+  matrix[N_G, N_T] jnd;
+  vector[N] k_pred;
+
+  for (i in 1:N_G) {
+    for (j in 1:N_T) {
+      real mu_b = exp(b + bT[j] + bG[i]);
+      real mu_a = a + aT[j] + aG[i];
+      pss[i, j] = mu_a;
+      jnd[i, j] = logit(0.84) / mu_b;
+    }
+  }
+  
+  for (i in 1:N) {
+    real mu_a = a + aT[trt[i]] + aG[G[i]];
+    real mu_b = b + bT[trt[i]] + bG[G[i]];
+    real p = inv_logit(exp(mu_b) * (x[i] - mu_a));
+    k_pred[i] = binomial_rng(n[i], p);
+  }
+}
+```
+\setstretch{2.0}
 
 **Post-Model, Post-Data**
 

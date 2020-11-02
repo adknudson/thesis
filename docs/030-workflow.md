@@ -38,62 +38,93 @@ The question of inferential adequacy depends on the set of questions that we are
 
 For the last question, model adequacy, I will be following a set of steps proposed in @betancourt2020. The purpose of laying out these steps is not to again blindly check them off, but to force the analyst to carefully consider each point and make an _informed_ decision whether the step is necessary or to craft the specifics of how the step should be completed. The steps are listed in table \@ref(tab:ch030-workflow-steps). These steps are also not meant to be followed linearly. If at any point it is discovered that there is an issue in conceptual understanding or model adequacy or something else, then it is encouraged to go back to a previous step and start with a new understanding.
 
-\begin{table}[!h]
-
-\caption{(\#tab:ch030-workflow-steps)Principled workflow}
-\centering
-\begin{tabular}[t]{ll}
-\toprule
-Part & Step\\
-\midrule
- & conceptual analysis\\
-\cmidrule{2-2}
- & define observational space\\
-\cmidrule{2-2}
-\multirow[t]{-3}{*}{\raggedright\arraybackslash Pre-Model, Pre-Data} & construct summary statistics\\
-\cmidrule{1-2}
- & develop model\\
-\cmidrule{2-2}
- & construct summary functions\\
-\cmidrule{2-2}
- & simulate Bayesian ensemble\\
-\cmidrule{2-2}
- & prior checks\\
-\cmidrule{2-2}
- & configure algorithm\\
-\cmidrule{2-2}
- & fit simulated ensemble\\
-\cmidrule{2-2}
- & algorithmic calibration\\
-\cmidrule{2-2}
-\multirow[t]{-8}{*}{\raggedright\arraybackslash Post-Model, Pre-Data} & inferential calibration\\
-\cmidrule{1-2}
- & fit observed data\\
-\cmidrule{2-2}
- & diagnose posterior fit\\
-\cmidrule{2-2}
- & posterior retrodictive checks\\
-\cmidrule{2-2}
-\multirow[t]{-4}{*}{\raggedright\arraybackslash Post-Model, Post-Data} & celebrate\\
-\bottomrule
-\end{tabular}
-\end{table}
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>(\#tab:ch030-workflow-steps)Principled workflow</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Part </th>
+   <th style="text-align:left;"> Step </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="3"> Pre-Model, Pre-Data </td>
+   <td style="text-align:left;"> conceptual analysis </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> define observational space </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> construct summary statistics </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="8"> Post-Model, Pre-Data </td>
+   <td style="text-align:left;"> develop model </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> construct summary functions </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> simulate Bayesian ensemble </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> prior checks </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> configure algorithm </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> fit simulated ensemble </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> algorithmic calibration </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> inferential calibration </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> Post-Model, Post-Data </td>
+   <td style="text-align:left;"> fit observed data </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> diagnose posterior fit </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> posterior retrodictive checks </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> celebrate </td>
+  </tr>
+</tbody>
+</table>
 
 I'll talk about each step in the first iteration, but may choose to omit steps in subsequent iterations if there are no changes. For the purposes of building a model and being concise, I will focus around the audiovisual TOJ task in this chapter, but the final model will apply similarly to the visual and duration tasks. For the sensorimotor task, the model will be modified to accept Bernoulli data as apposed to aggregated Binomial counts (described more in the next section).
 
 ## Iteration 1 (journey of a thousand miles) {#iter1}
 
-**pre-model, pre-data**
+**Pre-Model, Pre-Data**
 
 I begin the modeling process by modeling the experiment according to the description of how it occurred and how the data were collected. This first part consists of conceptual analysis, defining the observational space, and constructing summary statistics that can help us to identify issues in the model specification.
 
-_conceptual analysis_
+_Conceptual Analysis_
 
 In section \@ref(toj-task) I discussed the experimental setup and data collection. To reiterate, subjects are presented with two stimuli separated by some temporal delay, and they are asked to respond as to their perception of the temporal order. There are 45 subjects with 15 each in the young, middle, and older age groups. As the SOA becomes larger in the positive direction, subjects are expected to give more "positive" responses, and as the SOA becomes larger in the negative direction, more "negative" responses are expected. By the way the experiment and responses are constructed, there is no expectation to see a reversal of this trend unless there was an issue with the subject's understanding of the directions given to them or an error in the recording device.
 
 After the first experimental block the subjects go through a recalibration period, and repeat the experiment again. The interest is in seeing if the recalibration has an effect on temporal sensitivity and perceptual synchrony, and if the effect is different for each age group.
 
-_define observational space_
+_Define Observational Space_
 
 The response that subjects give during a TOJ task is recorded as a zero or a one (see section \@ref(toj-task)), and their relative performance is determined by the SOA value. Let $y$ represent the binary outcome of a trial and let $x$ be the SOA value.
 
@@ -153,7 +184,7 @@ data {
 
 In Stan (and unlike in R), data types must be statically declared. While sometimes a nuisance, this requirement aids in something called _type inference_, and also lets Stan optimize certain parts of the model. 
 
-_construct summary statistics_
+_Construct Summary Statistics_
 
 In order to effectively challenge the validity of the model, a set of summary statistics are constructed that help answer the questions of domain expertise consistency and model adequacy. We are studying the affects of age and temporal recalibration through the PSS and JND (see section \@ref(psycho-experiments)), so it is natural to define summary statistics around these quantities to verify model consistency. Additionally the PSS and JND can be computed regardless of the model parameterization or chosen psychometric function.
 
@@ -165,26 +196,22 @@ As for the point of subjective simultaneity, it can be either positive or negati
 
 A histogram of computed PSS and JND values will suffice for summary statistics. We can estimate the proportion of values that fall outside of our limits defined above, and use them as indications of problems with the model fitting or conceptual understanding.
 
-**post-model, pre-data**
+**Post-Model, Pre-Data**
 
 It is now time to define priors for the model, while still not having looked at the [distribution of] data. The priors should be motivated by domain expertise and *prior knowledge*, not the data. There are also many choices when it comes to selecting a psychometric (sigmoid) function. Common ones are logistic, Gaussian, and Weibull.
 
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\linewidth]{030-workflow_files/figure-latex/ch031-pf-assortment-1} 
-
-}
-
-\caption{Assortment of psychometric functions.}(\#fig:ch031-pf-assortment)
-\end{figure}
+<div class="figure" style="text-align: center">
+<img src="030-workflow_files/figure-html/ch031-pf-assortment-1.png" alt="Assortment of psychometric functions." width="70%" />
+<p class="caption">(\#fig:ch031-pf-assortment)Assortment of psychometric functions.</p>
+</div>
 
 
 The Weibull psychometric function is more common when it comes to 2-AFC psychometric experiments where the independent variable is a stimulus intensity (non-negative) and the goal is signal detection. The data in this paper includes both positive and negative SOA values, so the Weibull is not a natural choice. In fact, because this is essentially a model for logistic regression, my first choice is the logistic function as it is the canonical choice for Binomial data. Additionally, the data in this study are reversible. The label of a positive response can be swapped with the label of a negative response and the inferences should remain the same. Since there is no natural ordering, it makes more sense for the psychometric function to be symmetric, e.g. the logistic and Gaussian. I use symmetric loosely to mean that probability density function (PDF) is symmetric about its middle. More specifically, the distribution has zero skewness.
 
 In practice, there is little difference in inference between the _logit_ and _probit_ links, but computationally the logit link is more efficient. I am also more familiar with working on the log-odds scale compared to the probit scale, so I make the decision to go forward with the logistic function. In [chapter 4](#model-checking) I will show how even with a mis-specified link function, we can still achieve accurate predictions.
 
-_develop model_
+_Develop Model_
 
 Before moving on to specifying priors, I think it is appropriate to provide a little more background into generalized linear models (GLMs) and their role in working with psychometric functions. A GLM allows the linear model to be related to the outcome variable via a _link_ function. An example of this is the logit link - the inverse of the logistic function. The logistic function, $F$, takes $x \in \mathbb{R}$ and constrains the output to be in $(0, 1)$.
 
@@ -378,8 +405,7 @@ sol$y
 
 Sampling from a log-normal distribution with these parameters and plotting the histogram shows no inconsistency with the domain expertise.
 
-
-\begin{center}\includegraphics[width=0.7\linewidth]{030-workflow_files/figure-latex/ch031-Risky-Lion-1} \end{center}
+<img src="030-workflow_files/figure-html/ch031-Risky-Lion-1.png" width="70%" style="display: block; margin: auto;" />
 
 So now with a prior for the JND, the prior for $\beta$ can be determined.
 
@@ -393,7 +419,7 @@ $$
 \beta = \frac{\mathrm{logit}(0.84)}{jnd} \sim \mathrm{Lognormal}(2.8, 0.99^2)
 $$
 
-The priors do not need to be too exact. Rounding the parameters for $\beta$, the simple model is written below.
+The priors do not need to be too exact. Rounding the parameters for $\beta$, the simple model is
 
 
 \begin{align*}
@@ -404,21 +430,33 @@ The priors do not need to be too exact. Rounding the parameters for $\beta$, the
 \end{align*}
 
 
-As a final check before moving on to the next step, I can simulate values from $\alpha$ and $\beta$ and plot the distribution of psychometric functions. This check is valuable as the interaction between the two isn't always predictable.
+and in Stan, the model code is
 
+\setstretch{1.0}
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\linewidth]{030-workflow_files/figure-latex/ch030-prior-pf-plot-1} 
-
+```stan
+data {
+  int N;
+  int n[N];
+  int k[N];
+  vector[N] x;
 }
+parameters {
+  real alpha;
+  real<lower=0> beta;
+}
+model {
+  vector[N] p = beta * (x - alpha);
+  alpha ~ normal(0, 0.05);
+  beta ~ lognormal(3.0, 1.5);
+  k ~ binomial_logit(n, p);
+}
+```
+\setstretch{2.0}
 
-\caption{Prior distribution of psychometric functions using the priors for alpha and beta.}(\#fig:ch030-prior-pf-plot)
-\end{figure}
+Notice that the model block is nearly identical to the mathematical model!
 
-Figure \@ref(fig:ch030-prior-pf-plot) shows the distribution of prior psychometric functions. There are a few very steep and very shallow curves, but the majority fall within a range that appears likely. Additionally most of the PSS values are within $\pm 0.1$ with room to allow for some larger values.
-
-_construct summary functions_
+_Construct Summary Functions_
 
 Whew! that was a lot of work to define the priors for just two parameters. Thankfully going forward not as much work will need to be done to expand the model. The next step is to construct any relevant summary functions. Since the distribution of posterior PSS and JND values are needed for the summary statistics, it will be nice to have a function that can take in the posterior samples for $\alpha$ and $\beta$ and return the PSS and JND values. I'll define $Q$ as a more general function that takes in the two parameters and a probability, $\pi$, and returns the distribution of SOA values at $\pi$.
 
@@ -429,6 +467,13 @@ Whew! that was a lot of work to define the priors for just two parameters. Thank
 \end{equation}
 
 
+The function can be defined in R as
+
+
+```r
+Q <- function(p, a, b) qlogis(p) / b + a
+```
+
 With $Q$, the PSS and JND can be calculated as
 
 
@@ -438,169 +483,595 @@ With $Q$, the PSS and JND can be calculated as
 \end{align}
 
 
-_simulate Bayesian ensemble_
+_Simulate Bayesian Ensemble_
 
-_prior checks_
+During this step, I simulate the Bayesian ensemble and later feed the prior values into the summary functions in order to verify that there are no other inconsistencies with domain knowledge. Since the model is fairly simple, I will simulate directly in R.
 
-_configure algorithm_
 
-_fit simulated ensemble_
 
-_algorithmic calibration_
+```r
+set.seed(124)
+n <- 10000
 
-_inferential calibration_
+a <- rnorm(n, 0, 0.06)
+b <- rlnorm(n, 3.0, 1)
 
-**post-model, post-data**
+dat <- with(av_dat, list(N = N, x = x, n = n)) 
+n_obs <- length(dat$x)
 
-_fit observed data_
+idx <- sample(1:n, n_obs, replace = TRUE)
+probs <- logistic(b[idx] * (dat$x - a[idx]))
+sim_k <- rbinom(n_obs, dat$n, probs)
+```
 
-_diagnose posterior fit_
 
-_posterior retrodictive checks_
+_Prior Checks_
+
+This step pertains to ensuring that prior estimates are consistent with domain expertise. I already did that in the model construction step by sampling values for the just noticeable difference. The first prior chosen was not producing JND estimates that were consistent with domain knowledge, so I adjusted accordingly. That check would normally be done during this step, and I would have had to return to the model development step.
+
+Figure \@ref(fig:ch030-prior-pf-plot) shows the distribution of prior psychometric functions derived from the simulated ensemble. There are a few very steep and very shallow curves, but the majority fall within a range that appears likely.
+
+
+<div class="figure" style="text-align: center">
+<img src="030-workflow_files/figure-html/ch030-prior-pf-plot-1.png" alt="Prior distribution of psychometric functions using the priors for alpha and beta." width="70%" />
+<p class="caption">(\#fig:ch030-prior-pf-plot)Prior distribution of psychometric functions using the priors for alpha and beta.</p>
+</div>
+
+
+Additionally most of the PSS values are within $\pm 0.1$ with room to allow for some larger values. Let's check the prior distribution of PSS and JND values.
+
+
+<div class="figure" style="text-align: center">
+<img src="030-workflow_files/figure-html/ch031-prior-pss-plot-1.png" alt="PSS prior distribution." width="70%" />
+<p class="caption">(\#fig:ch031-prior-pss-plot)PSS prior distribution.</p>
+</div>
+
+
+<div class="figure" style="text-align: center">
+<img src="030-workflow_files/figure-html/ch031-prior-jnd-plot-1.png" alt="JND prior distribution." width="70%" />
+<p class="caption">(\#fig:ch031-prior-jnd-plot)JND prior distribution.</p>
+</div>
+
+
+I am satisfied with the prior coverage of the PSS and JND values, and there are only a few samples that go beyond the extremes that were specified in the summary statistics step.
+
+_Configure Algorithm_
+
+There are a few parameters that can be set for Stan. On the user side, the main parameters are the number of iterations, the number of warm-up iterations, the target acceptance rate, and the number of chains to run. The NUTS algorithm samples in two phases: a warm-up phase and a sampling phase. During the warm-up phase, the sampler is automatically tuning three internal parameters that can significantly affect the sampling efficiency. By default, the Stan function will use half the number of iterations for warm-up and the other half for actual sampling. The full details of Stan's HMC algorithm is described in the Stan reference manual. For now I am going to use the default algorithm parameters in Stan, and will tweak them later if and when issues arise.
+
+_Fit Simulated Ensemble_
+
+Nothing to say here. Only code.
+
+
+```r
+sim_dat <- with(av_dat, list(N = N, x = x, n = n, k = sim_k)) 
+m031 <- sampling(m031_stan, data = sim_dat, 
+                 chains = 4, cores = 4, refresh = 0)
+```
+
+_Algorithmic Calibration_
+
+One benefit of using HMC over other samplers like Gibbs sampling is that HMC offers diagnostic tools for the health of chains and the ability to check for _divergent transitions_. Recall that the HMC and NUTS algorithm can be imagined as a physics simulation of a particle in a potential energy field, and a random momentum is imparted on the particle. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle (@stanref). The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called _leapfrog steps_ (see @leimkuhler2004simulating for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.
+
+To check the basic diagnostics of the model, I run the following code.
+
+\setstretch{1.0}
+
+```r
+check_hmc_diagnostics(m031)
+#> 
+#> Divergences:
+#> 0 of 4000 iterations ended with a divergence.
+#> 
+#> Tree depth:
+#> 0 of 4000 iterations saturated the maximum tree depth of 10.
+#> 
+#> Energy:
+#> E-BFMI indicated no pathological behavior.
+```
+\setstretch{2.0}
+
+There is no undesirable behavior from this model, so next I check the summary statistics of the estimated parameters. The $\hat{R}$ statistic is a comparison of the measure of variance within chains and between chains. When chains have converged to a stationary distribution, the variance within and between chains is the same, and the ratio is one. Values of $\hat{R} > 1.1$ are usually indicative of chains that have not converged to a common distribution. Lastly there is the effective sample size ($N_{\mathrm{eff}}$) which is a loose measure for the autocorrelation within the parameter samples. As autocorrelation generally decreases as the lag increases, one can achieve a higher $N_{\mathrm{eff}}$ by running a chain with more samples and then _thinning_ the samples, i.e. saving only every $n^{th}$ sample.
+
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>(\#tab:ch031-Cloudy-Toupee)Summary statistics of the fitted Bayesian ensemble.</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> parameter </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> se_mean </th>
+   <th style="text-align:right;"> sd </th>
+   <th style="text-align:right;"> 2.5% </th>
+   <th style="text-align:right;"> 97.5% </th>
+   <th style="text-align:right;"> n_eff </th>
+   <th style="text-align:right;"> Rhat </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> alpha </td>
+   <td style="text-align:right;"> 0.0061 </td>
+   <td style="text-align:right;"> 0.0001 </td>
+   <td style="text-align:right;"> 0.0035 </td>
+   <td style="text-align:right;"> -0.0007 </td>
+   <td style="text-align:right;"> 0.0129 </td>
+   <td style="text-align:right;"> 3728 </td>
+   <td style="text-align:right;"> 1.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> beta </td>
+   <td style="text-align:right;"> 10.7726 </td>
+   <td style="text-align:right;"> 0.0054 </td>
+   <td style="text-align:right;"> 0.2473 </td>
+   <td style="text-align:right;"> 10.3054 </td>
+   <td style="text-align:right;"> 11.2600 </td>
+   <td style="text-align:right;"> 2073 </td>
+   <td style="text-align:right;"> 1.001 </td>
+  </tr>
+</tbody>
+</table>
+
+Both the $\hat{R}$ and $N_{\mathrm{eff}}$ look fine for both $\alpha$ and $\beta$, thought it is slightly concerning that $\alpha$ is centered relatively far from zero. This could just be due to sampling variance, so I will continue on to the next step.
+
+_Inferential Calibration_
+
+
+
+**Post-Model, Post-Data**
+
+_Fit Observed Data_
+
+All of the work up until now has been done without peaking at the observed data. Satisfied with the model so far, I can now go ahead and run the data through.
+
+
+
+```r
+obs_dat <- with(av_dat, list(N = N, x = x, n = n, k = k)) 
+m031 <- sampling(m031_stan, data = obs_dat, 
+                 chains = 4, cores = 4, refresh = 0)
+```
+
+
+_Diagnose Posterior Fit_
+
+Here I repeat the diagnostic checks that I used after fitting the simulated Bayesian ensemble. 
+
+\setstretch{1.0}
+
+```r
+check_hmc_diagnostics(m031)
+#> 
+#> Divergences:
+#> 0 of 4000 iterations ended with a divergence.
+#> 
+#> Tree depth:
+#> 0 of 4000 iterations saturated the maximum tree depth of 10.
+#> 
+#> Energy:
+#> E-BFMI indicated no pathological behavior.
+```
+\setstretch{2.0}
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>(\#tab:ch031-Maroon-Oyster)Summary statistics of the fitted Bayesian ensemble.</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> parameter </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> se_mean </th>
+   <th style="text-align:right;"> sd </th>
+   <th style="text-align:right;"> 2.5% </th>
+   <th style="text-align:right;"> 97.5% </th>
+   <th style="text-align:right;"> n_eff </th>
+   <th style="text-align:right;"> Rhat </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> alpha </td>
+   <td style="text-align:right;"> 0.0373 </td>
+   <td style="text-align:right;"> 0.0001 </td>
+   <td style="text-align:right;"> 0.0040 </td>
+   <td style="text-align:right;"> 0.0293 </td>
+   <td style="text-align:right;"> 0.0453 </td>
+   <td style="text-align:right;"> 4035 </td>
+   <td style="text-align:right;"> 0.9992 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> beta </td>
+   <td style="text-align:right;"> 8.4236 </td>
+   <td style="text-align:right;"> 0.0039 </td>
+   <td style="text-align:right;"> 0.1857 </td>
+   <td style="text-align:right;"> 8.0771 </td>
+   <td style="text-align:right;"> 8.7992 </td>
+   <td style="text-align:right;"> 2311 </td>
+   <td style="text-align:right;"> 1.0017 </td>
+  </tr>
+</tbody>
+</table>
+
+No indications of an ill-behaved posterior fit! Let's also check the posterior distribution of $\alpha$ and $\beta$ against the prior density (\@ref(fig:ch031-m031-posterior-alpha-beta)).
+
+
+<div class="figure" style="text-align: center">
+<img src="030-workflow_files/figure-html/ch031-m031-posterior-alpha-beta-1.png" alt="Comparison of posterior distributions for alpha and beta to their respective prior distributions." width="70%" />
+<p class="caption">(\#fig:ch031-m031-posterior-alpha-beta)Comparison of posterior distributions for alpha and beta to their respective prior distributions.</p>
+</div>
+
+The posterior distributions for $\alpha$ and $\beta$ are well within the range determined by domain knowledge, and highly concentrated due to both the large amount of data and the fact that this is a completely pooled model - no stratification. As expected, the prior for the JND could have been tighter with more weight below half a second compared to the one second limit used, but this is not prior information, so it is not prudent to change the prior in this manner after having seen the posterior. As a rule of thumb, priors should only be updated as motivated by domain expertise and not by posterior distributions.
+
+_Posterior Retrodictive Checks_
+
+Finally it is time to run the posterior samples through the summary functions and then perform _retrodictive_ checks. A retrodiction is using the posterior model to predict and compare to the observed data. This is simply done by drawing samples from the posterior and feeding in the observational data. This may be repeated to gain a retrodictive distribution.
+
+
+
+```r
+posterior_pss <- Q(0.5, p031$alpha, p031$beta)
+posterior_jnd <- Q(0.84, p031$alpha, p031$beta) - posterior_pss
+```
+
+
+<div class="figure" style="text-align: center">
+<img src="030-workflow_files/figure-html/ch031-posterior-pss-jnd-plot-1.png" alt="Posterior distribution of the PSS and JND." width="70%" />
+<p class="caption">(\#fig:ch031-posterior-pss-jnd-plot)Posterior distribution of the PSS and JND.</p>
+</div>
+
+Neither of the posterior estimates for the PSS or JND exceed the extreme cutoffs set in the earlier steps, so I can be confident that the model is consistent with domain expertise. Let's also take a second to appreciate how simple it is to visualize and summarize the distribution of values for these measures. Using classical techniques like MLE might require using bootstrap methods to estimate the distribution of parameter values, or one might approximate the parameter distributions using the mean and standard error of the mean to simulate new values. Since we have the entire posterior distribution we can calculate the distribution of transformed parameters by working directly with the posterior samples and be sure that the intervals are credible.
+
+Next is to actually do the posterior retrodictions. I will do this in two steps to better show how the distribution of posterior psychometric functions relates to the observed data, and then compare the observed data to the retrodictions. Figure \@ref(fig:ch031-posterior-pf-plot) shows the result of the first step.
+
+<div class="figure" style="text-align: center">
+<img src="030-workflow_files/figure-html/ch031-posterior-pf-plot-1.png" alt="Posterior distribution of psychometric functions using pooled observations." width="70%" />
+<p class="caption">(\#fig:ch031-posterior-pf-plot)Posterior distribution of psychometric functions using pooled observations.</p>
+</div>
+
+Next I sample parameter values from the posterior distribution and use them to simulate a new data set. In the next iteration I will show how I can get Stan to automatically produce retrodictions for me in the model fitting step. The results of the posterior retrodictions are shown in figure \@ref(fig:ch031-obs-vs-retro-plot).
+
+
+
+```r
+alpha <- sample(p031$alpha, n_obs, replace = TRUE)
+beta  <- sample(p031$beta, n_obs, replace = TRUE)
+logodds <- beta * (av_dat$x - alpha)
+probs <- logistic(logodds)
+sim_k <- rbinom(n_obs, av_dat$n, probs)
+```
+
+
+<div class="figure" style="text-align: center">
+<img src="030-workflow_files/figure-html/ch031-obs-vs-retro-plot-1.png" alt="Observed data compared to the posterior retrodictions. The data is post-stratified by block for easier visualization." width="70%" />
+<p class="caption">(\#fig:ch031-obs-vs-retro-plot)Observed data compared to the posterior retrodictions. The data is post-stratified by block for easier visualization.</p>
+</div>
+
+I want to make it clear exactly what the first iteration of this model tells us. It is the average distribution of underlying psychometric functions across all subjects and blocks. It cannot tell us what the differences are between pre- and post-adaptation blocks are, or even what the variation between subjects is. As such, it is only useful in determining if the average value for the PSS is different from 0 or if the average JND is different from some other predetermined level. This model is still useful given the right question, but this model cannot answer questions about group-level effects.
+
+Figure \@ref(fig:ch031-obs-vs-retro-plot) shows that the model captures the broad structure of the observed data, but is perhaps a bit under-dispersed in the tail ends of the SOA values. Besides this one issue, I am satisfied with the first iteration of this model and am ready to proceed to the next iteration.
 
 ## Iteration 2 (electric boogaloo) {#iter2}
 
-**pre-model, pre-data**
+In this iteration I will be adding in the treatment and age groups into the model. There are no changes with the conceptual understanding of the experiment, and nothing to change with the observational space. As such I will be skipping the first three steps and go straight to the model development step. As I build the model, the number of changes from one iteration to the next should go to zero as the model _expands_ to become only as complex as necessary to answer the research questions.
 
-_conceptual analysis_
+**Post-Model, Pre-Data**
 
-_define observational space_
+_Develop Model_
 
-_construct summary statistics_
+To start, let's add in the treatment indicator and put off consideration of adding in the age group levels. In classical statistics, it is added as an indicator variable (zero or one) for both the slope and intercept (varying slopes, varying intercepts model). Let $trt$ be $0$ if it is the pre-adaptation block and $1$ if the observation comes from the post-adaptation block.
 
-**post-model, pre-data**
+$$
+\theta = \alpha + \alpha_{trt} \times trt + \beta \times x + \beta_{trt}\times trt \times x
+$$
 
-_develop model_
+Now when an observation comes from the pre-adaptation block ($trt=0$) the linear predictor is given by
 
-_construct summary functions_
+$$
+\theta_{pre} = \alpha + \beta \times x
+$$
 
-_simulate Bayesian ensemble_
+and when an observation comes from the post-adaptation block ($trt=1$) the linear predictor is
 
-_prior checks_
+$$
+\theta_{post} = (\alpha + \alpha_{trt}) + (\beta + \beta_{trt}) \times x
+$$
 
-_configure algorithm_
+This might seem like a natural way to introduce an indicator variable, but it comes with serious implications. This model implies that there is more uncertainty about the post-adaptation block compared to the baseline block, and this is not necessarily true. 
 
-_fit simulated ensemble_
+\begin{align*}
+\mathrm{Var}(\theta_{post}) &= \mathrm{Var}((\alpha + \alpha_{trt}) + (\beta + \beta_{trt}) \times x) \\
+&= \mathrm{Var}(\alpha) + \mathrm{Var}(\alpha_{trt}) + x^2 \mathrm{Var}(\beta) + x^2\mathrm{Var}(\beta_{trt})
+\end{align*}
 
-_algorithmic calibration_
 
-_inferential calibration_
+On the other hand, the variance of $\theta_{pre}$ is
 
-**post-model, post-data**
+$$
+\mathrm{Var}(\theta_{pre}) = \mathrm{Var}(\alpha) + x^2 \mathrm{Var}(\beta) \le \mathrm{Var}(\theta_{post})
+$$
 
-_fit observed data_
+Furthermore, the intercept, $\alpha$, is no longer the average response probability at $x=0$ for the entire data set, but is instead exclusively the average for the pre-adaptation block. This may not matter in certain analyses, but one nice property of multilevel models is the separation of population level estimates and group level estimates (fixed vs. mixed effects).
 
-_diagnose posterior fit_
+So instead the treatment variable is introduced into the linear model as a factor variable. This essentially means that each level in the treatment gets its own parameter estimate, and this also makes it easier to set priors when there are many levels in a group (such as for the subject level). The linear model, using equation \@ref(eq:linearform2), with the treatment is written as
 
-_posterior retrodictive checks_
+
+\begin{equation}
+  \theta = (\beta + \beta_{trt[i]}) \left[x_i - (\alpha + \alpha_{trt[i]})\right]
+  (\#eq:linearmodel2)
+\end{equation}
+
+
+As I add in more predictors and groups, equation \@ref(eq:linearmodel2) will start to be more difficult to read. What I can do is break up the slope and intercept parameters and write the linear model as
+
+
+\begin{align*}
+\mu_\alpha &= \alpha + \alpha_{trt[i]} \\
+\mu_\beta &= \beta + \beta_{trt[i]} \\
+\theta &= \mu_\beta (x - \mu_\alpha)
+\end{align*}
+
+
+In this way the combined parameters can be considered separately from the linear parameterization. Which leads me to consider the priors for $\alpha_{trt}$ and $\beta_{trt}$. The way that we can turn an normal model with categorical predictors into a multilevel model is by allowing the priors to borrow information from other groups. This is accomplished by putting priors on priors. It is easier to write down the model first before explaining how it works.
+
+
+\begin{align*}
+k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+\mu_\alpha &= \alpha + \alpha_{trt[i]} \\
+\mu_\beta &= \beta + \beta_{trt[i]} \\
+\mathrm{logit}(p_i) &= \mu_\beta (x_i - \mu_\alpha) \\
+\alpha &\sim \mathcal{N}(0, 0.06^2) \\
+\alpha_{trt} &\sim \mathcal{N}(0, \sigma_{trt}^2) \\
+\sigma_{trt} &\sim \textrm{to be defined}
+\end{align*}
+
+
+In the above model, $\alpha$ gets a fixed prior (the same as in the first iteration), and $\alpha_{trt}$ gets a Gaussian prior with an adaptive variance term that is allowed to be learned from the data. This notation is compact, but $\alpha_{trt}$ is actually two parameters - one each for pre- and post-adaptation block - but they both share the same variance term $\sigma_{trt}$. This produces a _regularizing_ effect where both treatment estimates are shrunk towards the mean, $\alpha$.
+
+I'll discuss selecting a prior for the variance term shortly, but now I want to discuss setting the prior for the slope terms. Instead of modeling $\beta$ with a log-normal prior, I can sample from a normal distribution and take the exponential of it to produce a log-normal distribution. I.e.
+
+$$
+X \sim \mathcal{N}(3, 1^2) \\
+Y = \exp\left\lbrace X \right\rbrace \Longleftrightarrow Y \sim \mathrm{Lognormal(3, 1^2)}
+$$
+
+The motivation behind this transformation is that it is now easier to include new slope variables as an additive affect. If both $\beta$ and $\beta_{trt}$ are specified with Gaussian priors, then the exponential of the sum will be a log-normal distribution! So now the model is
+
+
+\begin{align*}
+k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+\mu_\alpha &= \alpha + \alpha_{trt[i]} \\
+\mu_\beta &= \beta + \beta_{trt[i]} \\
+\mathrm{logit}(p_i) &= \exp(\mu_\beta) (x_i - \mu_\alpha) \\
+\alpha &\sim \mathcal{N}(0, 0.06^2) \\
+\alpha_{trt} &\sim \mathcal{N}(0, \sigma_{trt}^2) \\
+\beta &\sim \mathcal{N}(3, 1^2) \\
+\beta_{trt} &\sim \mathcal{N}(0, \gamma_{trt}^2) \\
+\sigma_{trt} &\sim \textrm{to be defined} \\
+\gamma_{trt} &\sim \textrm{to be defined}
+\end{align*}
+
+
+Deciding on priors for the variance term requires some careful consideration. In one sense, the variance term is the within group variance, but with non-linear models like logistic regression, the logit link can have undesirable or unpredictable floor and ceiling effects. @gelman2006prior recommends that for multilevel models with groups with less than say 5 levels to use a half Cauchy prior with a larger scale parameter. This weakly informative prior still has a regularizing affect and dissuades larger variance estimates. Even though the treatment group only has two levels, there is still value in specifying an adaptive prior for them, and there is also a lot of data for each treatment so partial pooling won't make a difference anyway.
+
+
+\begin{align*}
+\sigma_{trt} &\sim \mathrm{HalfCauchy}(0, 25) \\
+\gamma_{trt} &\sim \mathrm{HalfCauchy}(0, 25)
+\end{align*}
+
+
+Finally I can add in the age group level effects and specify the variance terms.
+
+
+\begin{align*}
+k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+\mu_\alpha &= \alpha + \alpha_{trt[i]} + \alpha_{G[i]} \\
+\mu_\beta &= \beta + \beta_{trt[i]} + \beta_{G[i]} \\
+\mathrm{logit}(p_i) &= \exp(\mu_\beta) (x_i - \mu_\alpha) \\
+\alpha &\sim \mathcal{N}(0, 0.06^2) \\
+\alpha_{trt} &\sim \mathcal{N}(0, \sigma_{trt}^2) \\
+\alpha_{G} &\sim \mathcal{N}(0, \tau_{G}^2)\\
+\beta &\sim \mathcal{N}(3, 1^2) \\
+\beta_{trt} &\sim \mathcal{N}(0, \gamma_{trt}^2) \\
+\beta_{G} &\sim \mathcal{N}(0, \nu_{G}^2) \\
+\sigma_{trt} &\sim \mathrm{HalfCauchy}(0, 25) \\
+\gamma_{trt} &\sim \mathrm{HalfCauchy}(0, 25) \\
+\tau_{G} &\sim \mathrm{HalfCauchy}(0, 25) \\
+\nu_{G} &\sim \mathrm{HalfCauchy}(0, 25)
+\end{align*}
+
+
+Here is the corresponding Stan code that also computes the posterior retrodictions and JND and PSS estimates.
+
+
+\setstretch{1.0}
+
+```stan
+data {
+  int N;
+  int N_G;
+  int N_T;
+  int n[N];
+  int k[N];
+  vector[N] x;
+  int G[N];
+  int trt[N];
+}
+parameters {
+  real a;
+  real<lower=machine_precision()> sd_aG;
+  real<lower=machine_precision()> sd_aT;
+  real aG[N_G];
+  real aT[N_T];
+
+  real b;
+  real<lower=machine_precision()> sd_bG;
+  real<lower=machine_precision()> sd_bT;
+  real bG[N_G];
+  real bT[N_T];
+}
+model {
+  vector[N] theta;
+
+  a  ~ normal(0, 0.06);
+  aG ~ normal(0, sd_aG);
+  aT ~ normal(0, sd_aT);
+  sd_aG ~ cauchy(0, 25);
+  sd_aT ~ cauchy(0, 25);
+
+  b  ~ normal(3.0, 1.0);
+  bG ~ normal(0, sd_bG);
+  bT ~ normal(0, sd_bT);
+  sd_bG ~ cauchy(0, 25);
+  sd_bT ~ cauchy(0, 25);
+
+  for (i in 1:N) {
+    real mu_a = a + aT[trt[i]] + aG[G[i]];
+    real mu_b = b + bT[trt[i]] + bG[G[i]];
+    theta[i] = exp(mu_b) * (x[i] - mu_a);
+  }
+
+  k ~ binomial_logit(n, theta);
+}
+generated quantities {
+  matrix[N_G, N_T] pss;
+  matrix[N_G, N_T] jnd;
+  vector[N] k_pred;
+
+  for (i in 1:N_G) {
+    for (j in 1:N_T) {
+      real mu_b = exp(b + bT[j] + bG[i]);
+      real mu_a = a + aT[j] + aG[i];
+      pss[i, j] = mu_a;
+      jnd[i, j] = logit(0.84) / mu_b;
+    }
+  }
+  
+  for (i in 1:N) {
+    real mu_a = a + aT[trt[i]] + aG[G[i]];
+    real mu_b = b + bT[trt[i]] + bG[G[i]];
+    real p = inv_logit(exp(mu_b) * (x[i] - mu_a));
+    k_pred[i] = binomial_rng(n[i], p);
+  }
+}
+```
+\setstretch{2.0}
+
+**Post-Model, Post-Data**
+
+_Fit Observed Data_
+
+_Diagnose Posterior Fit_
+
+_Posterior Retrodictive Checks_
 
 ## Iteration 3 (the one for me){#iter3}
 
-**pre-model, pre-data**
+**Pre-Model, Pre-Data**
 
-_conceptual analysis_
+_Conceptual Analysis_
 
-_define observational space_
+_Define Observational Space_
 
-_construct summary statistics_
+_Construct Summary Statistics_
 
-**post-model, pre-data**
+**Post-Model, Pre-Data**
 
-_develop model_
+_Develop Model_
 
-_construct summary functions_
+_Construct Summary Functions_
 
-_simulate Bayesian ensemble_
+_Simulate Bayesian Ensemble_
 
-_prior checks_
+_Prior Checks_
 
-_configure algorithm_
+_Configure Algorithm_
 
-_fit simulated ensemble_
+_Fit Simulated Ensemble_
 
-_algorithmic calibration_
+_Algorithmic Calibration_
 
-_inferential calibration_
+_Inferential Calibration_
 
-**post-model, post-data**
+**Post-Model, Post-Data**
 
-_fit observed data_
+_Fit Observed Data_
 
-_diagnose posterior fit_
+_Diagnose Posterior Fit_
 
-_posterior retrodictive checks_
+_Posterior Retrodictive Checks_
 
 ## Iteration 4 (what's one more) {#iter4}
 
-**pre-model, pre-data**
+**Pre-Model, Pre-Data**
 
-_conceptual analysis_
+_Conceptual Analysis_
 
-_define observational space_
+_Define Observational Space_
 
-_construct summary statistics_
+_Construct Summary Statistics_
 
-**post-model, pre-data**
+**Post-Model, Pre-Data**
 
-_develop model_
+_Develop Model_
 
-_construct summary functions_
+_Construct Summary Functions_
 
-_simulate Bayesian ensemble_
+_Simulate Bayesian Ensemble_
 
-_prior checks_
+_Prior Checks_
 
-_configure algorithm_
+_Configure Algorithm_
 
-_fit simulated ensemble_
+_Fit Simulated Ensemble_
 
-_algorithmic calibration_
+_Algorithmic Calibration_
 
-_inferential calibration_
+_Inferential Calibration_
 
-**post-model, post-data**
+**Post-Model, Post-Data**
 
-_fit observed data_
+_Fit Observed Data_
 
-_diagnose posterior fit_
+_Diagnose Posterior Fit_
 
-_posterior retrodictive checks_
+_Posterior Retrodictive Checks_
 
 ## Iteration 5 (final_final_draft_2.pdf) {#iter5}
 
-**pre-model, pre-data**
+**Pre-Model, Pre-Data**
 
-_conceptual analysis_
+_Conceptual Analysis_
 
-_define observational space_
+_Define Observational Space_
 
-_construct summary statistics_
+_Construct Summary Statistics_
 
-**post-model, pre-data**
+**Post-Model, Pre-Data**
 
-_develop model_
+_Develop Model_
 
-_construct summary functions_
+_Construct Summary Functions_
 
-_simulate Bayesian ensemble_
+_Simulate Bayesian Ensemble_
 
-_prior checks_
+_Prior Checks_
 
-_configure algorithm_
+_Configure Algorithm_
 
-_fit simulated ensemble_
+_Fit Simulated Ensemble_
 
-_algorithmic calibration_
+_Algorithmic Calibration_
 
-_inferential calibration_
+_Inferential Calibration_
 
-**post-model, post-data**
+**Post-Model, Post-Data**
 
-_fit observed data_
+_Fit Observed Data_
 
-_diagnose posterior fit_
+_Diagnose Posterior Fit_
 
-_posterior retrodictive checks_
+_Posterior Retrodictive Checks_
 
 ## Celebrate
 
