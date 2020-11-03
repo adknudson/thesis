@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2 Background and Motivating Data | Contributions to Modern Bayesian Multilevel Modeling</title>
-  <meta name="description" content="2 Background and Motivating Data | Contributions to Modern Bayesian Multilevel Modeling" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <title>2 What is a Model without Data | Application of a Principaled Bayesian Workflow to Multilevel Modeling</title>
+  <meta name="description" content="2 What is a Model without Data | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 Background and Motivating Data | Contributions to Modern Bayesian Multilevel Modeling" />
+  <meta property="og:title" content="2 What is a Model without Data | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
   <meta property="og:type" content="book" />
   
   
@@ -16,12 +16,12 @@
   <meta name="github-repo" content="adkudson/thesis" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Background and Motivating Data | Contributions to Modern Bayesian Multilevel Modeling" />
+  <meta name="twitter:title" content="2 What is a Model without Data | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
   
   
   
 
-<meta name="author" content="Alexander Knudson" />
+<meta name="author" content="Alexander D. Knudson" />
 
 
 
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="index.html"/>
-<link rel="next" href="background.html"/>
+<link rel="next" href="workflow.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -50,6 +50,8 @@
 
 
 <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -131,57 +133,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="motivating-data.html"><a href="motivating-data.html"><i class="fa fa-check"></i><b>2</b> Background and Motivating Data</a><ul>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#ch010-classical-methods"><i class="fa fa-check"></i><b>1.1</b> Everything can be Blamed on Fisher</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#ch010-new-methods"><i class="fa fa-check"></i><b>1.2</b> Proposal of New Methods</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#ch010-organization"><i class="fa fa-check"></i><b>1.3</b> Organization</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="motivating-data.html"><a href="motivating-data.html"><i class="fa fa-check"></i><b>2</b> What is a Model without Data</a><ul>
 <li class="chapter" data-level="2.1" data-path="motivating-data.html"><a href="motivating-data.html#psycho-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
 <li class="chapter" data-level="2.2" data-path="motivating-data.html"><a href="motivating-data.html#toj-task"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Data</a></li>
 <li class="chapter" data-level="2.3" data-path="motivating-data.html"><a href="motivating-data.html#data-visualizations-and-quirks"><i class="fa fa-check"></i><b>2.3</b> Data Visualizations and Quirks</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>3</b> Modeling the Psychometric Function</a><ul>
-<li class="chapter" data-level="3.1" data-path="background.html"><a href="background.html#methods-for-working-with-pfs"><i class="fa fa-check"></i><b>3.1</b> Methods for working with PFs</a></li>
-<li class="chapter" data-level="3.2" data-path="background.html"><a href="background.html#post-model-analysis"><i class="fa fa-check"></i><b>3.2</b> Post-model Analysis</a></li>
-<li class="chapter" data-level="3.3" data-path="background.html"><a href="background.html#shortcomings"><i class="fa fa-check"></i><b>3.3</b> Shortcomings</a></li>
-<li class="chapter" data-level="3.4" data-path="background.html"><a href="background.html#bayesian-modeling"><i class="fa fa-check"></i><b>3.4</b> Bayesian Multilevel Modeling</a><ul>
-<li class="chapter" data-level="3.4.1" data-path="background.html"><a href="background.html#bayesian-stuff"><i class="fa fa-check"></i><b>3.4.1</b> Bayesian Stuff</a></li>
-<li class="chapter" data-level="3.4.2" data-path="background.html"><a href="background.html#multilevel-modeling-stuff"><i class="fa fa-check"></i><b>3.4.2</b> Multilevel Modeling Stuff</a></li>
+<li class="chapter" data-level="3" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>3</b> Principled Bayesian Workflow</a><ul>
+<li class="chapter" data-level="3.1" data-path="workflow.html"><a href="workflow.html#iter1"><i class="fa fa-check"></i><b>3.1</b> Iteration 1 (journey of a thousand miles)</a></li>
+<li class="chapter" data-level="3.2" data-path="workflow.html"><a href="workflow.html#iter2"><i class="fa fa-check"></i><b>3.2</b> Iteration 2 (electric boogaloo)</a></li>
+<li class="chapter" data-level="3.3" data-path="workflow.html"><a href="workflow.html#iter3"><i class="fa fa-check"></i><b>3.3</b> Iteration 3 (the one for me)</a></li>
+<li class="chapter" data-level="3.4" data-path="workflow.html"><a href="workflow.html#iter4"><i class="fa fa-check"></i><b>3.4</b> Iteration 4 (what’s one more)</a></li>
+<li class="chapter" data-level="3.5" data-path="workflow.html"><a href="workflow.html#celebrate"><i class="fa fa-check"></i><b>3.5</b> Celebrate</a></li>
 </ul></li>
+<li class="chapter" data-level="4" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>4</b> Model Fitting/Checking</a></li>
+<li class="chapter" data-level="5" data-path="predictive-inferences.html"><a href="predictive-inferences.html"><i class="fa fa-check"></i><b>5</b> Predictive Inference</a></li>
+<li class="chapter" data-level="6" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>6</b> Psychometric Results</a><ul>
+<li class="chapter" data-level="6.1" data-path="results.html"><a href="results.html#affect-of-adaptation-across-age-groups"><i class="fa fa-check"></i><b>6.1</b> Affect of Adaptation across Age Groups</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="results.html"><a href="results.html#on-perceptual-synchrony"><i class="fa fa-check"></i><b>6.1.1</b> On Perceptual Synchrony</a></li>
+<li class="chapter" data-level="6.1.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>6.1.2</b> On Temporal Sensitivity</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>4</b> Principled Bayesian Workflow</a><ul>
-<li class="chapter" data-level="4.1" data-path="workflow.html"><a href="workflow.html#iter1"><i class="fa fa-check"></i><b>4.1</b> Iteration 1 (The Journey of a Thousand Miles Begins with a Single Step)</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="workflow.html"><a href="workflow.html#pre-model-pre-data"><i class="fa fa-check"></i><b>4.1.1</b> Pre-Model, Pre-Data</a></li>
-<li class="chapter" data-level="4.1.2" data-path="workflow.html"><a href="workflow.html#post-model-pre-data"><i class="fa fa-check"></i><b>4.1.2</b> Post-Model, Pre-Data</a></li>
-<li class="chapter" data-level="4.1.3" data-path="workflow.html"><a href="workflow.html#post-model-post-data"><i class="fa fa-check"></i><b>4.1.3</b> Post-Model, Post-Data</a></li>
+<li class="chapter" data-level="6.2" data-path="results.html"><a href="results.html#lapse-rates-across-age-groups"><i class="fa fa-check"></i><b>6.2</b> Lapse Rates across Age Groups</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="workflow.html"><a href="workflow.html#iter2"><i class="fa fa-check"></i><b>4.2</b> Iteration 2 (Electric Boogaloo)</a><ul>
-<li class="chapter" data-level="4.2.1" data-path="workflow.html"><a href="workflow.html#iter2-model-dev"><i class="fa fa-check"></i><b>4.2.1</b> Model Development</a></li>
-<li class="chapter" data-level="4.2.2" data-path="workflow.html"><a href="workflow.html#iter2-sim"><i class="fa fa-check"></i><b>4.2.2</b> Simulate bayesian ensemble</a></li>
-<li class="chapter" data-level="4.2.3" data-path="workflow.html"><a href="workflow.html#iter2-prior-check"><i class="fa fa-check"></i><b>4.2.3</b> Prior Checks</a></li>
-<li class="chapter" data-level="4.2.4" data-path="workflow.html"><a href="workflow.html#iter2-config-algo"><i class="fa fa-check"></i><b>4.2.4</b> Configure algorithm</a></li>
-<li class="chapter" data-level="4.2.5" data-path="workflow.html"><a href="workflow.html#iter2-fit-sim"><i class="fa fa-check"></i><b>4.2.5</b> Fit simulated ensemble</a></li>
-<li class="chapter" data-level="4.2.6" data-path="workflow.html"><a href="workflow.html#iter2-algo-calibration"><i class="fa fa-check"></i><b>4.2.6</b> Algorithmic calibration</a></li>
-<li class="chapter" data-level="4.2.7" data-path="workflow.html"><a href="workflow.html#iter2-inferential-calibration"><i class="fa fa-check"></i><b>4.2.7</b> Inferential Calibration</a></li>
-<li class="chapter" data-level="4.2.8" data-path="workflow.html"><a href="workflow.html#iter2-fit-obs"><i class="fa fa-check"></i><b>4.2.8</b> Fit Observation</a></li>
-<li class="chapter" data-level="4.2.9" data-path="workflow.html"><a href="workflow.html#iter2-diagnose-post"><i class="fa fa-check"></i><b>4.2.9</b> Diagnose posterior fit</a></li>
-<li class="chapter" data-level="4.2.10" data-path="workflow.html"><a href="workflow.html#iter2-post-retro"><i class="fa fa-check"></i><b>4.2.10</b> Posterior retrodictive checks</a></li>
+<li class="chapter" data-level="7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>7</b> Discussion</a><ul>
+<li class="chapter" data-level="7.1" data-path="discussion.html"><a href="discussion.html#project-history"><i class="fa fa-check"></i><b>7.1</b> Project History</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="discussion.html"><a href="discussion.html#data-cleaning"><i class="fa fa-check"></i><b>7.1.1</b> Data Cleaning</a></li>
+<li class="chapter" data-level="7.1.2" data-path="discussion.html"><a href="discussion.html#developing-a-model"><i class="fa fa-check"></i><b>7.1.2</b> Developing a model</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="workflow.html"><a href="workflow.html#iter3"><i class="fa fa-check"></i><b>4.3</b> Iteration 3 (The one for Me)</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="workflow.html"><a href="workflow.html#iter3-model-dev"><i class="fa fa-check"></i><b>4.3.1</b> Model Development</a></li>
-<li class="chapter" data-level="4.3.2" data-path="workflow.html"><a href="workflow.html#iter3-diagnose-post"><i class="fa fa-check"></i><b>4.3.2</b> Diagnose posterior fit</a></li>
-<li class="chapter" data-level="4.3.3" data-path="workflow.html"><a href="workflow.html#iter3-post-retro"><i class="fa fa-check"></i><b>4.3.3</b> Posterior retrodictive checks</a></li>
+<li class="chapter" data-level="7.2" data-path="discussion.html"><a href="discussion.html#model-selection-is-not-always-the-goal"><i class="fa fa-check"></i><b>7.2</b> Model selection is not always the goal</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="workflow.html"><a href="workflow.html#iter4"><i class="fa fa-check"></i><b>4.4</b> Iteration 4 (What’s one more?)</a><ul>
-<li class="chapter" data-level="4.4.1" data-path="workflow.html"><a href="workflow.html#iter4-conceptual"><i class="fa fa-check"></i><b>4.4.1</b> Conceptual analysis</a></li>
-<li class="chapter" data-level="4.4.2" data-path="workflow.html"><a href="workflow.html#iter4-summary-stats"><i class="fa fa-check"></i><b>4.4.2</b> Construct summary statistics</a></li>
-<li class="chapter" data-level="4.4.3" data-path="workflow.html"><a href="workflow.html#iter4-model-dev"><i class="fa fa-check"></i><b>4.4.3</b> Model Development</a></li>
-<li class="chapter" data-level="4.4.4" data-path="workflow.html"><a href="workflow.html#iter4-fit-obs"><i class="fa fa-check"></i><b>4.4.4</b> Fit the model</a></li>
-<li class="chapter" data-level="4.4.5" data-path="workflow.html"><a href="workflow.html#iter4-post-retro"><i class="fa fa-check"></i><b>4.4.5</b> Posterior retrodictive checks</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>5</b> Model Checking</a></li>
-<li class="chapter" data-level="6" data-path="predictive-inference.html"><a href="predictive-inference.html"><i class="fa fa-check"></i><b>6</b> Predictive Inference</a></li>
-<li class="chapter" data-level="7" data-path="application-results.html"><a href="application-results.html"><i class="fa fa-check"></i><b>7</b> Application Results</a></li>
-<li class="chapter" data-level="8" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>8</b> Discussion</a></li>
-<li class="chapter" data-level="9" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>9</b> Conclusion</a></li>
+<li class="chapter" data-level="8" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>8</b> Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="supplementary-code.html"><a href="supplementary-code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -194,7 +179,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Contributions to Modern Bayesian Multilevel Modeling</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Application of a Principaled Bayesian Workflow to Multilevel Modeling</a>
           </h1>
         </div>
 
@@ -203,9 +188,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="motivating-data" class="section level1">
-<h1><span class="header-section-number">2</span> Background and Motivating Data</h1>
-<p>It was Charles Darwin who in his book <em>On the Origin of Species</em> developed the idea that living organisms adapt to better survive in their environment. Sir Francis Galton, inspired by Darwin’s ideas, became interested in the differences in human beings and in how to measure those differences. Though the dark side of statistics and hubris lead Galton to become a pioneer of eugenics, his works on studying and measuring human differences lead to the creation of psychometrics – the science of measuring mental faculties. Around the same time that was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.</p>
-<p>E.H. Weber built upon Herbart’s work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system – a <em>liminal</em> stimulus. He paved the way for experimental psychology and is the namesake of <em>Weber’s Law</em> – the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus <span class="citation">(Britannica <a href="#ref-britannica2014editors" role="doc-biblioref">2014</a>)</span>.</p>
+<h1><span class="header-section-number">2</span> What is a Model without Data</h1>
+<p><em>What is data without a model</em></p>
+<p>It was Charles Darwin who in his book <em>On the Origin of Species</em> developed the idea that living organisms adapt in order to better survive in their environment. Sir Francis Galton, inspired by Darwin’s ideas, became interested in the differences in human beings and in how to measure those differences. Though the dark side of statistics and hubris lead Galton to become a pioneer of eugenics, his works on studying and measuring human differences lead to the creation of psychometrics – the science of measuring mental faculties. Around the same time that he was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.</p>
+<p>E.H. Weber built upon Herbart’s work, and sought out to prove the idea of a <em>psychological threshold</em>. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system – a <em>liminal</em> stimulus. He paved the way for experimental psychology and is the namesake of <em>Weber’s Law</em> – the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus <span class="citation">(Britannica <a href="#ref-britannica2014editors" role="doc-biblioref">2014</a>)</span>.</p>
 <p><span class="math display">\[
 \frac{\Delta I}{I} = k
 \]</span></p>
@@ -219,32 +205,35 @@ k = \frac{0.2}{1} = 0.2
 \]</span></p>
 <p>The difference between a 10 kg and a 12 kg weight should be just barely perceptible. Notice that the difference in the first set of weights is 0.2 and in the second set it is 2. Our perception of the difference in stimulus intensities is not absolute, but relative. G.T. Fechner devised the law (Weber-Fechner Law) that the strength of a sensation grows as the logarithm of the stimulus intensity.</p>
 <p><span class="math display">\[S = K \ln I\]</span></p>
-<p>An example to this law is to consider two light sources, one that is 100 lumens (<span class="math inline">\(S_1 = K \ln 100\)</span>) and another that is 200 lumens (<span class="math inline">\(S_2 = K \ln 200\)</span>). The intensity of the second light is not perceived as twice as bright, but only about 1.15 times as bright according to the Weber-Fechner law: <span class="math inline">\(\theta = S_2 / S_1 \approx 1.15\)</span>. Notice that the value <span class="math inline">\(K\)</span> cancels out when calculating the relative intensity, but knowing <span class="math inline">\(K\)</span> can lead to important psychological insights; insights about differences between persons or groups of people! What biological and contextual factors affect how people perceive different stimuli? How do we measure their perception in a meaningful way? As one might expect, we can collect data from psychometric experiments, fit a model to the data from a family of functions called <em>psychometric functions</em>, and inspect key operating characteristics of those functions.</p>
+<p>An example to this law is to consider two light sources, one that is 100 lumens (<span class="math inline">\(S_1 = K \ln 100\)</span>) and another that is 200 lumens (<span class="math inline">\(S_2 = K \ln 200\)</span>). The intensity of the second light is not perceived as twice as bright, but only about 1.15 times as bright according to the Weber-Fechner law.</p>
+<p><span class="math display">\[\theta = S_2 / S_1 \approx 1.15\]</span></p>
+<p>Notice that the value <span class="math inline">\(K\)</span> cancels out when calculating the relative intensity, but knowing <span class="math inline">\(K\)</span> can lead to important psychological insights; insights about differences between persons or groups of people! What biological and contextual factors affect how people perceive different stimuli? How do we measure their perception in a meaningful way? As one might expect, we can collect data from psychometric experiments, fit a model to the data from a family of functions called <em>psychometric functions</em>, and inspect key operating characteristics of those functions.</p>
 <div id="psycho-experiments" class="section level2">
 <h2><span class="header-section-number">2.1</span> Psychometric Experiments</h2>
 <p>Psychometric experiments are devised in a way to examine psychophysical processes, or the response between the world around us and our inward perceptions. A <strong>psychometric function</strong> relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task <span class="citation">(Wichmann and Hill <a href="#ref-wichmann2001a" role="doc-biblioref">2001</a>)</span>. Psychometric functions were studied as early as the late 1800’s, and Edwin Boring published a chart of the psychometric function in The American Journal of Psychology in 1917 <span class="citation">(Boring <a href="#ref-boring1917chart" role="doc-biblioref">1917</a>)</span>.</p>
 <div class="figure" style="text-align: center"><span id="fig:ch020-chart-of-pf"></span>
-<img src="figures/chart_of_pf.png" alt="A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or 'two', recorded as either 'two' or 'not two'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their response of 'two'. So at what separation is the impression of two points liminal?" width="70%" />
+<img src="figures/chart_of_pf.png" alt="A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or two, recorded as either 'two points' or 'not two points'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their perception of 'two-ness'. So at what separation is the impression of two points liminal?" width="70%" />
 <p class="caption">
-Figure 2.1: A chart of the psychometric function. The experiment in this paper places two points on a subject’s skin separated by some distance, and has them answer their impression of whether there is one point or ‘two’, recorded as either ‘two’ or ‘not two’. As the separation of aesthesiometer points increases, so too does the subject’s confidence in their response of ‘two’. So at what separation is the impression of two points liminal?
+Figure 2.1: A chart of the psychometric function. The experiment in this paper places two points on a subject’s skin separated by some distance, and has them answer their impression of whether there is one point or two, recorded as either ‘two points’ or ‘not two points’. As the separation of aesthesiometer points increases, so too does the subject’s confidence in their perception of ‘two-ness’. So at what separation is the impression of two points liminal?
 </p>
 </div>
-<p>Figure <a href="motivating-data.html#fig:ch020-chart-of-pf">2.1</a> displays the key aspects of the psychometric function. The most crucial part is the sigmoid function, the S-like non-decreasing curve, which in this case is represented by the Normal CDF, <span class="math inline">\(\Phi(\gamma)\)</span>. The horizontal axis represents the stimulus stimulus intensity, the separation of two points in centimeters. The vertical axis represents the probability that a subject has the impression of two points. With only experimental data, the response proportion becomes an approximation for the probability.</p>
-<p>This leads me to talk about the type of psychometric experiment that this paper deals with called a <strong>temporal order judgment</strong> (TOJ) experiment. The concept is that if there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept – perceive them as happening simultaneously. Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events. The temporal asynchrony between stimuli is called the <strong>stimulus onset asynchrony</strong> (SOA), and the range of SOAs for which sensory signals are integrated into a global percept is called the <strong>temporal binding window</strong>. When the SOA grows too large then the brain segregates the two signals and the temporal order can be determined.</p>
-<p>Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the <strong>point of subjective simultaneity</strong> (PSS) – the temporal delay between two signals at which an observer is unsure about their temporal order <span class="citation">(Stone et al. <a href="#ref-stone2001now" role="doc-biblioref">2001</a>)</span>. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the <strong>just noticeable difference</strong> (JND) – the smallest lapse in time so that a temporal order can just be determined. Figure <a href="motivating-data.html#fig:ch020-plot-ref-pf">2.2</a> highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e. the response probability is 50%). The JND is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84% level and the PSS, though the upper level depends on domain expertise.</p>
+<p>Figure <a href="motivating-data.html#fig:ch020-chart-of-pf">2.1</a> displays the key aspects of the psychometric function. The most crucial part is the sigmoid function, the S-like non-decreasing curve which in this case is represented by the Normal CDF, <span class="math inline">\(\Phi(\gamma)\)</span>. The horizontal axis represents the stimulus stimulus intensity, the separation of two points in centimeters. The vertical axis represents the probability that a subject has the impression of two points. With only experimental data, the response proportion becomes an approximation for the probability.</p>
+<p>This leads me to talk about the type of psychometric experiment that this paper deals with called a <em>temporal order judgment</em> (TOJ) experiment. The concept is that if there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept (perceive them as happening simultaneously). Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events. The temporal asynchrony between stimuli is called the <em>stimulus onset asynchrony</em> (SOA), and the range of SOAs for which sensory signals are integrated into a global percept is called the <em>temporal binding window</em>. When the SOA grows too large then the brain segregates the two signals and the temporal order can be determined.</p>
+<p>Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the <em>point of subjective simultaneity</em> (PSS) – the temporal delay between two signals at which an observer is unsure about their temporal order <span class="citation">(Stone et al. <a href="#ref-stone2001now" role="doc-biblioref">2001</a>)</span>. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the <em>just noticeable difference</em> (JND) – the smallest lapse in time so that a temporal order can just be determined. Figure <a href="motivating-data.html#fig:ch020-plot-ref-pf">2.2</a> highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e. the response probability is 50%). The JND is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84% level<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> and the PSS, though the upper level often depends on domain expertise.</p>
 <div class="figure" style="text-align: center"><span id="fig:ch020-plot-ref-pf"></span>
-<img src="020-motivating-data_files/figure-html/ch020-plot-ref-pf-1.png" alt="The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise." width="70%" />
+<img src="020-psychometrics_files/figure-html/ch020-plot-ref-pf-1.png" alt="The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise." width="70%" />
 <p class="caption">
 Figure 2.2: The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise.
 </p>
 </div>
-<p>Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing <span class="citation">(Fujisaki et al. <a href="#ref-fujisaki2004recalibration" role="doc-biblioref">2004</a>)</span>. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer <span class="citation">(Vroomen et al. <a href="#ref-vroomen2004recalibration" role="doc-biblioref">2004</a>)</span>. This repetition of presenting the adapter stimulus is called <strong>temporal recalibration</strong>.</p>
+<p>Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing <span class="citation">(Fujisaki et al. <a href="#ref-fujisaki2004recalibration" role="doc-biblioref">2004</a>)</span>. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer <span class="citation">(Vroomen et al. <a href="#ref-vroomen2004recalibration" role="doc-biblioref">2004</a>)</span>. This repetition of presenting the adapter stimulus is called <em>temporal recalibration</em>.</p>
 <p>The data set that I introduce in the next section concerns temporal order judgment across various sensory modalities with a temporal recalibration component.</p>
 </div>
 <div id="toj-task" class="section level2">
 <h2><span class="header-section-number">2.2</span> Temporal Order Judgment Data</h2>
-<p>The data set that I am using in this paper comes from experiments done by A.N. Scurry and Dr. Fang Jiang in the Department of Psychology at the University of Nevada. Reduced temporal sensitivity in the aging population manifests in an impaired ability to perceive synchronous events as simultaneous, and similarly more difficulty in segregating asynchronous sensory signals that belong to different sources. The consequences of a widening of the temporal binding window is considered in <span class="citation">Scurry et al. (<a href="#ref-scurry2019aging" role="doc-biblioref">2019</a>)</span>, as well as a complete detailing of the experimental setup and recording process. A shortened summary of the methods is provided below.</p>
-<p>There are four different tasks in the experiment: audio-visual, visual-visual, visuo-motor, and duration, and I will refer to each task respectively as audiovisual, visual, sensorimotor, and duration. The participants consist of 15 young adults (age 20-27), 15 middle age adults (age 39-50), and 15 older adults (age 65-75), all recruited from the University of Nevada, Reno. Additionally all subjects are right handed and were reported to have normal or corrected to normal hearing and vision.</p>
+<p><em>Which came first, the chicken or the experimentally controlled stimulus</em></p>
+<p>The data set that I am using in this paper comes from experiments done by A.N. Scurry and Dr. F. Jiang in the Department of Psychology at the University of Nevada. Reduced temporal sensitivity in the aging population manifests in an impaired ability to perceive synchronous events as simultaneous, and similarly more difficulty in segregating asynchronous sensory signals that belong to different sources. The consequences of a widening of the temporal binding window is considered in <span class="citation">Scurry et al. (<a href="#ref-scurry2019aging" role="doc-biblioref">2019</a>)</span>, as well as a complete detailing of the experimental setup and recording process. A shortened summary of the methods is provided below.</p>
+<p>There are four different tasks in the experiment: audio-visual, visual-visual, visual-motor, and duration, and I will refer to each task respectively as audiovisual, visual, sensorimotor, and duration. The participants consist of 15 young adults (age 20-27), 15 middle age adults (age 39-50), and 15 older adults (age 65-75), all recruited from the University of Nevada, Reno. Additionally all subjects are right handed and were reported to have normal or corrected to normal hearing and vision.</p>
 <!-- Count the number of unique subjects by age group and task
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>(\#tab:unnamed-chunk-1)Number of subjects in each task.</caption>
@@ -459,7 +448,8 @@ F
 </tbody>
 </table>
 <p>In the audiovisual TOJ task, participants were asked to determine the temporal order between an auditory and visual stimulus. Stimulus onset asynchrony values were selected uniformly between -500 to +500 ms with 50 ms steps, where negative SOAs indicated that the visual stimulus was leading, and positive values indicated that the auditory stimulus was leading. Each SOA value was presented 5 times in random order in the initial block. At the end of each trial the subject was asked to report if the auditory stimulus came before the visual, where a <span class="math inline">\(1\)</span> indicates that they perceived the sound first, and a <span class="math inline">\(0\)</span> indicates that they perceived the visual stimulus first.</p>
-<p>A similar setup is repeated for the visual, sensorimotor, and duration tasks. The visual task presented two visual stimuli on the left and right side of a display with temporal asynchronies that varied between -300 ms to +300 ms with 25 ms steps. Negative SOAs indicated that the left stimulus was first, and positive that the right came first. A positive response indicates that the subject perceived the right stimulus first. The sensorimotor task has subjects focus on a black cross on a screen. When it disappears, they respond by pressing a button. Additionally, when the cross disappears, a visual stimulus was flashed on the screen, and subjects were asked if they perceived the visual stimulus before or after their button press. The latency of the visual stimulus was partially determined by individual subject’s average response time, so SOA values are not fixed between subjects and trials. A positive response indicates that the visual stimulus was perceived after the button press.</p>
+<p>A similar setup is repeated for the visual, sensorimotor, and duration tasks. The visual task presented two visual stimuli on the left and right side of a display with temporal asynchronies that varied between -300 ms to +300 ms with 25 ms steps. Negative SOAs indicated that the left stimulus was first, and positive that the right came first. A positive response indicates that the subject perceived the right stimulus first.</p>
+<p>The sensorimotor task has subjects focus on a black cross on a screen. When it disappears, they respond by pressing a button. Additionally, when the cross disappears, a visual stimulus was flashed on the screen, and subjects were asked if they perceived the visual stimulus before or after their button press. The latency of the visual stimulus was partially determined by individual subject’s average response time, so SOA values are not fixed between subjects and trials. A positive response indicates that the visual stimulus was perceived after the button press.</p>
 <p>The duration task presents two vertically stacked circles on a screen with one appearing right after the other. The top stimulus appeared for a fixed amount of time of 300 ms, and the bottom was displayed for anywhere between +100 ms to +500 ms in 50 ms steps corresponding to SOA values between -200 ms to +200 ms. The subject then responds to if they perceived the bottom circle as appearing longer than the top circle.</p>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
@@ -529,9 +519,9 @@ Bottom lasted longer than top
 </div>
 <div id="data-visualizations-and-quirks" class="section level2">
 <h2><span class="header-section-number">2.3</span> Data Visualizations and Quirks</h2>
-<p>The dependent variable in these experiments is the perceived response which is encoded as a 0 or a 1, and the independent variable is the SOA value. If the response is plotted against the SOA values, then it is difficult to determine any relationship (see figure <a href="motivating-data.html#fig:ch020-simple-response-soa-plot">2.3</a>). Transparency can be used to better visualize the relationships between SOA value and responses. The center plot in figure <a href="motivating-data.html#fig:ch020-simple-response-soa-plot">2.3</a> uses the same data as the left plot, except that the transparency is set to 0.05. As a result, one can see that there is a higher density of “0” responses towards more negative SOAs, and a higher density of “1” responses for more positive SOAs. Taking it a step further, I can compute and plot the proportion of responses for a given SOA. This is displayed in the right plot. Now the relationship between SOA value and responses is clear – as the SOA value goes from more negative to more positive, the proportion of positive responses increases from near 0 to near 1.</p>
+<p>The dependent variable in these experiments is the perceived response which is encoded as a 0 or a 1, and the independent variable is the SOA value. If the response is plotted against the SOA values, then it is difficult to determine any relationship (see figure <a href="motivating-data.html#fig:ch020-simple-response-soa-plot">2.3</a>). Transparency can be used to better visualize the relationships between SOA value and responses. The center plot in figure <a href="motivating-data.html#fig:ch020-simple-response-soa-plot">2.3</a> uses the same data as the left plot, except that the transparency is set to 0.05. As a result, one can see that there is a higher density of “0” responses towards more negative SOAs, and a higher density of “1” responses for more positive SOAs. Taking it a step further, I can compute and plot the proportion of responses for a given SOA. This is displayed in the right panel. Now the relationship between SOA values and responses is clear – as the SOA value goes from more negative to more positive, the proportion of positive responses increases from near 0 to near 1.</p>
 <div class="figure" style="text-align: center"><span id="fig:ch020-simple-response-soa-plot"></span>
-<img src="020-motivating-data_files/figure-html/ch020-simple-response-soa-plot-1.png" alt="Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency." width="70%" />
+<img src="020-psychometrics_files/figure-html/ch020-simple-response-soa-plot-1.png" alt="Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency." width="70%" />
 <p class="caption">
 Figure 2.3: Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency.
 </p>
@@ -653,28 +643,29 @@ post1
 </tr>
 </tbody>
 </table>
-<p>Other quirks about the data pertain to the subjects. There is one younger subject that did not complete the audiovisual task, and one younger subject that did not complete the duration task. Additionally there is one older subject who’s response data for the post-adaptation audiovisual task is unreasonable<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> (see figure <a href="motivating-data.html#fig:ch020-av-post1-O-f-CE-plot">2.4</a>).</p>
+<p>Other quirks about the data pertain to the subjects. There is one younger subject that did not complete the audiovisual task, and one younger subject that did not complete the duration task. Additionally there is one older subject who’s response data for the post-adaptation audiovisual task is unreasonable<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> (see figure <a href="motivating-data.html#fig:ch020-av-post1-O-f-CE-plot">2.4</a>).</p>
 <div class="figure" style="text-align: center"><span id="fig:ch020-av-post1-O-f-CE-plot"></span>
-<img src="020-motivating-data_files/figure-html/ch020-av-post1-O-f-CE-plot-1.png" alt="Post-adaptation response data for O-f-CE" width="70%" />
+<img src="020-psychometrics_files/figure-html/ch020-av-post1-O-f-CE-plot-1.png" alt="Post-adaptation response data for O-f-CE" width="70%" />
 <p class="caption">
 Figure 2.4: Post-adaptation response data for O-f-CE
 </p>
 </div>
-<p>It is unreasonable because, of all the negative SOAs, there were only two correct responses<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. If a subject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject’s proportion of correct responses is above 0.5, then they are doing better than random guessing. In figure <a href="motivating-data.html#fig:ch020-av-post-neg-trials">2.5</a> it is seen that subject O-f-CE is the only one who’s proportion is below 0.5 (and by a considerable amount).</p>
+<p>It is unreasonable because, of all the negative SOAs, there were only two correct responses<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>. If a subject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject’s proportion of correct responses is above 0.5, then they are doing better than random guessing. In figure <a href="motivating-data.html#fig:ch020-av-post-neg-trials">2.5</a> it is seen that subject O-f-CE is the only one who’s proportion is below 0.5 (and by a considerable amount).</p>
 <div class="figure" style="text-align: center"><span id="fig:ch020-av-post-neg-trials"></span>
-<img src="020-motivating-data_files/figure-html/ch020-av-post-neg-trials-1.png" alt="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment." width="70%" />
+<img src="020-psychometrics_files/figure-html/ch020-av-post-neg-trials-1.png" alt="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment." width="70%" />
 <p class="caption">
 Figure 2.5: Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment.
 </p>
 </div>
-<p>The consequences of leaving in this experimental block in the data is considered in the <a href="workflow.html#workflow">Chapter 5</a>, but it is a clear outlier that must be noted. When this method of detecting outliers is repeated for all tasks and blocks, then I end up with 17 records in total (see figure <a href="motivating-data.html#fig:ch020-naive-prop-outliers">2.6</a>), one of which is the aforementioned subject.</p>
+<p>The consequences of leaving in this experimental block in the data is considered in the <a href="results.html#results">Chapter 6</a>, but it is a clear outlier that must be noted. When this method of detecting outliers is repeated for all tasks and blocks, then I end up with 17 records in total (see figure <a href="motivating-data.html#fig:ch020-naive-prop-outliers">2.6</a>), one of which is the aforementioned subject.</p>
 <div class="figure" style="text-align: center"><span id="fig:ch020-naive-prop-outliers"></span>
-<img src="020-motivating-data_files/figure-html/ch020-naive-prop-outliers-1.png" alt="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs." width="70%" />
+<img src="020-psychometrics_files/figure-html/ch020-naive-prop-outliers-1.png" alt="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs." width="70%" />
 <p class="caption">
 Figure 2.6: Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs.
 </p>
 </div>
-<p>Most of the records that are flagged by this method of outlier detection are from the sensorimotor task, and none are from the visual task. This may be caused by the perceived difficulty of the task. One consequence of higher temporal sensitivity is that it is easier to determine temporal order. It may also be that determining temporal order is inherently easier for certain multisensory tasks than others. Since the sensorimotor task does not have fixed SOA values like the other tasks, it may be perceived as more difficult. Or perhaps the mechanisms that process touch and visual signals are not as well coupled as those that process audio and visual signals. I’ll consider how to handle the sensorimotor outliers in the model fitting process.</p>
+<p>Most of the records that are flagged by this method of outlier detection are from the sensorimotor task, and none are from the visual task. This may be attributed to the perceived difficulty of the task. One consequence of higher temporal sensitivity is that it is easier to determine temporal order. It may also be that determining temporal order is inherently easier for certain multisensory tasks compared to others. Since the sensorimotor task does not have fixed SOA values like the other tasks, it may be perceived as more difficult. Or perhaps the mechanisms that process tactile and visual signals are not as well coupled as those that process audio and visual signals. Once again, I’ll consider the handling of the sensorimotor outliers in the results chapter.</p>
+<p>Now that I have introduced the motivating data and some of the theory behind psychometric experiments, I am ready to introduce a Bayesian workflow for multilevel modeling of the psychometric function. If the reader is interested in a fun story, in the <a href="discussion.html#discussion">discussion chapter</a> I talk about the process I went through to read in this psychometric data, clean it up, and produce a tidy data set that is ready for modeling. While data cleaning and transforming is a topic entirely to itself, it is not the main focus of this paper.</p>
 
 </div>
 </div>
@@ -704,9 +695,10 @@ Figure 2.6: Proportion of correct responses across all tasks and blocks Proporti
 </div>
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p>By unreasonable, I mean that it is extremely unlikely that the data represents genuine responses.<a href="motivating-data.html#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>Correct in the sense that the perceived order matches the actual order.<a href="motivating-data.html#fnref2" class="footnote-back">↩︎</a></p></li>
+<ol start="3">
+<li id="fn3"><p>One standard deviation away from the mean in a Gaussian distribution.<a href="motivating-data.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>By unreasonable, I mean that it is extremely unlikely that the data represents genuine responses.<a href="motivating-data.html#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>Correct in the sense that the perceived order matches the actual order.<a href="motivating-data.html#fnref5" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -715,7 +707,7 @@ Figure 2.6: Proportion of correct responses across all tasks and blocks Proporti
         </div>
       </div>
 <a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="background.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="workflow.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -751,7 +743,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/adknudson/thesis/blob/master/020-motivating-data.Rmd",
+"link": "https://github.com/adknudson/thesis/blob/master/020-psychometrics.Rmd",
 "text": null
 },
 "download": ["adknudson-thesis.pdf"],

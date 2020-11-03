@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5 Predictive Inference | Application of a Principaled Bayesian Workflow to Multilevel Modeling</title>
+  <meta name="description" content="5 Predictive Inference | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="5 Predictive Inference | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="adkudson/thesis" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5 Predictive Inference | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  
+  
+  
+
+<meta name="author" content="Alexander D. Knudson" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="model-checking.html"/>
+<link rel="next" href="results.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#ch010-classical-methods"><i class="fa fa-check"></i><b>1.1</b> Everything can be Blamed on Fisher</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#ch010-new-methods"><i class="fa fa-check"></i><b>1.2</b> Proposal of New Methods</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#ch010-organization"><i class="fa fa-check"></i><b>1.3</b> Organization</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="motivating-data.html"><a href="motivating-data.html"><i class="fa fa-check"></i><b>2</b> What is a Model without Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="motivating-data.html"><a href="motivating-data.html#psycho-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
+<li class="chapter" data-level="2.2" data-path="motivating-data.html"><a href="motivating-data.html#toj-task"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Data</a></li>
+<li class="chapter" data-level="2.3" data-path="motivating-data.html"><a href="motivating-data.html#data-visualizations-and-quirks"><i class="fa fa-check"></i><b>2.3</b> Data Visualizations and Quirks</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>3</b> Principled Bayesian Workflow</a><ul>
+<li class="chapter" data-level="3.1" data-path="workflow.html"><a href="workflow.html#iter1"><i class="fa fa-check"></i><b>3.1</b> Iteration 1 (journey of a thousand miles)</a></li>
+<li class="chapter" data-level="3.2" data-path="workflow.html"><a href="workflow.html#iter2"><i class="fa fa-check"></i><b>3.2</b> Iteration 2 (electric boogaloo)</a></li>
+<li class="chapter" data-level="3.3" data-path="workflow.html"><a href="workflow.html#iter3"><i class="fa fa-check"></i><b>3.3</b> Iteration 3 (the one for me)</a></li>
+<li class="chapter" data-level="3.4" data-path="workflow.html"><a href="workflow.html#iter4"><i class="fa fa-check"></i><b>3.4</b> Iteration 4 (what’s one more)</a></li>
+<li class="chapter" data-level="3.5" data-path="workflow.html"><a href="workflow.html#celebrate"><i class="fa fa-check"></i><b>3.5</b> Celebrate</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>4</b> Model Fitting/Checking</a></li>
+<li class="chapter" data-level="5" data-path="predictive-inferences.html"><a href="predictive-inferences.html"><i class="fa fa-check"></i><b>5</b> Predictive Inference</a></li>
+<li class="chapter" data-level="6" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>6</b> Psychometric Results</a><ul>
+<li class="chapter" data-level="6.1" data-path="results.html"><a href="results.html#affect-of-adaptation-across-age-groups"><i class="fa fa-check"></i><b>6.1</b> Affect of Adaptation across Age Groups</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="results.html"><a href="results.html#on-perceptual-synchrony"><i class="fa fa-check"></i><b>6.1.1</b> On Perceptual Synchrony</a></li>
+<li class="chapter" data-level="6.1.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>6.1.2</b> On Temporal Sensitivity</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="results.html"><a href="results.html#lapse-rates-across-age-groups"><i class="fa fa-check"></i><b>6.2</b> Lapse Rates across Age Groups</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>7</b> Discussion</a><ul>
+<li class="chapter" data-level="7.1" data-path="discussion.html"><a href="discussion.html#project-history"><i class="fa fa-check"></i><b>7.1</b> Project History</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="discussion.html"><a href="discussion.html#data-cleaning"><i class="fa fa-check"></i><b>7.1.1</b> Data Cleaning</a></li>
+<li class="chapter" data-level="7.1.2" data-path="discussion.html"><a href="discussion.html#developing-a-model"><i class="fa fa-check"></i><b>7.1.2</b> Developing a model</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="discussion.html"><a href="discussion.html#model-selection-is-not-always-the-goal"><i class="fa fa-check"></i><b>7.2</b> Model selection is not always the goal</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>8</b> Conclusion</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="supplementary-code.html"><a href="supplementary-code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Application of a Principaled Bayesian Workflow to Multilevel Modeling</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="predictive-inferences" class="section level1">
+<h1><span class="header-section-number">5</span> Predictive Inference</h1>
+<p><em>why is predictive performance the right model selection/comparison criteria</em>.<br />
+- idea of “geocentric” models: wrong models that still predict well<br />
+- notions overfitting/underfitting:
+- more parameters leads to better in-sample fit<br />
+- a prefect fit to data is always possible<br />
+- but predicts poorly (overfit)<br />
+- underfitting fails to capture the <em>regular</em> features of the data (why regularizing priors are important)</p>
+<p>I think you covered this already in Ch. 1 and 2 but here is more thoughts:
+The PI’s predictive philosophy has evolved to prefer this reference model approach.
+Early on statisticians are usually taught to prefere <em>parsimony</em> or simple models.
+The idea is that this guards against <em>overfitting</em> and also boosts power to detect <em>statistically significant</em> effects.
+Also computation limitations made small models preferable.
+But in modern statistical learning, we tend to include all relavant data with elaborate probabilitistc structures.
+The idea is to include all the data with the aim of squeezing all predictive ability from the data points.</p>
+<ul>
+<li>not sure where this goes, but make sure you say that 1 model is not sufficient, we need a collection (or series/sequence) of models. that is why we need to fit models fast in <code>stan</code>/HMC</li>
+</ul>
+<p>transitional sentence: given that we want to compare models (and possibly select), how to quantifying</p>
+<p><em>Quantifying predictive performance</em></p>
+<ul>
+<li>log posterior predictives (more below) and information theory (if you want to talk about that at all)</li>
+<li>cross-validation, loo, WAIC</li>
+<li>and estimates of loo. loo psis
+<!-- Vehtari, Aki, Andrew Gelman, and Jonah Gabry. "Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC." Statistics and computing 27.5 (2017): 1413-1432. --></li>
+</ul>
+<p><em>some notes from my grant posterior</em>. rewrite this for your glm based model.
+Given a model <span class="math inline">\(M\)</span> with posterior predictive distribution <span class="math inline">\(p( \tilde{T} | \tilde{x}, D\)</span> for a new survival time <span class="math inline">\(\tilde{T}\)</span> with observed data <span class="math inline">\(D\)</span> with feature vector <span class="math inline">\(\tilde{x}\)</span>.
+We evaluate predictive performance using the <strong>logarithm of the predictive density (LPD)</strong> evaluated pointwise at the acutal observation <span class="math inline">\(( \tilde{t}, \tilde{x}, M)\)</span> <span class="citation">(<span class="citeproc-not-found" data-reference-id="Peltola2014"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="Piironen2017b"><strong>???</strong></span>)</span>.
+LPD is a proper scoring rule and measures both the <strong>calibration</strong> and <strong>sharpness</strong> of the predictive distribution <span class="citation">(<span class="citeproc-not-found" data-reference-id="Gneiting2007"><strong>???</strong></span>)</span>.
+With omit technical definitions of these concepts, but loosely calibration means the statistical consistency between the predicitve distribution and the observations (errors on the order).
+Sharpness, on the other hand, refers to how concentrated the predictive posterior (how precisely forecasted).
+Typically we don’t have the analytic form of the predictive posterior, so instead we use <span class="math inline">\(J\)</span> MCMC draws to approximate the LPD <span class="citation">(<span class="citeproc-not-found" data-reference-id="Peltola2014"><strong>???</strong></span>)</span>:</p>
+<p><span class="math display">\[\begin{equation}
+    LPD(M) \approx \frac{1}{J} \Sigma_{j=1}^{J} log p( \tilde{t} | \tilde{x}, D, \theta^{(j)} ),
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(\theta^{(j)}\)</span> is the posterior parameter vector from the <span class="math inline">\(j\)</span>th posterior sample.</p>
+<p>Further we’ll like a metric of general predictive performance and so compute the average over <span class="math inline">\(n\)</span> data points:</p>
+<!--
+\begin{equation}
+    MLPD(M) = \frac{1}{n} \Sigma_{i=1}^{n} log p( \tilde{t} | \tilde{x_i}, D, M ),
+\end{equation}
+-->
+<p>Further, we’d like to compare the MLPD value of a model <span class="math inline">\(M\)</span> and another model <span class="math inline">\(M^*\)</span> (possibly a reference model or competing model):</p>
+<!--
+
+\begin{equation}
+    \Delta MLPD(M) = MLPD(M) - MLPD(M^*)
+\end{equation}
+-->
+<p>A negative difference in <span class="math inline">\(\Delta MLPD\)</span> for Model <span class="math inline">\(M\)</span> compared to a reference Model (<span class="math inline">\(M^*\)</span>) means worse performance for the model while a positive difference indicates better prediction.
+We assess the uncertainty in the difference using Bayesian bootstrap <span class="citation">(<span class="citeproc-not-found" data-reference-id="Rubin1981"><strong>???</strong></span>)</span> samples of <span class="math inline">\(\Delta MLPD\)</span> between model <span class="math inline">\(M\)</span> and <span class="math inline">\(M^*\)</span>:</p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="model-checking.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="results.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/adknudson/thesis/blob/master/050-predictive-inference.Rmd",
+"text": null
+},
+"download": ["adknudson-thesis.pdf"],
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+},
+"toc_depth": 3,
+"toolbar": {
+"position": "fixed"
+},
+"search": true,
+"info": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
