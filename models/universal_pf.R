@@ -4,16 +4,12 @@ library(rstan)
 
 options(mc.cores = parallel::detectCores())
 rstan_options(auto_write = TRUE)
-m <- stan_model(file = "scratch/universal_pf.stan")
-
-logit <- function(p) qlogis(p)
-inv_logit <- function(x) plogis(x)
-logistic <- function(x) inv_logit(x)
-fn <- function(x, a, b) logistic(b * (x - a))
+m <- stan_model(file = "models/universal_pf.stan")
 
 obs_dat <- function(data) {
   dat <- data %>%
     filter(trial %in% c("pre", "post1")) %>%
+    # filter(rid != "av-post1-O-f-CE") %>%
     mutate(x = soa / 1000,
            rid = factor(rid),
            sid = factor(sid),
@@ -26,19 +22,15 @@ obs_dat <- function(data) {
   dat
 }
 
-stan_summary <- function(object, ...) {
-  round(summary(object, ...)$summary, 4)[,c(1,2,3,4,8,9,10)]
-}
-
-dat <- obs_dat(visual_binomial)
+dat <- obs_dat(sensorimotor)
 stan_dat <- with(dat, list(
   N = N,
   N_G = N_G,
   N_T = N_T,
   N_S = N_S,
   x = x,
-  k = k,
-  n = n,
+  k = response,
+  n = rep(1, length(response)),
   G = as.integer(age_group),
   trt = as.integer(trial),
   S = as.integer(sid)
@@ -86,51 +78,12 @@ f <- sampling(
   data = stan_dat,
   chains = n_chains,
   cores = n_chains,
-  iter = 4000,
+  iter = 12000,
   warmup = 2000,
-  refresh = 100,
+  refresh = 200,
   init = init,
   control = list(adapt_delta = 0.95),
   pars = keep_pars
 )
 
-stan_summary(f, c("a", "aG", "aT"))
-stan_summary(f, c("aGT"))
-stan_summary(f, c("b", "bG", "bT"))
-stan_summary(f, c("bGT"))
-stan_summary(f, "lG")
-stan_summary(f, c("pss"))
-stan_summary(f, c("jnd"))
-stan_summary(f, pars = paste0("sd_a", c("G", "T", "GT", "S")))
-stan_summary(f, pars = paste0("sd_b", c("G", "T", "GT", "S")))
-stan_summary(f, "aS")
-stan_summary(f, "bS")
-
-post <- extract(f)
-hist(post$lG[,3] - post$lG[,1], breaks = 50)
-hist(post$lG[,3] - post$lG[,2], breaks = 50)
-hist(post$lG[,1] - post$lG[,2], breaks = 50)
-
-simulate_new_subject <- function(post, G, trt, method = c("average", "random")) {
-  method <- match.arg(method)
-
-  mu_alpha <- with(post, a + aG[,G] + aT[,trt] + aGT[,G,trt])
-  mu_beta <- with(post, b + bG[,G] + bT[,trt] + bGT[,G,trt])
-
-  if (method == "average") {
-    alpha <- mu_alpha
-    beta <- mu_beta
-  } else {
-    alpha <- rnorm(length(mu_alpha), mu_alpha, post$sd_aS)
-    beta <- rnorm(length(mu_beta), mu_beta, post$sd_bS)
-  }
-
-  lambda <- with(post, lG[,G])
-
-  list(alpha = alpha, beta = beta, lambda = lambda)
-}
-
-pre <- simulate_new_subject(post, 1, 1)
-pos <- simulate_new_subject(post, 1, 2)
-round(summary(pre$alpha), 4)
-round(summary(pos$alpha), 4)
+saveRDS(f, "models/m034s_sm.rds")

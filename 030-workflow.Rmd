@@ -523,10 +523,10 @@ _Prior Checks_
 
 This step pertains to ensuring that prior estimates are consistent with domain expertise. I already did that in the model construction step by sampling values for the just noticeable difference. The first prior chosen was not producing JND estimates that were consistent with domain knowledge, so I adjusted accordingly. That check would normally be done during this step, and I would have had to return to the model development step.
 
-Figure \@ref(fig:ch030-prior-pf-plot) shows the distribution of prior psychometric functions derived from the simulated ensemble. There are a few very steep and very shallow curves, but the majority fall within a range that appears likely.
+Figure \@ref(fig:ch031-prior-pf-plot) shows the distribution of prior psychometric functions derived from the simulated ensemble. There are a few very steep and very shallow curves, but the majority fall within a range that appears likely.
 
 
-```{r ch030-prior-pf-plot, fig.cap="Prior distribution of psychometric functions using the priors for alpha and beta."}
+```{r ch031-prior-pf-plot, fig.cap="Prior distribution of psychometric functions using the priors for alpha and beta."}
 set.seed(124)
 n <- 100
 a2 <- rnorm(n, 0, 0.06)
@@ -1576,7 +1576,7 @@ Figure \@ref(fig:ch033-Y-m-CB-vis-response) shows that there is almost perfect s
 
 Of course one remedy for this is to pool observations together as I have done for the model in this iteration. The data is pooled together at the age group level and variation in the subjects' responses removes the separation. This isn't always ideal, as sometimes we may be interested in studying the individuals within the experiment. If we can't get accurate inferences about the individual, then the results are not valid. The better solution is to use a hierarchical model! With a hierarchical model, individual estimates are shrunk towards the group mean, and so inferences about individuals may be made along with inferences about the group that contains them. I am interested only in the group level inferences right now, but in [chapter 5](#predictive-inference) I will compare the group level model at the end of this chapter to a model that includes individual estimates.
 
-Figure \@ref(fig:ch030-Abandoned-Locomotive) shows the posterior distribution of psychometric functions for the visual TOJ data. Notice that there is almost no difference between the pre- and post-adaptation blocks.
+Figure \@ref(fig:ch033-Iron-Intensive) shows the posterior distribution of psychometric functions for the visual TOJ data. Notice that there is almost no difference between the pre- and post-adaptation blocks.
 
 ```{r ch033-Eager Old Helium}
 obs_dat <- with(vis_dat, list(N = N, x = x, n = n, k = k, 
@@ -1597,35 +1597,45 @@ if (file.exists("models/m033vis.rds")) {
 ```
 
 
-```{r ch030-Abandoned-Locomotive, fig.cap="Posterior distribution of psychometric functions for the visual TOJ data. There is almost no visual difference between the pre- and post-adaptation blocks."}
+```{r ch033-Iron-Intensive, fig.cap="Posterior distribution of psychometric functions for the visual TOJ data. There is almost no visual difference between the pre- and post-adaptation blocks."}
 p033vis <- extract(m033vis)
-n <- 100
-idx <- sample(1:length(p033vis$a), n, replace = TRUE)
-
-pp <- list()
-for (i in 1:3) {
-  p <- data.frame(x = c(-0.1, 0.1), y = c(0, 1)) %>% 
-    ggplot(aes(x, y)) +
-    theme(axis.title.y = element_blank()) +
-    labs(x = "SOA (seconds)")
-  alpha_pre <- with(p033vis, a + aG[,i] + aT[,1] + aGT[,i,1])
-  alpha_pos <- with(p033vis, a + aG[,i] + aT[,2] + aGT[,i,2])
-  beta_pre <- exp(with(p033vis, b + bG[,i] + bT[,1] + bGT[,i,1]))
-  beta_pos <- exp(with(p033vis, b + bG[,i] + bT[,2] + bGT[,i,2]))
-  for (j in idx) {
-    p <- p +
-      geom_function(fun = fn, args = list(a = alpha_pre[j], b = beta_pre[j]),
-                    alpha = 0.15, aes(color = "Pre")) +
-      geom_function(fun = fn, args = list(a = alpha_pos[j], b = beta_pos[j]),
-                    alpha = 0.15, aes(color = "Post"))
+if (!file.exists("figures/ch033-Iron-Intensive.png")) {
+  n <- 100
+  idx <- sample(1:length(p033vis$a), n, replace = TRUE)
+  
+  pp <- list()
+  for (i in 1:3) {
+    p <- data.frame(x = c(-0.1, 0.1), y = c(0, 1)) %>% 
+      ggplot(aes(x, y)) +
+      theme(axis.title.y = element_blank()) +
+      labs(x = "SOA (seconds)")
+    alpha_pre <- with(p033vis, a + aG[,i] + aT[,1] + aGT[,i,1])
+    alpha_pos <- with(p033vis, a + aG[,i] + aT[,2] + aGT[,i,2])
+    beta_pre <- exp(with(p033vis, b + bG[,i] + bT[,1] + bGT[,i,1]))
+    beta_pos <- exp(with(p033vis, b + bG[,i] + bT[,2] + bGT[,i,2]))
+    for (j in idx) {
+      p <- p +
+        geom_function(fun = fn, args = list(a = alpha_pre[j], b = beta_pre[j]),
+                      alpha = 0.15, aes(color = "Pre")) +
+        geom_function(fun = fn, args = list(a = alpha_pos[j], b = beta_pos[j]),
+                      alpha = 0.15, aes(color = "Post"))
+    }
+    pp[[i]] <- p +
+      scale_color_manual(values = c("steelblue4", "orangered3")) +
+      theme(legend.title = element_blank())
   }
-  pp[[i]] <- p +
-    scale_color_manual(values = c("steelblue4", "orangered3")) +
-    theme(legend.title = element_blank())
+  
+  plot1 <- (pp[[1]] / pp[[2]] / pp[[3]]) + 
+    plot_annotation(title = "Posterior Distribution of Psychometric Functions")
+  ggsave(
+    filename = "ch033-Iron-Intensive.png", 
+    plot = plot1, 
+    device = "png",
+    path = "figures/",
+    dpi = "print")
 }
 
-(pp[[1]] / pp[[2]] / pp[[3]]) + 
-  plot_annotation(title = "Posterior Distribution of Psychometric Functions")
+knitr::include_graphics("figures/ch033-Iron-Intensive.png")
 ```
 
 
@@ -1862,7 +1872,7 @@ _Fit Observed Data_
 Because it is the visual data that motivated this iteration, I will finish up using that data to fit the model and perform posterior retrodictive checks.
 
 
-```{r}
+```{r ch034-Arm Remote}
 obs_dat <- with(vis_dat, list(N = N, x = x, n = n, k = k, 
                               G = as.integer(age_group), 
                               trt = as.integer(trial),
@@ -1915,43 +1925,52 @@ _Posterior Retrodictive Checks_
 
 ```{r ch034-Screaming-Proton}
 p034 <- extract(m034)
-n <- 100
-idx <- sample(1:length(p034$a), n, replace = TRUE)
-fn2 <- function(x, a, b, l) {
-  l + (1-2*l) * fn(x, a, b)
-}
-
-pp <- list()
-for (i in 1:3) {
-  p <- data.frame(x = c(-0.1, 0.1), y = c(0, 1)) %>% 
-    ggplot(aes(x, y)) +
-    theme(axis.title.y = element_blank()) +
-    labs(x = "SOA (seconds)")
-  alpha_pre <- with(p034, a + aG[,i] + aT[,1] + aGT[,i,1])
-  alpha_pos <- with(p034, a + aG[,i] + aT[,2] + aGT[,i,2])
-  beta_pre <- exp(with(p034, b + bG[,i] + bT[,1] + bGT[,i,1]))
-  beta_pos <- exp(with(p034, b + bG[,i] + bT[,2] + bGT[,i,2]))
-  
-  lambda <- with(p034, lG[,i])
-  
-  for (j in idx) {
-    p <- p +
-      geom_function(fun = fn2, args = list(a = alpha_pre[j], 
-                                           b = beta_pre[j],
-                                           l = lambda[j]),
-                    alpha = 0.15, aes(color = "Pre")) +
-      geom_function(fun = fn2, args = list(a = alpha_pos[j], 
-                                           b = beta_pos[j],
-                                           l = lambda[j]),
-                    alpha = 0.15, aes(color = "Post"))
+if (!file.exists("figures/ch034-Screaming-Proton.png")) {
+  n <- 100
+  idx <- sample(1:length(p034$a), n, replace = TRUE)
+  fn2 <- function(x, a, b, l) {
+    l + (1-2*l) * fn(x, a, b)
   }
-  pp[[i]] <- p +
-    scale_color_manual(values = c("steelblue4", "orangered3")) +
-    theme(legend.title = element_blank())
+  
+  pp <- list()
+  for (i in 1:3) {
+    p <- data.frame(x = c(-0.1, 0.1), y = c(0, 1)) %>% 
+      ggplot(aes(x, y)) +
+      theme(axis.title.y = element_blank()) +
+      labs(x = "SOA (seconds)")
+    alpha_pre <- with(p034, a + aG[,i] + aT[,1] + aGT[,i,1])
+    alpha_pos <- with(p034, a + aG[,i] + aT[,2] + aGT[,i,2])
+    beta_pre <- exp(with(p034, b + bG[,i] + bT[,1] + bGT[,i,1]))
+    beta_pos <- exp(with(p034, b + bG[,i] + bT[,2] + bGT[,i,2]))
+    
+    lambda <- with(p034, lG[,i])
+    
+    for (j in idx) {
+      p <- p +
+        geom_function(fun = fn2, args = list(a = alpha_pre[j], 
+                                             b = beta_pre[j],
+                                             l = lambda[j]),
+                      alpha = 0.15, aes(color = "Pre")) +
+        geom_function(fun = fn2, args = list(a = alpha_pos[j], 
+                                             b = beta_pos[j],
+                                             l = lambda[j]),
+                      alpha = 0.15, aes(color = "Post"))
+    }
+    pp[[i]] <- p +
+      scale_color_manual(values = c("steelblue4", "orangered3")) +
+      theme(legend.title = element_blank())
+  }
+  
+  plot1 <- (pp[[1]] / pp[[2]] / pp[[3]]) + 
+    plot_annotation(title = "Posterior Distribution of Psychometric Functions")
+  ggsave(
+      filename = "ch034-Screaming-Proton.png", 
+      plot = plot1, 
+      device = "png",
+      path = "figures/",
+      dpi = "print")
 }
-
-(pp[[1]] / pp[[2]] / pp[[3]]) + 
-  plot_annotation(title = "Posterior Distribution of Psychometric Functions")
+knitr::include_graphics("figures/ch034-Screaming-Proton.png")
 ```
 
 
