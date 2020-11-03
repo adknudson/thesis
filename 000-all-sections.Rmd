@@ -452,7 +452,7 @@ data.frame(x = seq(-6, 6, 1),
   labs(title = "Responses with perfect separation")
 ```
 
-Two problems happen here: 1) the maximum likelihood estimate of the slope is $\infty$ which means that some algorithms will never converge, and 2) the center of the psychometric function is not uniquely defined. Any location value in the range $[1, 2]$ is valid and perfectly separates the positive and negative responses. In psychometric experiments, neither of these results are likely, and neither are informative. The just noticeble *difference* is not zero, and the *point* of subject simultaneity is not a range.
+Two problems happen here: 1) the maximum likelihood estimate of the slope is $\infty$ which means that some algorithms will never converge, and 2) the center of the psychometric function is not uniquely defined. Any location value in the range $[1, 2]$ is valid and perfectly separates the positive and negative responses. In psychometric experiments, neither of these results are likely, and neither are informative. The just noticeable *difference* is not zero, and the *point* of subject simultaneity is not a range.
 
 - shortcomings
   - Convergence failure in the presence of complete separation

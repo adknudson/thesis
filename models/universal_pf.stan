@@ -37,7 +37,7 @@ transformed parameters {
   real a;
   vector[N_G] aG;
   vector[N_T] aT;
-  real aGT[N_G, N_T];
+  matrix[N_G, N_T] aGT;
   vector[N_S] aS;
   real sd_aG;
   real sd_aT;
@@ -47,7 +47,7 @@ transformed parameters {
   real b;
   vector[N_G] bG;
   vector[N_T] bT;
-  real bGT[N_G, N_T];
+  matrix[N_G, N_T] bGT;
   vector[N_S] bS;
   real sd_bG;
   real sd_bT;
@@ -55,20 +55,20 @@ transformed parameters {
   real sd_bS;
 
   // Z * sigma ~ N(0, sigma^2)
-  a = a_raw * 0.05;
+  a = a_raw * 0.06;
 
   // mu + tau * tan(U) ~ cauchy(mu, tau)
-  sd_aG = 0.01 * tan(aG_unif);
-  sd_aT = 0.01 * tan(aT_unif);
-  sd_aGT = 0.05 * tan(aGT_unif);
-  sd_aS = 0.05 * tan(aS_unif);
+  sd_aG = 0.1 * tan(aG_unif);
+  sd_aT = 0.1 * tan(aT_unif);
+  sd_aGT = 0.1 * tan(aGT_unif);
+  sd_aS = 0.1 * tan(aS_unif);
 
   aG = aG_raw * sd_aG;
   aT = aT_raw * sd_aT;
   aS = aS_raw * sd_aS;
 
   // mu + Z * sigma ~ N(mu, sigma^2)
-  b = 3.0 + b_raw * 1.5;
+  b = 3.0 + b_raw;
 
   // mu + tau * tan(U) ~ cauchy(mu, tau)
   sd_bG = 0.5 * tan(bG_unif);
@@ -88,7 +88,7 @@ transformed parameters {
   }
 }
 model {
-  vector[N] theta;
+  vector[N] p;
 
   a_raw ~ std_normal();
   aG_raw ~ std_normal();
@@ -107,23 +107,26 @@ model {
 
   // Compute probability values
   for (i in 1:N) {
-    real mu_b = exp(b + bG[G[i]] + bT[trt[i]] + bGT[G[i], trt[i]] + bS[S[i]]);
+    real mu_b = b + bG[G[i]] + bT[trt[i]] + bGT[G[i], trt[i]] + bS[S[i]];
     real mu_a = a + aG[G[i]] + aT[trt[i]] + aGT[G[i], trt[i]] + aS[S[i]];
-    theta[i] = lG[G[i]] + (1 - 2*lG[G[i]]) * inv_logit(mu_b * (x[i] - mu_a));
+    real mu_l = lG[G[i]];
+    p[i] = mu_l + (1 - 2*mu_l) * inv_logit(exp(mu_b) * (x[i] - mu_a));
   }
 
-  k ~ binomial(n, theta);
+  k ~ binomial(n, p);
 }
 generated quantities {
   vector[N] log_lik;
+  vector[N] k_pred;
 
   for (i in 1:N) {
-    real beta = exp(b + bG[G[i]] + bT[trt[i]] + bGT[G[i], trt[i]] + bS[S[i]]);
+    real beta  = b + bG[G[i]] + bT[trt[i]] + bGT[G[i], trt[i]] + bS[S[i]];
     real alpha = a + aG[G[i]] + aT[trt[i]] + aGT[G[i], trt[i]] + aS[S[i]];
     real lambda = lG[G[i]];
 
-    real p = lambda + (1 - 2*lambda) * inv_logit(beta * (x[i] - alpha));
+    real p = lambda + (1 - 2*lambda) * inv_logit(exp(beta) * (x[i] - alpha));
 
     log_lik[i] = binomial_lpmf(k[i] | n[i], p);
+    k_pred[i]  = binomial_rng(n[i], p);
   }
 }
