@@ -150,7 +150,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.4" data-path="workflow.html"><a href="workflow.html#iter4"><i class="fa fa-check"></i><b>3.4</b> Iteration 4 (what’s one more)</a></li>
 <li class="chapter" data-level="3.5" data-path="workflow.html"><a href="workflow.html#celebrate"><i class="fa fa-check"></i><b>3.5</b> Celebrate</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>4</b> Model Fitting/Checking</a></li>
+<li class="chapter" data-level="4" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>4</b> Model Fitting/Checking</a><ul>
+<li class="chapter" data-level="4.1" data-path="model-checking.html"><a href="model-checking.html#fitting-using-hmc"><i class="fa fa-check"></i><b>4.1</b> Fitting using HMC</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="model-checking.html"><a href="model-checking.html#diagnostic-tools"><i class="fa fa-check"></i><b>4.1.1</b> Diagnostic Tools</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="model-checking.html"><a href="model-checking.html#prior-predictive-checks"><i class="fa fa-check"></i><b>4.2</b> Prior Predictive Checks</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="predictive-inferences.html"><a href="predictive-inferences.html"><i class="fa fa-check"></i><b>5</b> Predictive Inference</a></li>
 <li class="chapter" data-level="6" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>6</b> Psychometric Results</a><ul>
 <li class="chapter" data-level="6.1" data-path="results.html"><a href="results.html#affect-of-adaptation-across-age-groups"><i class="fa fa-check"></i><b>6.1</b> Affect of Adaptation across Age Groups</a><ul>
@@ -189,6 +194,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="supplementary-code" class="section level1">
 <h1><span class="header-section-number">A</span> Supplementary Code</h1>
+<p><strong>Eight Schools Model</strong></p>
+
+<pre><code>data {
+  int&lt;lower=0&gt; J;
+  vector[J] y;
+  vector&lt;lower=0&gt;[J] sigma;
+}
+parameters {
+  real mu;
+  real&lt;lower=0&gt; tau;
+  vector[J] theta;
+}
+model {
+  mu ~ normal(0, 10);
+  tau ~ cauchy(0, 10);
+  theta ~ normal(mu, tau);
+  y ~ normal(theta, sigma);
+}</code></pre>
+
 
 </div>
             </section>

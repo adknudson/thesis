@@ -62,18 +62,7 @@ Since everyone asks different questions, the value of a model is not in how well
 
 Like any good Bayesian^[The opposite of a Frequentist.], much work is done before seeing the data or building a model. This may include talking with experts to gain domain knowledge or to _elicit priors_. Experts may know something about a particular measure, perhaps the mean or variability of the data from years of research, and different experts may provide different estimates of a measure. The benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the _posterior distribution_. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints. Consistency is key.
 
-The computational tool I will be using to estimate the posterior is a probabilistic programming language (PPL) called Stan [@R-rstan] within the R programming language. Stan uses the No U-Turn Sampler (NUTS) version of Hamiltonian Monte Carlo (HMC). For a gentle introduction to Bayesian statistics and sampling methods, see @bolstad2016introduction, and for an in-depth review of HMC see @betancourt2017conceptual.
-
-Why do we need a sampler at all? Bayesian statistics and modeling stems from Bayes theorem (Equation \@ref(eq:bayesthm)). The prior $P(\theta)$ is some distribution over the parameter space and the likelihood $P(X | \theta)$ is the probability of an outcome in the sample space given a value in the parameter space. To keep things simple, we generally say that the posterior is proportional to the prior times the likelihood. Why proportional? The posterior distribution is a probability distribution, which means that the sum or integral over the parameter space must evaluate to one. Because of this constraint, the denominator in \@ref(eq:bayesthm) acts as a scale factor to ensure that the posterior is valid. Often it happens that the integral in the denominator is complex or of a high dimension. In the former situation, the integral may not be possible to evaluate, and in the latter there may not be enough computational resources in the world to perform a simple grid approximation.
-
-
-\begin{equation}
-  P(\theta | X) = \frac{P(X | \theta)\cdot P(\theta)}{\sum_i P(X | \theta_i)} =   \frac{P(X | \theta)\cdot P(\theta)}{\int_\Omega P(X | \theta)d\theta}
-  (\#eq:bayesthm)
-\end{equation}
-
-
-The solution is to use Markov Chain Monte Carlo (MCMC). The idea is that we can _draw samples_ from the posterior distribution in a way that samples proportionally to the density. This sampling is a form of approximation to the area under the curve (i.e. an approximation to the denominator in \@ref(eq:bayesthm)). Rejection sampling [@gilks1992adaptive] and slice sampling [@neal2003slice] are basic methods for sampling from a target distribution, however they can often be inefficient^[Efficiency of a sampler is related to the proportion of proposal samples that get accepted.]. NUTS is a much more complex algorithm that can be compared to a physics simulation. A massless "particle" is flicked in a random direction with some amount of kinetic energy in a probability field, and is stopped randomly. The stopping point is the new proposal sample. The No U-Turn part means that when the algorithm detects that the particle is turning around, it will stop so as not to return to the starting position. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that let us know when the sampler is having trouble efficiently exploring the posterior. I'll talk more about these diagnostic tools throughout the remaining sections and in [chapter 4](#model-checking).
+The computational tool I will be using to estimate the posterior is a probabilistic programming language (PPL) called Stan [@R-rstan] within the R programming language. Stan uses the No U-Turn Sampler (NUTS) version of Hamiltonian Monte Carlo (HMC) which I will discuss more in [chapter 4](#model-checking). For a gentle introduction to Bayesian statistics and sampling methods, see @bolstad2016introduction, and for an in-depth review of HMC see @betancourt2017conceptual.
 
 The question of inferential adequacy depends on the set of questions that we are seeking to answer with the data from the psychometric experiment. The broad objective is to determine if there are any significant differences between age groups when it comes to temporal sensitivity, perceptual synchrony, and temporal recalibration, and if the task influences the results as well. The specific goals are to estimate and compare the PSS an JND across all age groups, conditions, and tasks, and determine the affect of recalibration between age groups.
 
@@ -106,7 +95,7 @@ bind_rows(
   collapse_rows(columns = 1, valign = "top")
 ```
 
-I'll talk about each step in the first iteration, but may choose to omit steps in subsequent iterations if there are no changes. For the purposes of building a model and being concise, I will focus around the audiovisual TOJ task in this chapter, but the final model will apply similarly to the visual and duration tasks. For the sensorimotor task, the model will be modified to accept Bernoulli data as apposed to aggregated Binomial counts (described more in the next section).
+I'll talk about each step in the first iteration, but may choose to omit steps in subsequent iterations if there are no changes. For the purposes of building a model and being concise, I will focus around the audiovisual TOJ task in this chapter, but the final model will apply similarly to the visual and duration tasks. For the sensorimotor task, the model will be modified to accept Bernoulli data as opposed to aggregated Binomial counts (described more in the next section).
 
 ## Iteration 1 (journey of a thousand miles) {#iter1}
 
@@ -584,9 +573,7 @@ m031 <- sampling(m031_stan, data = sim_dat,
 
 _Algorithmic Calibration_
 
-One benefit of using HMC over other samplers like Gibbs sampling is that HMC offers diagnostic tools for the health of chains and the ability to check for _divergent transitions_. Recall that the HMC and NUTS algorithm can be imagined as a physics simulation of a particle in a potential energy field, and a random momentum is imparted on the particle. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle (@stanref). The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called _leapfrog steps_ (see @leimkuhler2004simulating for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.
-
-To check the basic diagnostics of the model, I run the following code.
+One benefit of using HMC over other samplers like Gibbs sampling is that HMC offers diagnostic tools for the health of chains and the ability to check for _divergent transitions_ (discussed in \@ref(divergent-transitions)). To check the basic diagnostics of the model, I run the following code.
 
 \setstretch{1.0}
 ```{r ch031-Persistent Hook, message=TRUE, echo=TRUE}
@@ -981,16 +968,15 @@ obs_dat <- with(av_dat, list(N = N, x = x, n = n, k = k,
 if (file.exists("models/m032.rds")) {
   m032 <- readRDS("models/m032.rds")
 } else {
-  m032 <- sampling(m032_stan, data = obs_dat, seed = 124,
-                 chains = 4, cores = 4, refresh = 0)
+  <<ch032-Brutal-Limousine>>
   saveRDS(m032, "models/m032.rds")
 }
 ```
 
 
-```{r ch032-Brutal Limousine, echo=TRUE, eval=FALSE}
+```{r ch032-Brutal-Limousine, echo=TRUE, eval=FALSE}
 m032 <- sampling(m032_stan, data = obs_dat, seed = 124,
-                 chains = 4, cores = 4, refresh = 0)
+                 chains = 4, cores = 4, refresh = 100)
 ```
 
 _Diagnose Posterior Fit_
@@ -1036,7 +1022,6 @@ U_\tau &\sim \mathcal{U}(0, \pi/2) \\
 \end{align*}
 
 
-\setstretch{1.0}
 ```{stan ch032-Stormy Mountain, output.var="m032nc_stan"}
 data {
   int N;
@@ -1076,12 +1061,12 @@ transformed parameters {
   
   a = a_raw * 0.06;
   // mu + tau * tan(U) ~ cauchy(mu, tau)
-  sd_aG = 1 * tan(aG_unif);
-  sd_aT = 1 * tan(aT_unif);
+  sd_aG = tan(aG_unif);
+  sd_aT = tan(aT_unif);
   aG = aG_raw * sd_aG;
   aT = aT_raw * sd_aT;
   
-  b = 3.0 + b_raw * 1.0;
+  b = 3.0 + b_raw;
   // mu + tau * tan(U) ~ cauchy(mu, tau)
   sd_bG = 2 * tan(bG_unif);
   sd_bT = 2 * tan(bT_unif);
@@ -1129,7 +1114,6 @@ generated quantities {
   }
 }
 ```
-\setstretch{2.0}
 
 
 As an aside, a multilevel model can be fit in R using `lme4::glmer`, `brms::brm`, or `rstanarm::stan_glmer`, and they all use the same notation to specify the model. The notation is very compact, but easy to unpack. Values not in a grouping term are _fixed_ effects and values in a grouping term (e.g. `(1 + x | G)`) are _mixed_ or _random_ effects depending on which textbook you read.
@@ -1172,20 +1156,17 @@ obs_dat <- with(av_dat, list(N = N, x = x, n = n, k = k,
 if (file.exists("models/m032nc.rds")) {
   m032nc <- readRDS("models/m032nc.rds")
 } else {
-  m032nc <- sampling(m032nc_stan, data = obs_dat, seed = 143,
-                     iter = 5000, warmup = 2500, pars = keep_pars,
-                     control = list(adapt_delta = 0.95),
-                     chains = 4, cores = 4, refresh = 0)
+  <<ch032-Official-Lama>>
   saveRDS(m032nc, "models/m032nc.rds")
 }
 ```
 
 
-```{r ch032-Official Lama, echo=TRUE, eval=FALSE}
-m032nc <- sampling(m032nc_stan, data = obs_dat, seed = 143,
-                   iter = 5000, warmup = 2500, pars = keep_pars,
+```{r ch032-Official-Lama, echo=TRUE, eval=FALSE}
+m032nc <- sampling(m032nc_stan, data = obs_dat, seed = 143, thin = 2,
+                   iter = 4000, warmup = 2000, pars = keep_pars,
                    control = list(adapt_delta = 0.95),
-                   chains = 4, cores = 4, refresh = 0)
+                   chains = 4, cores = 4, refresh = 100)
 ```
 
 _Diagnose Posterior Fit_
@@ -1328,71 +1309,39 @@ In the above expression, the interaction variable $\beta_{G[i] \times trt[i]}$ i
 
 ```{stan ch033-Tea Screaming, output.var="m033_stan"}
 data {
-  int N;        // Number of observations
-  int N_G;      // Number of age groups
-  int N_T;      // Number of treatments
-  int n[N];     // Number of Bernoulli trials
-  int k[N];     // Number of "positive" responses
-  vector[N] x;  // SOA values
-  int G[N];     // Age group index variable
-  int trt[N];   // Treatment index variable
+  int N;
+  int N_G;
+  int N_T;
+  int n[N];
+  int k[N];
+  vector[N] x;
+  int G[N];
+  int trt[N];
 }
 parameters {
   real a_raw;
-  real<lower=machine_precision(),upper=pi()/2> aG_unif;
-  real<lower=machine_precision(),upper=pi()/2> aT_unif;
   real<lower=machine_precision(),upper=pi()/2> aGT_unif;
-  vector[N_G] aG_raw;
-  vector[N_T] aT_raw;
   matrix[N_G, N_T] aGT_raw;
 
   real b_raw;
-  real<lower=machine_precision(),upper=pi()/2> bG_unif;
-  real<lower=machine_precision(),upper=pi()/2> bT_unif;
   real<lower=machine_precision(),upper=pi()/2> bGT_unif;
-  vector[N_G] bG_raw;
-  vector[N_T] bT_raw;
   matrix[N_G, N_T] bGT_raw;
 }
 transformed parameters {
   real a;
-  vector[N_G] aG;
-  vector[N_T] aT;
   matrix[N_G, N_T] aGT;
-  real sd_aG;
-  real sd_aT;
   real sd_aGT;
 
   real b;
-  vector[N_G] bG;
-  vector[N_T] bT;
   matrix[N_G, N_T] bGT;
-  real sd_bG;
-  real sd_bT;
   real sd_bGT;
 
-  // Z * sigma ~ N(0, sigma^2)
   a = a_raw * 0.06;
-
-  // mu + tau * tan(U) ~ cauchy(mu, tau)
-  sd_aG = 1 * tan(aG_unif);
-  sd_aT = 1 * tan(aT_unif);
   sd_aGT = 1 * tan(aGT_unif);
-
-  aG = aG_raw * sd_aG;
-  aT = aT_raw * sd_aT;
-
-  // mu + Z * sigma ~ N(mu, sigma^2)
+  
   b = 3.0 + b_raw;
-
-  // mu + tau * tan(U) ~ cauchy(mu, tau)
-  sd_bG = 2 * tan(bG_unif);
-  sd_bT = 2 * tan(bT_unif);
   sd_bGT = 2 * tan(bGT_unif);
 
-  bG = bG_raw * sd_bG;
-  bT = bT_raw * sd_bT;
-  
   for (i in 1:N_G) {
     for (j in 1:N_T) {
       aGT[i, j] = aGT_raw[i, j] * sd_aGT;
@@ -1402,22 +1351,14 @@ transformed parameters {
 }
 model {
   vector[N] theta;
-
   a_raw ~ std_normal();
-  aG_raw ~ std_normal();
-  aT_raw ~ std_normal();
-
   b_raw ~ std_normal();
-  bG_raw ~ std_normal();
-  bT_raw ~ std_normal();
-
   to_vector(aGT_raw) ~ std_normal();
   to_vector(bGT_raw) ~ std_normal();
 
-  // Compute probability values
   for (i in 1:N) {
-    real mu_b = b + bG[G[i]] + bT[trt[i]] + bGT[G[i], trt[i]];
-    real mu_a = a + aG[G[i]] + aT[trt[i]] + aGT[G[i], trt[i]];
+    real mu_b = b + bGT[G[i], trt[i]];
+    real mu_a = a + aGT[G[i], trt[i]];
     theta[i] = exp(mu_b) * (x[i] - mu_a);
   }
 
@@ -1430,16 +1371,16 @@ generated quantities {
 
   for (i in 1:N_G) {
     for (j in 1:N_T) {
-      real mu_b = exp(b + bG[i] + bT[j] + bGT[i, j]);
-      real mu_a =     a + aG[i] + aT[j] + aGT[i, j];
+      real mu_b = exp(b + bGT[i, j]);
+      real mu_a =     a + aGT[i, j];
       pss[i, j] = mu_a;
       jnd[i, j] = logit(0.84) / mu_b;
     }
   }
   
   for (i in 1:N) {
-    real mu_b = b + bG[G[i]] + bT[trt[i]] + bGT[G[i], trt[i]];
-    real mu_a = a + aG[G[i]] + aT[trt[i]] + aGT[G[i], trt[i]];
+    real mu_b = b + bGT[G[i], trt[i]];
+    real mu_a = a + aGT[G[i], trt[i]];
     real p = inv_logit(exp(mu_b) * (x[i] - mu_a));
     k_pred[i] = binomial_rng(n[i], p);
   }
@@ -1450,14 +1391,11 @@ generated quantities {
 
 ```{r ch033-Alien Vulture}
 keep_pars <- c(
-  "a", "b", 
-  "aG", "bG",
-  "aT", "bT",
+  "a", "b",
   "aGT", "bGT",
-  "sd_aG", "sd_bG",
-  "sd_aT", "sd_bT",
+  "sd_aGT", "sd_bGT",
   "pss", "jnd",
-  "k_pred"
+  "k_pred", "log_lik"
 )
 
 obs_dat <- with(av_dat, list(N = N, x = x, n = n, k = k, 
@@ -1469,8 +1407,8 @@ obs_dat <- with(av_dat, list(N = N, x = x, n = n, k = k,
 if (file.exists("models/m033.rds")) {
   m033 <- readRDS("models/m033.rds")
 } else {
-  m033 <- sampling(m033_stan, data = obs_dat, seed = 143,
-                   iter = 5000, warmup = 2500, pars = keep_pars,
+  m033 <- sampling(m033_stan, data = obs_dat, seed = 143, thin = 2,
+                   iter = 4000, warmup = 2000, pars = keep_pars,
                    control = list(adapt_delta = 0.95),
                    chains = 4, cores = 4, refresh = 0)
   saveRDS(m033, "models/m033.rds")
@@ -1588,8 +1526,8 @@ obs_dat <- with(vis_dat, list(N = N, x = x, n = n, k = k,
 if (file.exists("models/m033vis.rds")) {
   m033vis <- readRDS("models/m033vis.rds")
 } else {
-  m033vis <- sampling(m033_stan, data = obs_dat, seed = 143,
-                      iter = 5000, warmup = 2500, pars = keep_pars,
+  m033vis <- sampling(m033_stan, data = obs_dat, seed = 143, thin = 2,
+                      iter = 4000, warmup = 2000, pars = keep_pars,
                       control = list(adapt_delta = 0.95),
                       chains = 4, cores = 4, refresh = 0)
   saveRDS(m033vis, "models/m033vis.rds")
@@ -1609,10 +1547,10 @@ if (!file.exists("figures/ch033-Iron-Intensive.png")) {
       ggplot(aes(x, y)) +
       theme(axis.title.y = element_blank()) +
       labs(x = "SOA (seconds)")
-    alpha_pre <- with(p033vis, a + aG[,i] + aT[,1] + aGT[,i,1])
-    alpha_pos <- with(p033vis, a + aG[,i] + aT[,2] + aGT[,i,2])
-    beta_pre <- exp(with(p033vis, b + bG[,i] + bT[,1] + bGT[,i,1]))
-    beta_pos <- exp(with(p033vis, b + bG[,i] + bT[,2] + bGT[,i,2]))
+    alpha_pre <- with(p033vis, a + aGT[,i,1])
+    alpha_pos <- with(p033vis, a + aGT[,i,2])
+    beta_pre <- exp(with(p033vis, b + bGT[,i,1]))
+    beta_pos <- exp(with(p033vis, b + bGT[,i,2]))
     for (j in idx) {
       p <- p +
         geom_function(fun = fn, args = list(a = alpha_pre[j], b = beta_pre[j]),
@@ -1764,61 +1702,29 @@ data {
 }
 parameters {
   real a_raw;
-  real<lower=machine_precision(),upper=pi()/2> aG_unif;
-  real<lower=machine_precision(),upper=pi()/2> aT_unif;
   real<lower=machine_precision(),upper=pi()/2> aGT_unif;
-  vector[N_G] aG_raw;
-  vector[N_T] aT_raw;
   matrix[N_G, N_T] aGT_raw;
 
   real b_raw;
-  real<lower=machine_precision(),upper=pi()/2> bG_unif;
-  real<lower=machine_precision(),upper=pi()/2> bT_unif;
   real<lower=machine_precision(),upper=pi()/2> bGT_unif;
-  vector[N_G] bG_raw;
-  vector[N_T] bT_raw;
   matrix[N_G, N_T] bGT_raw;
   
   vector[N_G] lG;
 }
 transformed parameters {
   real a;
-  vector[N_G] aG;
-  vector[N_T] aT;
   matrix[N_G, N_T] aGT;
-  real sd_aG;
-  real sd_aT;
   real sd_aGT;
 
   real b;
-  vector[N_G] bG;
-  vector[N_T] bT;
   matrix[N_G, N_T] bGT;
-  real sd_bG;
-  real sd_bT;
   real sd_bGT;
 
-  // Z * sigma ~ N(0, sigma^2)
   a = a_raw * 0.06;
-
-  // mu + tau * tan(U) ~ cauchy(mu, tau)
-  sd_aG = tan(aG_unif);
-  sd_aT = tan(aT_unif);
   sd_aGT = tan(aGT_unif);
 
-  aG = aG_raw * sd_aG;
-  aT = aT_raw * sd_aT;
-
-  // mu + Z * sigma ~ N(mu, sigma^2)
   b = 3.0 + b_raw;
-
-  // mu + tau * tan(U) ~ cauchy(mu, tau)
-  sd_bG = 2 * tan(bG_unif);
-  sd_bT = 2 * tan(bT_unif);
   sd_bGT = 2 * tan(bGT_unif);
-
-  bG = bG_raw * sd_bG;
-  bT = bT_raw * sd_bT;
   
   for (i in 1:N_G) {
     for (j in 1:N_T) {
@@ -1831,22 +1737,16 @@ model {
   vector[N] p;
 
   a_raw ~ std_normal();
-  aG_raw ~ std_normal();
-  aT_raw ~ std_normal();
-
   b_raw ~ std_normal();
-  bG_raw ~ std_normal();
-  bT_raw ~ std_normal();
 
   to_vector(aGT_raw) ~ std_normal();
   to_vector(bGT_raw) ~ std_normal();
   
   lG ~ beta(4, 96);
 
-  // Compute probability values
   for (i in 1:N) {
-    real mu_b = b + bG[G[i]] + bT[trt[i]] + bGT[G[i], trt[i]];
-    real mu_a = a + aG[G[i]] + aT[trt[i]] + aGT[G[i], trt[i]];
+    real mu_b = b + bGT[G[i], trt[i]];
+    real mu_a = a + aGT[G[i], trt[i]];
     p[i] = lG[G[i]] + (1 - 2*lG[G[i]]) * inv_logit(exp(mu_b) * (x[i] - mu_a));
   }
 
@@ -1854,12 +1754,14 @@ model {
 }
 generated quantities {
   vector[N] k_pred;
+  vector[N] log_lik;
 
   for (i in 1:N) {
-    real mu_b = b + bG[G[i]] + bT[trt[i]] + bGT[G[i], trt[i]];
-    real mu_a = a + aG[G[i]] + aT[trt[i]] + aGT[G[i], trt[i]];
+    real mu_b = b + bGT[G[i], trt[i]];
+    real mu_a = a + aGT[G[i], trt[i]];
     real p = lG[G[i]] + (1 - 2*lG[G[i]]) * inv_logit(exp(mu_b) * (x[i] - mu_a));
     k_pred[i] = binomial_rng(n[i], p);
+    log_lik[i] = binomial_lpmf(k[i] | n[i], p);
   }
 }
 ```
@@ -1880,29 +1782,21 @@ obs_dat <- with(vis_dat, list(N = N, x = x, n = n, k = k,
                               N_G = length(levels(age_group))))
 
 keep_pars <- c(
-  "a", "b", 
-  "aG", "bG", "lG",
-  "aT", "bT",
+  "a", "b",
+  "lG",
   "aGT", "bGT",
-  "k_pred"
+  "sd_aGT", "sd_bGT",
+  "k_pred", "log_lik"
 )
 
 n_chains <- 4L
 set.seed(626)
 init <- with(obs_dat, replicate(n_chains, list(
   a_raw = rnorm(1),
-  aG_raw = rnorm(N_G, 0, 0.5),
-  aT_raw = rnorm(N_T, 0, 0.5),
   aGT_raw = matrix(rnorm(N_G * N_T, 0, 0.5), N_G, N_T),
-  aG_unif = runif(1, 0, pi/4),
-  aT_unif = runif(1, 0, pi/4),
   aGT_unif = runif(1, 0, pi/4),
   b_raw = rnorm(1),
-  bG_raw = rnorm(N_G, 0, 0.5),
-  bT_raw = rnorm(N_T, 0, 0.5),
   bGT_raw = matrix(rnorm(N_G * N_T, 0, 0.5), N_G, N_T),
-  bG_unif = runif(1, 0, pi/4),
-  bT_unif = runif(1, 0, pi/4),
   bGT_unif = runif(1, 0, pi/4),
   lG = runif(N_G, 0, 0.05)),
 simplify = FALSE))
@@ -1911,8 +1805,8 @@ if (file.exists("models/m034.rds")) {
   m034 <- readRDS("models/m034.rds")
 } else {
   m034 <- sampling(m034_stan, data = obs_dat, seed = 626, init = init,
-                   iter = 7000, warmup = 2000, pars = keep_pars,
-                   control = list(adapt_delta = 0.95),
+                   iter = 4000, warmup = 2000, pars = keep_pars,
+                   control = list(adapt_delta = 0.95), thin = 2,
                    chains = 4, cores = 4, refresh = 200)
   saveRDS(m034, "models/m034.rds")
 }
@@ -1921,10 +1815,10 @@ if (file.exists("models/m034.rds")) {
 
 _Posterior Retrodictive Checks_
 
+The plot for the distribution of psychometric functions is repeated one more time below (figure \@ref(fig:ch034-Screaming-Proton)). There is now visual separation between the pre- and post-adaptation blocks, with the latter exhibiting a higher slope, which in turn implies a reduced just noticeable difference which is consistent with the audiovisual data in the previous model.
 
-
-```{r ch034-Screaming-Proton}
-p034 <- extract(m034)
+```{r ch034-Screaming-Proton, fig.cap="There is now a visual distinction between the two blocks unlike in the model without lapse rate. The lapse rate acts as a balance between steep slopes near the PSS and variation near the outer SOA values."}
+p034 <- extract(m034) 
 if (!file.exists("figures/ch034-Screaming-Proton.png")) {
   n <- 100
   idx <- sample(1:length(p034$a), n, replace = TRUE)
@@ -1938,10 +1832,10 @@ if (!file.exists("figures/ch034-Screaming-Proton.png")) {
       ggplot(aes(x, y)) +
       theme(axis.title.y = element_blank()) +
       labs(x = "SOA (seconds)")
-    alpha_pre <- with(p034, a + aG[,i] + aT[,1] + aGT[,i,1])
-    alpha_pos <- with(p034, a + aG[,i] + aT[,2] + aGT[,i,2])
-    beta_pre <- exp(with(p034, b + bG[,i] + bT[,1] + bGT[,i,1]))
-    beta_pos <- exp(with(p034, b + bG[,i] + bT[,2] + bGT[,i,2]))
+    alpha_pre <- with(p034, a + aGT[,i,1])
+    alpha_pos <- with(p034, a + aGT[,i,2])
+    beta_pre <- exp(with(p034, b + bGT[,i,1]))
+    beta_pos <- exp(with(p034, b + bGT[,i,2]))
     
     lambda <- with(p034, lG[,i])
     
@@ -1974,8 +1868,10 @@ knitr::include_graphics("figures/ch034-Screaming-Proton.png")
 ```
 
 
+As for the posterior retrodictions, the model is now better capturing the outer SOA variation. This can best be seen in the comparison of the younger adult pre-adaptation block of figure \@ref(fig:ch034-Insane-Metaphor).
 
-```{r ch034-Insane-Metaphor}
+
+```{r ch034-Insane-Metaphor, fig.cap="The lapse rate produces posterior retrodictions that are visually more similar to the observed data than in the previous model, suggesting that the model is now just complex enough to capture the relevant details of the data generating process."}
 set.seed(123)
 idx <- sample(nrow(p034$k_pred), 1)
 posterior_retrodictions <- bind_rows(
@@ -2005,6 +1901,8 @@ posterior_retrodictions %>%
   labs(x = "SOA (seconds)", y = "Response Probability") +
   facet_grid(trial ~ age_group + Data)
 ```
+
+
 
 
 ## Celebrate

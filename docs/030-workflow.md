@@ -21,18 +21,7 @@ Since everyone asks different questions, the value of a model is not in how well
 
 Like any good Bayesian^[The opposite of a Frequentist.], much work is done before seeing the data or building a model. This may include talking with experts to gain domain knowledge or to _elicit priors_. Experts may know something about a particular measure, perhaps the mean or variability of the data from years of research, and different experts may provide different estimates of a measure. The benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the _posterior distribution_. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints. Consistency is key.
 
-The computational tool I will be using to estimate the posterior is a probabilistic programming language (PPL) called Stan [@R-rstan] within the R programming language. Stan uses the No U-Turn Sampler (NUTS) version of Hamiltonian Monte Carlo (HMC). For a gentle introduction to Bayesian statistics and sampling methods, see @bolstad2016introduction, and for an in-depth review of HMC see @betancourt2017conceptual.
-
-Why do we need a sampler at all? Bayesian statistics and modeling stems from Bayes theorem (Equation \@ref(eq:bayesthm)). The prior $P(\theta)$ is some distribution over the parameter space and the likelihood $P(X | \theta)$ is the probability of an outcome in the sample space given a value in the parameter space. To keep things simple, we generally say that the posterior is proportional to the prior times the likelihood. Why proportional? The posterior distribution is a probability distribution, which means that the sum or integral over the parameter space must evaluate to one. Because of this constraint, the denominator in \@ref(eq:bayesthm) acts as a scale factor to ensure that the posterior is valid. Often it happens that the integral in the denominator is complex or of a high dimension. In the former situation, the integral may not be possible to evaluate, and in the latter there may not be enough computational resources in the world to perform a simple grid approximation.
-
-
-\begin{equation}
-  P(\theta | X) = \frac{P(X | \theta)\cdot P(\theta)}{\sum_i P(X | \theta_i)} =   \frac{P(X | \theta)\cdot P(\theta)}{\int_\Omega P(X | \theta)d\theta}
-  (\#eq:bayesthm)
-\end{equation}
-
-
-The solution is to use Markov Chain Monte Carlo (MCMC). The idea is that we can _draw samples_ from the posterior distribution in a way that samples proportionally to the density. This sampling is a form of approximation to the area under the curve (i.e. an approximation to the denominator in \@ref(eq:bayesthm)). Rejection sampling [@gilks1992adaptive] and slice sampling [@neal2003slice] are basic methods for sampling from a target distribution, however they can often be inefficient^[Efficiency of a sampler is related to the proportion of proposal samples that get accepted.]. NUTS is a much more complex algorithm that can be compared to a physics simulation. A massless "particle" is flicked in a random direction with some amount of kinetic energy in a probability field, and is stopped randomly. The stopping point is the new proposal sample. The No U-Turn part means that when the algorithm detects that the particle is turning around, it will stop so as not to return to the starting position. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that let us know when the sampler is having trouble efficiently exploring the posterior. I'll talk more about these diagnostic tools throughout the remaining sections and in [chapter 4](#model-checking).
+The computational tool I will be using to estimate the posterior is a probabilistic programming language (PPL) called Stan [@R-rstan] within the R programming language. Stan uses the No U-Turn Sampler (NUTS) version of Hamiltonian Monte Carlo (HMC) which I will discuss more in [chapter 4](#model-checking). For a gentle introduction to Bayesian statistics and sampling methods, see @bolstad2016introduction, and for an in-depth review of HMC see @betancourt2017conceptual.
 
 The question of inferential adequacy depends on the set of questions that we are seeking to answer with the data from the psychometric experiment. The broad objective is to determine if there are any significant differences between age groups when it comes to temporal sensitivity, perceptual synchrony, and temporal recalibration, and if the task influences the results as well. The specific goals are to estimate and compare the PSS an JND across all age groups, conditions, and tasks, and determine the affect of recalibration between age groups.
 
@@ -110,7 +99,7 @@ For the last question, model adequacy, I will be following a set of steps propos
 </tbody>
 </table>
 
-I'll talk about each step in the first iteration, but may choose to omit steps in subsequent iterations if there are no changes. For the purposes of building a model and being concise, I will focus around the audiovisual TOJ task in this chapter, but the final model will apply similarly to the visual and duration tasks. For the sensorimotor task, the model will be modified to accept Bernoulli data as apposed to aggregated Binomial counts (described more in the next section).
+I'll talk about each step in the first iteration, but may choose to omit steps in subsequent iterations if there are no changes. For the purposes of building a model and being concise, I will focus around the audiovisual TOJ task in this chapter, but the final model will apply similarly to the visual and duration tasks. For the sensorimotor task, the model will be modified to accept Bernoulli data as opposed to aggregated Binomial counts (described more in the next section).
 
 ## Iteration 1 (journey of a thousand miles) {#iter1}
 
@@ -202,7 +191,7 @@ It is now time to define priors for the model, while still not having looked at 
 
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-pf-assortment-1.png" alt="Assortment of psychometric functions." width="70%" />
+<img src="030-workflow_files/figure-html/ch031-pf-assortment-1.png" alt="Assortment of psychometric functions." width="85%" />
 <p class="caption">(\#fig:ch031-pf-assortment)Assortment of psychometric functions.</p>
 </div>
 
@@ -405,7 +394,7 @@ sol$y
 
 Sampling from a log-normal distribution with these parameters and plotting the histogram shows no inconsistency with the domain expertise.
 
-<img src="030-workflow_files/figure-html/ch031-Risky-Lion-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="030-workflow_files/figure-html/ch031-Risky-Lion-1.png" width="85%" style="display: block; margin: auto;" />
 
 So now with a prior for the JND, the prior for $\beta$ can be determined.
 
@@ -513,7 +502,7 @@ Figure \@ref(fig:ch031-prior-pf-plot) shows the distribution of prior psychometr
 
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-prior-pf-plot-1.png" alt="Prior distribution of psychometric functions using the priors for alpha and beta." width="70%" />
+<img src="030-workflow_files/figure-html/ch031-prior-pf-plot-1.png" alt="Prior distribution of psychometric functions using the priors for alpha and beta." width="85%" />
 <p class="caption">(\#fig:ch031-prior-pf-plot)Prior distribution of psychometric functions using the priors for alpha and beta.</p>
 </div>
 
@@ -522,13 +511,13 @@ Additionally most of the PSS values are within $\pm 0.1$ with room to allow for 
 
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-prior-pss-plot-1.png" alt="PSS prior distribution." width="70%" />
+<img src="030-workflow_files/figure-html/ch031-prior-pss-plot-1.png" alt="PSS prior distribution." width="85%" />
 <p class="caption">(\#fig:ch031-prior-pss-plot)PSS prior distribution.</p>
 </div>
 
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-prior-jnd-plot-1.png" alt="JND prior distribution." width="70%" />
+<img src="030-workflow_files/figure-html/ch031-prior-jnd-plot-1.png" alt="JND prior distribution." width="85%" />
 <p class="caption">(\#fig:ch031-prior-jnd-plot)JND prior distribution.</p>
 </div>
 
@@ -552,9 +541,7 @@ m031 <- sampling(m031_stan, data = sim_dat,
 
 _Algorithmic Calibration_
 
-One benefit of using HMC over other samplers like Gibbs sampling is that HMC offers diagnostic tools for the health of chains and the ability to check for _divergent transitions_. Recall that the HMC and NUTS algorithm can be imagined as a physics simulation of a particle in a potential energy field, and a random momentum is imparted on the particle. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle (@stanref). The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called _leapfrog steps_ (see @leimkuhler2004simulating for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.
-
-To check the basic diagnostics of the model, I run the following code.
+One benefit of using HMC over other samplers like Gibbs sampling is that HMC offers diagnostic tools for the health of chains and the ability to check for _divergent transitions_ (discussed in \@ref(divergent-transitions)). To check the basic diagnostics of the model, I run the following code.
 
 \setstretch{1.0}
 
@@ -672,21 +659,21 @@ check_hmc_diagnostics(m031)
    <td style="text-align:left;"> alpha </td>
    <td style="text-align:right;"> 0.0373 </td>
    <td style="text-align:right;"> 0.0001 </td>
-   <td style="text-align:right;"> 0.0040 </td>
-   <td style="text-align:right;"> 0.0293 </td>
-   <td style="text-align:right;"> 0.0453 </td>
-   <td style="text-align:right;"> 4035 </td>
-   <td style="text-align:right;"> 0.9992 </td>
+   <td style="text-align:right;"> 0.0042 </td>
+   <td style="text-align:right;"> 0.0291 </td>
+   <td style="text-align:right;"> 0.0455 </td>
+   <td style="text-align:right;"> 3992 </td>
+   <td style="text-align:right;"> 1 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> beta </td>
-   <td style="text-align:right;"> 8.4236 </td>
-   <td style="text-align:right;"> 0.0039 </td>
-   <td style="text-align:right;"> 0.1857 </td>
-   <td style="text-align:right;"> 8.0771 </td>
-   <td style="text-align:right;"> 8.7992 </td>
-   <td style="text-align:right;"> 2311 </td>
-   <td style="text-align:right;"> 1.0017 </td>
+   <td style="text-align:right;"> 8.4220 </td>
+   <td style="text-align:right;"> 0.0038 </td>
+   <td style="text-align:right;"> 0.1839 </td>
+   <td style="text-align:right;"> 8.0591 </td>
+   <td style="text-align:right;"> 8.7779 </td>
+   <td style="text-align:right;"> 2393 </td>
+   <td style="text-align:right;"> 1 </td>
   </tr>
 </tbody>
 </table>
@@ -695,7 +682,7 @@ No indications of an ill-behaved posterior fit! Let's also check the posterior d
 
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-m031-posterior-alpha-beta-1.png" alt="Comparison of posterior distributions for alpha and beta to their respective prior distributions." width="70%" />
+<img src="030-workflow_files/figure-html/ch031-m031-posterior-alpha-beta-1.png" alt="Comparison of posterior distributions for alpha and beta to their respective prior distributions." width="85%" />
 <p class="caption">(\#fig:ch031-m031-posterior-alpha-beta)Comparison of posterior distributions for alpha and beta to their respective prior distributions.</p>
 </div>
 
@@ -714,7 +701,7 @@ posterior_jnd <- Q(0.84, p031$alpha, p031$beta) - posterior_pss
 
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-posterior-pss-jnd-plot-1.png" alt="Posterior distribution of the PSS and JND." width="70%" />
+<img src="030-workflow_files/figure-html/ch031-posterior-pss-jnd-plot-1.png" alt="Posterior distribution of the PSS and JND." width="85%" />
 <p class="caption">(\#fig:ch031-posterior-pss-jnd-plot)Posterior distribution of the PSS and JND.</p>
 </div>
 
@@ -723,7 +710,7 @@ Neither of the posterior estimates for the PSS or JND exceed the extreme cutoffs
 Next is to actually do the posterior retrodictions. I will do this in two steps to better show how the distribution of posterior psychometric functions relates to the observed data, and then compare the observed data to the retrodictions. Figure \@ref(fig:ch031-posterior-pf-plot) shows the result of the first step.
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-posterior-pf-plot-1.png" alt="Posterior distribution of psychometric functions using pooled observations." width="70%" />
+<img src="030-workflow_files/figure-html/ch031-posterior-pf-plot-1.png" alt="Posterior distribution of psychometric functions using pooled observations." width="85%" />
 <p class="caption">(\#fig:ch031-posterior-pf-plot)Posterior distribution of psychometric functions using pooled observations.</p>
 </div>
 
@@ -741,7 +728,7 @@ sim_k <- rbinom(n_obs, av_dat$n, probs)
 
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-obs-vs-retro-plot-1.png" alt="Observed data compared to the posterior retrodictions. The data is post-stratified by block for easier visualization." width="70%" />
+<img src="030-workflow_files/figure-html/ch031-obs-vs-retro-plot-1.png" alt="Observed data compared to the posterior retrodictions. The data is post-stratified by block for easier visualization." width="85%" />
 <p class="caption">(\#fig:ch031-obs-vs-retro-plot)Observed data compared to the posterior retrodictions. The data is post-stratified by block for easier visualization.</p>
 </div>
 
@@ -884,7 +871,7 @@ I'm choosing to skip the prior checks this time around and use the observed data
 
 ```r
 m032 <- sampling(m032_stan, data = obs_dat, seed = 124,
-                 chains = 4, cores = 4, refresh = 0)
+                 chains = 4, cores = 4, refresh = 100)
 ```
 
 _Diagnose Posterior Fit_
@@ -1031,9 +1018,7 @@ U_\tau &\sim \mathcal{U}(0, \pi/2) \\
 \end{align*}
 
 
-\setstretch{1.0}
 
-\setstretch{2.0}
 
 
 As an aside, a multilevel model can be fit in R using `lme4::glmer`, `brms::brm`, or `rstanarm::stan_glmer`, and they all use the same notation to specify the model. The notation is very compact, but easy to unpack. Values not in a grouping term are _fixed_ effects and values in a grouping term (e.g. `(1 + x | G)`) are _mixed_ or _random_ effects depending on which textbook you read.
@@ -1062,10 +1047,10 @@ Moving on to refitting the data, this time with more iterations and with the non
 
 
 ```r
-m032nc <- sampling(m032nc_stan, data = obs_dat, seed = 143,
-                   iter = 5000, warmup = 2500, pars = keep_pars,
+m032nc <- sampling(m032nc_stan, data = obs_dat, seed = 143, thin = 2,
+                   iter = 4000, warmup = 2000, pars = keep_pars,
                    control = list(adapt_delta = 0.95),
-                   chains = 4, cores = 4, refresh = 0)
+                   chains = 4, cores = 4, refresh = 100)
 ```
 
 _Diagnose Posterior Fit_
@@ -1075,11 +1060,11 @@ _Diagnose Posterior Fit_
 check_hmc_diagnostics(m032nc)
 #> 
 #> Divergences:
-#> 99 of 10000 iterations ended with a divergence (0.99%).
+#> 32 of 4000 iterations ended with a divergence (0.8%).
 #> Try increasing 'adapt_delta' to remove the divergences.
 #> 
 #> Tree depth:
-#> 0 of 10000 iterations saturated the maximum tree depth of 10.
+#> 0 of 4000 iterations saturated the maximum tree depth of 10.
 #> 
 #> Energy:
 #> E-BFMI indicated no pathological behavior.
@@ -1104,123 +1089,123 @@ There are still a few divergent transitions ($<1\%$), but the effective sample s
 <tbody>
   <tr>
    <td style="text-align:left;"> a </td>
-   <td style="text-align:right;"> 0.0200 </td>
-   <td style="text-align:right;"> 0.0006 </td>
+   <td style="text-align:right;"> 0.0192 </td>
+   <td style="text-align:right;"> 0.0008 </td>
    <td style="text-align:right;"> 0.0419 </td>
-   <td style="text-align:right;"> -0.0755 </td>
-   <td style="text-align:right;"> 0.0968 </td>
-   <td style="text-align:right;"> 4542 </td>
-   <td style="text-align:right;"> 1.000 </td>
+   <td style="text-align:right;"> -0.0744 </td>
+   <td style="text-align:right;"> 0.0956 </td>
+   <td style="text-align:right;"> 2509 </td>
+   <td style="text-align:right;"> 1.0005 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> aG[1] </td>
    <td style="text-align:right;"> -0.0025 </td>
-   <td style="text-align:right;"> 0.0004 </td>
-   <td style="text-align:right;"> 0.0329 </td>
-   <td style="text-align:right;"> -0.0654 </td>
-   <td style="text-align:right;"> 0.0728 </td>
-   <td style="text-align:right;"> 5486 </td>
-   <td style="text-align:right;"> 1.001 </td>
+   <td style="text-align:right;"> 0.0006 </td>
+   <td style="text-align:right;"> 0.0326 </td>
+   <td style="text-align:right;"> -0.0636 </td>
+   <td style="text-align:right;"> 0.0739 </td>
+   <td style="text-align:right;"> 2737 </td>
+   <td style="text-align:right;"> 1.0014 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> aG[2] </td>
    <td style="text-align:right;"> 0.0262 </td>
-   <td style="text-align:right;"> 0.0005 </td>
-   <td style="text-align:right;"> 0.0333 </td>
-   <td style="text-align:right;"> -0.0343 </td>
-   <td style="text-align:right;"> 0.1031 </td>
-   <td style="text-align:right;"> 5348 </td>
-   <td style="text-align:right;"> 1.000 </td>
+   <td style="text-align:right;"> 0.0006 </td>
+   <td style="text-align:right;"> 0.0328 </td>
+   <td style="text-align:right;"> -0.0342 </td>
+   <td style="text-align:right;"> 0.1044 </td>
+   <td style="text-align:right;"> 2644 </td>
+   <td style="text-align:right;"> 1.0014 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> aG[3] </td>
-   <td style="text-align:right;"> -0.0091 </td>
-   <td style="text-align:right;"> 0.0004 </td>
-   <td style="text-align:right;"> 0.0330 </td>
-   <td style="text-align:right;"> -0.0717 </td>
-   <td style="text-align:right;"> 0.0660 </td>
-   <td style="text-align:right;"> 5537 </td>
-   <td style="text-align:right;"> 1.000 </td>
+   <td style="text-align:right;"> -0.0093 </td>
+   <td style="text-align:right;"> 0.0006 </td>
+   <td style="text-align:right;"> 0.0326 </td>
+   <td style="text-align:right;"> -0.0713 </td>
+   <td style="text-align:right;"> 0.0652 </td>
+   <td style="text-align:right;"> 2752 </td>
+   <td style="text-align:right;"> 1.0011 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> aT[1] </td>
-   <td style="text-align:right;"> 0.0177 </td>
-   <td style="text-align:right;"> 0.0006 </td>
-   <td style="text-align:right;"> 0.0421 </td>
-   <td style="text-align:right;"> -0.0589 </td>
-   <td style="text-align:right;"> 0.1167 </td>
-   <td style="text-align:right;"> 4284 </td>
-   <td style="text-align:right;"> 1.000 </td>
+   <td style="text-align:right;"> 0.0185 </td>
+   <td style="text-align:right;"> 0.0009 </td>
+   <td style="text-align:right;"> 0.0425 </td>
+   <td style="text-align:right;"> -0.0546 </td>
+   <td style="text-align:right;"> 0.1242 </td>
+   <td style="text-align:right;"> 2338 </td>
+   <td style="text-align:right;"> 1.0005 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> aT[2] </td>
-   <td style="text-align:right;"> 0.0030 </td>
-   <td style="text-align:right;"> 0.0006 </td>
-   <td style="text-align:right;"> 0.0417 </td>
-   <td style="text-align:right;"> -0.0754 </td>
-   <td style="text-align:right;"> 0.1015 </td>
-   <td style="text-align:right;"> 4512 </td>
-   <td style="text-align:right;"> 1.000 </td>
+   <td style="text-align:right;"> 0.0039 </td>
+   <td style="text-align:right;"> 0.0009 </td>
+   <td style="text-align:right;"> 0.0419 </td>
+   <td style="text-align:right;"> -0.0679 </td>
+   <td style="text-align:right;"> 0.1089 </td>
+   <td style="text-align:right;"> 2404 </td>
+   <td style="text-align:right;"> 1.0005 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> b </td>
-   <td style="text-align:right;"> 2.3753 </td>
-   <td style="text-align:right;"> 0.0084 </td>
-   <td style="text-align:right;"> 0.5160 </td>
-   <td style="text-align:right;"> 1.4916 </td>
-   <td style="text-align:right;"> 3.6370 </td>
-   <td style="text-align:right;"> 3792 </td>
-   <td style="text-align:right;"> 1.000 </td>
+   <td style="text-align:right;"> 2.3841 </td>
+   <td style="text-align:right;"> 0.0115 </td>
+   <td style="text-align:right;"> 0.5284 </td>
+   <td style="text-align:right;"> 1.4762 </td>
+   <td style="text-align:right;"> 3.6952 </td>
+   <td style="text-align:right;"> 2109 </td>
+   <td style="text-align:right;"> 1.0010 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> bG[1] </td>
-   <td style="text-align:right;"> 0.0101 </td>
-   <td style="text-align:right;"> 0.0040 </td>
-   <td style="text-align:right;"> 0.2815 </td>
-   <td style="text-align:right;"> -0.6784 </td>
-   <td style="text-align:right;"> 0.5018 </td>
-   <td style="text-align:right;"> 5049 </td>
-   <td style="text-align:right;"> 1.000 </td>
+   <td style="text-align:right;"> 0.0170 </td>
+   <td style="text-align:right;"> 0.0049 </td>
+   <td style="text-align:right;"> 0.2730 </td>
+   <td style="text-align:right;"> -0.6323 </td>
+   <td style="text-align:right;"> 0.4979 </td>
+   <td style="text-align:right;"> 3106 </td>
+   <td style="text-align:right;"> 1.0004 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> bG[2] </td>
-   <td style="text-align:right;"> 0.0610 </td>
-   <td style="text-align:right;"> 0.0039 </td>
-   <td style="text-align:right;"> 0.2803 </td>
-   <td style="text-align:right;"> -0.6173 </td>
-   <td style="text-align:right;"> 0.5528 </td>
-   <td style="text-align:right;"> 5082 </td>
-   <td style="text-align:right;"> 1.000 </td>
+   <td style="text-align:right;"> 0.0678 </td>
+   <td style="text-align:right;"> 0.0049 </td>
+   <td style="text-align:right;"> 0.2728 </td>
+   <td style="text-align:right;"> -0.5773 </td>
+   <td style="text-align:right;"> 0.5671 </td>
+   <td style="text-align:right;"> 3113 </td>
+   <td style="text-align:right;"> 1.0005 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> bG[3] </td>
-   <td style="text-align:right;"> -0.2147 </td>
-   <td style="text-align:right;"> 0.0040 </td>
-   <td style="text-align:right;"> 0.2826 </td>
-   <td style="text-align:right;"> -0.9043 </td>
-   <td style="text-align:right;"> 0.2617 </td>
-   <td style="text-align:right;"> 5000 </td>
-   <td style="text-align:right;"> 1.000 </td>
+   <td style="text-align:right;"> -0.2075 </td>
+   <td style="text-align:right;"> 0.0050 </td>
+   <td style="text-align:right;"> 0.2741 </td>
+   <td style="text-align:right;"> -0.8506 </td>
+   <td style="text-align:right;"> 0.2767 </td>
+   <td style="text-align:right;"> 3026 </td>
+   <td style="text-align:right;"> 1.0004 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> bT[1] </td>
-   <td style="text-align:right;"> -0.2602 </td>
-   <td style="text-align:right;"> 0.0076 </td>
-   <td style="text-align:right;"> 0.4684 </td>
-   <td style="text-align:right;"> -1.4875 </td>
-   <td style="text-align:right;"> 0.5604 </td>
-   <td style="text-align:right;"> 3765 </td>
-   <td style="text-align:right;"> 1.000 </td>
+   <td style="text-align:right;"> -0.2764 </td>
+   <td style="text-align:right;"> 0.0106 </td>
+   <td style="text-align:right;"> 0.4914 </td>
+   <td style="text-align:right;"> -1.6338 </td>
+   <td style="text-align:right;"> 0.5427 </td>
+   <td style="text-align:right;"> 2141 </td>
+   <td style="text-align:right;"> 0.9999 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> bT[2] </td>
-   <td style="text-align:right;"> -0.0347 </td>
-   <td style="text-align:right;"> 0.0076 </td>
-   <td style="text-align:right;"> 0.4670 </td>
-   <td style="text-align:right;"> -1.2590 </td>
-   <td style="text-align:right;"> 0.7781 </td>
-   <td style="text-align:right;"> 3815 </td>
-   <td style="text-align:right;"> 1.001 </td>
+   <td style="text-align:right;"> -0.0501 </td>
+   <td style="text-align:right;"> 0.0106 </td>
+   <td style="text-align:right;"> 0.4909 </td>
+   <td style="text-align:right;"> -1.4120 </td>
+   <td style="text-align:right;"> 0.7778 </td>
+   <td style="text-align:right;"> 2125 </td>
+   <td style="text-align:right;"> 1.0000 </td>
   </tr>
 </tbody>
 </table>
@@ -1229,7 +1214,7 @@ Now is also a good time to introduce a diagnostic tool called the _trace plot_. 
 
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch032-traceplot-m032nc-1.png" alt="Traceplot for the slope and intercept parameters." width="70%" />
+<img src="030-workflow_files/figure-html/ch032-traceplot-m032nc-1.png" alt="Traceplot for the slope and intercept parameters." width="85%" />
 <p class="caption">(\#fig:ch032-traceplot-m032nc)Traceplot for the slope and intercept parameters.</p>
 </div>
 
@@ -1243,7 +1228,7 @@ In this iteration of the model, I now have estimates for the age groups and the 
 
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch032-posterior-pss-jnd-plot-1.png" alt="Posterior distribution of the PSS and JND." width="70%" />
+<img src="030-workflow_files/figure-html/ch032-posterior-pss-jnd-plot-1.png" alt="Posterior distribution of the PSS and JND." width="85%" />
 <p class="caption">(\#fig:ch032-posterior-pss-jnd-plot)Posterior distribution of the PSS and JND.</p>
 </div>
 
@@ -1254,7 +1239,7 @@ As for the posterior retrodictions, I can do something similar to last time. Fir
 
 ```r
 str(p032$k_pred)
-#>  num [1:10000, 1:1827] 0 0 0 0 0 0 0 0 0 0 ...
+#>  num [1:4000, 1:1827] 0 0 0 0 0 0 0 0 0 0 ...
 #>  - attr(*, "dimnames")=List of 2
 #>   ..$ iterations: NULL
 #>   ..$           : NULL
@@ -1264,7 +1249,7 @@ str(p032$k_pred)
 I only need one to compare to the observed data, so I will select it randomly from the posterior.
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch032-obs-vs-retro-plot-1.png" alt="Observed data compared to the posterior retrodictions." width="70%" />
+<img src="030-workflow_files/figure-html/ch032-obs-vs-retro-plot-1.png" alt="Observed data compared to the posterior retrodictions." width="85%" />
 <p class="caption">(\#fig:ch032-obs-vs-retro-plot)Observed data compared to the posterior retrodictions.</p>
 </div>
 
@@ -1301,7 +1286,7 @@ Again, I'll start with the PSS and JND posterior densities. Because the model no
 
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch033-posterior-pss-jnd-plot-1.png" alt="Posterior distribution of the PSS and JND." width="70%" />
+<img src="030-workflow_files/figure-html/ch033-posterior-pss-jnd-plot-1.png" alt="Posterior distribution of the PSS and JND." width="85%" />
 <p class="caption">(\#fig:ch033-posterior-pss-jnd-plot)Posterior distribution of the PSS and JND.</p>
 </div>
 
@@ -1386,7 +1371,7 @@ The standard error of the slope estimate for subject `Y-m-CB` is incredibly larg
 
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch033-Y-m-CB-vis-response-1.png" alt="There is almost complete separation in the data." width="70%" />
+<img src="030-workflow_files/figure-html/ch033-Y-m-CB-vis-response-1.png" alt="There is almost complete separation in the data." width="85%" />
 <p class="caption">(\#fig:ch033-Y-m-CB-vis-response)There is almost complete separation in the data.</p>
 </div>
 
@@ -1401,7 +1386,7 @@ Figure \@ref(fig:ch033-Iron-Intensive) shows the posterior distribution of psych
 
 
 <div class="figure" style="text-align: center">
-<img src="figures/ch033-Iron-Intensive.png" alt="Posterior distribution of psychometric functions for the visual TOJ data. There is almost no visual difference between the pre- and post-adaptation blocks." width="70%" />
+<img src="figures/ch033-Iron-Intensive.png" alt="Posterior distribution of psychometric functions for the visual TOJ data. There is almost no visual difference between the pre- and post-adaptation blocks." width="85%" />
 <p class="caption">(\#fig:ch033-Iron-Intensive)Posterior distribution of psychometric functions for the visual TOJ data. There is almost no visual difference between the pre- and post-adaptation blocks.</p>
 </div>
 
@@ -1410,7 +1395,7 @@ Furthermore, as shown by the posterior retrodictions (figure \@ref(fig:ch033-obs
 
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch033-obs-vs-retro-plot-1.png" alt="Observed visual TOJ data compared to the posterior retrodictions. The retrodictions are not capturing the variation at the outer SOA values." width="70%" />
+<img src="030-workflow_files/figure-html/ch033-obs-vs-retro-plot-1.png" alt="Observed visual TOJ data compared to the posterior retrodictions. The retrodictions are not capturing the variation at the outer SOA values." width="85%" />
 <p class="caption">(\#fig:ch033-obs-vs-retro-plot)Observed visual TOJ data compared to the posterior retrodictions. The retrodictions are not capturing the variation at the outer SOA values.</p>
 </div>
 
@@ -1436,7 +1421,7 @@ $$
 
 
 <div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch034-plot-pf-with-lapse-1.png" alt="Psychometric function with lower and upper performance bounds." width="70%" />
+<img src="030-workflow_files/figure-html/ch034-plot-pf-with-lapse-1.png" alt="Psychometric function with lower and upper performance bounds." width="85%" />
 <p class="caption">(\#fig:ch034-plot-pf-with-lapse)Psychometric function with lower and upper performance bounds.</p>
 </div>
 
@@ -1482,13 +1467,23 @@ Because it is the visual data that motivated this iteration, I will finish up us
 
 _Posterior Retrodictive Checks_
 
+The plot for the distribution of psychometric functions is repeated one more time below (figure \@ref(fig:ch034-Screaming-Proton)). There is now visual separation between the pre- and post-adaptation blocks, with the latter exhibiting a higher slope, which in turn implies a reduced just noticeable difference which is consistent with the audiovisual data in the previous model.
+
+<div class="figure" style="text-align: center">
+<img src="figures/ch034-Screaming-Proton.png" alt="There is now a visual distinction between the two blocks unlike in the model without lapse rate. The lapse rate acts as a balance between steep slopes near the PSS and variation near the outer SOA values." width="85%" />
+<p class="caption">(\#fig:ch034-Screaming-Proton)There is now a visual distinction between the two blocks unlike in the model without lapse rate. The lapse rate acts as a balance between steep slopes near the PSS and variation near the outer SOA values.</p>
+</div>
 
 
-<img src="figures/ch034-Screaming-Proton.png" width="70%" style="display: block; margin: auto;" />
+As for the posterior retrodictions, the model is now better capturing the outer SOA variation. This can best be seen in the comparison of the younger adult pre-adaptation block of figure \@ref(fig:ch034-Insane-Metaphor).
 
 
+<div class="figure" style="text-align: center">
+<img src="030-workflow_files/figure-html/ch034-Insane-Metaphor-1.png" alt="The lapse rate produces posterior retrodictions that are visually more similar to the observed data than in the previous model, suggesting that the model is now just complex enough to capture the relevant details of the data generating process." width="85%" />
+<p class="caption">(\#fig:ch034-Insane-Metaphor)The lapse rate produces posterior retrodictions that are visually more similar to the observed data than in the previous model, suggesting that the model is now just complex enough to capture the relevant details of the data generating process.</p>
+</div>
 
-<img src="030-workflow_files/figure-html/ch034-Insane-Metaphor-1.png" width="70%" style="display: block; margin: auto;" />
+
 
 
 ## Celebrate

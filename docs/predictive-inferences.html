@@ -150,7 +150,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.4" data-path="workflow.html"><a href="workflow.html#iter4"><i class="fa fa-check"></i><b>3.4</b> Iteration 4 (what’s one more)</a></li>
 <li class="chapter" data-level="3.5" data-path="workflow.html"><a href="workflow.html#celebrate"><i class="fa fa-check"></i><b>3.5</b> Celebrate</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>4</b> Model Fitting/Checking</a></li>
+<li class="chapter" data-level="4" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>4</b> Model Fitting/Checking</a><ul>
+<li class="chapter" data-level="4.1" data-path="model-checking.html"><a href="model-checking.html#fitting-using-hmc"><i class="fa fa-check"></i><b>4.1</b> Fitting using HMC</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="model-checking.html"><a href="model-checking.html#diagnostic-tools"><i class="fa fa-check"></i><b>4.1.1</b> Diagnostic Tools</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="model-checking.html"><a href="model-checking.html#prior-predictive-checks"><i class="fa fa-check"></i><b>4.2</b> Prior Predictive Checks</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="predictive-inferences.html"><a href="predictive-inferences.html"><i class="fa fa-check"></i><b>5</b> Predictive Inference</a></li>
 <li class="chapter" data-level="6" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>6</b> Psychometric Results</a><ul>
 <li class="chapter" data-level="6.1" data-path="results.html"><a href="results.html#affect-of-adaptation-across-age-groups"><i class="fa fa-check"></i><b>6.1</b> Affect of Adaptation across Age Groups</a><ul>
@@ -189,36 +194,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="predictive-inferences" class="section level1">
 <h1><span class="header-section-number">5</span> Predictive Inference</h1>
-<p><em>why is predictive performance the right model selection/comparison criteria</em>.<br />
-- idea of “geocentric” models: wrong models that still predict well<br />
-- notions overfitting/underfitting:
-- more parameters leads to better in-sample fit<br />
-- a prefect fit to data is always possible<br />
-- but predicts poorly (overfit)<br />
-- underfitting fails to capture the <em>regular</em> features of the data (why regularizing priors are important)</p>
+<p><em>All models are wrong but some are useful</em></p>
+<p>The above quote is from George Box, and it is a popular quote that statisticians like to throw around<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a>. All models are wrong because it is nearly impossible to account for the minutiae of every process that contributes to an observed phenomenon, and often trying to results in poorer performing models.</p>
+<p><em>why is predictive performance the right model selection/comparison criteria</em></p>
+<ul>
+<li>idea of “geocentric” models: wrong models that still predict well<br />
+</li>
+<li>notions overfitting/underfitting:</li>
+<li>more parameters leads to better in-sample fit<br />
+</li>
+<li>a prefect fit to data is always possible<br />
+</li>
+<li>but predicts poorly (overfit)<br />
+</li>
+<li>underfitting fails to capture the <em>regular</em> features of the data (why regularizing priors are important)</li>
+</ul>
 <p>I think you covered this already in Ch. 1 and 2 but here is more thoughts:
 The PI’s predictive philosophy has evolved to prefer this reference model approach.
-Early on statisticians are usually taught to prefere <em>parsimony</em> or simple models.
-The idea is that this guards against <em>overfitting</em> and also boosts power to detect <em>statistically significant</em> effects.
-Also computation limitations made small models preferable.
-But in modern statistical learning, we tend to include all relavant data with elaborate probabilitistc structures.
-The idea is to include all the data with the aim of squeezing all predictive ability from the data points.</p>
+Early on statisticians are usually taught to prefer <em>parsimony</em> or simple models.
+The idea is that this guards against <em>overfitting</em> and also boosts power to detect <em>statistically significant</em> effects.</p>
+<p>Also computation limitations made small models preferable.
+But in modern statistical learning, we tend to include all relevant data with elaborate probabilitistc structures.</p>
+<p>The idea is to include all the data with the aim of squeezing all predictive ability from the data points.</p>
 <ul>
 <li>not sure where this goes, but make sure you say that 1 model is not sufficient, we need a collection (or series/sequence) of models. that is why we need to fit models fast in <code>stan</code>/HMC</li>
 </ul>
 <p>transitional sentence: given that we want to compare models (and possibly select), how to quantifying</p>
 <p><em>Quantifying predictive performance</em></p>
 <ul>
-<li>log posterior predictives (more below) and information theory (if you want to talk about that at all)</li>
+<li>log posterior predictive (more below) and information theory (if you want to talk about that at all)</li>
 <li>cross-validation, loo, WAIC</li>
-<li>and estimates of loo. loo psis
-<!-- Vehtari, Aki, Andrew Gelman, and Jonah Gabry. "Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC." Statistics and computing 27.5 (2017): 1413-1432. --></li>
+<li>and estimates of loo. loo psis</li>
+<li><span class="citation">Vehtari, Gelman, and Gabry (<a href="#ref-vehtari2017practical" role="doc-biblioref">2017</a>)</span></li>
 </ul>
 <p><em>some notes from my grant posterior</em>. rewrite this for your glm based model.
 Given a model <span class="math inline">\(M\)</span> with posterior predictive distribution <span class="math inline">\(p( \tilde{T} | \tilde{x}, D\)</span> for a new survival time <span class="math inline">\(\tilde{T}\)</span> with observed data <span class="math inline">\(D\)</span> with feature vector <span class="math inline">\(\tilde{x}\)</span>.
-We evaluate predictive performance using the <strong>logarithm of the predictive density (LPD)</strong> evaluated pointwise at the acutal observation <span class="math inline">\(( \tilde{t}, \tilde{x}, M)\)</span> <span class="citation">(<span class="citeproc-not-found" data-reference-id="Peltola2014"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="Piironen2017b"><strong>???</strong></span>)</span>.
+We evaluate predictive performance using the <strong>logarithm of the predictive density (LPD)</strong> evaluated pointwise at the actual observation <span class="math inline">\(( \tilde{t}, \tilde{x}, M)\)</span> <span class="citation">(<span class="citeproc-not-found" data-reference-id="Peltola2014"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="Piironen2017b"><strong>???</strong></span>)</span>.
 LPD is a proper scoring rule and measures both the <strong>calibration</strong> and <strong>sharpness</strong> of the predictive distribution <span class="citation">(<span class="citeproc-not-found" data-reference-id="Gneiting2007"><strong>???</strong></span>)</span>.
-With omit technical definitions of these concepts, but loosely calibration means the statistical consistency between the predicitve distribution and the observations (errors on the order).
+With omit technical definitions of these concepts, but loosely calibration means the statistical consistency between the predictive distribution and the observations (errors on the order).
 Sharpness, on the other hand, refers to how concentrated the predictive posterior (how precisely forecasted).
 Typically we don’t have the analytic form of the predictive posterior, so instead we use <span class="math inline">\(J\)</span> MCMC draws to approximate the LPD <span class="citation">(<span class="citeproc-not-found" data-reference-id="Peltola2014"><strong>???</strong></span>)</span>:</p>
 <p><span class="math display">\[\begin{equation}
@@ -233,7 +246,6 @@ Typically we don’t have the analytic form of the predictive posterior, so inst
 -->
 <p>Further, we’d like to compare the MLPD value of a model <span class="math inline">\(M\)</span> and another model <span class="math inline">\(M^*\)</span> (possibly a reference model or competing model):</p>
 <!--
-
 \begin{equation}
     \Delta MLPD(M) = MLPD(M) - MLPD(M^*)
 \end{equation}
@@ -241,6 +253,18 @@ Typically we don’t have the analytic form of the predictive posterior, so inst
 <p>A negative difference in <span class="math inline">\(\Delta MLPD\)</span> for Model <span class="math inline">\(M\)</span> compared to a reference Model (<span class="math inline">\(M^*\)</span>) means worse performance for the model while a positive difference indicates better prediction.
 We assess the uncertainty in the difference using Bayesian bootstrap <span class="citation">(<span class="citeproc-not-found" data-reference-id="Rubin1981"><strong>???</strong></span>)</span> samples of <span class="math inline">\(\Delta MLPD\)</span> between model <span class="math inline">\(M\)</span> and <span class="math inline">\(M^*\)</span>:</p>
 
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-vehtari2017practical">
+<p>Vehtari, Aki, Andrew Gelman, and Jonah Gabry. 2017. “Practical Bayesian Model Evaluation Using Leave-One-Out Cross-Validation and Waic.” <em>Statistics and Computing</em> 27 (5): 1413–32.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="9">
+<li id="fn9"><p>I am one of them<a href="predictive-inferences.html#fnref9" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

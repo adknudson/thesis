@@ -150,7 +150,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.4" data-path="workflow.html"><a href="workflow.html#iter4"><i class="fa fa-check"></i><b>3.4</b> Iteration 4 (what’s one more)</a></li>
 <li class="chapter" data-level="3.5" data-path="workflow.html"><a href="workflow.html#celebrate"><i class="fa fa-check"></i><b>3.5</b> Celebrate</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>4</b> Model Fitting/Checking</a></li>
+<li class="chapter" data-level="4" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>4</b> Model Fitting/Checking</a><ul>
+<li class="chapter" data-level="4.1" data-path="model-checking.html"><a href="model-checking.html#fitting-using-hmc"><i class="fa fa-check"></i><b>4.1</b> Fitting using HMC</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="model-checking.html"><a href="model-checking.html#diagnostic-tools"><i class="fa fa-check"></i><b>4.1.1</b> Diagnostic Tools</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="model-checking.html"><a href="model-checking.html#prior-predictive-checks"><i class="fa fa-check"></i><b>4.2</b> Prior Predictive Checks</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="predictive-inferences.html"><a href="predictive-inferences.html"><i class="fa fa-check"></i><b>5</b> Predictive Inference</a></li>
 <li class="chapter" data-level="6" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>6</b> Psychometric Results</a><ul>
 <li class="chapter" data-level="6.1" data-path="results.html"><a href="results.html#affect-of-adaptation-across-age-groups"><i class="fa fa-check"></i><b>6.1</b> Affect of Adaptation across Age Groups</a><ul>
@@ -204,6 +209,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="lapse-rates-across-age-groups" class="section level2">
 <h2><span class="header-section-number">6.2</span> Lapse Rates across Age Groups</h2>
+<div class="figure" style="text-align: center"><span id="fig:ch060-Waffle-Hollow"></span>
+<img src="060-results_files/figure-html/ch060-Waffle-Hollow-1.png" alt="Process model of the result of a psychometric experiment with the assumption that lapses occur at random and at a fixed rate, and that the subject guesses randomly in the event of a lapse." width="85%" />
+<p class="caption">
+Figure 6.1: Process model of the result of a psychometric experiment with the assumption that lapses occur at random and at a fixed rate, and that the subject guesses randomly in the event of a lapse.
+</p>
+</div>
+<p>In the above figure, the outcome of one experiment can be represented as a directed acyclic graph (DAG) where at the start of the experiment, the subject either experiences a lapse in judgment with probability <span class="math inline">\(\gamma\)</span> or they do not experience a lapse in judgment. If there is no lapse, then they will give a positive response with probability <span class="math inline">\(F(x)\)</span>. If there is a lapse in judgment, then it is assumed that they will respond randomly - e.g. a fifty-fifty chance of a positive response. In this model of an experiment, the probability of a positive response is the sum of the two paths.</p>
+<p><span class="math display">\[\begin{align}
+\mathrm{P}(\textrm{positive}) &amp;= 
+  \mathrm{P}(\textrm{lapse}) \cdot \mathrm{P}(\textrm{positive} | \textrm{lapse}) + 
+  \mathrm{P}(\textrm{no lapse}) \cdot \mathrm{P}(\textrm{positive} | \textrm{no lapse}) \\
+  &amp;= \frac{1}{2} \gamma + (1 - \gamma) \cdot F(x)
+\end{align}\]</span></p>
+<p>If we then let <span class="math inline">\(\gamma = 2\lambda\)</span> then the probability of a positive response becomes</p>
+<p><span class="math display">\[
+\mathrm{P}(\textrm{positive}) = \lambda + (1 - 2\lambda) \cdot F(x)
+\]</span></p>
+<p>This is the lapse model described in <a href="workflow.html#eq:Psi">(3.10)</a>! But now there is a little bit more insight into what the parameter <span class="math inline">\(\lambda\)</span> is. If <span class="math inline">\(\gamma\)</span> is the true lapse rate, then <span class="math inline">\(\lambda\)</span> is half the lapse rate. This may sound strange at first, but remember that equation <a href="workflow.html#eq:Psi">(3.10)</a> was motivated as a lower and upper bound to the psychometric function, and where the bounds are constrained by the same amount. Here the motivation is from a process model, yet the two lines of reasoning arrive at the same model.</p>
 <p><strong>Audiovisual TOJ Task</strong></p>
 <p><strong>Visual TOJ Task</strong></p>
 

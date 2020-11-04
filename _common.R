@@ -17,8 +17,8 @@ knitr::opts_chunk$set(
   cache = TRUE,
   # Plots
   fig.show = "hold",
-  fig.asp = 0.618,  # 1 / phi
-  out.width = "70%",
+  fig.asp = 0.625,
+  out.width = "85%",
   fig.align = 'center'
 )
 

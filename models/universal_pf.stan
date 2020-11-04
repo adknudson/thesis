@@ -58,10 +58,10 @@ transformed parameters {
   a = a_raw * 0.06;
 
   // mu + tau * tan(U) ~ cauchy(mu, tau)
-  sd_aG = 0.1 * tan(aG_unif);
-  sd_aT = 0.1 * tan(aT_unif);
+  sd_aG  = 0.1 * tan(aG_unif);
+  sd_aT  = 0.1 * tan(aT_unif);
   sd_aGT = 0.1 * tan(aGT_unif);
-  sd_aS = 0.1 * tan(aS_unif);
+  sd_aS  = 0.1 * tan(aS_unif);
 
   aG = aG_raw * sd_aG;
   aT = aT_raw * sd_aT;
@@ -71,10 +71,10 @@ transformed parameters {
   b = 3.0 + b_raw;
 
   // mu + tau * tan(U) ~ cauchy(mu, tau)
-  sd_bG = 0.5 * tan(bG_unif);
-  sd_bT = 0.5 * tan(bT_unif);
+  sd_bG  = 0.5 * tan(bG_unif);
+  sd_bT  = 0.5 * tan(bT_unif);
   sd_bGT = 0.5 * tan(bGT_unif);
-  sd_bS = 0.5 * tan(bS_unif);
+  sd_bS  = 0.5 * tan(bS_unif);
 
   bG = bG_raw * sd_bG;
   bT = bT_raw * sd_bT;
