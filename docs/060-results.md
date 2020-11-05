@@ -9,13 +9,39 @@
 
 **Audiovisual TOJ Task**
 
+<img src="060-results_files/figure-html/ch060-Eastern-Cat-1.png" width="85%" style="display: block; margin: auto;" />
+
+
 **Visual TOJ Task**
+
+<img src="060-results_files/figure-html/ch060-Gruesome-Waffle-1.png" width="85%" style="display: block; margin: auto;" />
+
+**Duration TOJ Task**
+
+<img src="060-results_files/figure-html/ch060-Stormy-Frostbite-1.png" width="85%" style="display: block; margin: auto;" />
+
+**Sensorimotor TOJ Task**
+
+<img src="060-results_files/figure-html/ch060-Homeless-Anaconda-1.png" width="85%" style="display: block; margin: auto;" />
 
 ### On Temporal Sensitivity
 
 **Audiovisual TOJ Task**
 
+<img src="060-results_files/figure-html/ch060-Timely-Toupee-1.png" width="85%" style="display: block; margin: auto;" />
+
+
 **Visual TOJ Task**
+
+<img src="060-results_files/figure-html/ch060-Mercury-Rainbow-1.png" width="85%" style="display: block; margin: auto;" />
+
+**Duration TOJ Task**
+
+<img src="060-results_files/figure-html/ch060-Aimless-Planet-1.png" width="85%" style="display: block; margin: auto;" />
+
+**Sensorimotor TOJ Task**
+
+<img src="060-results_files/figure-html/ch060-Tombstone-Cold-1.png" width="85%" style="display: block; margin: auto;" />
 
 ## Lapse Rates across Age Groups
 
@@ -44,6 +70,5 @@ $$
 
 This is the lapse model described in \@ref(eq:Psi)! But now there is a little bit more insight into what the parameter $\lambda$ is. If $\gamma$ is the true lapse rate, then $\lambda$ is half the lapse rate. This may sound strange at first, but remember that equation \@ref(eq:Psi) was motivated as a lower and upper bound to the psychometric function, and where the bounds are constrained by the same amount. Here the motivation is from a process model, yet the two lines of reasoning arrive at the same model. 
 
-**Audiovisual TOJ Task**
+<img src="060-results_files/figure-html/ch060-Magenta-Finger-1.png" width="85%" style="display: block; margin: auto;" />
 
-**Visual TOJ Task**

@@ -1,5 +1,30 @@
 ```{r ch060-setup, include=FALSE}
 library(dagitty)
+library(tidyverse)
+library(purrr)
+library(patchwork)
+
+source("R/ch060.R")
+
+# p034s_av  <- readRDS("models/p034s_av.rds")
+# p034s_vis <- readRDS("models/p034s_vis.rds")
+# p034s_dur <- readRDS("models/p034s_dur.rds")
+# p034s_sm  <- readRDS("models/p034s_sm.rds")
+
+two_colors   <- c("orangered3", "steelblue4")
+three_colors <- c("goldenrod2", "turquoise3", "indianred4")
+
+av  <- post_table(readRDS("models/p034s_av.rds")) %>% 
+  add_column(Task = "Audiovisual", .before = 1)
+vis <- post_table(readRDS("models/p034s_vis.rds")) %>% 
+  add_column(Task = "Visual", .before = 1)
+dur <- post_table(readRDS("models/p034s_dur.rds")) %>% 
+  add_column(Task = "Duration", .before = 1)
+sm  <- post_table(readRDS("models/p034s_sm.rds")) %>% 
+  add_column(Task = "Sensorimotor", .before = 1)
+
+post <- bind_rows(av, vis, dur, sm) %>%
+  mutate(Task = factor(Task, levels = c("Audiovisual", "Visual", "Duration", "Sensorimotor")))
 ```
 
 
@@ -11,13 +36,55 @@ library(dagitty)
 
 **Audiovisual TOJ Task**
 
+```{r ch060-Eastern-Cat}
+plot_pss(av)
+```
+
+
 **Visual TOJ Task**
+
+```{r ch060-Gruesome-Waffle}
+plot_pss(vis)
+```
+
+**Duration TOJ Task**
+
+```{r ch060-Stormy-Frostbite}
+plot_pss(dur)
+```
+
+**Sensorimotor TOJ Task**
+
+```{r ch060-Homeless-Anaconda}
+plot_pss(sm)
+```
 
 ### On Temporal Sensitivity
 
 **Audiovisual TOJ Task**
 
+```{r ch060-Timely-Toupee}
+plot_jnd(av)
+```
+
+
 **Visual TOJ Task**
+
+```{r ch060-Mercury-Rainbow}
+plot_jnd(vis)
+```
+
+**Duration TOJ Task**
+
+```{r ch060-Aimless-Planet}
+plot_jnd(dur)
+```
+
+**Sensorimotor TOJ Task**
+
+```{r ch060-Tombstone-Cold}
+plot_jnd(sm)
+```
 
 ## Lapse Rates across Age Groups
 
@@ -69,6 +136,14 @@ $$
 
 This is the lapse model described in \@ref(eq:Psi)! But now there is a little bit more insight into what the parameter $\lambda$ is. If $\gamma$ is the true lapse rate, then $\lambda$ is half the lapse rate. This may sound strange at first, but remember that equation \@ref(eq:Psi) was motivated as a lower and upper bound to the psychometric function, and where the bounds are constrained by the same amount. Here the motivation is from a process model, yet the two lines of reasoning arrive at the same model. 
 
-**Audiovisual TOJ Task**
+```{r ch060-Magenta-Finger}
+ggplot(post, aes(gamma, fill = `Age Group`)) +
+  geom_density(alpha = 0.75) +
+  scale_fill_manual(values = three_colors) +
+  facet_grid(Task ~ .) +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  labs(x = "Lapse Rate")
+```
 
-**Visual TOJ Task**
