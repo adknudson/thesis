@@ -162,14 +162,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.1.1" data-path="results.html"><a href="results.html#on-perceptual-synchrony"><i class="fa fa-check"></i><b>6.1.1</b> On Perceptual Synchrony</a></li>
 <li class="chapter" data-level="6.1.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>6.1.2</b> On Temporal Sensitivity</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="results.html"><a href="results.html#lapse-rates-across-age-groups"><i class="fa fa-check"></i><b>6.2</b> Lapse Rates across Age Groups</a></li>
+<li class="chapter" data-level="6.2" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>6.2</b> Lapse Rate across Age Groups</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>7</b> Discussion</a><ul>
-<li class="chapter" data-level="7.1" data-path="discussion.html"><a href="discussion.html#project-history"><i class="fa fa-check"></i><b>7.1</b> Project History</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="discussion.html"><a href="discussion.html#data-cleaning"><i class="fa fa-check"></i><b>7.1.1</b> Data Cleaning</a></li>
-<li class="chapter" data-level="7.1.2" data-path="discussion.html"><a href="discussion.html#developing-a-model"><i class="fa fa-check"></i><b>7.1.2</b> Developing a model</a></li>
-</ul></li>
-<li class="chapter" data-level="7.2" data-path="discussion.html"><a href="discussion.html#model-selection-is-not-always-the-goal"><i class="fa fa-check"></i><b>7.2</b> Model selection is not always the goal</a></li>
+<li class="chapter" data-level="7.1" data-path="discussion.html"><a href="discussion.html#model-selection-is-not-always-the-goal"><i class="fa fa-check"></i><b>7.1</b> Model selection is not always the goal</a></li>
+<li class="chapter" data-level="7.2" data-path="discussion.html"><a href="discussion.html#data-cleaning-and-reproducibility"><i class="fa fa-check"></i><b>7.2</b> Data Cleaning and Reproducibility</a></li>
+<li class="chapter" data-level="7.3" data-path="discussion.html"><a href="discussion.html#developing-a-model"><i class="fa fa-check"></i><b>7.3</b> Developing a model</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>8</b> Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
@@ -194,132 +192,148 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="discussion" class="section level1">
 <h1><span class="header-section-number">7</span> Discussion</h1>
-<div id="project-history" class="section level2">
-<h2><span class="header-section-number">7.1</span> Project History</h2>
-<div id="data-cleaning" class="section level3">
-<h3><span class="header-section-number">7.1.1</span> Data Cleaning</h3>
-<ul>
-<li>Data doesn’t always come in a nice tidy format</li>
-<li>Metadata came in the form of directory names</li>
-<li>Additional metadata (clinical data) came from a separate excel file
-<ul>
-<li>Ages were provided, but not age groups</li>
-</ul></li>
-<li>Actual data were recorded into a Matlab file</li>
-<li>Not every task had the same column data</li>
-<li>Not every directory/file name was spelled correctly
-<ul>
-<li>Adaptation, adapat,</li>
-</ul></li>
-<li>Had to create a unique identifier for each subject
-<ul>
-<li>subjects with the same initials</li>
-<li>[task, trial,] age group, gender, and initials</li>
-</ul></li>
-<li>Some subjects with two-letter initials, others with three, and yet others that were singly unique
-<ul>
-<li>JM, JM_F</li>
-<li>DTF</li>
-<li>IV_23_, DD_21_</li>
-</ul></li>
-<li>Aggregating Bernoulli trials into binomial counts
-<ul>
-<li>Sufficient statistics</li>
-</ul></li>
-<li>Tidying the data
-<ul>
-<li>Tidy Data by Hadley Wickham</li>
-<li>each row is an individual observation</li>
-</ul></li>
-</ul>
-</div>
-<div id="developing-a-model" class="section level3">
-<h3><span class="header-section-number">7.1.2</span> Developing a model</h3>
-<ul>
-<li>I knew I wanted to apply Bayesian modeling techniques to the data</li>
-<li>Tried using classical GLM fit first to get a baseline understanding of the data
-<ul>
-<li>The fact that some estimates for certain subjects failed due to complete separation reinforced my enthusiasm to employ non-classical techniques</li>
-</ul></li>
-<li>First model was derived from the psychometric function from Bayesian Cognitive Modeling
-<ul>
-<li>Used nested loops to iterate over subjects and SOA values</li>
-<li>Data was messy and the model was hard to build off of</li>
-</ul></li>
-<li>Tried <code>bayes_glm</code> and <code>rstanarm</code></li>
-<li>Moved on to multilevel modeling
-<ul>
-<li>“Statistical Rethinking” by McElreath was my first introduction to Bayesian multilevel modeling
-<ul>
-<li>His <code>rethinking</code> package is too good to be just a book package</li>
-</ul></li>
-<li>Tried writing my own package that generates a Stan program based on R formula syntax
-<ul>
-<li>didn’t fully understand the concepts of no-pooling, complete pooling, and partial pooling</li>
-<li>didn’t understand fixed/random effects models</li>
-<li>Was shot down quickly by some kind folks on Reddit who told me that <code>brms</code> and <code>rstanarm</code> already did what I was trying to do
-<ul>
-<li><code>brms</code> and <code>rstanarm</code> actually did it better, but I’m not bitter. At all…</li>
-</ul></li>
-<li>The fossilized remains of my attempt can be viewed on github</li>
-</ul></li>
-<li>Tried using <code>lme4</code>, <code>rstanarm</code>, and <code>brms</code> for random effects modeling
-<ul>
-<li>was still limited by the lack of control over parameterization and link functions</li>
-<li>Couldn’t easily include a lapse rate parameter into these packages</li>
-</ul></li>
-</ul></li>
-<li>Realized that parameterization can have a significant affect on the efficiency of a model and the inferential power of the estimated parameters
-<ul>
-<li>When fitting a classical model, there is little difference in estimating <code>a + bx</code> vs. <code>d(x - c)</code> since the latter can just be expanded as <code>-cd + dx</code> which is essentially the same as the first parameterization, but there is a practical difference in the interpretation of the parameters
-<ul>
-<li>The second parameterization implies that there is a dependence among the parameters that can be factored out</li>
-<li>In the context of psychometric functions, there is a stronger connection between PSS and <code>c</code> and the JND and <code>d</code></li>
-<li>This reparameterization made it easier to specify priors and also increased the model efficiency</li>
-</ul></li>
-</ul></li>
-<li>Visualization and making shiny plots
-<ul>
-<li>For the end of STAT 629 - Intro to Bayesian Statistics with Dr. Schissler, I created an interactive graph that lets you select a subject, plot a sample of their estimated psychometric functions, and plot the marginal distributions of SOA values given a probability and probability given an SOA value</li>
-</ul></li>
-<li>Still issues with parameterization
-<ul>
-<li>Treating the condition as an indicator/dummy variable has implications on the variance of predictions</li>
-<li>Using an indicator variable also introduced an interaction effect into the model that I almost did not account for</li>
-<li>Switched to index/factor variables helped with model fitting, and interaction effects between factors is handled by creating a new factor that is essentially the cross-product of other factor variables
-<ul>
-<li>E.g. x=[a, b, c], y=[i, j] –&gt; xy=[ai, aj, bi, bj, ci, cj]</li>
-</ul></li>
-</ul></li>
-<li>One more bout of reparameterization
-<ul>
-<li>To us, <span class="math inline">\(Z \sim N(0, 1^2);\quad X = 3 + 2Z\)</span> is the same as saying <span class="math inline">\(X \sim N(3, 2^2)\)</span>, but to a computer, the process of sampling from <span class="math inline">\(X\)</span> can be more difficult than sampling from <span class="math inline">\(Z\)</span></li>
-<li>Hierarchical models can benefit greatly from non-centered parameterization</li>
-<li>Results in more efficient exploration of the posterior, higher number of effected samples, and fewer divergent transitions</li>
-</ul></li>
-<li>Side quest: helped explain logistic regression to a fellow who is taking a statistical psychology course in New Zealand
-<ul>
-<li>He was interested in fitting a 2-AFC model in Julia, which did not provide a link function for such psychometric experiments</li>
-<li>In the end of our discussion, I wrote my own N-AFC link function that can be dropped in to the <code>GLM.jl</code> package</li>
-</ul></li>
-</ul>
-</div>
-</div>
 <div id="model-selection-is-not-always-the-goal" class="section level2">
-<h2><span class="header-section-number">7.2</span> Model selection is not always the goal</h2>
-<ul>
-<li>Building a model motivated by a set of principles and domain expertise should be the preferred way</li>
-<li>Model comparison is important, especially in terms of predictive inference</li>
-<li>One model doesn’t fit all
-<ul>
-<li>Different models help to answer different questions
-<ul>
-<li>Mean effect, individual effect, predictive density, conditional densities, etc</li>
-</ul></li>
-</ul></li>
-</ul>
+<h2><span class="header-section-number">7.1</span> Model selection is not always the goal</h2>
+<p>Building a model motivated by a set of principles and domain expertise should be the preferred way of performing an analysis. The next important principle is model comparison, especially in terms of predictive inference. One model also doesn’t always work for everything. In the course of building a model that is just complex enough to answer questions about age and temporal recalibration, I mentioned that intermediate models could be used to answer questions about average effects at different levels. For purely predictive inference, there is also the possibility of Bayesian model averaging (BMA) and other ensemble methods.</p>
+</div>
+<div id="data-cleaning-and-reproducibility" class="section level2">
+<h2><span class="header-section-number">7.2</span> Data Cleaning and Reproducibility</h2>
+<p>Data doesn’t always come in a nice tidy<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a> format, and I had the pleasure of turning the raw experimental data into a clean data set that is ready for modeling. Sometimes the process is quick and straight forward, but other times, like with this psychometric data, it takes more effort and clever techniques. There is academic value in describing the steps I took up front to reduce the headache later.</p>
+<p>To begin, there is a strong push in recent years for reproducible data science. Scientific methods and results should be able to be replicated by other researchers, and part of that includes being able to replicate the process that takes the raw data and produces the tidy data that is ready for analysis. Tidy data is described by <span class="citation">Wickham and others (<a href="#ref-wickham2014tidy" role="doc-biblioref">2014</a>)</span> and can be summed up by three principles</p>
+<ol style="list-style-type: decimal">
+<li>Each variable forms a column</li>
+<li>Each observation forms a row</li>
+<li>Each type of observational unit forms a table</li>
+</ol>
+<p>One problem I have come across and have been guilty of in the past is having data in a spread sheet, modifying it, and then having no way of recovering the original data. Spread sheets are a convenient way to organize, transform, and lightly analyze date, but problems can quickly arise unless there is a good backup/snapshot system in place. Data is immutable<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a>, or at least that is the mindset that researchers must adopt in order to have truly reproducible workflows. The raw data that is collected or produced by a measurement device should never be modified without first being copied, even if for trivial reasons such as correcting a spelling mistake<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a>.</p>
+<p>To begin the data cleaning journey, I’ll introduce the directory system that I had been given to work with. Each task is separated into its own folder, and within each folder is a subdirectory of age groups.</p>
+<pre><code>RecalibrationData
+├── ParticipantAgeSex.xlsx
+├── Audiovisual
+│   ├── MiddleAge
+│   ├── Older
+│   └── Young
+├── Duration
+│   ├── MiddleAge
+│   ├── Older
+│   └── Young
+├── Sensorimotor
+│   ├── MiddleAge
+│   ├── Older
+│   └── Young
+└── Visual
+    ├── MiddleAge
+    ├── Older
+    └── Young</code></pre>
+<p>Within each age group subdirectory are the subdirectories for each subject named by their initials which then contain the experimental data in Matlab files.</p>
+<pre><code>├── MiddleAge
+│   ├── BT
+│   │   ├── BTadapt1__MAT.mat
+│   │   ├── ...
+│   ├── ...
+├── Older
+│   ├── BB
+│   │   ├── BBadapt1__MAT.mat
+│   │   ├── ...
+│   ├── ...
+└── Young
+    ├── AC
+    │   ├── ACadapt1__MAT.mat
+    │   ├── ...
+    ├── ...</code></pre>
+<p>At this point, the data appears manageable, there is information contained in the directory structure such as task, age group, and initials, and file name contains information about the experimental block. There is also an excel file that I was later given that contains more subject information like age and sex, though that information is not used in the model. The columns of the Matlab file depends on the task, but generally contains an SOA value and a response, but no column or row name information - that was provided by the researcher who collected the data.</p>
+<p>The next thing I did was to create a table of metadata - information extracted from the directory structure and file names combined with the the subject data and the file path. Regular expressions can be used to extract patterns from a string. With a list of all Matlab files within the <code>RecalibrationData</code> folder, I tried to extract the task, age group, initials, and block using the expression</p>
+<pre><code>&quot;^(\\w+)/(\\w+)/(\\w+)/[A-Z]{2,3}_*[A-Z]*(adapt[0-9]|baseline[0-9]*).*&quot;</code></pre>
+<p>Breaking it apart, the <code>^(\\w+)/</code> matches any word characters at the start and before the next slash. Since the directory structure is <code>Task/AgeGroup/Subject/file.mat</code>, the regular expression should match three words between slashes. The file name generally follows the pattern of <code>Initials__block#__MAT.mat</code>, so <code>[A-Z]{2,3}_*[A-Z]*</code> should match the initials, and <code>(adapt[0-9]|baseline[0-9]*)</code> should match the block (baseline or adapt). This method works for <span class="math inline">\(536\)</span> of the <span class="math inline">\(580\)</span> individual records. For the ones it failed, it was generally do to misspellings or irregular capitalizing of “baseline” and “adapt”.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="discussion.html#cb28-1"></a><span class="kw">table</span>(feat_typ[,<span class="dv">4</span>])</span>
+<span id="cb28-2"><a href="discussion.html#cb28-2"></a><span class="co">#&gt; </span></span>
+<span id="cb28-3"><a href="discussion.html#cb28-3"></a><span class="co">#&gt;     adapt1     adapt2     adapt3   baseline  baseline2 baseline43 </span></span>
+<span id="cb28-4"><a href="discussion.html#cb28-4"></a><span class="co">#&gt;        165        162         43        162          3          1</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="discussion.html#cb29-1"></a><span class="kw">table</span>(feat_atyp[,<span class="dv">4</span>])</span>
+<span id="cb29-2"><a href="discussion.html#cb29-2"></a><span class="co">#&gt; </span></span>
+<span id="cb29-3"><a href="discussion.html#cb29-3"></a><span class="co">#&gt;                         adapat1      adapation1    Adaptation_1    Adaptation_2 </span></span>
+<span id="cb29-4"><a href="discussion.html#cb29-4"></a><span class="co">#&gt;               1               1               1               9               7 </span></span>
+<span id="cb29-5"><a href="discussion.html#cb29-5"></a><span class="co">#&gt;     Adaptation1     adaptation2     Adaptation2     adaptation3          adpat1 </span></span>
+<span id="cb29-6"><a href="discussion.html#cb29-6"></a><span class="co">#&gt;               2               1               3               1               1 </span></span>
+<span id="cb29-7"><a href="discussion.html#cb29-7"></a><span class="co">#&gt;          adpat2          adpat3        baseline        Baseline Visual_Baseline </span></span>
+<span id="cb29-8"><a href="discussion.html#cb29-8"></a><span class="co">#&gt;               4               1               1              10               1</span></span></code></pre></div>
+<p>Since there is only a handful of irregular block names, they can be dealt with a separate regular expression that properly extracts the block information. Other challenges in cleaning the data include the handling of subjects with the same initials. This becomes a problem because filtering by a subject’s initials is not guaranteed to return a unique subject. Furthermore there are two middle age subjects with the same initials of “JM”, so one was also identified with their sex “JM_F”. The solution is to create a unique identifier (labeled as SID) that is a combination of age group, sex, and initials. For an experiment identifier (labeled as RID), the task and block were prepended to the SID. Each of these IDs uniquely identify the subjects and their experimental records making it easier to filter and search.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="discussion.html#cb30-1"></a><span class="kw">glimpse</span>(features)</span>
+<span id="cb30-2"><a href="discussion.html#cb30-2"></a><span class="co">#&gt; Rows: 580</span></span>
+<span id="cb30-3"><a href="discussion.html#cb30-3"></a><span class="co">#&gt; Columns: 8</span></span>
+<span id="cb30-4"><a href="discussion.html#cb30-4"></a><span class="co">#&gt; $ rid       &lt;fct&gt; av-post1-M-f-CC, av-post1-M-f-DB, av-post1-M-f-HG, av-post1…</span></span>
+<span id="cb30-5"><a href="discussion.html#cb30-5"></a><span class="co">#&gt; $ sid       &lt;fct&gt; M-f-CC, M-f-DB, M-f-HG, M-f-JM, M-f-MS, M-f-SJF, M-f-TS, M-…</span></span>
+<span id="cb30-6"><a href="discussion.html#cb30-6"></a><span class="co">#&gt; $ path      &lt;chr&gt; &quot;Audiovisual/MiddleAge/CC/CCadapt1__MAT.mat&quot;, &quot;Audiovisual/…</span></span>
+<span id="cb30-7"><a href="discussion.html#cb30-7"></a><span class="co">#&gt; $ task      &lt;chr&gt; &quot;audiovisual&quot;, &quot;audiovisual&quot;, &quot;audiovisual&quot;, &quot;audiovisual&quot;,…</span></span>
+<span id="cb30-8"><a href="discussion.html#cb30-8"></a><span class="co">#&gt; $ trial     &lt;fct&gt; post1, post1, post1, post1, post1, post1, post1, post1, pos…</span></span>
+<span id="cb30-9"><a href="discussion.html#cb30-9"></a><span class="co">#&gt; $ age_group &lt;fct&gt; middle_age, middle_age, middle_age, middle_age, middle_age,…</span></span>
+<span id="cb30-10"><a href="discussion.html#cb30-10"></a><span class="co">#&gt; $ age       &lt;dbl&gt; 39, 44, 41, 48, 49, 43, 47, 49, 49, 44, 43, 44, 48, 48, 50,…</span></span>
+<span id="cb30-11"><a href="discussion.html#cb30-11"></a><span class="co">#&gt; $ sex       &lt;fct&gt; F, F, F, F, F, F, F, F, F, M, M, M, M, M, M, F, F, F, F, F,…</span></span></code></pre></div>
+<p>Then with the table of clean metadata, the task is simply to loop through each row, read the Matlab file given by <code>path</code>, add the unique ID as a column, and then join the experimental data with the metadata to create a data set that is ready for model fitting and data exploration. The full code used to generate the clean data is not yet available online, but can be shared with the committee.</p>
+<p>The benefit of writing a script to generate the data is that others can look over my code and verify that it is doing what I intended for it to do, and I can go back to any step within the process to make changes if the need comes up. Another tool that contributed to the reproducibility is the version control management software, Git. With Git I can take a snapshot of the changes I make, and revert if necessary. This thesis is also hosted on Github, and the entire history of development can be viewed there.</p>
+</div>
+<div id="developing-a-model" class="section level2">
+<h2><span class="header-section-number">7.3</span> Developing a model</h2>
+<p><a href="workflow.html#workflow">Chapter 3</a> details the deeper considerations that went into building a model, but doesn’t tell the full story of struggles and setbacks I faced. I find that I learn more from others when they share what didn’t work along with the final path that did work. There is knowledge to be gained in failed experiments, because then there is one more way to not do something, just like a failing outcome reduces the variance of the Beta distribution.</p>
+<p>I knew that I wanted to apply Bayesian modeling techniques to the data, because it was something knew that I was learning. I tried using a classical GLM to first get a baseline understanding of the data, but the fact that some estimates for certain subjects failed due to complete separation reinforced my enthusiasm to employ non-classical techniques. My first Bayesian model was derived from <span class="citation">Lee and Wagenmakers (<a href="#ref-lee2014bayesian" role="doc-biblioref">2014</a>)</span> which used nested loops to iterate over subjects and SOA values. I felt that the data was stored in a complicated way and made it difficult to comprehend and extend.</p>
+<p>Next I moved on to using <code>arm::bayesglm</code> to remove convergence issues, but was met with other limitations such as linear parameterization and lack of hierarchical modeling. The book Statistical Rethinking <span class="citation">(McElreath <a href="#ref-mcelreath2020statistical" role="doc-biblioref">2020</a>)</span> was my first introduction to Bayesian multilevel modeling. His <code>rethinking</code> package accompanies the book, and offers a compact yet expressive syntax for models that get translated into a Stan model. A model with age group and block can be written using <code>rethinking::ulam</code> as</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="discussion.html#cb31-1"></a>rethinking<span class="op">::</span><span class="kw">ulam</span>(<span class="kw">alist</span>(</span>
+<span id="cb31-2"><a href="discussion.html#cb31-2"></a>  k <span class="op">~</span><span class="st"> </span><span class="kw">binomial_logit</span>(n, p),</span>
+<span id="cb31-3"><a href="discussion.html#cb31-3"></a>  <span class="dt">p =</span> <span class="kw">exp</span>(b <span class="op">+</span><span class="st"> </span>bG[G] <span class="op">+</span><span class="st"> </span>bT[trt]) <span class="op">*</span><span class="st"> </span>(x <span class="op">-</span><span class="st"> </span>(a <span class="op">+</span><span class="st"> </span>aG[G] <span class="op">+</span><span class="st"> </span>aT[trt])),</span>
+<span id="cb31-4"><a href="discussion.html#cb31-4"></a>  a <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, <span class="fl">0.06</span>),</span>
+<span id="cb31-5"><a href="discussion.html#cb31-5"></a>  aG[G] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_aG),</span>
+<span id="cb31-6"><a href="discussion.html#cb31-6"></a>  aT[trt] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_aT),</span>
+<span id="cb31-7"><a href="discussion.html#cb31-7"></a>  b <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">3</span>, <span class="dv">1</span>),</span>
+<span id="cb31-8"><a href="discussion.html#cb31-8"></a>  bG[G] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_bG),</span>
+<span id="cb31-9"><a href="discussion.html#cb31-9"></a>  bT[trt] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_bT),</span>
+<span id="cb31-10"><a href="discussion.html#cb31-10"></a>  <span class="kw">c</span>(sd_aG, sd_aT, sd_bG, sd_bT) <span class="op">~</span><span class="st"> </span><span class="kw">half_cauchy</span>(<span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb31-11"><a href="discussion.html#cb31-11"></a>), <span class="dt">data =</span> df, <span class="dt">chains =</span> <span class="dv">4</span>, <span class="dt">cores =</span> <span class="dv">4</span>, <span class="dt">log_lik =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p>During my time learning about multilevel models, I tried writing my own package that generates a Stan program based on R formula syntax. At the time I didn’t fully understand the concepts of no-pooling, complete pooling, and partial pooling, and my package was plagued by the same lack of flexibility that <code>rstanarm</code> and <code>brms</code> have. In fact I learned that <code>brms</code> and <code>rstanarm</code> already did what I was trying to do after I had already started making my library, but it was a fun learning and programming experience. The fossilized remains of my attempt can be viewed on github.</p>
+<p>I also tried using <code>lme4</code>, <code>rstanarm</code>, and <code>brms</code>, and learned more about the concepts of fixed and random effects. It was around this time that I noticed that parameterization can have a significant affect on the efficiency of a model and the inferential power of the estimated parameters. When fitting a classical model, there is little difference in estimating <code>a + bx</code> vs. <code>d(x - c)</code> since the latter can just be expanded as <code>-cd + dx</code> which is essentially the same as the first parameterization, but there is a practical difference in the interpretation of the parameters. The second parameterization implies that there is a dependence among the parameters that can be factored out. In the context of psychometric functions, there is a stronger connection between PSS and <code>c</code> and the JND and <code>d</code>. This parameterization made it easier to specify priors and also increased the model efficiency. Since only <code>rethinking</code> and <code>Stan</code> allow for arbitrary parameterization, I left the others behind.</p>
+<p>I finally arrived at a model that worked well, but learned that using a binary indicator variable for the treatment comes with the assumption of higher uncertainty for one of the conditions. The linear model that I arrived at is displayed in equation <a href="discussion.html#eq:badlinearmodel">(7.1)</a>.</p>
+<p><span class="math display" id="eq:badlinearmodel">\[\begin{equation}
+  \theta = \exp(\beta + \beta_G +(\beta_T + \beta_{TG})\times trt) \left[x - (\alpha + \alpha_G + (\alpha_T + \alpha_{TG})\times trt)\right]
+  \tag{7.1}
+\end{equation}\]</span></p>
+<p>Using an indicator variable in this fashion also introduced an interaction effect into the model that I almost did not account for after I switched to using a factor variable. Interaction effects between factors is handled by creating a new factor that is essentially the cross-product of other factor variables. E.g. for factor variables <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span></p>
+<p><span class="math display">\[
+x = \begin{bmatrix}
+a \\
+b \\
+c
+\end{bmatrix}, y =  \begin{bmatrix}
+i \\
+j
+\end{bmatrix}\Longrightarrow x\times y = 
+\begin{bmatrix}
+ai &amp; aj \\
+bi &amp; bj \\
+ci &amp; cj
+\end{bmatrix}
+\]</span></p>
+<p>The final round of reparameterization came in the form of adopting non-centered parameterization for more efficient models. To us, <span class="math inline">\(Z \sim N(0, 1^2);\quad X = 3 + 2Z\)</span> is the same as <span class="math inline">\(X \sim N(3, 2^2)\)</span>, but to a computer the process of sampling from <span class="math inline">\(X\)</span> can be more difficult than sampling from <span class="math inline">\(Z\)</span> (discussed in <a href="model-checking.html#model-checking">chapter 4</a>).</p>
 
 </div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-lee2014bayesian">
+<p>Lee, Michael D, and Eric-Jan Wagenmakers. 2014. <em>Bayesian Cognitive Modeling: A Practical Course</em>. Cambridge university press.</p>
+</div>
+<div id="ref-mcelreath2020statistical">
+<p>McElreath, Richard. 2020. <em>Statistical Rethinking: A Bayesian Course with Examples in R and Stan</em>. CRC press.</p>
+</div>
+<div id="ref-wickham2014tidy">
+<p>Wickham, Hadley, and others. 2014. “Tidy Data.” <em>Journal of Statistical Software</em> 59 (10): 1–23.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="10">
+<li id="fn10"><p>Tidy data is described by Hadley Wickham<a href="discussion.html#fnref10" class="footnote-back">↩︎</a></p></li>
+<li id="fn11"><p>Mutability in computer science is the property of a data structure where its contents can be modified in place. Immutability means that the object cannot be modified without first making a copy.<a href="discussion.html#fnref11" class="footnote-back">↩︎</a></p></li>
+<li id="fn12"><p>If a change is made to the raw data, it should be carefully documented and reversible<a href="discussion.html#fnref12" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

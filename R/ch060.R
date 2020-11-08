@@ -75,3 +75,65 @@ plot_jnd <- function(df) {
 
   p1 + p2
 }
+
+plot_pss_average <- function(df) {
+  p1 <- ggplot(df, aes(PSS, fill = Block)) +
+    geom_density(alpha = 0.75) +
+    scale_fill_manual(values = two_colors) +
+    theme(legend.position = "bottom",
+          axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p2 <- ggplot(df, aes(PSS, fill = `Age Group`)) +
+    geom_density(alpha = 0.66) +
+    scale_fill_manual(values = three_colors) +
+    theme(legend.position = "bottom",
+          axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p1 + p2
+}
+
+plot_jnd_average <- function(df) {
+  p1 <- ggplot(df, aes(JND, fill = Block)) +
+    geom_density(alpha = 0.75) +
+    scale_fill_manual(values = two_colors) +
+    theme(legend.position = "bottom",
+          axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p2 <- ggplot(df, aes(JND, fill = `Age Group`)) +
+    geom_density(alpha = 0.66) +
+    scale_fill_manual(values = three_colors) +
+    theme(legend.position = "bottom",
+          axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p1 + p2
+}
+
+density_with_shade <- function(x, prob) {
+
+  ci <- rethinking::HPDI(x, prob = prob)
+
+  p <- ggplot(data.frame(x = x), aes(x)) +
+    geom_density() +
+    theme(axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p_df <- ggplot_build(p)
+  x1 <- min(which(p_df$data[[1]]$x >= ci[1]))
+  x2 <- max(which(p_df$data[[1]]$x <= ci[2]))
+
+  p +
+    geom_area(data=data.frame(x=p_df$data[[1]]$x[x1:x2],
+                              y=p_df$data[[1]]$y[x1:x2]),
+              aes(x=x, y=y), fill="grey") +
+    geom_hline(yintercept = 0) +
+    geom_density()
+}
