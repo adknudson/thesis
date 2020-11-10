@@ -24,46 +24,19 @@ One problem I have come across and have been guilty of in the past is having dat
 
 To begin the data cleaning journey, I'll introduce the directory system that I had been given to work with. Each task is separated into its own folder, and within each folder is a subdirectory of age groups.
 
+
+```{r ch070-Lama Everyday, out.width="30%"}
+knitr::include_graphics("figures/data_dir.png")
 ```
-RecalibrationData
-├── ParticipantAgeSex.xlsx
-├── Audiovisual
-│   ├── MiddleAge
-│   ├── Older
-│   └── Young
-├── Duration
-│   ├── MiddleAge
-│   ├── Older
-│   └── Young
-├── Sensorimotor
-│   ├── MiddleAge
-│   ├── Older
-│   └── Young
-└── Visual
-    ├── MiddleAge
-    ├── Older
-    └── Young
-```
+
 
 Within each age group subdirectory are the subdirectories for each subject named by their initials which then contain the experimental data in Matlab files.
 
+
+```{r ch070-Third Needless Antique, out.width="35%"}
+knitr::include_graphics("figures/data_subdir.png")
 ```
-├── MiddleAge
-│   ├── BT
-│   │   ├── BTadapt1__MAT.mat
-│   │   ├── ...
-│   ├── ...
-├── Older
-│   ├── BB
-│   │   ├── BBadapt1__MAT.mat
-│   │   ├── ...
-│   ├── ...
-└── Young
-    ├── AC
-    │   ├── ACadapt1__MAT.mat
-    │   ├── ...
-    ├── ...
-```
+
 
 At this point, the data appears manageable, there is information contained in the directory structure such as task, age group, and initials, and file name contains information about the experimental block. There is also an excel file that I was later given that contains more subject information like age and sex, though that information is not used in the model. The columns of the Matlab file depends on the task, but generally contains an SOA value and a response, but no column or row name information - that was provided by the researcher who collected the data. 
 

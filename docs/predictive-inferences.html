@@ -220,10 +220,10 @@ Figure 5.3: The fitted polynomial models with a new observation.
 </p>
 </div>
 <p>Figure <a href="predictive-inferences.html#fig:ch050-Strawberry-Swallow">5.4</a> shows the 80% and 95% prediction intervals for a new observation given <span class="math inline">\(x = 5\)</span> as well as the true outcome as a dashed line at <span class="math inline">\(y = -3.434\)</span>. The linear model has the smallest prediction interval (PI), but completely misses the target. The remaining three models all include the observed value in their 95% PIs, but the quadratic has the smallest PI of the three. The actual data generating polynomial is</p>
-<p><span class="math display">\[
-y \sim \mathcal{N}(\mu, 1^2) \\
-\mu = -0.5(x - 2)^2 + 2
-\]</span></p>
+<p><span class="math display">\[\begin{align*}
+y &amp;\sim \mathcal{N}(\mu, 1^2) \\
+\mu &amp;= -0.5(x - 2)^2 + 2
+\end{align*}\]</span></p>
 <div class="figure" style="text-align: center"><span id="fig:ch050-Strawberry-Swallow"></span>
 <img src="050-predictive-inference_files/figure-html/ch050-Strawberry-Swallow-1.png" alt="95% Prediction intervals for the four polynomial models, as well as the true value (dashed line)." width="85%" />
 <p class="caption">
@@ -238,12 +238,10 @@ Figure 5.4: 95% Prediction intervals for the four polynomial models, as well as 
 <div id="loocv-and-importance-sampling" class="section level3">
 <h3><span class="header-section-number">5.1.1</span> LOOCV and Importance Sampling</h3>
 <p>LOOCV and many other evaluation tools such as WAIC rest on the <em>log-pointwise-predictive-density</em> (lppd), which is a loose measure of deviance from some “true” probability distribution. Typically we don’t have the analytic form of the predictive posterior, so instead we use <span class="math inline">\(S\)</span> MCMC draws to approximate the lppd <span class="citation">(Vehtari, Gelman, and Gabry <a href="#ref-vehtari2017practical" role="doc-biblioref">2017</a>)</span>:</p>
-<p><span class="math display" id="eq:lppd">\[
-\begin{equation}
+<p><span class="math display" id="eq:lppd">\[\begin{equation}
 \mathrm{lppd}(y, \Theta) = \sum_i \log \frac{1}{S} \sum_s p(y_i | \Theta_s)
 \tag{5.1}
-\end{equation}
-\]</span></p>
+\end{equation}\]</span></p>
 <p>To estimate LOOCV, the relative “importance” of each observation must be computed. Certain observations have more influence on the posterior distribution, and so have more impact on the posterior if they are removed. The intuition behind measuring importance is that more influential observations are relatively less likely than less important observations that are relatively expected. Then by omitting a sample, the relative importance weight can be measured by the lppd. This omitted calculation is known as the out-of-sample lppd. For each omitted <span class="math inline">\(y_i\)</span>,</p>
 <p><span class="math display">\[
 \mathrm{lppd}_{CV} = \sum_i \frac{1}{S} \sum_s \log p(y_{i} | \Theta_{-i,s})
@@ -261,28 +259,28 @@ Figure 5.4: 95% Prediction intervals for the four polynomial models, as well as 
   }
 }</code></pre>
 <p>Models can be compared simply using <code>loo::loo_compare</code>. It estimated the ELPD and its standard error, then calculates the relative differences between all the models. The model with the highest ELPD is predicted to have the best out-of-sample predictions. The comparison of the first three iterations of the model from <a href="workflow.html#workflow">chapter 3</a> for the audiovisual data are shown below.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="predictive-inferences.html#cb26-1"></a>comp_av &lt;-<span class="st"> </span><span class="kw">loo_compare</span>(l031_av, l032_av, l032nc_av, l033_av)</span>
-<span id="cb26-2"><a href="predictive-inferences.html#cb26-2"></a><span class="kw">print</span>(comp_av, <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb26-3"><a href="predictive-inferences.html#cb26-3"></a><span class="co">#&gt;        elpd_diff se_diff elpd_loo se_elpd_loo p_loo   se_p_loo looic   se_looic</span></span>
-<span id="cb26-4"><a href="predictive-inferences.html#cb26-4"></a><span class="co">#&gt; model4     0.0       0.0 -1615.7     42.8        16.2     0.9   3231.4    85.6 </span></span>
-<span id="cb26-5"><a href="predictive-inferences.html#cb26-5"></a><span class="co">#&gt; model2    -1.0       3.8 -1616.7     42.6        11.3     0.6   3233.3    85.2 </span></span>
-<span id="cb26-6"><a href="predictive-inferences.html#cb26-6"></a><span class="co">#&gt; model3    -1.3       3.8 -1617.0     42.7        11.8     0.6   3234.0    85.3 </span></span>
-<span id="cb26-7"><a href="predictive-inferences.html#cb26-7"></a><span class="co">#&gt; model1   -32.8      10.4 -1648.5     43.0         3.0     0.2   3296.9    86.1</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="predictive-inferences.html#cb25-1"></a>comp_av &lt;-<span class="st"> </span><span class="kw">loo_compare</span>(l031_av, l032_av, l032nc_av, l033_av)</span>
+<span id="cb25-2"><a href="predictive-inferences.html#cb25-2"></a><span class="kw">print</span>(comp_av, <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb25-3"><a href="predictive-inferences.html#cb25-3"></a><span class="co">#&gt;        elpd_diff se_diff elpd_loo se_elpd_loo p_loo   se_p_loo looic   se_looic</span></span>
+<span id="cb25-4"><a href="predictive-inferences.html#cb25-4"></a><span class="co">#&gt; model4     0.0       0.0 -1615.7     42.8        16.2     0.9   3231.4    85.6 </span></span>
+<span id="cb25-5"><a href="predictive-inferences.html#cb25-5"></a><span class="co">#&gt; model2    -1.0       3.8 -1616.7     42.6        11.3     0.6   3233.3    85.2 </span></span>
+<span id="cb25-6"><a href="predictive-inferences.html#cb25-6"></a><span class="co">#&gt; model3    -1.3       3.8 -1617.0     42.7        11.8     0.6   3234.0    85.3 </span></span>
+<span id="cb25-7"><a href="predictive-inferences.html#cb25-7"></a><span class="co">#&gt; model1   -32.8      10.4 -1648.5     43.0         3.0     0.2   3296.9    86.1</span></span></code></pre></div>
 <p>The centered and non-centered parameterizations (models 2 and 3 respectively) have essentially the same ELPD. This is expected since they are essentially the same model. The reparameterization only helps with model fitting efficiency, though that can mean more reliable posteriors. The model with age-block interactions (model 4) has the highest ELPD, but is not decisively the best as determined by the standard error of the ELPD. The only thing that can be determined is that including age and block improves performance significantly over the base model (model 1).</p>
 <p>But how about for the visual data? The fourth iteration of the model introduced a lapse rate. Did the change significantly improve the ELPD?</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="predictive-inferences.html#cb27-1"></a>comp_vis &lt;-<span class="st"> </span><span class="kw">loo_compare</span>(l033_vis, l034_vis)</span>
-<span id="cb27-2"><a href="predictive-inferences.html#cb27-2"></a><span class="kw">print</span>(comp_vis, <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb27-3"><a href="predictive-inferences.html#cb27-3"></a><span class="co">#&gt;        elpd_diff se_diff elpd_loo se_elpd_loo p_loo   se_p_loo looic   se_looic</span></span>
-<span id="cb27-4"><a href="predictive-inferences.html#cb27-4"></a><span class="co">#&gt; model2     0.0       0.0 -1001.1     44.0        19.2     1.9   2002.2    88.0 </span></span>
-<span id="cb27-5"><a href="predictive-inferences.html#cb27-5"></a><span class="co">#&gt; model1  -259.4      31.9 -1260.5     56.1        23.1     2.3   2520.9   112.2</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="predictive-inferences.html#cb26-1"></a>comp_vis &lt;-<span class="st"> </span><span class="kw">loo_compare</span>(l033_vis, l034_vis)</span>
+<span id="cb26-2"><a href="predictive-inferences.html#cb26-2"></a><span class="kw">print</span>(comp_vis, <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb26-3"><a href="predictive-inferences.html#cb26-3"></a><span class="co">#&gt;        elpd_diff se_diff elpd_loo se_elpd_loo p_loo   se_p_loo looic   se_looic</span></span>
+<span id="cb26-4"><a href="predictive-inferences.html#cb26-4"></a><span class="co">#&gt; model2     0.0       0.0 -1001.1     44.0        19.2     1.9   2002.2    88.0 </span></span>
+<span id="cb26-5"><a href="predictive-inferences.html#cb26-5"></a><span class="co">#&gt; model1  -259.4      31.9 -1260.5     56.1        23.1     2.3   2520.9   112.2</span></span></code></pre></div>
 <p>Absolutely! Something else interesting also happened with the introduction of the lapse rate - the effective number of parameters decreased (<code>p_loo</code>).</p>
 <p>Earlier I argued that model selection is out, model comparison is in. At the end of <a href="workflow.html#workflow">chapter 3</a> I finished with a model that has age-block interactions and a lapse rate for each age group. There was one more model that I could have specified - one that estimates at the subject level. There is no domain-specific reason to include the subject level information, especially since the goal is to make inferences at the age group level, but there may still be statistical reason to add in the subjects. For one, adding in the subject as another level in a multilevel model can induce regularization among the subjects, which can overall make for better predictions on new data.</p>
 <p>I’ve gone ahead and fit the model with subject-level information, and the comparison between this new model and the one from iteration 4 is shown below.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="predictive-inferences.html#cb28-1"></a>comp_vis2 &lt;-<span class="st"> </span><span class="kw">loo_compare</span>(l034_vis, l034s_vis)</span>
-<span id="cb28-2"><a href="predictive-inferences.html#cb28-2"></a><span class="kw">print</span>(comp_vis2, <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb28-3"><a href="predictive-inferences.html#cb28-3"></a><span class="co">#&gt;        elpd_diff se_diff elpd_loo se_elpd_loo p_loo   se_p_loo looic   se_looic</span></span>
-<span id="cb28-4"><a href="predictive-inferences.html#cb28-4"></a><span class="co">#&gt; model2     0.0       0.0  -925.1     38.1        75.6     5.4   1850.3    76.2 </span></span>
-<span id="cb28-5"><a href="predictive-inferences.html#cb28-5"></a><span class="co">#&gt; model1   -76.0      19.1 -1001.1     44.0        19.2     1.9   2002.2    88.0</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="predictive-inferences.html#cb27-1"></a>comp_vis2 &lt;-<span class="st"> </span><span class="kw">loo_compare</span>(l034_vis, l034s_vis)</span>
+<span id="cb27-2"><a href="predictive-inferences.html#cb27-2"></a><span class="kw">print</span>(comp_vis2, <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb27-3"><a href="predictive-inferences.html#cb27-3"></a><span class="co">#&gt;        elpd_diff se_diff elpd_loo se_elpd_loo p_loo   se_p_loo looic   se_looic</span></span>
+<span id="cb27-4"><a href="predictive-inferences.html#cb27-4"></a><span class="co">#&gt; model2     0.0       0.0  -925.1     38.1        75.6     5.4   1850.3    76.2 </span></span>
+<span id="cb27-5"><a href="predictive-inferences.html#cb27-5"></a><span class="co">#&gt; model1   -76.0      19.1 -1001.1     44.0        19.2     1.9   2002.2    88.0</span></span></code></pre></div>
 <p>Including the subject-level information significantly improves the ELPD, and even though there are over 100 parameters in the model (slope and intercept for each of the 45 subjects), the effective number of parameters is much less. Since this new model is capable of making inferences at both the age group level and the subject level, I use it for the result section (<a href="results.html#results">chapter 6</a>).</p>
 <p>One concern comes up when it comes to LOOCV and multilevel models. What does it mean to leave <em>one</em> out? Should one subject be left out? One age group? Just one observation? With more levels in a model, more careful considerations must be taken when it comes to estimating prediction performance.</p>
 

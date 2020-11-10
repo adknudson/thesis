@@ -36,13 +36,17 @@ Notice that the value $K$ cancels out when calculating the relative intensity, b
 
 ## Psychometric Experiments {#psycho-experiments}
 
-Psychometric experiments are devised in a way to examine psychophysical processes, or the response between the world around us and our inward perceptions. A **psychometric function** relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task [@wichmann2001a]. Psychometric functions were studied as early as the late 1800's, and Edwin Boring published a chart of the psychometric function in The American Journal of Psychology in 1917 [@boring1917chart].
+Psychometric experiments are devised in a way to examine psychophysical processes, or the response between the world around us and our inward perceptions. A _psychometric function_ relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task [@wichmann2001a]. Psychometric functions were studied as early as the late 1800's, and Edwin Boring published a chart of the psychometric function in The American Journal of Psychology in 1917 [@boring1917chart].
 
 
-<div class="figure" style="text-align: center">
-<img src="figures/chart_of_pf.png" alt="A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or two, recorded as either 'two points' or 'not two points'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their perception of 'two-ness'. So at what separation is the impression of two points liminal?" width="85%" />
-<p class="caption">(\#fig:ch020-chart-of-pf)A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or two, recorded as either 'two points' or 'not two points'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their perception of 'two-ness'. So at what separation is the impression of two points liminal?</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{figures/chart_of_pf} 
+
+}
+
+\caption{A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or two, recorded as either 'two points' or 'not two points'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their perception of 'two-ness'. So at what separation is the impression of two points liminal?}(\#fig:ch020-chart-of-pf)
+\end{figure}
 
 
 Figure \@ref(fig:ch020-chart-of-pf) displays the key aspects of the psychometric function. The most crucial part is the sigmoid function, the S-like non-decreasing curve which in this case is represented by the Normal CDF, $\Phi(\gamma)$. The horizontal axis represents the stimulus stimulus intensity, the separation of two points in centimeters. The vertical axis represents the probability that a subject has the impression of two points. With only experimental data, the response proportion becomes an approximation for the probability.
@@ -52,10 +56,14 @@ This leads me to talk about the type of psychometric experiment that this paper 
 Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the _point of subjective simultaneity_ (PSS) -- the temporal delay between two signals at which an observer is unsure about their temporal order [@stone2001now]. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In temporal order judgment tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the _just noticeable difference_ (JND) -- the smallest lapse in time so that a temporal order can just be determined. Figure \@ref(fig:ch020-plot-ref-pf) highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e. the response probability is 50%). The JND is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84% level^[One standard deviation away from the mean in a Gaussian distribution.] and the PSS, though the upper level often depends on domain expertise.
 
 
-<div class="figure" style="text-align: center">
-<img src="020-psychometrics_files/figure-html/ch020-plot-ref-pf-1.png" alt="The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise." width="85%" />
-<p class="caption">(\#fig:ch020-plot-ref-pf)The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{020-psychometrics_files/figure-latex/ch020-plot-ref-pf-1} 
+
+}
+
+\caption{The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise.}(\#fig:ch020-plot-ref-pf)
+\end{figure}
 
 
 Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing [@fujisaki2004recalibration]. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer [@vroomen2004recalibration]. This repetition of presenting the adapter stimulus is called _temporal recalibration_.
@@ -71,138 +79,58 @@ The data set that I am using in this paper comes from experiments done by A.N. S
 There are four different tasks in the experiment: audio-visual, visual-visual, visual-motor, and duration, and I will refer to each task respectively as audiovisual, visual, sensorimotor, and duration. The participants consist of 15 young adults (age 20-27), 15 middle age adults (age 39-50), and 15 older adults (age 65-75), all recruited from the University of Nevada, Reno. Additionally all subjects are right handed and were reported to have normal or corrected to normal hearing and vision.
 
 <!-- Count the number of unique subjects by age group and task
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:unnamed-chunk-1)Number of subjects in each task.</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> age_group </th>
-   <th style="text-align:left;"> task </th>
-   <th style="text-align:right;"> n </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> young_adult </td>
-   <td style="text-align:left;"> audiovisual </td>
-   <td style="text-align:right;"> 14 </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> duration </td>
-   <td style="text-align:right;"> 14 </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> sensorimotor </td>
-   <td style="text-align:right;"> 15 </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> visual </td>
-   <td style="text-align:right;"> 15 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> middle_age </td>
-   <td style="text-align:left;"> audiovisual </td>
-   <td style="text-align:right;"> 15 </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> duration </td>
-   <td style="text-align:right;"> 15 </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> sensorimotor </td>
-   <td style="text-align:right;"> 15 </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> visual </td>
-   <td style="text-align:right;"> 15 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> older_adult </td>
-   <td style="text-align:left;"> audiovisual </td>
-   <td style="text-align:right;"> 15 </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> duration </td>
-   <td style="text-align:right;"> 15 </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> sensorimotor </td>
-   <td style="text-align:right;"> 15 </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> visual </td>
-   <td style="text-align:right;"> 15 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}[!h]
+
+\caption{(\#tab:unnamed-chunk-1)Number of subjects in each task.}
+\centering
+\begin{tabular}[t]{llr}
+\toprule
+age\_group & task & n\\
+\midrule
+\cellcolor{gray!6}{young\_adult} & \cellcolor{gray!6}{audiovisual} & \cellcolor{gray!6}{14}\\
+\cmidrule{1-3}
+young\_adult & duration & 14\\
+\cmidrule{1-3}
+\cellcolor{gray!6}{young\_adult} & \cellcolor{gray!6}{sensorimotor} & \cellcolor{gray!6}{15}\\
+\cmidrule{1-3}
+young\_adult & visual & 15\\
+\cmidrule{1-3}
+\cellcolor{gray!6}{middle\_age} & \cellcolor{gray!6}{audiovisual} & \cellcolor{gray!6}{15}\\
+\cmidrule{1-3}
+middle\_age & duration & 15\\
+\cmidrule{1-3}
+\cellcolor{gray!6}{middle\_age} & \cellcolor{gray!6}{sensorimotor} & \cellcolor{gray!6}{15}\\
+\cmidrule{1-3}
+middle\_age & visual & 15\\
+\cmidrule{1-3}
+\cellcolor{gray!6}{older\_adult} & \cellcolor{gray!6}{audiovisual} & \cellcolor{gray!6}{15}\\
+\cmidrule{1-3}
+older\_adult & duration & 15\\
+\cmidrule{1-3}
+\cellcolor{gray!6}{older\_adult} & \cellcolor{gray!6}{sensorimotor} & \cellcolor{gray!6}{15}\\
+\cmidrule{1-3}
+older\_adult & visual & 15\\
+\bottomrule
+\end{tabular}
+\end{table}
 -->
 
 
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:ch020-multitask-data)Sample of motivating data.</caption>
- <thead>
-  <tr>
-   <th style="text-align:right;"> soa </th>
-   <th style="text-align:right;"> response </th>
-   <th style="text-align:left;"> sid </th>
-   <th style="text-align:left;"> task </th>
-   <th style="text-align:left;"> trial </th>
-   <th style="text-align:left;"> age_group </th>
-   <th style="text-align:right;"> age </th>
-   <th style="text-align:left;"> sex </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:right;"> -350 </td>
-   <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;"> O-m-BC </td>
-   <td style="text-align:left;"> audiovisual </td>
-   <td style="text-align:left;"> pre </td>
-   <td style="text-align:left;"> older_adult </td>
-   <td style="text-align:right;"> 70 </td>
-   <td style="text-align:left;"> M </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> -200 </td>
-   <td style="text-align:right;"> 0 </td>
-   <td style="text-align:left;"> M-m-SJ </td>
-   <td style="text-align:left;"> duration </td>
-   <td style="text-align:left;"> post1 </td>
-   <td style="text-align:left;"> middle_age </td>
-   <td style="text-align:right;"> 48 </td>
-   <td style="text-align:left;"> M </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 28 </td>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> O-f-KK </td>
-   <td style="text-align:left;"> sensorimotor </td>
-   <td style="text-align:left;"> pre </td>
-   <td style="text-align:left;"> older_adult </td>
-   <td style="text-align:right;"> 66 </td>
-   <td style="text-align:left;"> F </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 275 </td>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> O-f-MW </td>
-   <td style="text-align:left;"> visual </td>
-   <td style="text-align:left;"> post1 </td>
-   <td style="text-align:left;"> older_adult </td>
-   <td style="text-align:right;"> 69 </td>
-   <td style="text-align:left;"> F </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}[!h]
+
+\caption{(\#tab:ch020-multitask-data)Sample of motivating data.}
+\centering
+\begin{tabular}[t]{rrllllrl}
+\toprule
+soa & response & sid & task & trial & age\_group & age & sex\\
+\midrule
+-350 & 0 & O-m-BC & audiovisual & pre & older\_adult & 70 & M\\
+-200 & 0 & M-m-SJ & duration & post1 & middle\_age & 48 & M\\
+28 & 1 & O-f-KK & sensorimotor & pre & older\_adult & 66 & F\\
+275 & 1 & O-f-MW & visual & post1 & older\_adult & 69 & F\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 
 In the audiovisual TOJ task, participants were asked to determine the temporal order between an auditory and visual stimulus. Stimulus onset asynchrony values were selected uniformly between -500 to +500 ms with 50 ms steps, where negative SOAs indicated that the visual stimulus was leading, and positive values indicated that the auditory stimulus was leading. Each SOA value was presented 5 times in random order in the initial block. At the end of each trial the subject was asked to report if the auditory stimulus came before the visual, where a $1$ indicates that they perceived the sound first, and a $0$ indicates that they perceived the visual stimulus first.
@@ -214,38 +142,21 @@ The sensorimotor task has subjects focus on a black cross on a screen. When it d
 The duration task presents two vertically stacked circles on a screen with one appearing right after the other. The top stimulus appeared for a fixed amount of time of 300 ms, and the bottom was displayed for anywhere between +100 ms to +500 ms in 50 ms steps corresponding to SOA values between -200 ms to +200 ms. The subject then responds to if they perceived the bottom circle as appearing longer than the top circle.
 
 
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:ch020-toj-summary)Summary of TOJ Tasks</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Task </th>
-   <th style="text-align:left;"> Positive Response </th>
-   <th style="text-align:left;"> Positive SOA Truth </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Audiovisual </td>
-   <td style="text-align:left;"> Perceived audio first </td>
-   <td style="text-align:left;"> Audio came before visual </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Visual </td>
-   <td style="text-align:left;"> Perceived right first </td>
-   <td style="text-align:left;"> Right came before left </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Sensorimotor </td>
-   <td style="text-align:left;"> Perceived visual first </td>
-   <td style="text-align:left;"> Visual came before tactile </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Duration </td>
-   <td style="text-align:left;"> Perceived bottom as longer </td>
-   <td style="text-align:left;"> Bottom lasted longer than top </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}[!h]
+
+\caption{(\#tab:ch020-toj-summary)Summary of TOJ Tasks}
+\centering
+\begin{tabular}[t]{lll}
+\toprule
+Task & Positive Response & Positive SOA Truth\\
+\midrule
+Audiovisual & Perceived audio first & Audio came before visual\\
+Visual & Perceived right first & Right came before left\\
+Sensorimotor & Perceived visual first & Visual came before tactile\\
+Duration & Perceived bottom as longer & Bottom lasted longer than top\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 
 Finally, after the first block of each task was completed, the participants went through an adaptation period where they were presented with the respective stimuli from each task repeatedly at fixed temporal delays, then they repeated the task. To ensure that the adaptation affect persisted, the subject were presented with the adapter stimulus at regular intervals throughout the second block. The blocks are designated as `pre` and `post1`, `post2`, etc. in the data set. In this paper I will only be focusing on the `pre` and `post1` blocks.
@@ -255,93 +166,75 @@ Finally, after the first block of each task was completed, the participants went
 The dependent variable in these experiments is the perceived response which is encoded as a 0 or a 1, and the independent variable is the SOA value. If the response is plotted against the SOA values, then it is difficult to determine any relationship (see figure \@ref(fig:ch020-simple-response-soa-plot)). Transparency can be used to better visualize the relationships between SOA value and responses. The center plot in figure \@ref(fig:ch020-simple-response-soa-plot) uses the same data as the left plot, except that the transparency is set to 0.05. As a result, one can see that there is a higher density of "0" responses towards more negative SOAs, and a higher density of "1" responses for more positive SOAs. Taking it a step further, I can compute and plot the proportion of responses for a given SOA. This is displayed in the right panel. Now the relationship between SOA values and responses is clear -- as the SOA value goes from more negative to more positive, the proportion of positive responses increases from near 0 to near 1.
 
 
-<div class="figure" style="text-align: center">
-<img src="020-psychometrics_files/figure-html/ch020-simple-response-soa-plot-1.png" alt="Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency." width="85%" />
-<p class="caption">(\#fig:ch020-simple-response-soa-plot)Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{020-psychometrics_files/figure-latex/ch020-simple-response-soa-plot-1} 
+
+}
+
+\caption{Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency.}(\#fig:ch020-simple-response-soa-plot)
+\end{figure}
 
 
 Subjectively the right plot in figure \@ref(fig:ch020-simple-response-soa-plot) is the easiest to interpret. Because of this, I will often present the observed and predicted data using the proportion of responses rather than the actual response. Proportional data also has the advantage of being bounded on the same interval as the response. For the audiovisual task, the responses can be aggregated into binomial data -- the number of positive responses for given SOA value -- which is sometimes more efficient to work with than the Bernoulli data (see table \@ref(tab:ch020-av-bin-sample)). However the number of times an SOA is presented varies between the pre-adaptation and post-adaptation blocks; 5 and 3 times per SOA respectively. 
 
 
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:ch020-av-bin-sample)Audiovisual task with aggregated responses.</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> trial </th>
-   <th style="text-align:right;"> soa </th>
-   <th style="text-align:right;"> n </th>
-   <th style="text-align:right;"> k </th>
-   <th style="text-align:right;"> proportion </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="3"> pre </td>
-   <td style="text-align:right;"> 200 </td>
-   <td style="text-align:right;"> 5 </td>
-   <td style="text-align:right;"> 4 </td>
-   <td style="text-align:right;"> 0.80 </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:right;"> 150 </td>
-   <td style="text-align:right;"> 5 </td>
-   <td style="text-align:right;"> 5 </td>
-   <td style="text-align:right;"> 1.00 </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:right;"> -350 </td>
-   <td style="text-align:right;"> 5 </td>
-   <td style="text-align:right;"> 0 </td>
-   <td style="text-align:right;"> 0.00 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="3"> post1 </td>
-   <td style="text-align:right;"> 350 </td>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:right;"> 1.00 </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:right;"> -500 </td>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:right;"> 0.33 </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:right;"> -200 </td>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:right;"> 0 </td>
-   <td style="text-align:right;"> 0.00 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}[!h]
+
+\caption{(\#tab:ch020-av-bin-sample)Audiovisual task with aggregated responses.}
+\centering
+\begin{tabular}[t]{lrrrr}
+\toprule
+trial & soa & n & k & proportion\\
+\midrule
+ & 200 & 5 & 4 & 0.80\\
+\cmidrule{2-5}
+ & 150 & 5 & 5 & 1.00\\
+\cmidrule{2-5}
+\multirow[t]{-3}{*}{\raggedright\arraybackslash pre} & -350 & 5 & 0 & 0.00\\
+\cmidrule{1-5}
+ & 350 & 3 & 3 & 1.00\\
+\cmidrule{2-5}
+ & -500 & 3 & 1 & 0.33\\
+\cmidrule{2-5}
+\multirow[t]{-3}{*}{\raggedright\arraybackslash post1} & -200 & 3 & 0 & 0.00\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 
 Other quirks about the data pertain to the subjects. There is one younger subject that did not complete the audiovisual task, and one younger subject that did not complete the duration task. Additionally there is one older subject who's response data for the post-adaptation audiovisual task is unreasonable^[By unreasonable, I mean that it is extremely unlikely that the data represents genuine responses.] (see figure \@ref(fig:ch020-av-post1-O-f-CE-plot)).
 
-<div class="figure" style="text-align: center">
-<img src="020-psychometrics_files/figure-html/ch020-av-post1-O-f-CE-plot-1.png" alt="Post-adaptation response data for O-f-CE" width="85%" />
-<p class="caption">(\#fig:ch020-av-post1-O-f-CE-plot)Post-adaptation response data for O-f-CE</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{020-psychometrics_files/figure-latex/ch020-av-post1-O-f-CE-plot-1} 
+
+}
+
+\caption{Post-adaptation response data for O-f-CE}(\#fig:ch020-av-post1-O-f-CE-plot)
+\end{figure}
 
 It is unreasonable because, of all the negative SOAs, there were only two correct responses^[Correct in the sense that the perceived order matches the actual order.]. If a subject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject's proportion of correct responses is above 0.5, then they are doing better than random guessing. In figure \@ref(fig:ch020-av-post-neg-trials) it is seen that subject O-f-CE is the only one who's proportion is below 0.5 (and by a considerable amount).
 
-<div class="figure" style="text-align: center">
-<img src="020-psychometrics_files/figure-html/ch020-av-post-neg-trials-1.png" alt="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment." width="85%" />
-<p class="caption">(\#fig:ch020-av-post-neg-trials)Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{020-psychometrics_files/figure-latex/ch020-av-post-neg-trials-1} 
+
+}
+
+\caption{Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment.}(\#fig:ch020-av-post-neg-trials)
+\end{figure}
 
 The consequences of leaving in this experimental block in the data is considered in the [Chapter 6](#results), but it is a clear outlier that must be noted. When this method of detecting outliers is repeated for all tasks and blocks, then I end up with 17 records in total (see figure \@ref(fig:ch020-naive-prop-outliers)), one of which is the aforementioned subject.
 
-<div class="figure" style="text-align: center">
-<img src="020-psychometrics_files/figure-html/ch020-naive-prop-outliers-1.png" alt="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs." width="85%" />
-<p class="caption">(\#fig:ch020-naive-prop-outliers)Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{020-psychometrics_files/figure-latex/ch020-naive-prop-outliers-1} 
+
+}
+
+\caption{Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs.}(\#fig:ch020-naive-prop-outliers)
+\end{figure}
 
 Most of the records that are flagged by this method of outlier detection are from the sensorimotor task, and none are from the visual task. This may be attributed to the perceived difficulty of the task. One consequence of higher temporal sensitivity is that it is easier to determine temporal order. It may also be that determining temporal order is inherently easier for certain multisensory tasks compared to others. Since the sensorimotor task does not have fixed SOA values like the other tasks, it may be perceived as more difficult. Or perhaps the mechanisms that process tactile and visual signals are not as well coupled as those that process audio and visual signals. Once again, I'll consider the handling of the sensorimotor outliers in the results chapter.
 

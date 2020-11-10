@@ -21,46 +21,17 @@ One problem I have come across and have been guilty of in the past is having dat
 
 To begin the data cleaning journey, I'll introduce the directory system that I had been given to work with. Each task is separated into its own folder, and within each folder is a subdirectory of age groups.
 
-```
-RecalibrationData
-├── ParticipantAgeSex.xlsx
-├── Audiovisual
-│   ├── MiddleAge
-│   ├── Older
-│   └── Young
-├── Duration
-│   ├── MiddleAge
-│   ├── Older
-│   └── Young
-├── Sensorimotor
-│   ├── MiddleAge
-│   ├── Older
-│   └── Young
-└── Visual
-    ├── MiddleAge
-    ├── Older
-    └── Young
-```
+
+
+\begin{center}\includegraphics[width=0.3\linewidth]{figures/data_dir} \end{center}
+
 
 Within each age group subdirectory are the subdirectories for each subject named by their initials which then contain the experimental data in Matlab files.
 
-```
-├── MiddleAge
-│   ├── BT
-│   │   ├── BTadapt1__MAT.mat
-│   │   ├── ...
-│   ├── ...
-├── Older
-│   ├── BB
-│   │   ├── BBadapt1__MAT.mat
-│   │   ├── ...
-│   ├── ...
-└── Young
-    ├── AC
-    │   ├── ACadapt1__MAT.mat
-    │   ├── ...
-    ├── ...
-```
+
+
+\begin{center}\includegraphics[width=0.35\linewidth]{figures/data_subdir} \end{center}
+
 
 At this point, the data appears manageable, there is information contained in the directory structure such as task, age group, and initials, and file name contains information about the experimental block. There is also an excel file that I was later given that contains more subject information like age and sex, though that information is not used in the model. The columns of the Matlab file depends on the task, but generally contains an SOA value and a response, but no column or row name information - that was provided by the researcher who collected the data. 
 
@@ -100,14 +71,14 @@ Since there is only a handful of irregular block names, they can be dealt with a
 glimpse(features)
 #> Rows: 580
 #> Columns: 8
-#> $ rid       <fct> av-post1-M-f-CC, av-post1-M-f-DB, av-post1-M-f-HG, av-post1…
-#> $ sid       <fct> M-f-CC, M-f-DB, M-f-HG, M-f-JM, M-f-MS, M-f-SJF, M-f-TS, M-…
-#> $ path      <chr> "Audiovisual/MiddleAge/CC/CCadapt1__MAT.mat", "Audiovisual/…
-#> $ task      <chr> "audiovisual", "audiovisual", "audiovisual", "audiovisual",…
-#> $ trial     <fct> post1, post1, post1, post1, post1, post1, post1, post1, pos…
-#> $ age_group <fct> middle_age, middle_age, middle_age, middle_age, middle_age,…
-#> $ age       <dbl> 39, 44, 41, 48, 49, 43, 47, 49, 49, 44, 43, 44, 48, 48, 50,…
-#> $ sex       <fct> F, F, F, F, F, F, F, F, F, M, M, M, M, M, M, F, F, F, F, F,…
+#> $ rid       <fct> av-post1-M-f-CC, av-post1-M-f-DB, av-post1-M-f-HG, av-pos...
+#> $ sid       <fct> M-f-CC, M-f-DB, M-f-HG, M-f-JM, M-f-MS, M-f-SJF, M-f-TS, ...
+#> $ path      <chr> "Audiovisual/MiddleAge/CC/CCadapt1__MAT.mat", "Audiovisua...
+#> $ task      <chr> "audiovisual", "audiovisual", "audiovisual", "audiovisual...
+#> $ trial     <fct> post1, post1, post1, post1, post1, post1, post1, post1, p...
+#> $ age_group <fct> middle_age, middle_age, middle_age, middle_age, middle_ag...
+#> $ age       <dbl> 39, 44, 41, 48, 49, 43, 47, 49, 49, 44, 43, 44, 48, 48, 5...
+#> $ sex       <fct> F, F, F, F, F, F, F, F, F, M, M, M, M, M, M, F, F, F, F, ...
 ```
 
 

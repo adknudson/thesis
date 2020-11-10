@@ -14,10 +14,14 @@ There are many great resources out there for following along with an analysis of
 
 Since everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in how consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by:
 
+\setstretch{1.0}
+
 1. Domain Expertise Consistency - Is our model consistent with our domain expertise?
 2. Computational Faithfulness - Will our computational tools be sufficient to accurately fit our posteriors?
 3. Inferential Adequacy - Will our inferences provide enough information to answer our questions?
 4. Model Adequacy - Is our model rich enough to capture the relevant structure of the true data generating process?
+
+\setstretch{2.0}
 
 Like any good Bayesian^[The opposite of a Frequentist.], much work is done before seeing the data or building a model. This may include talking with experts to gain domain knowledge or to _elicit priors_. Experts may know something about a particular measure, perhaps the mean or variability of the data from years of research, and different experts may provide different estimates of a measure. The benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the _posterior distribution_. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints. Consistency is key.
 
@@ -27,77 +31,46 @@ The question of inferential adequacy depends on the set of questions that we are
 
 For the last question, model adequacy, I will be following a set of steps proposed in @betancourt2020. The purpose of laying out these steps is not to again blindly check them off, but to force the analyst to carefully consider each point and make an _informed_ decision whether the step is necessary or to craft the specifics of how the step should be completed. The steps are listed in table \@ref(tab:ch030-workflow-steps). These steps are also not meant to be followed linearly. If at any point it is discovered that there is an issue in conceptual understanding or model adequacy or something else, then it is encouraged to go back to a previous step and start with a new understanding.
 
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:ch030-workflow-steps)Principled workflow</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Part </th>
-   <th style="text-align:left;"> Step </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="3"> Pre-Model, Pre-Data </td>
-   <td style="text-align:left;"> conceptual analysis </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> define observational space </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> construct summary statistics </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="8"> Post-Model, Pre-Data </td>
-   <td style="text-align:left;"> develop model </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> construct summary functions </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> simulate Bayesian ensemble </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> prior checks </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> configure algorithm </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> fit simulated ensemble </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> algorithmic calibration </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> inferential calibration </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> Post-Model, Post-Data </td>
-   <td style="text-align:left;"> fit observed data </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> diagnose posterior fit </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> posterior retrodictive checks </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> celebrate </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}[!h]
+
+\caption{(\#tab:ch030-workflow-steps)Principled workflow}
+\centering
+\begin{tabular}[t]{ll}
+\toprule
+Part & Step\\
+\midrule
+ & conceptual analysis\\
+\cmidrule{2-2}
+ & define observational space\\
+\cmidrule{2-2}
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Pre-Model, Pre-Data} & construct summary statistics\\
+\cmidrule{1-2}
+ & develop model\\
+\cmidrule{2-2}
+ & construct summary functions\\
+\cmidrule{2-2}
+ & simulate Bayesian ensemble\\
+\cmidrule{2-2}
+ & prior checks\\
+\cmidrule{2-2}
+ & configure algorithm\\
+\cmidrule{2-2}
+ & fit simulated ensemble\\
+\cmidrule{2-2}
+ & algorithmic calibration\\
+\cmidrule{2-2}
+\multirow[t]{-8}{*}{\raggedright\arraybackslash Post-Model, Pre-Data} & inferential calibration\\
+\cmidrule{1-2}
+ & fit observed data\\
+\cmidrule{2-2}
+ & diagnose posterior fit\\
+\cmidrule{2-2}
+ & posterior retrodictive checks\\
+\cmidrule{2-2}
+\multirow[t]{-4}{*}{\raggedright\arraybackslash Post-Model, Post-Data} & celebrate\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 I'll talk about each step in the first iteration, but may choose to omit steps in subsequent iterations if there are no changes. For the purposes of building a model and being concise, I will focus around the audiovisual TOJ task in this chapter, but the final model will apply similarly to the visual and duration tasks. For the sensorimotor task, the model will be modified to accept Bernoulli data as opposed to aggregated Binomial counts (described more in the next section).
 
@@ -118,18 +91,21 @@ _Define Observational Space_
 The response that subjects give during a TOJ task is recorded as a zero or a one (see section \@ref(toj-task)), and their relative performance is determined by the SOA value. Let $y$ represent the binary outcome of a trial and let $x$ be the SOA value.
 
 
+\setstretch{1.0}
 \begin{align*}
 y_i &\in \lbrace 0, 1\rbrace \\
 x_i &\in \mathbb{R}
 \end{align*}
+\setstretch{2.0}
 
 
 If the SOA values are fixed like in the audiovisual task, then the responses can be aggregated into binomial counts, $k$.
 
-
+\setstretch{1.0}
 $$
 k_i, n_i \in \mathbb{Z}_0^+, k_i \le n_i
 $$
+\setstretch{2.0}
 
 
 In the above expression, $\mathbb{Z}_0^+$ represents the set of non-negative integers. Notice that the number of trials $n$ has an index variable $i$. This is because the number of trials per SOA is not fixed between blocks. In the pre-adaptation block, there are five trials per SOA compared to three in the post-adaptation block. So if observation 32 is recorded during a "pre" block, $n_{32} = 5$, and if observation 1156 is during a "post" block, $n_{1156} = 3$. Of course this is assuming that each subject completed all trials in the block, but the flexibility of the indexing can manage even if they didn't.
@@ -138,7 +114,7 @@ Then there are also three categorical variables -- age group, subject ID, and tr
 
 Age groups and individual subjects can be indexed in the same way that number of trials is indexed. $S_i$ refers to the subject in record $i$, and similarly $G_i$ refers to the age group of that subject. Observation 63 is for record ID av-post1-M-f-HG, so then $S_{63}$ is M-f-HG and $G_{63}$ is middle_age. Under the hood of R, these factor levels are represented as integers (e.g. middle age group level is stored internally as the number 2).
 
-
+\setstretch{1.0}
 
 ```r
 (x <- factor(c("a", "a", "b", "c")))
@@ -147,6 +123,7 @@ Age groups and individual subjects can be indexed in the same way that number of
 storage.mode(x)
 #> [1] "integer"
 ```
+\setstretch{2.0}
 
 This data storage representation can later be exploited for the Stan model.
 
@@ -190,10 +167,14 @@ A histogram of computed PSS and JND values will suffice for summary statistics. 
 It is now time to define priors for the model, while still not having looked at the [distribution of] data. The priors should be motivated by domain expertise and *prior knowledge*, not the data. There are also many choices when it comes to selecting a psychometric (sigmoid) function. Common ones are logistic, Gaussian, and Weibull.
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-pf-assortment-1.png" alt="Assortment of psychometric functions." width="85%" />
-<p class="caption">(\#fig:ch031-pf-assortment)Assortment of psychometric functions.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch031-pf-assortment-1} 
+
+}
+
+\caption{Assortment of psychometric functions.}(\#fig:ch031-pf-assortment)
+\end{figure}
 
 
 The Weibull psychometric function is more common when it comes to 2-AFC psychometric experiments where the independent variable is a stimulus intensity (non-negative) and the goal is signal detection. The data in this paper includes both positive and negative SOA values, so the Weibull is not a natural choice. In fact, because this is essentially a model for logistic regression, my first choice is the logistic function as it is the canonical choice for Binomial data. Additionally, the data in this study are reversible. The label of a positive response can be swapped with the label of a negative response and the inferences should remain the same. Since there is no natural ordering, it makes more sense for the psychometric function to be symmetric, e.g. the logistic and Gaussian. I use symmetric loosely to mean that probability density function (PDF) is symmetric about its middle. More specifically, the distribution has zero skewness.
@@ -204,25 +185,27 @@ _Develop Model_
 
 Before moving on to specifying priors, I think it is appropriate to provide a little more background into generalized linear models (GLMs) and their role in working with psychometric functions. A GLM allows the linear model to be related to the outcome variable via a _link_ function. An example of this is the logit link - the inverse of the logistic function. The logistic function, $F$, takes $x \in \mathbb{R}$ and constrains the output to be in $(0, 1)$.
 
-
+\setstretch{1.0}
 \begin{equation}
   F(\theta) = \frac{1}{1 + \exp\left(-\theta\right)}
   (\#eq:logistic)
 \end{equation}
+\setstretch{2.0}
 
 
 Since $F$ is a strictly increasing and continuous function, it has an inverse, and the link for \@ref(eq:logistic) is the log-odds or logit function.
 
-
+\setstretch{1.0}
 \begin{equation}
   F^{-1}(\pi) = \mathrm{logit}(\pi) = \ln\left(\frac{\pi}{1 - \pi}\right)
   (\#eq:logit)
 \end{equation}
+\setstretch{2.0}
 
 
 By taking $(F^{-1} \circ F)(\theta)$ we can arrive at a relationship that is linear in $\theta$.
 
-
+\setstretch{1.0}
 \begin{align*}
   \pi = F(\theta) \Longleftrightarrow F^{-1}(\pi) &= F^{-1}(F(\theta)) \\
   & = \ln\left(\frac{F(\theta)}{1 - F(\theta)}\right) \\
@@ -232,84 +215,115 @@ By taking $(F^{-1} \circ F)(\theta)$ we can arrive at a relationship that is lin
   &= - \ln(\exp(-\theta)) \\
   &= \theta
 \end{align*}
+\setstretch{2.0}
 
 
 The purpose of all this setup is to show that a model for the psychometric function can be specified using a linear predictor, $\theta$. Given a simple slope-intercept model, one would typically write the linear predictor as
 
 
+\setstretch{1.0}
 \begin{equation}
   \theta = \alpha + \beta x
   (\#eq:linearform1)
 \end{equation}
+\setstretch{2.0}
 
 
 This isn't the only acceptable form; it could be written in the centered parameterization
 
 
+\setstretch{1.0}
 \begin{equation}
   \theta = \beta(x - a)
   (\#eq:linearform2)
 \end{equation}
+\setstretch{2.0}
 
 
 Both parameterizations will describe the same geometry, so why should it matter which form is chosen? Clearly the interpretation of the parameters change between the two models, but the reason becomes clear when you consider how the linear model relates back to the physical properties that the psychometric model describes. Take equation \@ref(eq:linearform1), substitute it in to \@ref(eq:logistic), and then take the logit of both sides
 
 
+\setstretch{1.0}
 \begin{equation}
   \mathrm{logit}(\pi) = \alpha+\beta x
   (\#eq:pfform1)
 \end{equation}
+\setstretch{2.0}
 
 
 Now recall that the PSS is defined as the SOA values such that the response probability, $\pi$, is $0.5$. Substituting $\pi = 0.5$ into \@ref(eq:pfform1) and solving for $x$ yields
 
+
+\setstretch{1.0}
 $$
 pss = -\frac{\alpha}{\beta}
 $$
+\setstretch{2.0}
+
 
 Similarly, the JND is defined as the difference between the SOA value at the 84% level and the PSS. Substituting $\pi = 0.84$ into \@ref(eq:pfform1), solving for $x$, and subtracting off the pss yields
 
 
+\setstretch{1.0}
 \begin{equation}
   jnd = \frac{\mathrm{logit}(0.84)}{\beta}
   (\#eq:jnd1)
 \end{equation}
+\setstretch{2.0}
 
 
 From the conceptual analysis, it is easy to define priors for the PSS and JND, but then how does one set the priors for $\alpha$ and $\beta$? Let's say the prior for the just noticeable difference is $jnd \sim \pi_j$. Then the prior for $\beta$ would be
 
+
+\setstretch{1.0}
 $$
 \beta \sim \frac{\mathrm{logit}(0.84)}{\pi_j}
 $$
+\setstretch{2.0}
+
 
 The log-normal distribution has a nice property where its multiplicative inverse is still a log-normal distribution. We could let $\pi_j = \mathrm{Lognormal}(\mu, \sigma^2)$ and then $\beta$ would be distributed as
 
+
+\setstretch{1.0}
 $$
 \beta \sim \mathrm{Lognormal}(-\mu + \ln(\mathrm{logit}(0.84)), \sigma^2)
 $$
+\setstretch{2.0}
+
 
 This is acceptable, as it was determined last chapter that the slope must always be positive, and a log-normal distribution constrains the support to postive real numbers. Next suppose that the prior distribution for the PSS is $pss \sim \pi_p$. Then the prior for $\alpha$ is 
 
+
+\setstretch{1.0}
 $$
 \alpha \sim -\pi_p \cdot \beta
 $$
+\setstretch{2.0}
 
-If $\pi_p$ is set to a log-normal distribution as well, then $\pi_p \cdot \beta$ would also be log-normal, but there is still the problem of the negative sign. If $\alpha$ is always negative, then the PSS will also always be negative, which is certainly not always true. Furthermore, I don't want to _a priori_ put more weight on positive PSS values compared to negative ones, for which a lognormal distribution would not do.
+
+If $\pi_p$ is set to a log-normal distribution as well, then $\pi_p \cdot \beta$ would also be log-normal, but there is still the problem of the negative sign. If $\alpha$ is always negative, then the PSS will also always be negative, which is certainly not always true. Furthermore, I don't want to _a priori_ put more weight on positive PSS values compared to negative ones, for which a log-normal distribution would not do.
 
 Let's now go back and consider using equation \@ref(eq:linearform2) and repeat the above process.
 
 
+\setstretch{1.0}
 \begin{equation}
   \mathrm{logit}(\pi) = \beta(x - a)
   (\#eq:pfform2)
 \end{equation}
+\setstretch{2.0}
 
 
 The just noticeable difference is still given by \@ref(eq:jnd1) and so the same method for choosing a prior can be used, but the PSS is now given by
 
+
+\setstretch{1.0}
 $$
 pss = \alpha
 $$
+\setstretch{2.0}
+
 
 This is a fortunate consequence of using \@ref(eq:linearform2) because now the JND only depends on $\beta$ and the PSS only depends on $\alpha$, and now $\alpha$ can literally be interpreted as the PSS of the estimated psychometric function! Also thrown in is the ability to set a prior for $\alpha$ that is symmetric around $0$ like a Gaussian distribution.
 
@@ -318,29 +332,41 @@ This also brings me to point out the first benefit of using a modeling language 
 For the first iteration of this model, I am going to start with the simplest model that captures the structure of the data without including information about age group, treatment, or subject. Here is a simple model that draws information from the conceptual analysis. 
 
 
+\setstretch{1.0}
 \begin{align*}
   k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
   \mathrm{logit}(p_i) &= \beta ( x_i - \alpha )
 \end{align*}
+\setstretch{2.0}
 
 
-Since I am using the linear model from \@ref(eq:linearform2), setting the priors for $\alpha$ and $\beta$ is relatively straightforward. The PSS can be positive or negative without any expected bias towards either, so a symmetric distribution like the Gaussian is a fine choice for $\alpha$ without having any other knowledge about the distribution of PSS values. Since I said earlier that a PSS value more than 150ms in absolute value is unlikely, I can define a Gaussian prior such that $P(|pss| > 0.150) \approx 0.01$. Since the prior does not need to be exact, the following mean and variance suffice
+Since I am using the linear model from \@ref(eq:linearform2), setting the priors for $\alpha$ and $\beta$ is relatively straightforward. The PSS can be positive or negative without any expected bias towards either, so a symmetric distribution like the Gaussian is a fine choice for $\alpha$ without having any other knowledge about the distribution of PSS values. Since I said earlier that a PSS value more than 150ms in absolute value is unlikely, I can define a Gaussian prior such that $P(|pss| > 0.150) \approx 0.01$. Since the prior does not need to be exact, the following mean and variance suffice:
 
+
+\setstretch{1.0}
 $$
 pss \sim \mathcal{N}(0, 0.06^2) \Longleftrightarrow \alpha \sim \mathcal{N}(0, 0.06^2)
 $$
+\setstretch{2.0}
+
 
 For the just noticeable difference, I will continue to use the log-normal distribution because it is constrained to positive values and has the nice reciprocal property. The JND is expected to be close to 100ms and extremely unlikely to exceed 1 second. This implies a prior such that the mean is around 100ms and the bulk of the distribution is below 1 second - i.e. $E[X] \approx 0.100$ and $P(X < 1) \approx 0.99$. This requires solving a system of nonlinear equations in two variables
 
+
+\setstretch{1.0}
 $$
 \begin{cases}
 E[X] = 0.100 = \exp\left(\mu + \sigma^2 / 2\right) \\
 P(X < 1) = 0.99 = 0.5 + 0.5 \cdot \mathrm{erf}\left[\frac{\ln (1) - \mu}{\sqrt{2} \cdot \sigma}\right]
 \end{cases}
 $$
+\setstretch{2.0}
+
 
 This nonlinear system can be solved using Stan's algebraic solver.
 
+
+\setstretch{1.0}
 
 ```stan
 functions {
@@ -362,11 +388,14 @@ transformed parameters {
   y = algebra_solver(system, y_guess, theta, x_r, x_i);
 }
 ```
+\setstretch{2.0}
 
 
+\setstretch{1.0}
 
 ```r
-fit <- sampling(prior_jnd, iter=1, warmup=0, chains=1, refresh=0,
+fit <- sampling(prior_jnd, 
+                iter=1, warmup=0, chains=1, refresh=0,
                 seed=31, algorithm="Fixed_param")
 sol <- extract(fit)
 sol$y
@@ -374,6 +403,8 @@ sol$y
 #> iterations   [,1]  [,2]
 #>       [1,] -7.501 3.225
 ```
+\setstretch{2.0}
+
 
 The solver has determined that $\mathrm{Lognormal}(-7.5, 3.2^2)$ is the appropriate prior. However, simulating some values from this distribution produces a lot of extremely small values ($<10^{-5}$) and a few extremely large values ($\approx 10^2$). This is because the expected value of a log-normal random variable depends on both the mean and standard deviation. If the median is used in place for the mean, then a more acceptable prior may be determined.
 
@@ -381,9 +412,11 @@ The solver has determined that $\mathrm{Lognormal}(-7.5, 3.2^2)$ is the appropri
 
 
 
+\setstretch{1.0}
 
 ```r
-fit <- sampling(prior_jnd_using_median, iter=1, warmup=0, chains=1, refresh=0,
+fit <- sampling(prior_jnd_using_median, 
+                iter=1, warmup=0, chains=1, refresh=0,
                 seed=31, algorithm="Fixed_param")
 sol <- extract(fit)
 sol$y
@@ -391,35 +424,49 @@ sol$y
 #> iterations   [,1]   [,2]
 #>       [1,] -2.303 0.9898
 ```
+\setstretch{2.0}
+
 
 Sampling from a log-normal distribution with these parameters and plotting the histogram shows no inconsistency with the domain expertise.
 
-<img src="030-workflow_files/figure-html/ch031-Risky-Lion-1.png" width="85%" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch031-Risky-Lion-1} \end{center}
 
 So now with a prior for the JND, the prior for $\beta$ can be determined.
 
+
+\setstretch{1.0}
 $$
 jnd \sim \mathrm{Lognormal}(-2.3, 0.99^2) \Longleftrightarrow \frac{1}{jnd} \sim \mathrm{Lognormal}(2.3, 0.99^2)
 $$
+\setstretch{2.0}
+
 
 and 
 
+
+\setstretch{1.0}
 $$
 \beta = \frac{\mathrm{logit}(0.84)}{jnd} \sim \mathrm{Lognormal}(2.8, 0.99^2)
 $$
+\setstretch{2.0}
+
 
 The priors do not need to be too exact. Rounding the parameters for $\beta$, the simple model is
 
 
+\setstretch{1.0}
 \begin{align*}
   k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
   \mathrm{logit}(p_i) &= \beta ( x_i - \alpha ) \\
   \alpha &\sim \mathcal{N}(0, 0.06^2) \\
   \beta &\sim \mathrm{Lognormal}(3, 1^2)
 \end{align*}
+\setstretch{2.0}
 
 
 and in Stan, the model code is
+
 
 \setstretch{1.0}
 
@@ -453,6 +500,7 @@ generated quantities {
 ```
 \setstretch{2.0}
 
+
 Notice that the model block is nearly identical to the mathematical model!
 
 _Construct Summary Functions_
@@ -460,26 +508,34 @@ _Construct Summary Functions_
 Whew! that was a lot of work to define the priors for just two parameters. Thankfully going forward not as much work will need to be done to expand the model. The next step is to construct any relevant summary functions. Since the distribution of posterior PSS and JND values are needed for the summary statistics, it will be nice to have a function that can take in the posterior samples for $\alpha$ and $\beta$ and return the PSS and JND values. I'll define $Q$ as a more general function that takes in the two parameters and a probability, $\pi$, and returns the distribution of SOA values at $\pi$.
 
 
+\setstretch{1.0}
 \begin{equation}
   Q(\pi; \alpha, \beta) = \frac{\mathrm{logit(\pi)}}{\beta} + \alpha
   (\#eq:summfun1)
 \end{equation}
+\setstretch{2.0}
 
 
 The function can be defined in R as
 
 
+\setstretch{1.0}
+
 ```r
 Q <- function(p, a, b) qlogis(p) / b + a
 ```
+\setstretch{2.0}
+
 
 With $Q$, the PSS and JND can be calculated as
 
 
+\setstretch{1.0}
 \begin{align}
   pss &= Q(0.5) \\
   jnd &= Q(0.84) - Q(0.5)
 \end{align}
+\setstretch{2.0}
 
 
 _Simulate Bayesian Ensemble_
@@ -487,6 +543,7 @@ _Simulate Bayesian Ensemble_
 During this step, I simulate the Bayesian ensemble and later feed the prior values into the summary functions in order to verify that there are no other inconsistencies with domain knowledge. Since the model is fairly simple, I will simulate directly in R.
 
 
+\setstretch{1.0}
 
 ```r
 set.seed(124)
@@ -502,6 +559,7 @@ idx <- sample(1:n, n_obs, replace = TRUE)
 probs <- logistic(b[idx] * (dat$x - a[idx]))
 sim_k <- rbinom(n_obs, dat$n, probs)
 ```
+\setstretch{2.0}
 
 
 _Prior Checks_
@@ -511,25 +569,37 @@ This step pertains to ensuring that prior estimates are consistent with domain e
 Figure \@ref(fig:ch031-prior-pf-plot) shows the distribution of prior psychometric functions derived from the simulated ensemble. There are a few very steep and very shallow curves, but the majority fall within a range that appears likely.
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-prior-pf-plot-1.png" alt="Prior distribution of psychometric functions using the priors for alpha and beta." width="85%" />
-<p class="caption">(\#fig:ch031-prior-pf-plot)Prior distribution of psychometric functions using the priors for alpha and beta.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch031-prior-pf-plot-1} 
+
+}
+
+\caption{Prior distribution of psychometric functions using the priors for alpha and beta.}(\#fig:ch031-prior-pf-plot)
+\end{figure}
 
 
 Additionally most of the PSS values are within $\pm 0.1$ with room to allow for some larger values. Let's check the prior distribution of PSS and JND values.
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-prior-pss-plot-1.png" alt="PSS prior distribution." width="85%" />
-<p class="caption">(\#fig:ch031-prior-pss-plot)PSS prior distribution.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch031-prior-pss-plot-1} 
+
+}
+
+\caption{PSS prior distribution.}(\#fig:ch031-prior-pss-plot)
+\end{figure}
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-prior-jnd-plot-1.png" alt="JND prior distribution." width="85%" />
-<p class="caption">(\#fig:ch031-prior-jnd-plot)JND prior distribution.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch031-prior-jnd-plot-1} 
+
+}
+
+\caption{JND prior distribution.}(\#fig:ch031-prior-jnd-plot)
+\end{figure}
 
 
 I am satisfied with the prior coverage of the PSS and JND values, and there are only a few samples that go beyond the extremes that were specified in the summary statistics step.
@@ -543,15 +613,20 @@ _Fit Simulated Ensemble_
 Nothing to say here. Only code.
 
 
+\setstretch{1.0}
+
 ```r
 sim_dat <- with(av_dat, list(N = N, x = x, n = n, k = sim_k)) 
 m031 <- sampling(m031_stan, data = sim_dat, 
                  chains = 4, cores = 4, refresh = 0)
 ```
+\setstretch{2.0}
+
 
 _Algorithmic Calibration_
 
 One benefit of using HMC over other samplers like Gibbs sampling is that HMC offers diagnostic tools for the health of chains and the ability to check for _divergent transitions_ (discussed in \@ref(divergent-transitions)). To check the basic diagnostics of the model, I run the following code.
+
 
 \setstretch{1.0}
 
@@ -569,46 +644,23 @@ check_hmc_diagnostics(m031)
 ```
 \setstretch{2.0}
 
+
 There is no undesirable behavior from this model, so next I check the summary statistics of the estimated parameters. The $\hat{R}$ statistic is a comparison of the measure of variance within chains and between chains. When chains have converged to a stationary distribution, the variance within and between chains is the same, and the ratio is one. Values of $\hat{R} > 1.1$ are usually indicative of chains that have not converged to a common distribution. Lastly there is the effective sample size ($N_{\mathrm{eff}}$) which is a loose measure for the autocorrelation within the parameter samples. As autocorrelation generally decreases as the lag increases, one can achieve a higher $N_{\mathrm{eff}}$ by running a chain with more samples and then _thinning_ the samples, i.e. saving only every $n^{th}$ sample.
 
 
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:ch031-Cloudy-Toupee)Summary statistics of the fitted Bayesian ensemble.</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> parameter </th>
-   <th style="text-align:right;"> mean </th>
-   <th style="text-align:right;"> se_mean </th>
-   <th style="text-align:right;"> sd </th>
-   <th style="text-align:right;"> 2.5% </th>
-   <th style="text-align:right;"> 97.5% </th>
-   <th style="text-align:right;"> n_eff </th>
-   <th style="text-align:right;"> Rhat </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> alpha </td>
-   <td style="text-align:right;"> 0.0061 </td>
-   <td style="text-align:right;"> 0.0001 </td>
-   <td style="text-align:right;"> 0.0038 </td>
-   <td style="text-align:right;"> -0.0012 </td>
-   <td style="text-align:right;"> 0.0136 </td>
-   <td style="text-align:right;"> 4039 </td>
-   <td style="text-align:right;"> 0.9995 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> beta </td>
-   <td style="text-align:right;"> 10.7681 </td>
-   <td style="text-align:right;"> 0.0051 </td>
-   <td style="text-align:right;"> 0.2404 </td>
-   <td style="text-align:right;"> 10.3043 </td>
-   <td style="text-align:right;"> 11.2313 </td>
-   <td style="text-align:right;"> 2202 </td>
-   <td style="text-align:right;"> 1.0003 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}[!h]
+
+\caption{(\#tab:ch031-Cloudy-Toupee)Summary statistics of the fitted Bayesian ensemble.}
+\centering
+\begin{tabular}[t]{lrrrrrrr}
+\toprule
+parameter & mean & se\_mean & sd & 2.5\% & 97.5\% & n\_eff & Rhat\\
+\midrule
+alpha & 0.0061 & 0.0001 & 0.0038 & -0.0012 & 0.0136 & 4039 & 0.9995\\
+beta & 10.7681 & 0.0051 & 0.2404 & 10.3043 & 11.2313 & 2202 & 1.0003\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 Both the $\hat{R}$ and $N_{\mathrm{eff}}$ look fine for both $\alpha$ and $\beta$, thought it is slightly concerning that $\alpha$ is centered relatively far from zero. This could just be due to sampling variance, so I will continue on to the next step.
 
@@ -622,16 +674,19 @@ All of the work up until now has been done without peaking at the observed data.
 
 
 
+\setstretch{1.0}
 
 ```r
 m031 <- sampling(m031_stan, data = obs_dat, 
                  chains = 4, cores = 4, refresh = 200)
 ```
+\setstretch{2.0}
 
 
 _Diagnose Posterior Fit_
 
 Here I repeat the diagnostic checks that I used after fitting the simulated Bayesian ensemble. 
+
 
 \setstretch{1.0}
 
@@ -649,51 +704,32 @@ check_hmc_diagnostics(m031)
 ```
 \setstretch{2.0}
 
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:ch031-Maroon-Oyster)Summary statistics of the fitted Bayesian ensemble.</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> parameter </th>
-   <th style="text-align:right;"> mean </th>
-   <th style="text-align:right;"> se_mean </th>
-   <th style="text-align:right;"> sd </th>
-   <th style="text-align:right;"> 2.5% </th>
-   <th style="text-align:right;"> 97.5% </th>
-   <th style="text-align:right;"> n_eff </th>
-   <th style="text-align:right;"> Rhat </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> alpha </td>
-   <td style="text-align:right;"> 0.0373 </td>
-   <td style="text-align:right;"> 0.0001 </td>
-   <td style="text-align:right;"> 0.0043 </td>
-   <td style="text-align:right;"> 0.029 </td>
-   <td style="text-align:right;"> 0.0458 </td>
-   <td style="text-align:right;"> 3765 </td>
-   <td style="text-align:right;"> 1.000 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> beta </td>
-   <td style="text-align:right;"> 8.4259 </td>
-   <td style="text-align:right;"> 0.0039 </td>
-   <td style="text-align:right;"> 0.1839 </td>
-   <td style="text-align:right;"> 8.070 </td>
-   <td style="text-align:right;"> 8.7897 </td>
-   <td style="text-align:right;"> 2249 </td>
-   <td style="text-align:right;"> 1.001 </td>
-  </tr>
-</tbody>
-</table>
+
+\begin{table}[!h]
+
+\caption{(\#tab:ch031-Maroon-Oyster)Summary statistics of the fitted Bayesian ensemble.}
+\centering
+\begin{tabular}[t]{lrrrrrrr}
+\toprule
+parameter & mean & se\_mean & sd & 2.5\% & 97.5\% & n\_eff & Rhat\\
+\midrule
+alpha & 0.0373 & 0.0001 & 0.0043 & 0.029 & 0.0458 & 3765 & 1.000\\
+beta & 8.4259 & 0.0039 & 0.1839 & 8.070 & 8.7897 & 2249 & 1.001\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 No indications of an ill-behaved posterior fit! Let's also check the posterior distribution of $\alpha$ and $\beta$ against the prior density (\@ref(fig:ch031-m031-posterior-alpha-beta)).
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-m031-posterior-alpha-beta-1.png" alt="Comparison of posterior distributions for alpha and beta to their respective prior distributions." width="85%" />
-<p class="caption">(\#fig:ch031-m031-posterior-alpha-beta)Comparison of posterior distributions for alpha and beta to their respective prior distributions.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch031-m031-posterior-alpha-beta-1} 
+
+}
+
+\caption{Comparison of posterior distributions for alpha and beta to their respective prior distributions.}(\#fig:ch031-m031-posterior-alpha-beta)
+\end{figure}
 
 The posterior distributions for $\alpha$ and $\beta$ are well within the range determined by domain knowledge, and highly concentrated due to both the large amount of data and the fact that this is a completely pooled model - no stratification. As expected, the prior for the JND could have been tighter with more weight below half a second compared to the one second limit used, but this is not prior information, so it is not prudent to change the prior in this manner after having seen the posterior. As a rule of thumb, priors should only be updated as motivated by domain expertise and not by posterior distributions.
 
@@ -702,30 +738,41 @@ _Posterior Retrodictive Checks_
 Finally it is time to run the posterior samples through the summary functions and then perform _retrodictive_ checks. A retrodiction is using the posterior model to predict and compare to the observed data. This is simply done by drawing samples from the posterior and feeding in the observational data. This may be repeated to gain a retrodictive distribution.
 
 
+\setstretch{1.0}
 
 ```r
 posterior_pss <- Q(0.5, p031$alpha, p031$beta)
 posterior_jnd <- Q(0.84, p031$alpha, p031$beta) - posterior_pss
 ```
+\setstretch{2.0}
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-posterior-pss-jnd-plot-1.png" alt="Posterior distribution of the PSS and JND." width="85%" />
-<p class="caption">(\#fig:ch031-posterior-pss-jnd-plot)Posterior distribution of the PSS and JND.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch031-posterior-pss-jnd-plot-1} 
+
+}
+
+\caption{Posterior distribution of the PSS and JND.}(\#fig:ch031-posterior-pss-jnd-plot)
+\end{figure}
 
 Neither of the posterior estimates for the PSS or JND exceed the extreme cutoffs set in the earlier steps, so I can be confident that the model is consistent with domain expertise. Let's also take a second to appreciate how simple it is to visualize and summarize the distribution of values for these measures. Using classical techniques like MLE might require using bootstrap methods to estimate the distribution of parameter values, or one might approximate the parameter distributions using the mean and standard error of the mean to simulate new values. Since we have the entire posterior distribution we can calculate the distribution of transformed parameters by working directly with the posterior samples and be sure that the intervals are credible.
 
 Next is to actually do the posterior retrodictions. I will do this in two steps to better show how the distribution of posterior psychometric functions relates to the observed data, and then compare the observed data to the retrodictions. Figure \@ref(fig:ch031-posterior-pf-plot) shows the result of the first step.
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-posterior-pf-plot-1.png" alt="Posterior distribution of psychometric functions using pooled observations." width="85%" />
-<p class="caption">(\#fig:ch031-posterior-pf-plot)Posterior distribution of psychometric functions using pooled observations.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch031-posterior-pf-plot-1} 
+
+}
+
+\caption{Posterior distribution of psychometric functions using pooled observations.}(\#fig:ch031-posterior-pf-plot)
+\end{figure}
 
 Next I sample parameter values from the posterior distribution and use them to simulate a new data set. In the next iteration I will show how I can get Stan to automatically produce retrodictions for me in the model fitting step. The results of the posterior retrodictions are shown in figure \@ref(fig:ch031-obs-vs-retro-plot).
 
 
+\setstretch{1.0}
 
 ```r
 alpha <- sample(p031$alpha, n_obs, replace = TRUE)
@@ -734,12 +781,17 @@ logodds <- beta * (av_dat$x - alpha)
 probs <- logistic(logodds)
 sim_k <- rbinom(n_obs, av_dat$n, probs)
 ```
+\setstretch{2.0}
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch031-obs-vs-retro-plot-1.png" alt="Observed data compared to the posterior retrodictions. The data is post-stratified by block for easier visualization." width="85%" />
-<p class="caption">(\#fig:ch031-obs-vs-retro-plot)Observed data compared to the posterior retrodictions. The data is post-stratified by block for easier visualization.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch031-obs-vs-retro-plot-1} 
+
+}
+
+\caption{Observed data compared to the posterior retrodictions. The data is post-stratified by block for easier visualization.}(\#fig:ch031-obs-vs-retro-plot)
+\end{figure}
 
 I want to make it clear exactly what the first iteration of this model tells us. It is the average distribution of underlying psychometric functions across all subjects and blocks. It cannot tell us what the differences are between pre- and post-adaptation blocks are, or even what the variation between subjects is. As such, it is only useful in determining if the average value for the PSS is different from 0 or if the average JND is different from some other predetermined level. This model is still useful given the right question, but this model cannot answer questions about group-level effects.
 
@@ -755,60 +807,84 @@ _Develop Model_
 
 To start, let's add in the treatment indicator and put off consideration of adding in the age group levels. In classical statistics, it is added as an indicator variable (zero or one) for both the slope and intercept (varying slopes, varying intercepts model). Let $trt$ be $0$ if it is the pre-adaptation block and $1$ if the observation comes from the post-adaptation block.
 
+
+\setstretch{1.0}
 $$
 \theta = \alpha + \alpha_{trt} \times trt + \beta \times x + \beta_{trt}\times trt \times x
 $$
+\setstretch{2.0}
+
 
 Now when an observation comes from the pre-adaptation block ($trt=0$) the linear predictor is given by
 
+
+\setstretch{1.0}
 $$
 \theta_{pre} = \alpha + \beta \times x
 $$
+\setstretch{2.0}
+
 
 and when an observation comes from the post-adaptation block ($trt=1$) the linear predictor is
 
+
+\setstretch{1.0}
 $$
 \theta_{post} = (\alpha + \alpha_{trt}) + (\beta + \beta_{trt}) \times x
 $$
+\setstretch{2.0}
+
 
 This might seem like a natural way to introduce an indicator variable, but it comes with serious implications. This model implies that there is more uncertainty about the post-adaptation block compared to the baseline block, and this is not necessarily true. 
 
+
+\setstretch{1.0}
 \begin{align*}
 \mathrm{Var}(\theta_{post}) &= \mathrm{Var}((\alpha + \alpha_{trt}) + (\beta + \beta_{trt}) \times x) \\
 &= \mathrm{Var}(\alpha) + \mathrm{Var}(\alpha_{trt}) + x^2 \mathrm{Var}(\beta) + x^2\mathrm{Var}(\beta_{trt})
 \end{align*}
+\setstretch{2.0}
 
 
 On the other hand, the variance of $\theta_{pre}$ is
 
+
+\setstretch{1.0}
 $$
 \mathrm{Var}(\theta_{pre}) = \mathrm{Var}(\alpha) + x^2 \mathrm{Var}(\beta) \le \mathrm{Var}(\theta_{post})
 $$
+\setstretch{2.0}
+
 
 Furthermore, the intercept, $\alpha$, is no longer the average response probability at $x=0$ for the entire data set, but is instead exclusively the average for the pre-adaptation block. This may not matter in certain analyses, but one nice property of multilevel models is the separation of population level estimates and group level estimates (fixed vs. mixed effects).
 
 So instead the treatment variable is introduced into the linear model as a factor variable. This essentially means that each level in the treatment gets its own parameter estimate, and this also makes it easier to set priors when there are many levels in a group (such as for the subject level). The linear model, using equation \@ref(eq:linearform2), with the treatment is written as
 
 
+\setstretch{1.0}
 \begin{equation}
   \theta = (\beta + \beta_{trt[i]}) \left[x_i - (\alpha + \alpha_{trt[i]})\right]
   (\#eq:linearmodel2)
 \end{equation}
+\setstretch{2.0}
 
 
 As I add in more predictors and groups, equation \@ref(eq:linearmodel2) will start to be more difficult to read. What I can do is break up the slope and intercept parameters and write the linear model as
 
 
+\setstretch{1.0}
 \begin{align*}
 \mu_\alpha &= \alpha + \alpha_{trt[i]} \\
 \mu_\beta &= \beta + \beta_{trt[i]} \\
 \theta &= \mu_\beta (x - \mu_\alpha)
 \end{align*}
+\setstretch{2.0}
 
 
 In this way the combined parameters can be considered separately from the linear parameterization. Which leads me to consider the priors for $\alpha_{trt}$ and $\beta_{trt}$. The way that we can turn an normal model with categorical predictors into a multilevel model is by allowing the priors to borrow information from other groups. This is accomplished by putting priors on priors. It is easier to write down the model first before explaining how it works.
 
 
+\setstretch{1.0}
 \begin{align*}
 k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
 \mu_\alpha &= \alpha + \alpha_{trt[i]} \\
@@ -818,54 +894,64 @@ k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
 \alpha_{trt} &\sim \mathcal{N}(0, \sigma_{trt}^2) \\
 \sigma_{trt} &\sim \textrm{to be defined}
 \end{align*}
+\setstretch{2.0}
 
 
 In the above model, $\alpha$ gets a fixed prior (the same as in the first iteration), and $\alpha_{trt}$ gets a Gaussian prior with an adaptive variance term that is allowed to be learned from the data. This notation is compact, but $\alpha_{trt}$ is actually two parameters - one each for the pre- and post-adaptation blocks - but they both share the same variance term $\sigma_{trt}$. This produces a _regularizing_ effect where both treatment estimates are shrunk towards the mean, $\alpha$.
 
 I'll discuss selecting a prior for the variance term shortly, but now I want to discuss setting the prior for the slope terms. Instead of modeling $\beta$ with a log-normal prior, I can sample from a normal distribution and take the exponential of it to produce a log-normal distribution. I.e.
 
+
+\setstretch{1.0}
 $$
 X \sim \mathcal{N}(3, 1^2) \\
 Y = \exp\left\lbrace X \right\rbrace \Longleftrightarrow Y \sim \mathrm{Lognormal(3, 1^2)}
 $$
+\setstretch{2.0}
+
 
 The motivation behind this transformation is that it is now easier to include new slope variables as an additive affect. If both $\beta$ and $\beta_{trt}$ are specified with Gaussian priors, then the exponential of the sum will be a log-normal distribution! So the model now gains
 
 
+\setstretch{1.0}
 \begin{align*}
 \mathrm{logit}(p_i) &= \exp(\mu_\beta) (x_i - \mu_\alpha) \\
 \beta &\sim \mathcal{N}(3, 1^2) \\
 \beta_{trt} &\sim \mathcal{N}(0, \gamma_{trt}^2) \\
 \gamma_{trt} &\sim \textrm{to be defined}
 \end{align*}
+\setstretch{2.0}
 
 
 Deciding on priors for the variance term requires some careful consideration. In one sense, the variance term is the within group variance. @gelman2006prior recommends that for multilevel models with groups with less than say 5 levels to use a half Cauchy prior. This weakly informative prior still has a regularizing affect and dissuades larger variance estimates. Even though the treatment group only has two levels, there is still value in specifying an adaptive prior for them, and there is also a lot of data for each treatment so partial pooling won't make a difference anyway.
 
 
+\setstretch{1.0}
 \begin{align*}
 \sigma_{trt} &\sim \mathrm{HalfCauchy}(0, 1) \\
 \gamma_{trt} &\sim \mathrm{HalfCauchy}(0, 1)
 \end{align*}
+\setstretch{2.0}
 
 
 Finally I can add in the age group level effects and specify the variance terms.
 
 
+\setstretch{1.0}
 \begin{align*}
 \alpha_{G} &\sim \mathcal{N}(0, \tau_{G}^2)\\
 \beta_{G} &\sim \mathcal{N}(0, \nu_{G}^2) \\
 \tau_{G} &\sim \mathrm{HalfCauchy}(0, 2) \\
 \nu_{G} &\sim \mathrm{HalfCauchy}(0, 2)
 \end{align*}
+\setstretch{2.0}
 
 
 The corresponding Stan model is becoming quite long, so I omit it from here on out. The final Stan model code may be found in the [supplementary code](#supplementary-code) of the appendix.
 
 
-\setstretch{1.0}
 
-\setstretch{2.0}
+
 
 **Post-Model, Post-Data**
 
@@ -877,14 +963,19 @@ I'm choosing to skip the prior checks this time around and use the observed data
 
 
 
+\setstretch{1.0}
 
 ```r
 m032 <- sampling(m032_stan, data = obs_dat, seed = 124,
                  chains = 4, cores = 4, refresh = 100)
 ```
+\setstretch{2.0}
+
 
 _Diagnose Posterior Fit_
 
+
+\setstretch{1.0}
 
 ```r
 check_hmc_diagnostics(m032)
@@ -899,107 +990,32 @@ check_hmc_diagnostics(m032)
 #> Energy:
 #> E-BFMI indicated no pathological behavior.
 ```
+\setstretch{2.0}
+
 
 As well as the 4 divergent transitions, there was also a message about the effective sample size (ESS) being too low. The recommended prescription for low ESS is to run the chains for more iterations. The posterior summary shows that $N_{\mathrm{eff}}$ is low for the age group level parameters (table \@ref(tab:ch032-Liquid-Strawberry-Eagle)).
 
 
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:ch032-Liquid-Strawberry-Eagle)Summary statistics of the second iteration.</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> parameter </th>
-   <th style="text-align:right;"> mean </th>
-   <th style="text-align:right;"> se_mean </th>
-   <th style="text-align:right;"> sd </th>
-   <th style="text-align:right;"> 2.5% </th>
-   <th style="text-align:right;"> 97.5% </th>
-   <th style="text-align:right;"> n_eff </th>
-   <th style="text-align:right;"> Rhat </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> a </td>
-   <td style="text-align:right;"> 0.0222 </td>
-   <td style="text-align:right;"> 0.0014 </td>
-   <td style="text-align:right;"> 0.0412 </td>
-   <td style="text-align:right;"> -0.0683 </td>
-   <td style="text-align:right;"> 0.1024 </td>
-   <td style="text-align:right;"> 824.6 </td>
-   <td style="text-align:right;"> 1.002 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> aG[1] </td>
-   <td style="text-align:right;"> -0.0009 </td>
-   <td style="text-align:right;"> 0.0012 </td>
-   <td style="text-align:right;"> 0.0313 </td>
-   <td style="text-align:right;"> -0.0531 </td>
-   <td style="text-align:right;"> 0.0714 </td>
-   <td style="text-align:right;"> 703.5 </td>
-   <td style="text-align:right;"> 1.003 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> aG[2] </td>
-   <td style="text-align:right;"> 0.0274 </td>
-   <td style="text-align:right;"> 0.0012 </td>
-   <td style="text-align:right;"> 0.0316 </td>
-   <td style="text-align:right;"> -0.0218 </td>
-   <td style="text-align:right;"> 0.0990 </td>
-   <td style="text-align:right;"> 698.3 </td>
-   <td style="text-align:right;"> 1.003 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> aG[3] </td>
-   <td style="text-align:right;"> -0.0078 </td>
-   <td style="text-align:right;"> 0.0012 </td>
-   <td style="text-align:right;"> 0.0311 </td>
-   <td style="text-align:right;"> -0.0609 </td>
-   <td style="text-align:right;"> 0.0609 </td>
-   <td style="text-align:right;"> 714.3 </td>
-   <td style="text-align:right;"> 1.004 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> b </td>
-   <td style="text-align:right;"> 2.4114 </td>
-   <td style="text-align:right;"> 0.0216 </td>
-   <td style="text-align:right;"> 0.5665 </td>
-   <td style="text-align:right;"> 1.4902 </td>
-   <td style="text-align:right;"> 3.8499 </td>
-   <td style="text-align:right;"> 688.2 </td>
-   <td style="text-align:right;"> 1.003 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> bG[1] </td>
-   <td style="text-align:right;"> 0.0030 </td>
-   <td style="text-align:right;"> 0.0170 </td>
-   <td style="text-align:right;"> 0.2942 </td>
-   <td style="text-align:right;"> -0.7681 </td>
-   <td style="text-align:right;"> 0.5013 </td>
-   <td style="text-align:right;"> 301.3 </td>
-   <td style="text-align:right;"> 1.004 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> bG[2] </td>
-   <td style="text-align:right;"> 0.0538 </td>
-   <td style="text-align:right;"> 0.0170 </td>
-   <td style="text-align:right;"> 0.2940 </td>
-   <td style="text-align:right;"> -0.7101 </td>
-   <td style="text-align:right;"> 0.5499 </td>
-   <td style="text-align:right;"> 299.9 </td>
-   <td style="text-align:right;"> 1.004 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> bG[3] </td>
-   <td style="text-align:right;"> -0.2223 </td>
-   <td style="text-align:right;"> 0.0172 </td>
-   <td style="text-align:right;"> 0.2955 </td>
-   <td style="text-align:right;"> -1.0150 </td>
-   <td style="text-align:right;"> 0.2597 </td>
-   <td style="text-align:right;"> 296.9 </td>
-   <td style="text-align:right;"> 1.004 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}[!h]
+
+\caption{(\#tab:ch032-Liquid-Strawberry-Eagle)Summary statistics of the second iteration.}
+\centering
+\begin{tabular}[t]{lrrrrrrr}
+\toprule
+parameter & mean & se\_mean & sd & 2.5\% & 97.5\% & n\_eff & Rhat\\
+\midrule
+a & 0.0222 & 0.0014 & 0.0412 & -0.0683 & 0.1024 & 824.6 & 1.002\\
+aG[1] & -0.0009 & 0.0012 & 0.0313 & -0.0531 & 0.0714 & 703.5 & 1.003\\
+aG[2] & 0.0274 & 0.0012 & 0.0316 & -0.0218 & 0.0990 & 698.3 & 1.003\\
+aG[3] & -0.0078 & 0.0012 & 0.0311 & -0.0609 & 0.0609 & 714.3 & 1.004\\
+b & 2.4114 & 0.0216 & 0.5665 & 1.4902 & 3.8499 & 688.2 & 1.003\\
+\addlinespace
+bG[1] & 0.0030 & 0.0170 & 0.2942 & -0.7681 & 0.5013 & 301.3 & 1.004\\
+bG[2] & 0.0538 & 0.0170 & 0.2940 & -0.7101 & 0.5499 & 299.9 & 1.004\\
+bG[3] & -0.2223 & 0.0172 & 0.2955 & -1.0150 & 0.2597 & 296.9 & 1.004\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 So I can go back to the algorithm configuration step and increase the number of iterations and warm-up iterations, as well as increase the adapt delta parameter to reduce the number of divergent transitions (which really isn't a problem right now).
 
@@ -1008,10 +1024,12 @@ Another technique I can employ is non-centered parameterization, and now is as g
 Because HMC is a physics simulation, complicated geometry or posteriors with steep slopes can be difficult to traverse if the step size is too course. The solution is to explore a simpler geometry, and then transform the sample into the target distribution. Reparameterization is especially important for hierarchical models. The Cauchy distribution used for the variance term can be reparameterized by first drawing from a uniform distribution on $(-\pi/2, \pi/2)$. For a half Cauchy distribution, just sample from $\mathcal{U}(0, \pi/2)$.
 
 
+\setstretch{1.0}
 \begin{align*}
 X &\sim \mathcal{U}(-\pi/2, \pi/2) \\
 Y &= \mu + \tau \cdot \tan(X) \Longrightarrow Y \sim \mathrm{Cauchy(\mu, \tau)}
 \end{align*}
+\setstretch{2.0}
 
 
 The Gaussian distributions can be reparameterized in a similar way. If $Z$ is a standard normal random variable, then $\mu + \sigma Z \sim \mathcal{N}(\mu, \sigma^2)$. For Stan, sampling from a standard normal or uniform distribution is very easy, and so the non-centered parameterization can alleviate divergent transitions. I now return to the model development step and incorporate the new methods.
@@ -1021,10 +1039,12 @@ _Develop Model_
 The model changes consist of using the non-centered parameterizations discussed in the previous step. An example is in the parameterization of $\tau_{G}$. The other variance terms are parameterized in the same fashion.
 
 
+\setstretch{1.0}
 \begin{align*}
 U_\tau &\sim \mathcal{U}(0, \pi/2) \\
 \tau_{G} &= 2 \cdot \tan(U_1) \Longrightarrow \tau_G \sim \mathrm{HalfCauchy}(0, 2)
 \end{align*}
+\setstretch{2.0}
 
 
 
@@ -1033,6 +1053,7 @@ U_\tau &\sim \mathcal{U}(0, \pi/2) \\
 As an aside, a multilevel model can be fit in R using `lme4::glmer`, `brms::brm`, or `rstanarm::stan_glmer`, and they all use the same notation to specify the model. The notation is very compact, but easy to unpack. Values not in a grouping term are _fixed_ effects and values in a grouping term (e.g. `(1 + x | G)`) are _mixed_ or _random_ effects depending on which textbook you read.
 
 
+\setstretch{1.0}
 
 ```r
 f <- formula(k|n ~ 1 + x + (1 + x | G) + (1 + x | trt))
@@ -1041,6 +1062,7 @@ lme4::glmer(f, data = data, family = binomial("logit"))
 rstanarm::stan_glmer(f, data = data, family = binomial("logit"))
 brms::brm(f, data = data, family = binomial("logit"))
 ```
+\setstretch{2.0}
 
 
 The simpler notation and compactness of these methods are very attractive, and for certain analyses they may be more than sufficient. The goal here is to decide early on if these methods satisfy the model adequacy, and to use more flexible modeling tools like Stan if necessary.
@@ -1054,16 +1076,21 @@ Moving on to refitting the data, this time with more iterations and with the non
 
 
 
+\setstretch{1.0}
 
 ```r
-m032nc <- sampling(m032nc_stan, data = obs_dat, seed = 143, thin = 2,
+m032nc <- sampling(m032nc_stan, data = obs_dat, seed = 143,
                    iter = 4000, warmup = 2000, pars = keep_pars,
-                   control = list(adapt_delta = 0.95),
+                   control = list(adapt_delta = 0.95), thin = 2,
                    chains = 4, cores = 4, refresh = 100)
 ```
+\setstretch{2.0}
+
 
 _Diagnose Posterior Fit_
 
+
+\setstretch{1.0}
 
 ```r
 check_hmc_diagnostics(m032nc)
@@ -1078,154 +1105,48 @@ check_hmc_diagnostics(m032nc)
 #> Energy:
 #> E-BFMI indicated no pathological behavior.
 ```
+\setstretch{2.0}
+
 
 There are still a few divergent transitions ($<1\%$), but the effective sample size increased significantly (table \@ref(tab:ch032-Bleeding-Tuna)).
 
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:ch032-Bleeding-Tuna)Summary statistics of the second iteration with non-centered parameterization.</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> parameter </th>
-   <th style="text-align:right;"> mean </th>
-   <th style="text-align:right;"> se_mean </th>
-   <th style="text-align:right;"> sd </th>
-   <th style="text-align:right;"> 2.5% </th>
-   <th style="text-align:right;"> 97.5% </th>
-   <th style="text-align:right;"> n_eff </th>
-   <th style="text-align:right;"> Rhat </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> a </td>
-   <td style="text-align:right;"> 0.0192 </td>
-   <td style="text-align:right;"> 0.0008 </td>
-   <td style="text-align:right;"> 0.0419 </td>
-   <td style="text-align:right;"> -0.0744 </td>
-   <td style="text-align:right;"> 0.0956 </td>
-   <td style="text-align:right;"> 2509 </td>
-   <td style="text-align:right;"> 1.0005 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> aG[1] </td>
-   <td style="text-align:right;"> -0.0025 </td>
-   <td style="text-align:right;"> 0.0006 </td>
-   <td style="text-align:right;"> 0.0326 </td>
-   <td style="text-align:right;"> -0.0636 </td>
-   <td style="text-align:right;"> 0.0739 </td>
-   <td style="text-align:right;"> 2737 </td>
-   <td style="text-align:right;"> 1.0014 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> aG[2] </td>
-   <td style="text-align:right;"> 0.0262 </td>
-   <td style="text-align:right;"> 0.0006 </td>
-   <td style="text-align:right;"> 0.0328 </td>
-   <td style="text-align:right;"> -0.0342 </td>
-   <td style="text-align:right;"> 0.1044 </td>
-   <td style="text-align:right;"> 2644 </td>
-   <td style="text-align:right;"> 1.0014 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> aG[3] </td>
-   <td style="text-align:right;"> -0.0093 </td>
-   <td style="text-align:right;"> 0.0006 </td>
-   <td style="text-align:right;"> 0.0326 </td>
-   <td style="text-align:right;"> -0.0713 </td>
-   <td style="text-align:right;"> 0.0652 </td>
-   <td style="text-align:right;"> 2752 </td>
-   <td style="text-align:right;"> 1.0011 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> aT[1] </td>
-   <td style="text-align:right;"> 0.0185 </td>
-   <td style="text-align:right;"> 0.0009 </td>
-   <td style="text-align:right;"> 0.0425 </td>
-   <td style="text-align:right;"> -0.0546 </td>
-   <td style="text-align:right;"> 0.1242 </td>
-   <td style="text-align:right;"> 2338 </td>
-   <td style="text-align:right;"> 1.0005 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> aT[2] </td>
-   <td style="text-align:right;"> 0.0039 </td>
-   <td style="text-align:right;"> 0.0009 </td>
-   <td style="text-align:right;"> 0.0419 </td>
-   <td style="text-align:right;"> -0.0679 </td>
-   <td style="text-align:right;"> 0.1089 </td>
-   <td style="text-align:right;"> 2404 </td>
-   <td style="text-align:right;"> 1.0005 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> b </td>
-   <td style="text-align:right;"> 2.3841 </td>
-   <td style="text-align:right;"> 0.0115 </td>
-   <td style="text-align:right;"> 0.5284 </td>
-   <td style="text-align:right;"> 1.4762 </td>
-   <td style="text-align:right;"> 3.6952 </td>
-   <td style="text-align:right;"> 2109 </td>
-   <td style="text-align:right;"> 1.0010 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> bG[1] </td>
-   <td style="text-align:right;"> 0.0170 </td>
-   <td style="text-align:right;"> 0.0049 </td>
-   <td style="text-align:right;"> 0.2730 </td>
-   <td style="text-align:right;"> -0.6323 </td>
-   <td style="text-align:right;"> 0.4979 </td>
-   <td style="text-align:right;"> 3106 </td>
-   <td style="text-align:right;"> 1.0004 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> bG[2] </td>
-   <td style="text-align:right;"> 0.0678 </td>
-   <td style="text-align:right;"> 0.0049 </td>
-   <td style="text-align:right;"> 0.2728 </td>
-   <td style="text-align:right;"> -0.5773 </td>
-   <td style="text-align:right;"> 0.5671 </td>
-   <td style="text-align:right;"> 3113 </td>
-   <td style="text-align:right;"> 1.0005 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> bG[3] </td>
-   <td style="text-align:right;"> -0.2075 </td>
-   <td style="text-align:right;"> 0.0050 </td>
-   <td style="text-align:right;"> 0.2741 </td>
-   <td style="text-align:right;"> -0.8506 </td>
-   <td style="text-align:right;"> 0.2767 </td>
-   <td style="text-align:right;"> 3026 </td>
-   <td style="text-align:right;"> 1.0004 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> bT[1] </td>
-   <td style="text-align:right;"> -0.2764 </td>
-   <td style="text-align:right;"> 0.0106 </td>
-   <td style="text-align:right;"> 0.4914 </td>
-   <td style="text-align:right;"> -1.6338 </td>
-   <td style="text-align:right;"> 0.5427 </td>
-   <td style="text-align:right;"> 2141 </td>
-   <td style="text-align:right;"> 0.9999 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> bT[2] </td>
-   <td style="text-align:right;"> -0.0501 </td>
-   <td style="text-align:right;"> 0.0106 </td>
-   <td style="text-align:right;"> 0.4909 </td>
-   <td style="text-align:right;"> -1.4120 </td>
-   <td style="text-align:right;"> 0.7778 </td>
-   <td style="text-align:right;"> 2125 </td>
-   <td style="text-align:right;"> 1.0000 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}[!h]
+
+\caption{(\#tab:ch032-Bleeding-Tuna)Summary statistics of the second iteration with non-centered parameterization.}
+\centering
+\begin{tabular}[t]{lrrrrrrr}
+\toprule
+parameter & mean & se\_mean & sd & 2.5\% & 97.5\% & n\_eff & Rhat\\
+\midrule
+a & 0.0192 & 0.0008 & 0.0419 & -0.0744 & 0.0956 & 2509 & 1.0005\\
+aG[1] & -0.0025 & 0.0006 & 0.0326 & -0.0636 & 0.0739 & 2737 & 1.0014\\
+aG[2] & 0.0262 & 0.0006 & 0.0328 & -0.0342 & 0.1044 & 2644 & 1.0014\\
+aG[3] & -0.0093 & 0.0006 & 0.0326 & -0.0713 & 0.0652 & 2752 & 1.0011\\
+aT[1] & 0.0185 & 0.0009 & 0.0425 & -0.0546 & 0.1242 & 2338 & 1.0005\\
+\addlinespace
+aT[2] & 0.0039 & 0.0009 & 0.0419 & -0.0679 & 0.1089 & 2404 & 1.0005\\
+b & 2.3841 & 0.0115 & 0.5284 & 1.4762 & 3.6952 & 2109 & 1.0010\\
+bG[1] & 0.0170 & 0.0049 & 0.2730 & -0.6323 & 0.4979 & 3106 & 1.0004\\
+bG[2] & 0.0678 & 0.0049 & 0.2728 & -0.5773 & 0.5671 & 3113 & 1.0005\\
+bG[3] & -0.2075 & 0.0050 & 0.2741 & -0.8506 & 0.2767 & 3026 & 1.0004\\
+\addlinespace
+bT[1] & -0.2764 & 0.0106 & 0.4914 & -1.6338 & 0.5427 & 2141 & 0.9999\\
+bT[2] & -0.0501 & 0.0106 & 0.4909 & -1.4120 & 0.7778 & 2125 & 1.0000\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 Now is also a good time to introduce a diagnostic tool called the _trace plot_. The trace plot is a way to visualize the sampling path of different parameters across all the chains. A healthy set of chains will look like a fuzzy caterpillar, bouncing around the posterior without any visual patterns or long sequences of being in the same place. Figure \@ref(fig:ch032-traceplot-m032nc) shows the trace plot for the slope and intercept parameters. Each chain looks like it is sampling around the same average value as the others with identical spreads (stationary and homoscedastic). This also helps to solidify the idea that the $\hat{R}$ statistic is the measure of between chain variance compared to cross chain variance.
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch032-traceplot-m032nc-1.png" alt="Traceplot for the slope and intercept parameters." width="85%" />
-<p class="caption">(\#fig:ch032-traceplot-m032nc)Traceplot for the slope and intercept parameters.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch032-traceplot-m032nc-1} 
+
+}
+
+\caption{Traceplot for the slope and intercept parameters.}(\#fig:ch032-traceplot-m032nc)
+\end{figure}
 
 The chains in figure \@ref(fig:ch032-traceplot-m032nc) look healthy as well as for the other parameters not shown. Since there are no algorithm issues, I can proceed to the posterior retrodictive checks.
 
@@ -1236,34 +1157,31 @@ In this iteration of the model, I now have estimates for the age groups and the 
 
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch032-posterior-pss-jnd-plot-1.png" alt="Posterior distribution of the PSS and JND." width="85%" />
-<p class="caption">(\#fig:ch032-posterior-pss-jnd-plot)Posterior distribution of the PSS and JND.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch032-posterior-pss-jnd-plot-1} 
+
+}
+
+\caption{Posterior distribution of the PSS and JND.}(\#fig:ch032-posterior-pss-jnd-plot)
+\end{figure}
 
 
-As for the posterior retrodictions, I can do something similar to last time. First I'd like to point out that I had Stan perform posterior retrodictions during the fitting step. This was achieved by adding a _generated quantities_ block to the Stan program that takes the posterior samples for the parameters, and then randomly generates a value from a binomial distribution for each observation in the data. In effect, I now have $10,000$ simulated data sets!
-
-
-
-```r
-str(p032$k_pred)
-#>  num [1:4000, 1:1827] 0 0 0 0 0 0 0 0 0 0 ...
-#>  - attr(*, "dimnames")=List of 2
-#>   ..$ iterations: NULL
-#>   ..$           : NULL
-```
-
+As for the posterior retrodictions, I can do something similar to last time. First I'd like to point out that I had Stan perform posterior retrodictions during the fitting step. This was achieved by adding a _generated quantities_ block to the Stan program that takes the posterior samples for the parameters, and then randomly generates a value from a binomial distribution for each observation in the data. In effect, I now have $4000$ simulated data sets!
 
 I only need one to compare to the observed data, so I will select it randomly from the posterior.
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch032-obs-vs-retro-plot-1.png" alt="Observed data compared to the posterior retrodictions." width="85%" />
-<p class="caption">(\#fig:ch032-obs-vs-retro-plot)Observed data compared to the posterior retrodictions.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch032-obs-vs-retro-plot-1} 
+
+}
+
+\caption{Observed data compared to the posterior retrodictions.}(\#fig:ch032-obs-vs-retro-plot)
+\end{figure}
 
 
-The posterior retrodictions show no disagreement between the model and the observed data. I almost would say that this model is complete, but this model has one more problem - it measures the average difference in blocks, and the average difference in age groups, but does not consider any interaction between the two! Implicitly it assumes that temporal recalibration affects all age groups the same which may not be true, so in the next iteration I will need to address that.
+The posterior retrodictions  in figure \@ref(fig:ch032-obs-vs-retro-plot) show no disagreement between the model and the observed data. I almost would say that this model is complete, but this model has one more problem - it measures the average difference in blocks, and the average difference in age groups, but does not consider any interaction between the two! Implicitly it assumes that temporal recalibration affects all age groups the same which may not be true, so in the next iteration I will need to address that.
 
 ## Iteration 3 (the one for me){#iter3}
 
@@ -1273,9 +1191,13 @@ _Develop Model_
 
 This time around I need to model an interaction between age group and treatment. In a simple model in R, interactions between factor variable $A$ and factor variable $B$ can be accomplished by taking the cross-product of all the factor levels. For example, if $A$ has levels $a, b, c$ and $B$ has levels $x, y$, then the interaction variable $C=A:B$ will have levels $ax, ay, bx, by, cx, cy$. The concept is similar in Stan - create a new variable that is indexed by the cross of the two other factor variables.
 
+
+\setstretch{1.0}
 $$
 \beta_{G[i] \times trt[i]} \Longrightarrow bGT[G[i], trt[i]] 
 $$
+\setstretch{2.0}
+
 
 In the above expression, the interaction variable $\beta_{G[i] \times trt[i]}$ is between age group and treatment. The right hand side is the corresponding Stan parameter. Notice that it is an array-like object that is indexed by the age group at observation $i$ and the treatment at observation $i$. For example, observation $51$ is from a middle age adult subject during the post-adaptation block, so $bGT[G[51], trt[51]] = bGT[2, 2]$. An interaction term is added for both the slope and intercept in this iteration.
 
@@ -1294,95 +1216,60 @@ Again, I'll start with the PSS and JND posterior densities. Because the model no
 
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch033-posterior-pss-jnd-plot-1.png" alt="Posterior distribution of the PSS and JND." width="85%" />
-<p class="caption">(\#fig:ch033-posterior-pss-jnd-plot)Posterior distribution of the PSS and JND.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch033-posterior-pss-jnd-plot-1} 
+
+}
+
+\caption{Posterior distribution of the PSS and JND.}(\#fig:ch033-posterior-pss-jnd-plot)
+\end{figure}
 
 The posterior retrodictions for this model are going to be similar to the last iteration. Instead, I want to see how this model performs when it comes to the posterior retrodictions of the visual TOJ data. There is something peculiar about that data that is readily apparent when I try to fit a GLM using classical MLE.
 
 
+\setstretch{1.0}
 
 ```r
 vis_mle <- glm(cbind(k, n-k) ~ 0 + sid + sid:soa,
                data = visual_binomial, family = binomial("logit"))
 ```
+\setstretch{2.0}
 
 
 I get a message saying that the fitted probabilities are numerically 0 or 1. What does this mean? First this model estimates a slope and an intercept for each subject individually (no pooling model), so we can look at the estimates for each subject. Table \@ref(tab:ch033-Intensive-Oyster) shows the top 3 coefficients sorted by largest standard error of the estimate for both slope and intercept.
 
 
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:ch033-Intensive-Oyster)Coefficients with the largest standard errors.</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Subject </th>
-   <th style="text-align:left;"> Coefficient </th>
-   <th style="text-align:right;"> Estimate </th>
-   <th style="text-align:right;"> Std. Error </th>
-   <th style="text-align:right;"> z value </th>
-   <th style="text-align:right;"> Pr(&gt;|z|) </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> O-f-MW </td>
-   <td style="text-align:left;"> Intercept </td>
-   <td style="text-align:right;"> -3.6313 </td>
-   <td style="text-align:right;"> 1.2170 </td>
-   <td style="text-align:right;"> -2.9837 </td>
-   <td style="text-align:right;"> 0.0028 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> M-f-CC </td>
-   <td style="text-align:left;"> Intercept </td>
-   <td style="text-align:right;"> -2.4925 </td>
-   <td style="text-align:right;"> 1.0175 </td>
-   <td style="text-align:right;"> -2.4497 </td>
-   <td style="text-align:right;"> 0.0143 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> M-f-DB </td>
-   <td style="text-align:left;"> Intercept </td>
-   <td style="text-align:right;"> -1.0928 </td>
-   <td style="text-align:right;"> 0.6389 </td>
-   <td style="text-align:right;"> -1.7105 </td>
-   <td style="text-align:right;"> 0.0872 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Y-m-CB </td>
-   <td style="text-align:left;"> Slope </td>
-   <td style="text-align:right;"> 0.6254 </td>
-   <td style="text-align:right;"> 12.7380 </td>
-   <td style="text-align:right;"> 0.0491 </td>
-   <td style="text-align:right;"> 0.9608 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> M-f-DB </td>
-   <td style="text-align:left;"> Slope </td>
-   <td style="text-align:right;"> 0.1434 </td>
-   <td style="text-align:right;"> 0.0442 </td>
-   <td style="text-align:right;"> 3.2471 </td>
-   <td style="text-align:right;"> 0.0012 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> M-f-CC </td>
-   <td style="text-align:left;"> Slope </td>
-   <td style="text-align:right;"> 0.1434 </td>
-   <td style="text-align:right;"> 0.0442 </td>
-   <td style="text-align:right;"> 3.2471 </td>
-   <td style="text-align:right;"> 0.0012 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}[!h]
+
+\caption{(\#tab:ch033-Intensive-Oyster)Coefficients with the largest standard errors.}
+\centering
+\begin{tabular}[t]{llrrrr}
+\toprule
+Subject & Coefficient & Estimate & Std. Error & z value & Pr(>|z|)\\
+\midrule
+O-f-MW & Intercept & -3.6313 & 1.2170 & -2.9837 & 0.0028\\
+M-f-CC & Intercept & -2.4925 & 1.0175 & -2.4497 & 0.0143\\
+M-f-DB & Intercept & -1.0928 & 0.6389 & -1.7105 & 0.0872\\
+Y-m-CB & Slope & 0.6254 & 12.7380 & 0.0491 & 0.9608\\
+M-f-DB & Slope & 0.1434 & 0.0442 & 3.2471 & 0.0012\\
+\addlinespace
+M-f-CC & Slope & 0.1434 & 0.0442 & 3.2471 & 0.0012\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 The standard error of the slope estimate for subject `Y-m-CB` is incredibly large in comparison to its own estimate and in comparison to the slope with the next largest standard error. To see what's going wrong, let's look at the graph for this subject.
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch033-Y-m-CB-vis-response-1.png" alt="There is almost complete separation in the data." width="85%" />
-<p class="caption">(\#fig:ch033-Y-m-CB-vis-response)There is almost complete separation in the data.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch033-Y-m-CB-vis-response-1} 
+
+}
+
+\caption{There is almost complete separation in the data.}(\#fig:ch033-Y-m-CB-vis-response)
+\end{figure}
 
 
 Figure \@ref(fig:ch033-Y-m-CB-vis-response) shows that there is almost perfect separation in the data for this subject, and that is giving the MLE algorithm trouble. It also has serious consequences on the estimated JND as the estimated JND for this subject is just 3ms which is suspect.
@@ -1394,19 +1281,27 @@ Figure \@ref(fig:ch033-Iron-Intensive) shows the posterior distribution of psych
 
 
 
-<div class="figure" style="text-align: center">
-<img src="figures/ch033-Iron-Intensive.png" alt="Posterior distribution of psychometric functions for the visual TOJ data. There is almost no visual difference between the pre- and post-adaptation blocks." width="85%" />
-<p class="caption">(\#fig:ch033-Iron-Intensive)Posterior distribution of psychometric functions for the visual TOJ data. There is almost no visual difference between the pre- and post-adaptation blocks.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{figures/ch033-Iron-Intensive} 
+
+}
+
+\caption{Posterior distribution of psychometric functions for the visual TOJ data. There is almost no visual difference between the pre- and post-adaptation blocks.}(\#fig:ch033-Iron-Intensive)
+\end{figure}
 
 
 Furthermore, as shown by the posterior retrodictions (figure \@ref(fig:ch033-obs-vs-retro-plot)), the model is not fully capturing the variation in the responses near the outer SOA values. I.e. the posterior retrodictions are tight around SOA values near zero.
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch033-obs-vs-retro-plot-1.png" alt="Observed visual TOJ data compared to the posterior retrodictions. The retrodictions are not capturing the variation at the outer SOA values." width="85%" />
-<p class="caption">(\#fig:ch033-obs-vs-retro-plot)Observed visual TOJ data compared to the posterior retrodictions. The retrodictions are not capturing the variation at the outer SOA values.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch033-obs-vs-retro-plot-1} 
+
+}
+
+\caption{Observed visual TOJ data compared to the posterior retrodictions. The retrodictions are not capturing the variation at the outer SOA values.}(\#fig:ch033-obs-vs-retro-plot)
+\end{figure}
 
 So why is the model having difficulty expressing the data? Well as it turns out, there is one more concept pertaining to psychometric experiments that I have left out until now, and that is a lapse in judgment. Not a lapse in judgment on my part, but the actual act of having a lapse while performing an experiment. So now, dear reader, I hope you have it in you for one last iteration of this model before moving on to read about the long sought after results.
 
@@ -1424,15 +1319,22 @@ _Develop Model_
 
 Lapses can be modeled as occurring independently at some fixed rate. Fundamentally this means that the underlying performance function, $F$, is bounded by some lower and upper lapse rate. This manifests as a scaling and translation of $F$. For a given lower and upper lapse rate $\lambda$ and $\gamma$, the performance function $\Psi$ is 
 
+
+\setstretch{1.0}
 $$
 \Psi(x; \alpha, \beta, \lambda, \gamma) = \lambda + (1 - \lambda - \gamma) F(x; \alpha, \beta)
 $$
+\setstretch{2.0}
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch034-plot-pf-with-lapse-1.png" alt="Psychometric function with lower and upper performance bounds." width="85%" />
-<p class="caption">(\#fig:ch034-plot-pf-with-lapse)Psychometric function with lower and upper performance bounds.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch034-plot-pf-with-lapse-1} 
+
+}
+
+\caption{Psychometric function with lower and upper performance bounds.}(\#fig:ch034-plot-pf-with-lapse)
+\end{figure}
 
 
 In certain psychometric experiments, $\lambda$ is interpreted as the lower performance bound or the guessing rate. For example, in certain 2-alternative forced choice (2-AFC) tasks, subjects are asked to respond which of two masses is heavier, and the correctness of their response is recorded. When the masses are the same, the subject can do no better than random guessing. In this task, the lower performance bound is assumed to be 50% as their guess is split between two choices. As the absolute difference in mass grows, the subject's correctness rate increases, though lapses can still happen. In this scenario, $\lambda$ is fixed at $0.5$ and the lapse rate $\gamma$ is a parameter in the model.
@@ -1440,10 +1342,12 @@ In certain psychometric experiments, $\lambda$ is interpreted as the lower perfo
 The model I am building for this data does not explicitly record correctness, so I do not give $\lambda$ the interpretation of a guessing rate. Since the data are recorded as proportion of positive responses, I instead treat $\lambda$ and $\gamma$ as lapse rates for negative and positive SOAs. But why should the upper and lower lapse rates be treated separately? A lapse in judgment can occur independently of the SOA, so $\lambda$ and $\gamma$ should be the same no matter what. With this assumption in mind, I can throw away $\gamma$ and assume that the lower and upper performance bounds are restricted by the same amount. I.e.
 
 
+\setstretch{1.0}
 \begin{equation}
   \Psi(x; \alpha, \beta, \lambda) = \lambda + (1 - 2\lambda) F(x; \alpha, \beta)
   (\#eq:Psi)
 \end{equation}
+\setstretch{2.0}
 
 
 While I'm throwing in a lapse rate, I'll also ask the question if different age groups have different lapse rates. To answer this (or rather have the model answer this), I include the new parameter $\lambda_{G[i]}$ into the model so that the lapse rate is estimated for each age group.
@@ -1456,9 +1360,12 @@ _Construct Summary Functions_
 
 Since the fundamental structure of the linear model has changed, it is worth updating the summary function that computes the distribution of SOA values for a given response probability. Given equation \@ref(eq:Psi), the summary function $Q$ is
 
+
+\setstretch{1.0}
 $$
 Q(\pi; \alpha, \beta, \lambda) = F_{\alpha, \beta}^{-1}\left(\frac{\pi - \lambda}{1 - 2\lambda}\right) = \frac{1}{\exp(\beta)} \cdot \mathrm{logit}\left(\frac{\pi - \lambda}{1-2\lambda}\right) + \alpha
 $$
+\setstretch{2.0}
 
 
 
@@ -1478,19 +1385,27 @@ _Posterior Retrodictive Checks_
 
 The plot for the distribution of psychometric functions is repeated one more time below (figure \@ref(fig:ch034-Screaming-Proton)). There is now visual separation between the pre- and post-adaptation blocks, with the latter exhibiting a higher slope, which in turn implies a reduced just noticeable difference which is consistent with the audiovisual data in the previous model.
 
-<div class="figure" style="text-align: center">
-<img src="figures/ch034-Screaming-Proton.png" alt="There is now a visual distinction between the two blocks unlike in the model without lapse rate. The lapse rate acts as a balance between steep slopes near the PSS and variation near the outer SOA values." width="85%" />
-<p class="caption">(\#fig:ch034-Screaming-Proton)There is now a visual distinction between the two blocks unlike in the model without lapse rate. The lapse rate acts as a balance between steep slopes near the PSS and variation near the outer SOA values.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{figures/ch034-Screaming-Proton} 
+
+}
+
+\caption{There is now a visual distinction between the two blocks unlike in the model without lapse rate. The lapse rate acts as a balance between steep slopes near the PSS and variation near the outer SOA values.}(\#fig:ch034-Screaming-Proton)
+\end{figure}
 
 
 As for the posterior retrodictions, the model is now better capturing the outer SOA variation. This can best be seen in the comparison of the younger adult pre-adaptation block of figure \@ref(fig:ch034-Insane-Metaphor).
 
 
-<div class="figure" style="text-align: center">
-<img src="030-workflow_files/figure-html/ch034-Insane-Metaphor-1.png" alt="The lapse rate produces posterior retrodictions that are visually more similar to the observed data than in the previous model, suggesting that the model is now just complex enough to capture the relevant details of the data generating process." width="85%" />
-<p class="caption">(\#fig:ch034-Insane-Metaphor)The lapse rate produces posterior retrodictions that are visually more similar to the observed data than in the previous model, suggesting that the model is now just complex enough to capture the relevant details of the data generating process.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{030-workflow_files/figure-latex/ch034-Insane-Metaphor-1} 
+
+}
+
+\caption{The lapse rate produces posterior retrodictions that are visually more similar to the observed data than in the previous model, suggesting that the model is now just complex enough to capture the relevant details of the data generating process.}(\#fig:ch034-Insane-Metaphor)
+\end{figure}
 
 
 

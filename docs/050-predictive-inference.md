@@ -8,42 +8,59 @@ The above quote is from George Box, and it is a popular quote that statisticians
 
 Why is predictive performance so important? Consider five points of data (figure \@ref(fig:ch050-Moving-Moose)). I have simulated values from some polynomial equation of degree less than five, but with no more information other than that, how can the best polynomial model be selected?
 
-<div class="figure" style="text-align: center">
-<img src="050-predictive-inference_files/figure-html/ch050-Moving-Moose-1.png" alt="Five points from a polynomial model." width="85%" />
-<p class="caption">(\#fig:ch050-Moving-Moose)Five points from a polynomial model.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{050-predictive-inference_files/figure-latex/ch050-Moving-Moose-1} 
+
+}
+
+\caption{Five points from a polynomial model.}(\#fig:ch050-Moving-Moose)
+\end{figure}
 
 One thing to try is fit a handful of linear models, check the parameter's p-values, the $R^2$ statistic, and perform other goodness of fit tests, but there is a problem. As you increase the degree of the polynomial fit, the $R^2$ statistic will always increase. In fact with five data points, a fourth degree polynomial will fit the data perfectly (figure \@ref(fig:ch050-Olive-Screwdriver)).
 
 
-<div class="figure" style="text-align: center">
-<img src="050-predictive-inference_files/figure-html/ch050-Olive-Screwdriver-1.png" alt="Data points with various polynomial regression lines." width="85%" />
-<p class="caption">(\#fig:ch050-Olive-Screwdriver)Data points with various polynomial regression lines.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{050-predictive-inference_files/figure-latex/ch050-Olive-Screwdriver-1} 
+
+}
+
+\caption{Data points with various polynomial regression lines.}(\#fig:ch050-Olive-Screwdriver)
+\end{figure}
 
 If I were to add a $6^{th}$ point - a new observation - which of the models would you expect to do best? Can it be estimated which model will predict best before testing with new data? One guess is that the quadratic or cubic model will do well because because the linear model is potentially _underfit_ to the data and the quartic is _overfit_ to the data. Figure \@ref(fig:ch050-Cold-Fish) shows the new data point from the polynomial model. Now the linear and cubic models are trending in the wrong direction. The quadratic and quartic models are both trending down, so may be the correct form for the model.
 
 
-<div class="figure" style="text-align: center">
-<img src="050-predictive-inference_files/figure-html/ch050-Cold-Fish-1.png" alt="The fitted polynomial models with a new observation." width="85%" />
-<p class="caption">(\#fig:ch050-Cold-Fish)The fitted polynomial models with a new observation.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{050-predictive-inference_files/figure-latex/ch050-Cold-Fish-1} 
+
+}
+
+\caption{The fitted polynomial models with a new observation.}(\#fig:ch050-Cold-Fish)
+\end{figure}
 
 Figure \@ref(fig:ch050-Strawberry-Swallow) shows the 80% and 95% prediction intervals for a new observation given $x = 5$ as well as the true outcome as a dashed line at $y = -3.434$. The linear model has the smallest prediction interval (PI), but completely misses the target. The remaining three models all include the observed value in their 95% PIs, but the quadratic has the smallest PI of the three. The actual data generating polynomial is
 
-$$
-y \sim \mathcal{N}(\mu, 1^2) \\
-\mu = -0.5(x - 2)^2 + 2
-$$
+
+\begin{align*}
+y &\sim \mathcal{N}(\mu, 1^2) \\
+\mu &= -0.5(x - 2)^2 + 2
+\end{align*}
 
 
 
 
 
-<div class="figure" style="text-align: center">
-<img src="050-predictive-inference_files/figure-html/ch050-Strawberry-Swallow-1.png" alt="95% Prediction intervals for the four polynomial models, as well as the true value (dashed line)." width="85%" />
-<p class="caption">(\#fig:ch050-Strawberry-Swallow)95% Prediction intervals for the four polynomial models, as well as the true value (dashed line).</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{050-predictive-inference_files/figure-latex/ch050-Strawberry-Swallow-1} 
+
+}
+
+\caption{95% Prediction intervals for the four polynomial models, as well as the true value (dashed line).}(\#fig:ch050-Strawberry-Swallow)
+\end{figure}
 
 This is just a toy example, and real-world real-data models are often more complex, but they do present the same headaches when it comes to model/feature selection and goodness of fit checks. Clearly the quartic model has the best fit to the data, but it is too variable and doesn't capture the regular features of the data, so it does poorly for the out-of-sample prediction. The linear model suffers as well by being less biased and too inflexible to capture the structure of the data. The quadratic and cubic are in the middle of the road, but the quadratic does well and makes fewer assumptions about the data. In other words, the quadratic model is just complex enough to predict well while making fewer assumptions. _Information criteria_ is a way of weighing the prediction quality of a model against its complexity, and is arguably a better system for model selection/comparison than other goodness of fit statistics such as $R^2$ or p-values.
 
@@ -57,12 +74,12 @@ Taking $k$-fold CV to the limit by letting $k = \# observations$ results in some
 
 LOOCV and many other evaluation tools such as WAIC rest on the _log-pointwise-predictive-density_ (lppd), which is a loose measure of deviance from some "true" probability distribution. Typically we don't have the analytic form of the predictive posterior, so instead we use $S$ MCMC draws to approximate the lppd [@vehtari2017practical]:
 
-$$
+
 \begin{equation}
 \mathrm{lppd}(y, \Theta) = \sum_i \log \frac{1}{S} \sum_s p(y_i | \Theta_s)
 (\#eq:lppd)
 \end{equation}
-$$
+
 
 To estimate LOOCV, the relative "importance" of each observation must be computed. Certain observations have more influence on the posterior distribution, and so have more impact on the posterior if they are removed. The intuition behind measuring importance is that more influential observations are relatively less likely than less important observations that are relatively expected. Then by omitting a sample, the relative importance weight can be measured by the lppd. This omitted calculation is known as the out-of-sample lppd. For each omitted $y_i$,
 

@@ -32,10 +32,14 @@ For simple models, the posterior distribution can sometimes be evaluated analyti
 The final line is the shape of a Beta distribution with parameters $6=2+4$ and $11=5+6$. The simple update rule is that for a prior $\mathrm{Beta}(a, b)$ and observed data with $y$ successes in $n$ observations, the posterior distribution is $\mathrm{Beta}(a + y, b + n - y)$. For the baseball player, the Bayesian estimate of his batting average is $6/(6+11) \approx 0.353$, but still with a good amount of uncertainty as shown in figure \@ref(fig:ch040-Teal-Monkey). 
 
 
-<div class="figure" style="text-align: center">
-<img src="040-model-checking_files/figure-html/ch040-Teal-Monkey-1.png" alt="After observing 4 hits in 10, the Beta(2,5) prior gets updated to become a Beta(6,11) posterior." width="85%" />
-<p class="caption">(\#fig:ch040-Teal-Monkey)After observing 4 hits in 10, the Beta(2,5) prior gets updated to become a Beta(6,11) posterior.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{040-model-checking_files/figure-latex/ch040-Teal-Monkey-1} 
+
+}
+
+\caption{After observing 4 hits in 10, the Beta(2,5) prior gets updated to become a Beta(6,11) posterior.}(\#fig:ch040-Teal-Monkey)
+\end{figure}
 
 
 Conjugate models are great for simple observational data, but often it happens that the posterior distribution cannot be deduced from the model or that the integral in the denominator is complex or of a high dimension. In the former situation, the integral may not be possible to evaluate, and in the latter there may not be enough computational resources in the world to perform a simple grid approximation.
@@ -50,17 +54,25 @@ The solution is to use Markov Chain Monte Carlo (MCMC). The idea is that we can 
 
 Trace plots are the first line of defense against misbehaved samplers. They are visual aids that let the practitioner asses the qualitative health of the chains, looking for properties such as autocorrelation, heteroskedacity, non-stationarity, and convergence. Healthy chains are _well-mixing_ and stationary. It's often better to run more chains during the model building process so that issues with mixing and convergence can be diagnosed sooner. Even one unhealthy chain can be indicative of a poorly specified model. The addition of more chains also contributes to the estimation of the Split $\hat{R}$ statistic, which I discuss in \@ref(split-r). Figure \@ref(fig:ch040-Brave-Moose) shows what a set of healthy chains looks like.
 
-<div class="figure" style="text-align: center">
-<img src="040-model-checking_files/figure-html/ch040-Brave-Moose-1.png" alt="An example of healthy chains." width="85%" />
-<p class="caption">(\#fig:ch040-Brave-Moose)An example of healthy chains.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{040-model-checking_files/figure-latex/ch040-Brave-Moose-1} 
+
+}
+
+\caption{An example of healthy chains.}(\#fig:ch040-Brave-Moose)
+\end{figure}
 
 There is a similar diagnostic plot called the rank histogram plot (or _trank_ plot for trace rank plot). @vehtari2020rank details the motivation for trank plots, but in short if the chains are all exploring the posterior efficiently, then the histograms will be similar and uniform. Figure \@ref(fig:ch040-Dog-Reborn) is from the same model as above but for the rank histogram.
 
-<div class="figure" style="text-align: center">
-<img src="040-model-checking_files/figure-html/ch040-Dog-Reborn-1.png" alt="A trank plot of healthy chains." width="85%" />
-<p class="caption">(\#fig:ch040-Dog-Reborn)A trank plot of healthy chains.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{040-model-checking_files/figure-latex/ch040-Dog-Reborn-1} 
+
+}
+
+\caption{A trank plot of healthy chains.}(\#fig:ch040-Dog-Reborn)
+\end{figure}
 
 As the number of parameters in a model grows, it becomes exceedingly tedious to check the trace and trank plots of all parameters, and so numerical summaries are required to flag potential issues within the model.
 
@@ -93,29 +105,24 @@ fit_cp <- sampling(schools_mod_cp, data = schools_dat, refresh = 0,
 
 Stan instantly warns about many different issues with this model, but the R-hat is the one of interest. The largest is $1.68$ which is incredibly large
 
-<img src="040-model-checking_files/figure-html/ch040-Rocky-Test-1.png" width="85%" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics[width=0.85\linewidth]{040-model-checking_files/figure-latex/ch040-Rocky-Test-1} \end{center}
 
 These chains do not look good at all! Let's take a look at the $\hat{R}$ values and see if we can calculate one of the values manually.
 
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:unnamed-chunk-1)Split R-hat values from the 8 Schools example.</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Parameter </th>
-   <th style="text-align:right;"> Rhat </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> mu </td>
-   <td style="text-align:right;"> 1.234 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> tau </td>
-   <td style="text-align:right;"> 1.596 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}[!h]
+
+\caption{(\#tab:unnamed-chunk-1)Split R-hat values from the 8 Schools example.}
+\centering
+\begin{tabular}[t]{lr}
+\toprule
+Parameter & Rhat\\
+\midrule
+mu & 1.234\\
+tau & 1.596\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 To calculate the (non split) $\hat{R}$, first calculate the between-chain variance, and then the average chain variance. For $M$ independent Markov chains, $\theta_m$, with $N$ samples each, the between-chain variance is
 
@@ -187,10 +194,14 @@ The $\hat{R}$ statistic is smaller than the split $\hat{R}$ value provided by St
 
 Samples from Markov Chains are typically autocorrelated, which can increase uncertainty of posterior estimates. I encountered this issue in the [second iteration](#iter2) of the model building process, and the solution I used was to reparameterize the model to avoid steep log-posterior densities - the benefit of reparameterization is conveyed by the ratio of effective sample size to actual sample size in figure \@ref(fig:ch040-Timely-Nitrogen). When the HMC algorithm is exploring difficult geometry, it can get stuck in regions of high densities, which means that there is more correlation between successive samples. 
 
-<div class="figure" style="text-align: center">
-<img src="040-model-checking_files/figure-html/ch040-Timely-Nitrogen-1.png" alt="Ratio of N_eff to actual sample size. Low ratios imply high autocorrelation which can be alleviated by reparameterizing the model or by thinning." width="85%" />
-<p class="caption">(\#fig:ch040-Timely-Nitrogen)Ratio of N_eff to actual sample size. Low ratios imply high autocorrelation which can be alleviated by reparameterizing the model or by thinning.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{040-model-checking_files/figure-latex/ch040-Timely-Nitrogen-1} 
+
+}
+
+\caption{Ratio of N_eff to actual sample size. Low ratios imply high autocorrelation which can be alleviated by reparameterizing the model or by thinning.}(\#fig:ch040-Timely-Nitrogen)
+\end{figure}
 
 As the strength of autocorrelation generally decreases at larger lags, a simple prescription to decrease autocorrelation between samples and increase the effective sample size is to use _thinning_. Thinning means saving every $k^{th}$ sample and throwing the rest away. If one desired to have 2000 posterior draws, it could be done in two of many possible ways
 
@@ -207,10 +218,14 @@ A few divergent transitions is not indicative of a poorly performing model, and 
 
 Divergent transitions are never saved in the posterior samples, but they are saved internally to the Stan fit object and can be compared against good samples. Sometimes this can give insight into which parameters and which regions of the posterior the divergent transitions are coming from.
 
-<div class="figure" style="text-align: center">
-<img src="040-model-checking_files/figure-html/ch040-Hot-Locomotive-1.png" alt="Divergent transitions highlighted for some parameters from the second iteration model. Divergent transitions tend to occur when both the hierarchical variance terms are near zero." width="85%" />
-<p class="caption">(\#fig:ch040-Hot-Locomotive)Divergent transitions highlighted for some parameters from the second iteration model. Divergent transitions tend to occur when both the hierarchical variance terms are near zero.</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{040-model-checking_files/figure-latex/ch040-Hot-Locomotive-1} 
+
+}
+
+\caption{Divergent transitions highlighted for some parameters from the second iteration model. Divergent transitions tend to occur when both the hierarchical variance terms are near zero.}(\#fig:ch040-Hot-Locomotive)
+\end{figure}
 
 ## Prior Predictive Checks
 

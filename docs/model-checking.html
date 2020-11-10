@@ -244,14 +244,14 @@ Figure 4.3: A trank plot of healthy chains.
 <div id="split-r" class="section level4">
 <h4><span class="header-section-number">4.1.1.2</span> <span class="math inline">\(\hat{R}\)</span> and Split <span class="math inline">\(\hat{R}\)</span></h4>
 <p>The most common summary statistic for chain health is the potential scale reduction factor <span class="citation">(Gelman, Rubin, and others <a href="#ref-gelman1992inference" role="doc-biblioref">1992</a>)</span> that measures the ratio of between chain variance and within chain variance. When the two have converged, the ratio is one. I’ve already shared examples of healthy chains which would also have healthy <span class="math inline">\(\hat{R}\)</span> values, but it’s valuable to also share an example of a bad model. Below is the 8 Schools example <span class="citation">(Gelman et al. <a href="#ref-gelman2013bayesian" role="doc-biblioref">2013</a>)</span> which is a classical example for introducing Stan and testing the operating characteristics of a model.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="model-checking.html#cb22-1"></a>schools_dat &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
-<span id="cb22-2"><a href="model-checking.html#cb22-2"></a>  <span class="dt">J =</span> <span class="dv">8</span>,</span>
-<span id="cb22-3"><a href="model-checking.html#cb22-3"></a>  <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">28</span>,  <span class="dv">8</span>, <span class="dv">-3</span>,  <span class="dv">7</span>, <span class="dv">-1</span>,  <span class="dv">1</span>, <span class="dv">18</span>, <span class="dv">12</span>),</span>
-<span id="cb22-4"><a href="model-checking.html#cb22-4"></a>  <span class="dt">sigma =</span> <span class="kw">c</span>(<span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">16</span>, <span class="dv">11</span>,  <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">10</span>, <span class="dv">18</span>)</span>
-<span id="cb22-5"><a href="model-checking.html#cb22-5"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="model-checking.html#cb21-1"></a>schools_dat &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
+<span id="cb21-2"><a href="model-checking.html#cb21-2"></a>  <span class="dt">J =</span> <span class="dv">8</span>,</span>
+<span id="cb21-3"><a href="model-checking.html#cb21-3"></a>  <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">28</span>,  <span class="dv">8</span>, <span class="dv">-3</span>,  <span class="dv">7</span>, <span class="dv">-1</span>,  <span class="dv">1</span>, <span class="dv">18</span>, <span class="dv">12</span>),</span>
+<span id="cb21-4"><a href="model-checking.html#cb21-4"></a>  <span class="dt">sigma =</span> <span class="kw">c</span>(<span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">16</span>, <span class="dv">11</span>,  <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">10</span>, <span class="dv">18</span>)</span>
+<span id="cb21-5"><a href="model-checking.html#cb21-5"></a>)</span></code></pre></div>
 <p>The initial starting parameters for this model are intentionally set to vary between <span class="math inline">\(-10\)</span> and <span class="math inline">\(10\)</span> (in contrast to the default range of <span class="math inline">\((-2, 2)\)</span>) and with only a few samples drawn in order to artificially drive up the split <span class="math inline">\(\hat{R}\)</span> statistic. The model is provided as supplementary code in the <a href="supplementary-code.html#supplementary-code">appendix</a>.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="model-checking.html#cb23-1"></a>fit_cp &lt;-<span class="st"> </span><span class="kw">sampling</span>(schools_mod_cp, <span class="dt">data =</span> schools_dat, <span class="dt">refresh =</span> <span class="dv">0</span>,</span>
-<span id="cb23-2"><a href="model-checking.html#cb23-2"></a>                   <span class="dt">iter =</span> <span class="dv">50</span>, <span class="dt">init_r =</span> <span class="dv">10</span>, <span class="dt">seed =</span> <span class="dv">671254821</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="model-checking.html#cb22-1"></a>fit_cp &lt;-<span class="st"> </span><span class="kw">sampling</span>(schools_mod_cp, <span class="dt">data =</span> schools_dat, <span class="dt">refresh =</span> <span class="dv">0</span>,</span>
+<span id="cb22-2"><a href="model-checking.html#cb22-2"></a>                   <span class="dt">iter =</span> <span class="dv">50</span>, <span class="dt">init_r =</span> <span class="dv">10</span>, <span class="dt">seed =</span> <span class="dv">671254821</span>)</span></code></pre></div>
 <p>Stan instantly warns about many different issues with this model, but the R-hat is the one of interest. The largest is <span class="math inline">\(1.68\)</span> which is incredibly large</p>
 <p><img src="040-model-checking_files/figure-html/ch040-Rocky-Test-1.png" width="85%" style="display: block; margin: auto;" /></p>
 <p>These chains do not look good at all! Let’s take a look at the <span class="math inline">\(\hat{R}\)</span> values and see if we can calculate one of the values manually.</p>
@@ -317,22 +317,22 @@ s_{m}^2 = \frac{1}{N-1}\sum_{n=1}^{N}\left(\theta_{m}^{(n)} - \bar{\theta}_m\rig
 \hat{R} = \sqrt{\frac{\hat{var}}{W}}
 \]</span></p>
 <p>Here is the calculation in R</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="model-checking.html#cb24-1"></a>param &lt;-<span class="st"> &quot;mu&quot;</span></span>
-<span id="cb24-2"><a href="model-checking.html#cb24-2"></a>theta &lt;-<span class="st"> </span>p_cp[,,param]</span>
-<span id="cb24-3"><a href="model-checking.html#cb24-3"></a>N     &lt;-<span class="st"> </span><span class="kw">nrow</span>(theta)</span>
-<span id="cb24-4"><a href="model-checking.html#cb24-4"></a>M     &lt;-<span class="st"> </span><span class="kw">ncol</span>(theta)</span>
-<span id="cb24-5"><a href="model-checking.html#cb24-5"></a></span>
-<span id="cb24-6"><a href="model-checking.html#cb24-6"></a>theta_bar_m &lt;-<span class="st"> </span><span class="kw">colMeans</span>(theta)</span>
-<span id="cb24-7"><a href="model-checking.html#cb24-7"></a>theta_bar   &lt;-<span class="st"> </span><span class="kw">mean</span>(theta_bar_m)</span>
-<span id="cb24-8"><a href="model-checking.html#cb24-8"></a></span>
-<span id="cb24-9"><a href="model-checking.html#cb24-9"></a>B &lt;-<span class="st"> </span>N <span class="op">/</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>((theta_bar_m <span class="op">-</span><span class="st"> </span>theta_bar)<span class="op">^</span><span class="dv">2</span>)</span>
-<span id="cb24-10"><a href="model-checking.html#cb24-10"></a>s_sq_m &lt;-<span class="st"> </span><span class="kw">apply</span>(theta, <span class="dv">2</span>, var)</span>
-<span id="cb24-11"><a href="model-checking.html#cb24-11"></a></span>
-<span id="cb24-12"><a href="model-checking.html#cb24-12"></a>W &lt;-<span class="st"> </span><span class="kw">mean</span>(s_sq_m)</span>
-<span id="cb24-13"><a href="model-checking.html#cb24-13"></a>var_hat &lt;-<span class="st"> </span>W <span class="op">*</span><span class="st"> </span>(N <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">/</span><span class="st"> </span>N <span class="op">+</span><span class="st"> </span>B <span class="op">/</span><span class="st"> </span>N</span>
-<span id="cb24-14"><a href="model-checking.html#cb24-14"></a></span>
-<span id="cb24-15"><a href="model-checking.html#cb24-15"></a>(mu_Rhat &lt;-<span class="st"> </span><span class="kw">sqrt</span>(var_hat <span class="op">/</span><span class="st"> </span>W))</span>
-<span id="cb24-16"><a href="model-checking.html#cb24-16"></a><span class="co">#&gt; [1] 1.134</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="model-checking.html#cb23-1"></a>param &lt;-<span class="st"> &quot;mu&quot;</span></span>
+<span id="cb23-2"><a href="model-checking.html#cb23-2"></a>theta &lt;-<span class="st"> </span>p_cp[,,param]</span>
+<span id="cb23-3"><a href="model-checking.html#cb23-3"></a>N     &lt;-<span class="st"> </span><span class="kw">nrow</span>(theta)</span>
+<span id="cb23-4"><a href="model-checking.html#cb23-4"></a>M     &lt;-<span class="st"> </span><span class="kw">ncol</span>(theta)</span>
+<span id="cb23-5"><a href="model-checking.html#cb23-5"></a></span>
+<span id="cb23-6"><a href="model-checking.html#cb23-6"></a>theta_bar_m &lt;-<span class="st"> </span><span class="kw">colMeans</span>(theta)</span>
+<span id="cb23-7"><a href="model-checking.html#cb23-7"></a>theta_bar   &lt;-<span class="st"> </span><span class="kw">mean</span>(theta_bar_m)</span>
+<span id="cb23-8"><a href="model-checking.html#cb23-8"></a></span>
+<span id="cb23-9"><a href="model-checking.html#cb23-9"></a>B &lt;-<span class="st"> </span>N <span class="op">/</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>((theta_bar_m <span class="op">-</span><span class="st"> </span>theta_bar)<span class="op">^</span><span class="dv">2</span>)</span>
+<span id="cb23-10"><a href="model-checking.html#cb23-10"></a>s_sq_m &lt;-<span class="st"> </span><span class="kw">apply</span>(theta, <span class="dv">2</span>, var)</span>
+<span id="cb23-11"><a href="model-checking.html#cb23-11"></a></span>
+<span id="cb23-12"><a href="model-checking.html#cb23-12"></a>W &lt;-<span class="st"> </span><span class="kw">mean</span>(s_sq_m)</span>
+<span id="cb23-13"><a href="model-checking.html#cb23-13"></a>var_hat &lt;-<span class="st"> </span>W <span class="op">*</span><span class="st"> </span>(N <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">/</span><span class="st"> </span>N <span class="op">+</span><span class="st"> </span>B <span class="op">/</span><span class="st"> </span>N</span>
+<span id="cb23-14"><a href="model-checking.html#cb23-14"></a></span>
+<span id="cb23-15"><a href="model-checking.html#cb23-15"></a>(mu_Rhat &lt;-<span class="st"> </span><span class="kw">sqrt</span>(var_hat <span class="op">/</span><span class="st"> </span>W))</span>
+<span id="cb23-16"><a href="model-checking.html#cb23-16"></a><span class="co">#&gt; [1] 1.134</span></span></code></pre></div>
 <p>The <span class="math inline">\(\hat{R}\)</span> statistic is smaller than the split <span class="math inline">\(\hat{R}\)</span> value provided by Stan. This is a consequence of steadily increasing or decreasing chains. The split value does what it sounds like, and splits the chains in half and measures each half separately. In this way, the measure is more robust in detecting unhealthy chains. This also highlights the utility in using both visual and statistical tools to evaluate models.</p>
 </div>
 <div id="effective-sample-size" class="section level4">
