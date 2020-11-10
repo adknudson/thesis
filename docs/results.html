@@ -239,12 +239,12 @@ Figure 5.13: Process model of the result of a psychometric experiment with the a
 </p>
 </div>
 <p>In the above figure, the outcome of one experiment can be represented as a directed acyclic graph (DAG) where at the start of the experiment, the subject either experiences a lapse in judgment with probability <span class="math inline">\(\gamma\)</span> or they do not experience a lapse in judgment. If there is no lapse, then they will give a positive response with probability <span class="math inline">\(F(x)\)</span>. If there is a lapse in judgment, then it is assumed that they will respond randomly - e.g. a fifty-fifty chance of a positive response. In this model of an experiment, the probability of a positive response is the sum of the two paths.</p>
-<p><span class="math display">\[\begin{align}
+<p><span class="math display">\[\begin{align*}
 \mathrm{P}(\textrm{positive}) &amp;= 
   \mathrm{P}(\textrm{lapse}) \cdot \mathrm{P}(\textrm{positive} | \textrm{lapse}) \\
   &amp;\quad + \mathrm{P}(\textrm{no lapse}) \cdot \mathrm{P}(\textrm{positive} | \textrm{no lapse}) \\
   &amp;= \frac{1}{2} \gamma + (1 - \gamma) \cdot F(x)
-\end{align}\]</span></p>
+\end{align*}\]</span></p>
 <p>If we then let <span class="math inline">\(\gamma = 2\lambda\)</span> then the probability of a positive response becomes</p>
 <p><span class="math display">\[
 \mathrm{P}(\textrm{positive}) = \lambda + (1 - 2\lambda) \cdot F(x)

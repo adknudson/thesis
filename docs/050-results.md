@@ -190,12 +190,12 @@ Finally in the sensorimotor task there are mixed results. Temporal recalibration
 In the above figure, the outcome of one experiment can be represented as a directed acyclic graph (DAG) where at the start of the experiment, the subject either experiences a lapse in judgment with probability $\gamma$ or they do not experience a lapse in judgment. If there is no lapse, then they will give a positive response with probability $F(x)$. If there is a lapse in judgment, then it is assumed that they will respond randomly - e.g. a fifty-fifty chance of a positive response. In this model of an experiment, the probability of a positive response is the sum of the two paths.
 
 
-\begin{align}
+\begin{align*}
 \mathrm{P}(\textrm{positive}) &= 
   \mathrm{P}(\textrm{lapse}) \cdot \mathrm{P}(\textrm{positive} | \textrm{lapse}) \\
   &\quad + \mathrm{P}(\textrm{no lapse}) \cdot \mathrm{P}(\textrm{positive} | \textrm{no lapse}) \\
   &= \frac{1}{2} \gamma + (1 - \gamma) \cdot F(x)
-\end{align}
+\end{align*}
 
 
 If we then let $\gamma = 2\lambda$ then the probability of a positive response becomes
@@ -234,34 +234,25 @@ Again, this ranking is based on the mean (lower intrinsically meaning easier) an
 
 \caption{(\#tab:ch050-Orange-Tigerfish)Relative difficulty of the different tasks by age group. The difficulty is measured by the proportion of incorrect responses.}
 \centering
-\begin{tabular}[t]{l|l|r}
-\hline
+\begin{tabular}[t]{llr}
+\toprule
 Task & Age Group & Pseudo Difficulty\\
-\hline
+\midrule
 visual & Middle Age & 0.03\\
-\hline
 visual & Young Adult & 0.03\\
-\hline
 visual & Older Adult & 0.06\\
-\hline
 audiovisual & Young Adult & 0.12\\
-\hline
 audiovisual & Middle Age & 0.12\\
-\hline
+\addlinespace
 duration & Middle Age & 0.14\\
-\hline
 duration & Young Adult & 0.16\\
-\hline
 duration & Older Adult & 0.17\\
-\hline
 audiovisual & Older Adult & 0.17\\
-\hline
 sensorimotor & Young Adult & 0.22\\
-\hline
+\addlinespace
 sensorimotor & Middle Age & 0.24\\
-\hline
 sensorimotor & Older Adult & 0.29\\
-\hline
+\bottomrule
 \end{tabular}
 \end{table}
 

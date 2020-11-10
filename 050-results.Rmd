@@ -351,12 +351,12 @@ text(x = c(0.5, 1.5,
 In the above figure, the outcome of one experiment can be represented as a directed acyclic graph (DAG) where at the start of the experiment, the subject either experiences a lapse in judgment with probability $\gamma$ or they do not experience a lapse in judgment. If there is no lapse, then they will give a positive response with probability $F(x)$. If there is a lapse in judgment, then it is assumed that they will respond randomly - e.g. a fifty-fifty chance of a positive response. In this model of an experiment, the probability of a positive response is the sum of the two paths.
 
 
-\begin{align}
+\begin{align*}
 \mathrm{P}(\textrm{positive}) &= 
   \mathrm{P}(\textrm{lapse}) \cdot \mathrm{P}(\textrm{positive} | \textrm{lapse}) \\
   &\quad + \mathrm{P}(\textrm{no lapse}) \cdot \mathrm{P}(\textrm{positive} | \textrm{no lapse}) \\
   &= \frac{1}{2} \gamma + (1 - \gamma) \cdot F(x)
-\end{align}
+\end{align*}
 
 
 If we then let $\gamma = 2\lambda$ then the probability of a positive response becomes
@@ -407,7 +407,7 @@ multitask %>%
   arrange(`Pseudo Difficulty`) %>%
   rename(Task = task, `Age Group` = age_group) %>%
   mutate(`Age Group` = fct_relabel(`Age Group`, ~str_to_title(str_replace(.x, "_", " ")))) %>%
-  kable(digits = 2, caption = "Relative difficulty of the different tasks by age group. The difficulty is measured by the proportion of incorrect responses.") %>%
+  kable(digits = 2, caption = "Relative difficulty of the different tasks by age group. The difficulty is measured by the proportion of incorrect responses.", booktabs=TRUE) %>%
   kable_styling(latex_options = "hold_position")
 ```
 
