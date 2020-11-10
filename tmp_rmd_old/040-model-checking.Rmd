@@ -34,25 +34,25 @@ This chapter serves as the formal home of definitions and explanations of concep
 Why do we need a sampler at all? Bayesian statistics and modeling stems from Bayes theorem (Equation \@ref(eq:bayesthm)). The prior $P(\theta)$ is some distribution over the parameter space and the likelihood $P(X | \theta)$ is the probability of an outcome in the sample space given a value in the parameter space. To keep things simple, we generally say that the posterior is proportional to the prior times the likelihood. Why proportional? The posterior distribution is a probability distribution, which means that the sum or integral over the parameter space must evaluate to one. Because of this constraint, the denominator in \@ref(eq:bayesthm) acts as a scale factor to ensure that the posterior is valid. 
 
 
-\setstretch{1.0}
+
 \begin{equation}
   P(\theta | X) = \frac{P(X | \theta)\cdot P(\theta)}{\sum_i P(X | \theta_i)} =   \frac{P(X | \theta)\cdot P(\theta)}{\int_\Omega P(X | \theta)d\theta}
   (\#eq:bayesthm)
 \end{equation}
-\setstretch{2.0}
+
 
 
 For simple models, the posterior distribution can sometimes be evaluated analytically. An example of this is in _conjugate_ models, where the resulting posterior distribution is of the same type as the prior distribution, and an example of a conjugate model is the Beta distribution for inference about a proportion statistic. This is common in baseball for a player's batting average. I don't know a lot about baseball, but I know that hitting a baseball is a little less common than one in three swings, so _a priori_ I believe the probability of hitting a baseball is distributed as $\mathrm{Beta}(2, 5)$ because the expected value is $\approx 0.29$ and not a lot of weight is given to any particular value. Throughout a game I follow one player and he hits four balls and misses six - data that can be modeled as a Binomial observation. To figure out the posterior distribution for batting average, I use Bayes' theorem - _posterior is proportional to the prior times the likelihood_.
 
 
-\setstretch{1.0}
+
 \begin{align*}
   P(\pi | y) &\propto P(y | \pi) \cdot P(\pi) \\
   &= {10 \choose 4}\pi^{4} (1-\pi)^{6} \cdot \frac{\Gamma(2+5)}{\Gamma(2)\Gamma(5)} \pi^{2-1}(1-\pi)^{5-1} \\
   &\propto \pi^{4+2-1}(1-\pi)^{6+5-1} \\
   &= \pi^{6-1}(1-\pi)^{11-1}
 \end{align*}
-\setstretch{2.0}
+
 
 
 The final line is the shape of a Beta distribution with parameters $6=2+4$ and $11=5+6$. The simple update rule is that for a prior $\mathrm{Beta}(a, b)$ and observed data with $y$ successes in $n$ observations, the posterior distribution is $\mathrm{Beta}(a + y, b + n - y)$. For the baseball player, the Bayesian estimate of his batting average is $6/(6+11) \approx 0.353$, but still with a good amount of uncertainty as shown in figure \@ref(fig:ch040-Teal-Monkey). 

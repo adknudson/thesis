@@ -6,7 +6,7 @@
 
 **Eight Schools Model**
 
-\setstretch{1.0}
+
 ```
 data {
   int<lower=0> J;
@@ -25,4 +25,4 @@ model {
   y ~ normal(theta, sigma);
 }
 ```
-\setstretch{2.0}
+

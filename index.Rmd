@@ -12,47 +12,21 @@ github-repo: adkudson/thesis
 
 ```{r ch010-setup, include=FALSE}
 knitr::write_bib(c(
-  'knitr', 'bookdown', 'rstan', 'rethinking', 'rstanarm', 'stats', 'arm',
-  'loo'
+  'arm',
+  'bookdown', 
+  'knitr', 
+  'loo',
+  'rstan', 
+  'rstanarm', 
+  'rethinking', 
+  'stats' 
 ), 'packages.bib', width = 80)
 ```
 
 # Introduction {#intro}
 
-With the advances in computational power and high-level programming languages like Python, R, and Julia, statistical methods have evolved to be more flexible and expressive. No longer must we be subjugated by p-values and step-wise regression techniques. Gone are the days of using clever modeling techniques to tame misbehaved data. Now is the time for principled and informed decisions to create bespoke models and domain-motivated analyses. We have the shoulders of giants to stand upon and look out at the vast sea of data science.
+## Current Methods
 
-I want to talk about how the advances in computational power have lead to a sort of mini revolution - resurrection - in statistics where Bayesian modeling has gained an incredible following thanks to projects like Stan. The steady adoption of computer aided statistical workflows also brings the need for multidisciplinary techniques from numerical analysis, probability theory, statistics, computer science, visualizations, and more. And with the age of computers, there is a strong push towards reproducibility. Concepts of modular design, workflows, project history and versioning, virtual environments, and human readable code all contribute to reproducible analyses. And somehow I also want to tie in how data is immutable - raw data should (must) be treated as a constant and unchangeable entity, and merely touching it will cause data mitosis.
+## New Methods
 
-I will now segue into introducing the intent of this paper. I believe that utilizing the computational ability of modern computers helps strengthen the validity of an analysis. This is achieved by using powerful but expressive tools like Stan to write models that visually match written mathematical models. Classical statistical tools, while fast, require clever mathematics to perform certain routines such as fitting mixed effects models or the interpretation of cryptic p-values to determine if a model is "good". Instead I believe we should be moving towards probabilistic programming languages like Stan to carry out Statistical analyses.
-
-This paper is motivated by an experiment in psychometrics ([chapter 2](#motivating-data)), and by highlighting a principled workflow I seek to convince the reader that Bayesian multilevel modeling should be the default tool for modeling psychometric experiments. In the next section of this introduction, I will list classical tools for statistical modeling [of psychometric experiments] and touch on the limitations of such tools. Following that section, I will introduce the methods I use for building a model that deviate from classical methods.
-
-## Everything can be Blamed on Fisher {#ch010-classical-methods}
-
-_... or Pearson, or Gauss, or ..._
-
-When I hear the term "regression", I instantly think about maximum likelihood estimation (MLE) of parameters. And why not? There is an endless wealth of literature on the subject of linear regression and MLE [@johnson2002applied; @larsen2005introduction; @sheather2009modern; @navidi2015statistics]. Most introductory courses on statistics and regression center around classical techniques such as MLE, hypothesis testing, and residual analysis. For the common student, learning statistical modeling in classical way can feel sterilized and mechanic. Check that the data are normal. Check that the coefficients are significantly different from zero. Check that the residuals are normal. Etc. I'm not trying to say that these methods are not important or that they are deeply flawed - it would be bad for modern society if we were just now finding out that the models are wrong. Instead, I am arguing that because they are so common and easy to apply that they are used without much extra thought.
-
-Take variable selection as an example. In a data set where there are a dozen predictors, how does one go about selecting which parameters produce the best model? Without thought, one may reach for a step-wise selection algorithm, and confidently conclude that variables $x$, $y$, and $z$ are _significant_ because the p-values say so. This method does fall apart quickly because as the number of parameters grow, so too does the number of steps needed to find the best subset of variables^[The number of subsets grows exponentially with the number of parameters. Forward and backward selection steps grows quadratically.], and there is no guarantee that the algorithm actually selects the best^[I'm being intentionally vague about what I mean by "best" because what is best is determined by the application] subset. But even if the best subset of variables is found, one still needs to consider if the variables have a practical effect or if the model omitted an important variable of interest.
-
-Sure, the type of analysis is important to the techniques used. Variable selection through step-wise algorithms or penalized maximum likelihood estimation [@hoerl1970ridge; @tibshirani1996regression] may be appropriate in an exploratory data analysis, but improper for causal inference and other scientifically motivated experiments.
-
-Which brings me to talk next about p-values, confidence intervals, and hypothesis testing. The concept of basing scientific results on the falsifiability [@popper1959logic] or refutability of a claim is a strong foundation for the scientific method, and is arguably much better than the previous grounds of verifiability -- just because something has been true for a very long time, doesn't mean it will always be true in the future. But hypothesis testing comes with its own set of problems. Null hypothesis testing for point estimates usually depends on calculating a confidence interval and seeing if the interval contains the point of interest. This can be misleading, as there is more than one confidence interval that can be calculated. For Gaussian distributions, the mean equals the median equals the mode, so a 95% confidence interval is evenly distributed around the central measures. Some distributions are skewed, so an equal tail area confidence interval might not necessarily include the most likely value. Take for example the exponential distribution
-
-$$
-X \sim \mathrm{exponential} (\lambda)
-$$
-
-An equal tail area 95% confidence interval would be $\left(-\ln(0.975)/\lambda, -\ln(0.025)/\lambda\right)$ which would not even contain the most likely value of zero. Should the highest density interval be used? Should skewness be reported with p-values and confidence intervals? Furthermore, confidence intervals are conditional on the model chosen, and that introduces other problems. @mcelreath2020statistical discusses a well-known issue in population biology about comparing a neutral model of the distribution of allele frequencies to a selective model. In short, the two differing hypotheses may suggest different process models which in turn lead to statistical models - some of which are shared by both hypotheses. Rejecting the statistical model doesn't rule out either of the hypotheses.
-
-Should we scrap these principles and tools all together? Absolutely not. Most of these wrinkled problems (and others) have been talked about and ironed out through careful discussion and clever techniques, but the damage is done, and hypothesis testing and p-values are widely misunderstood and misused. The problem is that these techniques rest on having a strong foundation of statistical knowledge, both to produce and to properly understand. This requirement is stifling. Communicating statistical results is just as important as producing them, and with modern tools and a vast selection of expressive languages we can analyze data in a more intuitive and natural framework.
-
-## Proposal of New Methods {#ch010-new-methods}
-
-In my biased opinion, the Bayesian framework for modeling is a much more natural way to conduct scientific research where some kind of data analysis is involved. Now of course, I can't claim as such without some compelling argument or examples. I have already targeted some weak points of classical statistics, and throughout [Chapter 3](#workflow) I will highlight specific examples of where classical techniques are typically applied, and how they may fall short compared to my proposal methods.
-
-What I am proposing is a fully Bayesian workflow to build and analyze a statistical model. In this Bayesian workflow (which shall hence be referred to simply as "workflow") I will highlight a set of principles that utilize domain expertise, and focus around building a multilevel model. My goal is to show that the combination of these two concepts yields better prediction results and greater inferential power. And in lieu of p-values and hypothesis testing, I let predictive inference narrate the statistical results and strength of association within the model.
-
-## Organization {#ch010-organization}
-
-I have organized this thesis as follows. In [Chapter 2](#motivating-data) I introduce the data set that drives the narrative and that motivates the adoption of Bayesian multilevel modeling. In [Chapter 3](#workflow) I describe and work through a principled Bayesian workflow for multilevel modeling. [Chapter 4](#model-checking) goes into more depth on checking the model goodness of fit and model diagnostics in a Bayesian setting. In [Chapter 5](#predictive-inference) I demonstrate how to use the Bayesian model from the principled workflow for predictive inference, and use posterior predictive distributions to plot and compare models. Chapters [5](#) and [6](#) go over the quantitative results and discuss the qualitative choices in the workflow. Then I conclude this paper in [Chapter 7](#conclusion).
+## Organization

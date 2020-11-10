@@ -1,3 +1,7 @@
+# What is a Model without Data {#motivating-data}
+
+_What is data without a model_
+
 ```{r ch020-setup, include=FALSE}
 library(FangPsychometric)
 library(tidyverse)
@@ -5,55 +9,33 @@ library(patchwork)
 library(kableExtra)
 ```
 
-# Motivating Data {#motivating-data}
-
 It was Charles Darwin who in his book _On the Origin of Species_ developed the idea that living organisms adapt in order to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Though the dark side of statistics and hubris lead Galton to become a pioneer of eugenics, his works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that he was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
 
 E.H. Weber built upon Herbart's work, and sought out to prove the idea of a _psychological threshold_. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a _liminal_ stimulus. He paved the way for experimental psychology and is the namesake of _Weber's Law_ -- the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus [@britannica2014editors].
-
-
 
 $$
 \frac{\Delta I}{I} = k
 $$
 
-
-
 To put this law into practice, consider holding a 1 kg weight ($I = 1$), and further suppose that we can _just_ detect the difference between a 1 kg weight and a 1.2 kg weight ($\Delta I = 0.2$). Then the constant just noticeable ratio is
-
-
 
 $$
 k = \frac{0.2}{1} = 0.2
 $$
 
-
-
 So now if we pick up a 10 kg weight, we should be able to determine how much more mass is required to just detect a difference:
-
-
 
 $$
 \frac{\Delta I}{10} = 0.2 \Rightarrow \Delta I = 2
 $$
 
-
-
 The difference between a 10 kg and a 12 kg weight should be just barely perceptible. Notice that the difference in the first set of weights is 0.2 and in the second set it is 2. Our perception of the difference in stimulus intensities is not absolute, but relative. G.T. Fechner devised the law (Weber-Fechner Law) that the strength of a sensation grows as the logarithm of the stimulus intensity.
-
-
 
 $$S = K \ln I$$
 
-
-
 An example to this law is to consider two light sources, one that is 100 lumens ($S_1 = K \ln 100$) and another that is 200 lumens ($S_2 = K \ln 200$). The intensity of the second light is not perceived as twice as bright, but only about 1.15 times as bright according to the Weber-Fechner law.
 
-
-
 $$\theta = S_2 / S_1 \approx 1.15$$
-
-
 
 Notice that the value $K$ cancels out when calculating the relative intensity, but knowing $K$ can lead to important psychological insights; insights about differences between persons or groups of people! What biological and contextual factors affect how people perceive different stimuli? How do we measure their perception in a meaningful way? As one might expect, we can collect data from psychometric experiments, fit a model to the data from a family of functions called _psychometric functions_, and inspect key operating characteristics of those functions.
 
@@ -112,11 +94,28 @@ Perceptual synchrony and temporal sensitivity can be modified through a baseline
 
 The data set that I introduce in the next section concerns temporal order judgment across various sensory modalities with a temporal recalibration component.
 
-## Temporal Order Judgment Task {#toj-task}
+## Temporal Order Judgment Data {#toj-task}
+
+_Which came first, the chicken or the experimentally controlled stimulus_
 
 The data set that I am using in this paper comes from experiments done by A.N. Scurry and Dr. F. Jiang in the Department of Psychology at the University of Nevada. Reduced temporal sensitivity in the aging population manifests in an impaired ability to perceive synchronous events as simultaneous, and similarly more difficulty in segregating asynchronous sensory signals that belong to different sources. The consequences of a widening of the temporal binding window is considered in @scurry2019aging, as well as a complete detailing of the experimental setup and recording process. A shortened summary of the methods is provided below.
 
 There are four different tasks in the experiment: audio-visual, visual-visual, visual-motor, and duration, and I will refer to each task respectively as audiovisual, visual, sensorimotor, and duration. The participants consist of 15 young adults (age 20-27), 15 middle age adults (age 39-50), and 15 older adults (age 65-75), all recruited from the University of Nevada, Reno. Additionally all subjects are right handed and were reported to have normal or corrected to normal hearing and vision.
+
+<!-- Count the number of unique subjects by age group and task
+```{r}
+multitask %>% 
+  drop_na() %>% 
+  group_by(age_group, task) %>% 
+  select(sid) %>% 
+  unique() %>% 
+  count() %>%
+  ungroup() %>%
+  kable(caption = "Number of subjects in each task.", booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "striped")) %>%
+  collapse_rows(columns = c(1), valign = "top")
+```
+-->
 
 
 ```{r ch020-multitask-data}
@@ -214,7 +213,6 @@ audiovisual_binomial %>%
 
 Other quirks about the data pertain to the subjects. There is one younger subject that did not complete the audiovisual task, and one younger subject that did not complete the duration task. Additionally there is one older subject who's response data for the post-adaptation audiovisual task is unreasonable^[By unreasonable, I mean that it is extremely unlikely that the data represents genuine responses.] (see figure \@ref(fig:ch020-av-post1-O-f-CE-plot)).
 
-
 ```{r ch020-av-post1-O-f-CE-plot, fig.cap="Post-adaptation response data for O-f-CE"}
 audiovisual_binomial %>%
   filter(rid == "av-post1-O-f-CE") %>%
@@ -227,9 +225,7 @@ audiovisual_binomial %>%
   scale_y_continuous(limits = c(0, 1))
 ```
 
-
 It is unreasonable because, of all the negative SOAs, there were only two correct responses^[Correct in the sense that the perceived order matches the actual order.]. If a subject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject's proportion of correct responses is above 0.5, then they are doing better than random guessing. In figure \@ref(fig:ch020-av-post-neg-trials) it is seen that subject O-f-CE is the only one who's proportion is below 0.5 (and by a considerable amount).
-
 
 ```{r ch020-av-post-neg-trials, fig.asp=1, fig.cap="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment."}
 audiovisual %>%
@@ -256,9 +252,7 @@ audiovisual %>%
   scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.25))
 ```
 
-
 The consequences of leaving in this experimental block in the data is considered in the [Chapter 6](#results), but it is a clear outlier that must be noted. When this method of detecting outliers is repeated for all tasks and blocks, then I end up with 17 records in total (see figure \@ref(fig:ch020-naive-prop-outliers)), one of which is the aforementioned subject.
-
 
 ```{r ch020-naive-prop-outliers, fig.cap="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs."}
 multitask %>%
@@ -285,7 +279,6 @@ multitask %>%
            angle = 270, vjust = 0) +
   scale_x_continuous(limits = c(0, 0.65), breaks = seq(0, 1, 0.25))
 ```
-
 
 Most of the records that are flagged by this method of outlier detection are from the sensorimotor task, and none are from the visual task. This may be attributed to the perceived difficulty of the task. One consequence of higher temporal sensitivity is that it is easier to determine temporal order. It may also be that determining temporal order is inherently easier for certain multisensory tasks compared to others. Since the sensorimotor task does not have fixed SOA values like the other tasks, it may be perceived as more difficult. Or perhaps the mechanisms that process tactile and visual signals are not as well coupled as those that process audio and visual signals. Once again, I'll consider the handling of the sensorimotor outliers in the results chapter.
 

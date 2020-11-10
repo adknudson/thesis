@@ -1,0 +1,416 @@
+```{r ch050-setup, include=FALSE}
+library(dagitty)
+library(tidyverse)
+library(purrr)
+library(patchwork)
+library(FangPsychometric)
+library(kableExtra)
+
+logit <- function(p) qlogis(p)
+inv_logit <- function(x) plogis(x)
+logistic <- function(x) inv_logit(x)
+
+Q <- function(p, a, b, l) {
+  logit((p - l) / (1 - 2*l)) / exp(b) + a
+}
+
+combine_samples <- function(post, age_group, block) {
+  with(post, data.frame(
+    age_group = age_group,
+    block = block,
+    alpha = a + aGT[,age_group,block],
+    beta  = b + bGT[,age_group,block],
+    lambda = lG[,age_group]
+  ))
+}
+
+post_table <- function(post) {
+  age_blk <- expand_grid(G=1:3, B=1:2)
+  pmap(age_blk, ~ combine_samples(post, ..1, ..2)) %>%
+    do.call(what = bind_rows) %>%
+    mutate(age_group = factor(age_group,
+                              levels = 1:3,
+                              labels = c("Young", "Middle", "Older")),
+           block = factor(block,
+                          levels = 1:2,
+                          labels = c("Pre", "Post"))) %>%
+    rename(`Age Group` = age_group, Block = block) %>%
+    mutate(gamma = 2 * lambda,
+           PSS = Q(0.5, alpha, beta, lambda),
+           JND = Q(0.84, alpha, beta, lambda) - PSS)
+}
+
+plot_pss <- function(df) {
+  p1 <- ggplot(df, aes(PSS, fill = Block)) +
+    geom_density(alpha = 0.75) +
+    facet_grid(`Age Group` ~ .) +
+    scale_fill_manual(values = two_colors) +
+    theme(legend.position = "bottom",
+          axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p2 <- ggplot(df, aes(PSS, fill = `Age Group`)) +
+    geom_density(alpha = 0.66) +
+    facet_grid(Block ~ .) +
+    scale_fill_manual(values = three_colors) +
+    theme(legend.position = "bottom",
+          axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p1 + p2
+}
+
+plot_jnd <- function(df) {
+  p1 <- ggplot(df, aes(JND, fill = Block)) +
+    geom_density(alpha = 0.75) +
+    facet_grid(`Age Group` ~ .) +
+    scale_fill_manual(values = two_colors) +
+    theme(legend.position = "bottom",
+          axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p2 <- ggplot(df, aes(JND, fill = `Age Group`)) +
+    geom_density(alpha = 0.66) +
+    facet_grid(Block ~ .) +
+    scale_fill_manual(values = three_colors) +
+    theme(legend.position = "bottom",
+          axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p1 + p2
+}
+
+plot_pss_average <- function(df) {
+  p1 <- ggplot(df, aes(PSS, fill = Block)) +
+    geom_density(alpha = 0.75) +
+    scale_fill_manual(values = two_colors) +
+    theme(legend.position = "bottom",
+          axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p2 <- ggplot(df, aes(PSS, fill = `Age Group`)) +
+    geom_density(alpha = 0.66) +
+    scale_fill_manual(values = three_colors) +
+    theme(legend.position = "bottom",
+          axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p1 + p2
+}
+
+plot_jnd_average <- function(df) {
+  p1 <- ggplot(df, aes(JND, fill = Block)) +
+    geom_density(alpha = 0.75) +
+    scale_fill_manual(values = two_colors) +
+    theme(legend.position = "bottom",
+          axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p2 <- ggplot(df, aes(JND, fill = `Age Group`)) +
+    geom_density(alpha = 0.66) +
+    scale_fill_manual(values = three_colors) +
+    theme(legend.position = "bottom",
+          axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p1 + p2
+}
+
+density_with_shade <- function(x, prob) {
+
+  ci <- rethinking::HPDI(x, prob = prob)
+
+  p <- ggplot(data.frame(x = x), aes(x)) +
+    geom_density() +
+    theme(axis.text.y = element_blank(),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank())
+
+  p_df <- ggplot_build(p)
+  x1 <- min(which(p_df$data[[1]]$x >= ci[1]))
+  x2 <- max(which(p_df$data[[1]]$x <= ci[2]))
+
+  p +
+    geom_area(data=data.frame(x=p_df$data[[1]]$x[x1:x2],
+                              y=p_df$data[[1]]$y[x1:x2]),
+              aes(x=x, y=y), fill="grey") +
+    geom_hline(yintercept = 0) +
+    geom_density()
+}
+
+HPDI <- rethinking::HPDI
+
+two_colors   <- c("orangered3", "steelblue4")
+three_colors <- c("goldenrod2", "turquoise3", "indianred4")
+
+av  <- post_table(readRDS("models/p034s_av.rds")) %>% 
+  add_column(Task = "Audiovisual", .before = 1)
+vis <- post_table(readRDS("models/p034s_vis.rds")) %>% 
+  add_column(Task = "Visual", .before = 1)
+dur <- post_table(readRDS("models/p034s_dur.rds")) %>% 
+  add_column(Task = "Duration", .before = 1)
+sm  <- post_table(readRDS("models/p034s_sm.rds")) %>% 
+  add_column(Task = "Sensorimotor", .before = 1)
+
+post <- bind_rows(av, vis, dur, sm) %>%
+  mutate(Task = factor(Task, levels = c("Audiovisual",
+                                        "Visual",
+                                        "Duration",
+                                        "Sensorimotor")))
+```
+
+# Psychometric Results {#results}
+
+What was the point of going through all the work of building a model if not to answer the questions that motivated the model in the first place? To reiterate, the questions pertain to how the brain reconciles stimuli originating from different sources, and if biological (age) and contextual (task, temporal recalibration) factors contribute to global percepts. The way through which these questions are answered is through a psychometric experiment and the resulting psychometric function ([chapter 2](#motivating-data)). I've divided this chapter into two sections - the affects of temporal recalibration and the consideration of a lapse rate. Temporal recalibration is considered in the context of perceptual synchrony and temporal sensitivity, and the results are broken down by age group. Also recall that there are four separate tasks - audiovisual, visual, duration, and sensorimotor.
+
+Temporal recalibration consists of presenting a subject with an adapting stimulus throughout a block of a psychometric experiment. Depending on the mechanisms at work, the resulting psychometric function can either be shifted (biased) towards the adapting stimulus (lag adaption) or away (Bayesian adaptation). The theory of integrating sensory signals is beyond the scope of this paper, but some papers discussing sensory adaptation in more detail are @miyazaki2006bayesian, @sato2011bayesian, and @stocker2005sensory. The statistical associations are reported without consideration for the deeper psychological theory.
+
+## On Perceptual Synchrony
+
+Perceptual synchrony is when the temporal delay between two stimuli is small enough so that the brain integrates the two signals into a global percept - perceived as happening simultaneously. Perceptual synchrony is studied through the point of subjective simultaneity (PSS), and in a simple sense represents the bias towards a given stimulus. Ideally the bias would be zero, but human perception is liable to change due to every day experiences. The pre-adaptation block is a proxy for implicit bias, and the post-adaptation indicates whether lag or Bayesian adaptation is taking place. Some researchers believe that both forms of adaptation are taking place at all times and that the mixture rates are determined by biological and contextual factors. I will try to stay away from making any strong determinations and will only present the results conditional on the model and the data.
+
+**Audiovisual TOJ Task**
+
+There are two ways that we can visually draw inferences across the 6 different age-block combinations. The distributions can either be faceted by age group, or they can be faceted by block. There are actually many ways that the data can be presented, but these two methods of juxtaposition help to answer two questions - how does the effect of adaptation vary by age group, and is there a difference in age groups by block? The left hand plot of figure \@ref(fig:ch050-Eastern-Cat) answers the former, and the right hand plot answers the latter.
+
+```{r ch050-Eastern-Cat, fig.cap="Posterior distribution of PSS values for the audiovisual task."}
+plot_pss(av) +
+  plot_annotation(title = "PSS - Audiovisual TOJ")
+```
+
+Across all age groups, temporal recalibration results in a negative shift towards zero in the PSS (as shown by the left hand plot), but there is no significant difference in the PSS between age groups (right hand plot). A very convenient consequence of using MCMC is that the samples from the posterior can be recombined in many ways to describe new phenomena. The PSS values can even be pooled across age groups so that the marginal affect of recalibration may be considered (left hand plot of figure \@ref(fig:ch050-Beta-Lonesome)).
+
+```{r ch050-Beta-Lonesome, fig.cap="Posterior distribution of PSS values for the audiovisual task. Left: Marginal over age group. Right: Marginal over block."}
+plot_pss_average(av) +
+  plot_annotation(title = "Marginal PSS - Audiovisual TOJ")
+```
+
+```{r ch050-Eternal Bulldozer}
+x <- av[av$Block == "Post", "PSS"]
+y <- av[av$Block == "Pre", "PSS"]
+d <- x - y
+ci90 <- HPDI(x - y, prob = 0.9)
+l90 <- ci90[1]
+u90 <- ci90[2]
+```
+
+Now with the marginal of age group, the distribution of differences between pre- and post-adaptation blocks can be calculated. I could report a simple credible interval, but it almost seems disingenuous given that the entire distribution is available. I could report that the $90\%$ highest posterior density interval (HPDI) of the difference is  $(`r round(l90, 3)`, `r round(u90, 3)`)$, but consider the following figure instead.
+
+
+```{r ch050-Omega-Permanent, fig.cap="Distribution of differences for pre- and post-adaptation PSS values with 90\\% HPDI."}
+density_with_shade(d, 0.9) +
+  labs(x = "SOA (seconds)",
+       title = "Distribution of the difference in PSS",
+       subtitle = "Between pre- and post-adaptation")
+```
+
+
+Figure \@ref(fig:ch050-Omega-Permanent) shows the distribution of differences with the $90\%$ HPDI region shaded. From this figure, one might conclude that the effect of recalibration, while small, is still noticeable for the audiovisual task. While this could be done for every task in the rest of this chapter, I do not think it is worth repeating as I am not trying to prove anything about the psychometric experiment itself (that is for a later paper). The point of this demonstration is simply that it can be done (and easily), and how to summarize the data both visually and quantitatively.
+
+**Visual TOJ Task**
+
+```{r ch050-Gruesome-Waffle, fig.cap="Posterior distribution of PSS values for the visual task."}
+plot_pss(vis) +
+  plot_annotation(title = "PSS - Visual TOJ")
+```
+
+
+Here there is no clear determination if recalibration has an effect on perceptual synchrony, as it is only the middle age group that shows a shift in bias. Even more, there is a lot of overlap between age group. Looking at the marginal distributions (figure \@ref(fig:ch050-Cold-Gamma)), there may be a difference between the younger and older age groups, and the middle age and older age groups. 
+
+
+```{r ch050-Cold-Gamma, fig.cap="The difference between the older age group and the two others is noticeable, but not likely significant."}
+plot_pss_average(vis) +
+  plot_annotation(title = "Marginal PSS - Visual TOJ")
+```
+
+
+These plots are useful for quickly being able to determine if there is a difference in factors. If there is a suspected difference, then the distribution can be calculated from the posterior samples as needed. I suspect that there may be a difference between the older age group and the other two, so I calculated the differences, and summarize them with the histogram in figure \@ref(fig:ch050-Rapid-Postal).
+
+```{r ch050-Rapid-Postal, fig.cap="The bulk of the distribution is above zero, but there is still a chance that there is no difference in the distribution of PSS values between the age groups during the visual TOJ experiment."}
+x <- vis[vis$`Age Group` == "Young", "PSS"]
+y <- vis[vis$`Age Group` == "Middle", "PSS"]
+z <- vis[vis$`Age Group` == "Older", "PSS"]
+
+d1 <- z - x
+d2 <- z - y
+bind_rows(tibble(x = d1, Difference = "Older - Young"),
+          tibble(x = d2, Difference = "Older - Middle")) %>%
+  ggplot(aes(x)) +
+  geom_histogram(bins = 50) +
+  facet_grid(Difference ~ .) +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  labs(title = "Marginal Difference in PSS",
+       subtitle = "Comparison between Older/Middle and Older/Young")
+```
+
+
+The bulk of the distribution is above zero, but there is still a chance that there is no difference in the distribution of PSS values between the age groups during the visual TOJ experiment.
+
+
+**Duration TOJ Task**
+
+```{r ch050-Stormy-Frostbite, fig.cap="Posterior distribution of PSS values for the duration task."}
+plot_pss(dur) +
+  plot_annotation(title = "PSS - Duration TOJ")
+```
+
+
+The duration TOJ task is very interesting because 1) recalibration had a visually significant effect across all age groups, and 2) there is virtually no difference between the age groups. I could plot the marginal distribution, but it wouldn't likely give any more insight. What I might ask is what is it about the duration task that lets temporal recalibration have such a significant effect? Is human perception of time duration more malleable than our perception to other sensory signals?
+
+**Sensorimotor TOJ Task**
+
+```{r ch050-Homeless-Anaconda, fig.cap="Posterior distribution of PSS values for the sensorimotor task."}
+plot_pss(sm) +
+  plot_annotation(title = "PSS - Sensorimotor TOJ")
+```
+
+
+There are no differences between age groups or blocks when it comes to perceptual synchrony in the sensorimotor task.
+
+## On Temporal Sensitivity
+
+Temporal sensitivity is the ability to successfully integrate signals arising from the same event, or segregate signals from different events. When the stimulus onset asynchrony increases, the ability to bind the signals into a single percept is reduced until they are perceived as distinct events with a temporal order. Those that are more readily able to determine temporal order have a higher temporal sensitivity, and it is measured through the slope of a psychometric function - specifically the quantity known as the just noticeable difference.
+
+**Audiovisual TOJ Task**
+
+```{r ch050-Timely-Toupee, fig.cap="Posterior distribution of JND values for the audiovisual task."}
+plot_jnd(av) +
+  plot_annotation(title = "JND - Audiovisual TOJ")
+```
+
+All age groups experienced an increase in temporal sensitivity, but the effect is largest in the older age group which also had the largest pre-adaptation JND estimates. There also appears to be some distinction between the older age group and the younger ones in the pre-adaptation block, but recalibration closes the gap.
+
+**Visual TOJ Task**
+
+```{r ch050-Mercury-Rainbow, fig.cap="Posterior distribution of JND values for the visual task."}
+plot_jnd(vis) +
+  plot_annotation(title = "JND - Visual TOJ")
+```
+
+The story for the visual TOJ task is similar to the audiovisual one - each age group experience heightened temporal sensitivity after recalibration, with the two older age groups receiving more benefit than the younger age group. It's also worth noting that the younger age groups have higher baseline temporal sensitivity, so there may not be as much room for improvement.
+
+**Duration TOJ Task**
+
+```{r ch050-Aimless-Planet, fig.cap="Posterior distribution of JND values for the duration task."}
+plot_jnd(dur) +
+  plot_annotation(title = "JND - Duration TOJ")
+```
+
+This time the effects of recalibration are not so strong, and just like for the PSS, there is no significant difference between age groups in the duration task.
+
+**Sensorimotor TOJ Task**
+
+```{r ch050-Tombstone-Cold, fig.cap="Posterior distribution of JND values for the sensorimotor task."}
+plot_jnd(sm) +
+  plot_annotation(title = "JND - Sensorimotor TOJ")
+```
+
+Finally in the sensorimotor task there are mixed results. Temporal recalibration increased the temporal sensitivity in the younger age group, reduced it in the middle age group, and had no effect on the older age group. Clearly the biological factors at play are complex, and the data here is a relatively thin slice of the population. More data and a better calibrated experiment may give better insights into the effects of temporal recalibration.
+
+## Lapse Rate across Age Groups
+
+
+```{r ch050-Waffle-Hollow, fig.cap="Process model of the result of a psychometric experiment with the assumption that lapses occur at random and at a fixed rate, and that the subject guesses randomly in the event of a lapse."}
+lapse_dag <- dagitty("dag{
+  Start -> Lapse
+  Start -> NoLapse
+  Lapse -> PositiveResponse
+  Lapse -> NegativeResponse
+  NoLapse -> PositiveResponse
+  NoLapse -> NegativeResponse
+}")
+coordinates(lapse_dag) <- list(x=c(Lapse=0, PositiveResponse=0,
+                                   Start=1,
+                                   NoLapse=2, NegativeResponse=2),
+                               y=c(Start=0,
+                                   Lapse=1, NoLapse=1,
+                                   PositiveResponse=2, NegativeResponse=2))
+
+plot(lapse_dag)
+text(x = c(0.5, 1.5,
+           0.05, 0.5,
+           1.5, 1.9), 
+     y = c(-0.4, -0.4,
+           -1.5, -1.2,
+           -1.2, -1.5), 
+     labels = c("γ", "1 - γ",
+                "0.5", "0.5",
+                "F(x)", "1-F(X)"))
+```
+
+In the above figure, the outcome of one experiment can be represented as a directed acyclic graph (DAG) where at the start of the experiment, the subject either experiences a lapse in judgment with probability $\gamma$ or they do not experience a lapse in judgment. If there is no lapse, then they will give a positive response with probability $F(x)$. If there is a lapse in judgment, then it is assumed that they will respond randomly - e.g. a fifty-fifty chance of a positive response. In this model of an experiment, the probability of a positive response is the sum of the two paths.
+
+
+\begin{align}
+\mathrm{P}(\textrm{positive}) &= 
+  \mathrm{P}(\textrm{lapse}) \cdot \mathrm{P}(\textrm{positive} | \textrm{lapse}) \\
+  &\quad + \mathrm{P}(\textrm{no lapse}) \cdot \mathrm{P}(\textrm{positive} | \textrm{no lapse}) \\
+  &= \frac{1}{2} \gamma + (1 - \gamma) \cdot F(x)
+\end{align}
+
+
+If we then let $\gamma = 2\lambda$ then the probability of a positive response becomes
+
+$$
+\mathrm{P}(\textrm{positive}) = \lambda + (1 - 2\lambda) \cdot F(x)
+$$
+
+This is the lapse model described in \@ref(eq:Psi)! But now there is a little bit more insight into what the parameter $\lambda$ is. If $\gamma$ is the true lapse rate, then $\lambda$ is half the lapse rate. This may sound strange at first, but remember that equation \@ref(eq:Psi) was motivated as a lower and upper bound to the psychometric function, and where the bounds are constrained by the same amount. Here the motivation is from a process model, yet the two lines of reasoning arrive at the same model. 
+
+Figure \@ref(fig:ch050-Magenta-Finger) shows the distribution of lapse rates for each age group across the four separate tasks. There is no visual trend in the ranks of lapse rates, meaning that no single age group definitively experiences a lower lapse rate than the others, though the middle age group comes close to being the winner and the older age group is more likely to be trailing behind. The distribution of lapse rates does reveal something about the tasks themselves.
+
+```{r ch050-Magenta-Finger, fig.cap="Lapse rates for the different age groups across the four separate tasks. Visually there is no clear trend in lapses by age group, but the concentration of the distributions give insight into the perceived difficulty of a task where more diffuse distributions may indiciate more difficult tasks."}
+ggplot(post, aes(gamma, fill = `Age Group`)) +
+  geom_density(alpha = 0.75) +
+  scale_fill_manual(values = three_colors) +
+  facet_grid(Task ~ ., scales = "free_y") +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  labs(x = "Lapse Rate",
+       title = "Distribution of lapse rates across tasks")
+```
+
+I used the audiovisual data in the first few iterations of building a model and there were no immediate issues, but when I tested the model on the visual data it had trouble expressing the variability at outer SOA values. I noted that one subject had a near perfect response set, and many others had equally impressive performance. The model without a lapse rate was being torn between a very steep slope near the PSS and random variability near the outer SOAs. The remedy was to include a lapse rate (motivated by domain expertise) which allowed for that one extra degree of freedom necessary to reconcile the opposing forces.
+
+Why did the visual data behave this way when the audiovisual data had no issue? That gets deep into the theory of how our brains integrate signals arising from different modalities. Detecting the temporal order of two visual stimuli may be an easier mental task than that of heterogeneous signals. Then consider audiovisual versus duration or sensorimotor. Visual-speech synthesis is a much more common task throughout the day than visual-tactile (sensorimotor), and so perhaps we are better adjusted to such a task as audiovisual. The latent measure of relative performance or task difficulty might be picked up through the lapse rate.
+
+To test this idea, the TOJ experiment could be repeated, and then ask the subject afterwards how they would rate the difficulty of each task. For now, a post-hoc test can be done by comparing the mean and spread of the lapse rates to a _pseuedo difficulty_ measure as defined by the mean of the incorrect responses. A response is correct when the sign of the SOA value is concordant with the response, e.g. a positive SOA and the subject gives the "positive" response or a negative SOA and the subject gives the "negative" response. Looking at figure \@ref(fig:ch050-Magenta-Finger), I would subjectively rate the tasks from easiest to hardest based on ocular analysis as
+
+1. Visual
+2. Audiovisual
+3. Duration
+4. Sensorimotor
+
+Again, this ranking is based on the mean (lower intrinsically meaning easier) and the spread (less diffuse implying more agreement of difficulty between age groups). The visual task has the tightest distribution of lapse rates, and the sensorimotor has the widest spread, so I can rank those first and last respectively. Audiovisual and duration are very similar in mean and spread, but the audiovisual has a bit more agreement between the young and middle age groups, so second and third go to audiovisual and duration. Table \@ref(tab:ch050-Orange-Tigerfish) shows the results arranged by increasing pseudo difficulty. As predicted, the visual task is squarely at the top and the sensorimotor is fully at the bottom. The only out of place group is the audiovisual task for the older age group, which is about equal to the older age group during the duration task. In fact, within tasks, the older age group always comes in last in terms of proportion of correct responses, while the young and middle age groups trade back and forth.
+
+```{r ch050-Orange-Tigerfish}
+multitask %>%
+  mutate(is_pos = soa > 0,
+         is_neg = soa < 0,
+         resp_pos = response == 1,
+         resp_neg = response == 0) %>%
+  filter(is_pos | is_neg, trial %in% c("pre", "post1")) %>%
+  mutate(correct = (is_pos & resp_pos) | (is_neg & resp_neg)) %>%
+  group_by(task, age_group) %>%
+  summarise(`Pseudo Difficulty` = 1 - mean(correct)) %>%
+  arrange(`Pseudo Difficulty`) %>%
+  rename(Task = task, `Age Group` = age_group) %>%
+  mutate(`Age Group` = fct_relabel(`Age Group`, ~str_to_title(str_replace(.x, "_", " ")))) %>%
+  kable(digits = 2, caption = "Relative difficulty of the different tasks by age group. The difficulty is measured by the proportion of incorrect responses.") %>%
+  kable_styling(latex_options = "hold_position")
+```
+
+One way to remove the uncertainty of the lapse rate could be to have some trials with very large SOA values. The reasoning is that if the difficulty of a task (given an SOA value) is lowered, than an incorrect response is more likely to be due to a true lapse in judgment as opposed to a genuinely incorrect response. @wichmann2001b recommends at least one sample at $\pi \ge 0.95$ is necessary for reliable bootstrap confidence intervals, so the same reasoning can be applied when using Bayesian credible intervals. For a task such as visual TOJ, the $90\%$ level may occur at an SOA of $\approx 40$ms while for the audiovisual TOJ it may be $\approx 220$ms, so the sampling scheme for psychometric experiments must be tuned to the task. 
+
+@wichmann2001a experimentally determined that the lapse rate for trained observers is between $0\%$ and $5\%$, and the data in this paper loosely agree with that conclusion. Any excess in lapse rate may be attributed to the perceived task difficulty and a sub-optimal sampling scheme. Since the visual TOJ task is relatively the easiest, the estimated lapse rates are more believable as true lapse rates, and fall closely within the $(0, 0.05)$ range.
