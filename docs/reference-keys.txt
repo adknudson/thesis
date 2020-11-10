@@ -48,6 +48,11 @@ fig:ch040-Dog-Reborn
 tab:unnamed-chunk-1
 fig:ch040-Timely-Nitrogen
 fig:ch040-Hot-Locomotive
+fig:ch050-Moving-Moose
+fig:ch050-Olive-Screwdriver
+fig:ch050-Cold-Fish
+fig:ch050-Strawberry-Swallow
+eq:lppd
 fig:ch060-Eastern-Cat
 fig:ch060-Beta-Lonesome
 fig:ch060-Omega-Permanent
@@ -87,6 +92,8 @@ effective-sample-size
 divergent-transitions
 prior-predictive-checks
 predictive-inferences
+model-comparison-via-predictive-performance
+loocv-and-importance-sampling
 results
 affect-of-adaptation-across-age-groups
 on-perceptual-synchrony
