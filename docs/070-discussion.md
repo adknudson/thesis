@@ -76,20 +76,20 @@ Breaking it apart, the `^(\\w+)/` matches any word characters at the start and b
 ```r
 table(feat_typ[,4])
 #> 
-#>     adapt1     adapt2     adapt3   baseline  baseline2 baseline43 
-#>        165        162         43        162          3          1
+#>   AC   AG   BB   BC   BT   CB   CC   CE   CJ   CM   DB   DC   DD   DE  DTF   DW 
+#>   13   12   13   13   13   13   10   12   13    4   13   13    7   12   12   13 
+#>   EM   ET   GB   GT   HG   IV   JM JM_F   JS   JW   KC   KK   LP   MC   MS   MW 
+#>   13   13   13   13   13    4   12   13   13   13   13   11    7   13   13   26 
+#>   NP   PB   SB   SJ  SJF   TS   TW   VM   WL   WW   YG 
+#>   12   13   12   26   13   13   13   13   13   12    7
 ```
 
 
 ```r
 table(feat_atyp[,4])
 #> 
-#>                         adapat1      adapation1    Adaptation_1    Adaptation_2 
-#>               1               1               1               9               7 
-#>     Adaptation1     adaptation2     Adaptation2     adaptation3          adpat1 
-#>               2               1               3               1               1 
-#>          adpat2          adpat3        baseline        Baseline Visual_Baseline 
-#>               4               1               1              10               1
+#>  AG  CC  CE  CM  DD DTF  IV  JM  JS  KK  NP  SB  WW  YG 
+#>   1   3   1   9   6   1   9   1   2   2   1   1   1   6
 ```
 
 Since there is only a handful of irregular block names, they can be dealt with a separate regular expression that properly extracts the block information. Other challenges in cleaning the data include the handling of subjects with the same initials. This becomes a problem because filtering by a subject's initials is not guaranteed to return a unique subject. Furthermore there are two middle age subjects with the same initials of "JM", so one was also identified with their sex "JM_F". The solution is to create a unique identifier (labeled as SID) that is a combination of age group, sex, and initials. For an experiment identifier (labeled as RID), the task and block were prepended to the SID. Each of these IDs uniquely identify the subjects and their experimental records making it easier to filter and search.

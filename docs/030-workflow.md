@@ -436,9 +436,19 @@ parameters {
 }
 model {
   vector[N] p = beta * (x - alpha);
-  alpha ~ normal(0, 0.05);
-  beta ~ lognormal(3.0, 1.5);
+  alpha ~ normal(0, 0.06);
+  beta ~ lognormal(3.0, 1.0);
   k ~ binomial_logit(n, p);
+}
+generated quantities {
+  vector[N] log_lik;
+  vector[N] k_pred;
+  vector[N] theta = beta * (x - alpha);
+  vector[N] p = inv_logit(theta);
+  for (i in 1:N) {
+    log_lik[i] = binomial_logit_lpmf(k[i] | n[i], theta[i]);
+    k_pred[i]  = binomial_rng(n[i], p[i]);
+  }
 }
 ```
 \setstretch{2.0}
@@ -581,21 +591,21 @@ There is no undesirable behavior from this model, so next I check the summary st
    <td style="text-align:left;"> alpha </td>
    <td style="text-align:right;"> 0.0061 </td>
    <td style="text-align:right;"> 0.0001 </td>
-   <td style="text-align:right;"> 0.0035 </td>
-   <td style="text-align:right;"> -0.0007 </td>
-   <td style="text-align:right;"> 0.0129 </td>
-   <td style="text-align:right;"> 3728 </td>
-   <td style="text-align:right;"> 1.000 </td>
+   <td style="text-align:right;"> 0.0038 </td>
+   <td style="text-align:right;"> -0.0012 </td>
+   <td style="text-align:right;"> 0.0136 </td>
+   <td style="text-align:right;"> 4039 </td>
+   <td style="text-align:right;"> 0.9995 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> beta </td>
-   <td style="text-align:right;"> 10.7726 </td>
-   <td style="text-align:right;"> 0.0054 </td>
-   <td style="text-align:right;"> 0.2473 </td>
-   <td style="text-align:right;"> 10.3054 </td>
-   <td style="text-align:right;"> 11.2600 </td>
-   <td style="text-align:right;"> 2073 </td>
-   <td style="text-align:right;"> 1.001 </td>
+   <td style="text-align:right;"> 10.7681 </td>
+   <td style="text-align:right;"> 0.0051 </td>
+   <td style="text-align:right;"> 0.2404 </td>
+   <td style="text-align:right;"> 10.3043 </td>
+   <td style="text-align:right;"> 11.2313 </td>
+   <td style="text-align:right;"> 2202 </td>
+   <td style="text-align:right;"> 1.0003 </td>
   </tr>
 </tbody>
 </table>
@@ -614,9 +624,8 @@ All of the work up until now has been done without peaking at the observed data.
 
 
 ```r
-obs_dat <- with(av_dat, list(N = N, x = x, n = n, k = k)) 
 m031 <- sampling(m031_stan, data = obs_dat, 
-                 chains = 4, cores = 4, refresh = 0)
+                 chains = 4, cores = 4, refresh = 200)
 ```
 
 
@@ -659,21 +668,21 @@ check_hmc_diagnostics(m031)
    <td style="text-align:left;"> alpha </td>
    <td style="text-align:right;"> 0.0373 </td>
    <td style="text-align:right;"> 0.0001 </td>
-   <td style="text-align:right;"> 0.0042 </td>
-   <td style="text-align:right;"> 0.0291 </td>
-   <td style="text-align:right;"> 0.0455 </td>
-   <td style="text-align:right;"> 3992 </td>
-   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0.0043 </td>
+   <td style="text-align:right;"> 0.029 </td>
+   <td style="text-align:right;"> 0.0458 </td>
+   <td style="text-align:right;"> 3765 </td>
+   <td style="text-align:right;"> 1.000 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> beta </td>
-   <td style="text-align:right;"> 8.4220 </td>
-   <td style="text-align:right;"> 0.0038 </td>
+   <td style="text-align:right;"> 8.4259 </td>
+   <td style="text-align:right;"> 0.0039 </td>
    <td style="text-align:right;"> 0.1839 </td>
-   <td style="text-align:right;"> 8.0591 </td>
-   <td style="text-align:right;"> 8.7779 </td>
-   <td style="text-align:right;"> 2393 </td>
-   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 8.070 </td>
+   <td style="text-align:right;"> 8.7897 </td>
+   <td style="text-align:right;"> 2249 </td>
+   <td style="text-align:right;"> 1.001 </td>
   </tr>
 </tbody>
 </table>

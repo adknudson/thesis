@@ -519,9 +519,19 @@ parameters {
 }
 model {
   vector[N] p = beta * (x - alpha);
-  alpha ~ normal(0, 0.05);
-  beta ~ lognormal(3.0, 1.5);
+  alpha ~ normal(0, 0.06);
+  beta ~ lognormal(3.0, 1.0);
   k ~ binomial_logit(n, p);
+}
+generated quantities {
+  vector[N] log_lik;
+  vector[N] k_pred;
+  vector[N] theta = beta * (x - alpha);
+  vector[N] p = inv_logit(theta);
+  for (i in 1:N) {
+    log_lik[i] = binomial_logit_lpmf(k[i] | n[i], theta[i]);
+    k_pred[i]  = binomial_rng(n[i], p[i]);
+  }
 }</code></pre>
 
 <p>Notice that the model block is nearly identical to the mathematical model!</p>
@@ -641,19 +651,19 @@ alpha
 0.0001
 </td>
 <td style="text-align:right;">
-0.0035
+0.0038
 </td>
 <td style="text-align:right;">
--0.0007
+-0.0012
 </td>
 <td style="text-align:right;">
-0.0129
+0.0136
 </td>
 <td style="text-align:right;">
-3728
+4039
 </td>
 <td style="text-align:right;">
-1.000
+0.9995
 </td>
 </tr>
 <tr>
@@ -661,25 +671,25 @@ alpha
 beta
 </td>
 <td style="text-align:right;">
-10.7726
+10.7681
 </td>
 <td style="text-align:right;">
-0.0054
+0.0051
 </td>
 <td style="text-align:right;">
-0.2473
+0.2404
 </td>
 <td style="text-align:right;">
-10.3054
+10.3043
 </td>
 <td style="text-align:right;">
-11.2600
+11.2313
 </td>
 <td style="text-align:right;">
-2073
+2202
 </td>
 <td style="text-align:right;">
-1.001
+1.0003
 </td>
 </tr>
 </tbody>
@@ -688,9 +698,8 @@ beta
 <p><strong>Post-Model, Post-Data</strong></p>
 <p><em>Fit Observed Data</em></p>
 <p>All of the work up until now has been done without peaking at the observed data. Satisfied with the model so far, I can now go ahead and run the data through.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="workflow.html#cb11-1"></a>obs_dat &lt;-<span class="st"> </span><span class="kw">with</span>(av_dat, <span class="kw">list</span>(<span class="dt">N =</span> N, <span class="dt">x =</span> x, <span class="dt">n =</span> n, <span class="dt">k =</span> k)) </span>
-<span id="cb11-2"><a href="workflow.html#cb11-2"></a>m031 &lt;-<span class="st"> </span><span class="kw">sampling</span>(m031_stan, <span class="dt">data =</span> obs_dat, </span>
-<span id="cb11-3"><a href="workflow.html#cb11-3"></a>                 <span class="dt">chains =</span> <span class="dv">4</span>, <span class="dt">cores =</span> <span class="dv">4</span>, <span class="dt">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="workflow.html#cb11-1"></a>m031 &lt;-<span class="st"> </span><span class="kw">sampling</span>(m031_stan, <span class="dt">data =</span> obs_dat, </span>
+<span id="cb11-2"><a href="workflow.html#cb11-2"></a>                 <span class="dt">chains =</span> <span class="dv">4</span>, <span class="dt">cores =</span> <span class="dv">4</span>, <span class="dt">refresh =</span> <span class="dv">200</span>)</span></code></pre></div>
 <p><em>Diagnose Posterior Fit</em></p>
 <p>Here I repeat the diagnostic checks that I used after fitting the simulated Bayesian ensemble.</p>
 
@@ -749,19 +758,19 @@ alpha
 0.0001
 </td>
 <td style="text-align:right;">
-0.0042
+0.0043
 </td>
 <td style="text-align:right;">
-0.0291
+0.029
 </td>
 <td style="text-align:right;">
-0.0455
+0.0458
 </td>
 <td style="text-align:right;">
-3992
+3765
 </td>
 <td style="text-align:right;">
-1
+1.000
 </td>
 </tr>
 <tr>
@@ -769,25 +778,25 @@ alpha
 beta
 </td>
 <td style="text-align:right;">
-8.4220
+8.4259
 </td>
 <td style="text-align:right;">
-0.0038
+0.0039
 </td>
 <td style="text-align:right;">
 0.1839
 </td>
 <td style="text-align:right;">
-8.0591
+8.070
 </td>
 <td style="text-align:right;">
-8.7779
+8.7897
 </td>
 <td style="text-align:right;">
-2393
+2249
 </td>
 <td style="text-align:right;">
-1
+1.001
 </td>
 </tr>
 </tbody>

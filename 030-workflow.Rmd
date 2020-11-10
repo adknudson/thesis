@@ -452,9 +452,19 @@ parameters {
 }
 model {
   vector[N] p = beta * (x - alpha);
-  alpha ~ normal(0, 0.05);
-  beta ~ lognormal(3.0, 1.5);
+  alpha ~ normal(0, 0.06);
+  beta ~ lognormal(3.0, 1.0);
   k ~ binomial_logit(n, p);
+}
+generated quantities {
+  vector[N] log_lik;
+  vector[N] k_pred;
+  vector[N] theta = beta * (x - alpha);
+  vector[N] p = inv_logit(theta);
+  for (i in 1:N) {
+    log_lik[i] = binomial_logit_lpmf(k[i] | n[i], theta[i]);
+    k_pred[i]  = binomial_rng(n[i], p[i]);
+  }
 }
 ```
 \setstretch{2.0}
@@ -606,17 +616,15 @@ obs_dat <- with(av_dat, list(N = N, x = x, n = n, k = k))
 if (file.exists("models/m031.rds")) {
   m031 <- readRDS("models/m031.rds")
 } else {
-  m031 <- sampling(m031_stan, data = obs_dat, 
-                 chains = 4, cores = 4, refresh = 0)
+  <<ch031-Homeless-Tea>>
   saveRDS(m031, "models/m031.rds")
 }
 ```
 
 
-```{r ch031-Homeless Tea, echo=TRUE, eval=FALSE}
-obs_dat <- with(av_dat, list(N = N, x = x, n = n, k = k)) 
+```{r ch031-Homeless-Tea, echo=TRUE, eval=FALSE}
 m031 <- sampling(m031_stan, data = obs_dat, 
-                 chains = 4, cores = 4, refresh = 0)
+                 chains = 4, cores = 4, refresh = 200)
 ```
 
 
@@ -932,21 +940,24 @@ generated quantities {
   matrix[N_G, N_T] pss;
   matrix[N_G, N_T] jnd;
   vector[N] k_pred;
+  vector[N] log_lik;
 
   for (i in 1:N_G) {
     for (j in 1:N_T) {
-      real mu_b = exp(b + bT[j] + bG[i]);
+      real mu_b = b + bT[j] + bG[i];
       real mu_a = a + aT[j] + aG[i];
       pss[i, j] = mu_a;
-      jnd[i, j] = logit(0.84) / mu_b;
+      jnd[i, j] = logit(0.84) / exp(mu_b);
     }
   }
   
   for (i in 1:N) {
     real mu_a = a + aT[trt[i]] + aG[G[i]];
     real mu_b = b + bT[trt[i]] + bG[G[i]];
-    real p = inv_logit(exp(mu_b) * (x[i] - mu_a));
+    real theta = exp(mu_b) * (x[i] - mu_a);
+    real p = inv_logit(theta);
     k_pred[i] = binomial_rng(n[i], p);
+    log_lik[i] = binomial_logit_lpmf(k[i] | n[i], theta);
   }
 }
 ```
@@ -1096,21 +1107,24 @@ generated quantities {
   matrix[N_G, N_T] pss;
   matrix[N_G, N_T] jnd;
   vector[N] k_pred;
+  vector[N] log_lik;
 
   for (i in 1:N_G) {
     for (j in 1:N_T) {
-      real mu_b = exp(b + bG[i] + bT[j]);
+      real mu_b = b + bG[i] + bT[j];
       real mu_a = a + aG[i] + aT[j];
       pss[i, j] = mu_a;
-      jnd[i, j] = logit(0.84) / mu_b;
+      jnd[i, j] = logit(0.84) / exp(mu_b);
     }
   }
   
   for (i in 1:N) {
     real mu_a = a + aT[trt[i]] + aG[G[i]];
     real mu_b = b + bT[trt[i]] + bG[G[i]];
-    real p = inv_logit(exp(mu_b) * (x[i] - mu_a));
+    real theta = exp(mu_b) * (x[i] - mu_a);
+    real p = inv_logit(theta);
     k_pred[i] = binomial_rng(n[i], p);
+    log_lik[i] = binomial_logit_lpmf(k[i] | n[i], theta);
   }
 }
 ```
@@ -1144,7 +1158,7 @@ keep_pars <- c(
   "sd_aG", "sd_bG",
   "sd_aT", "sd_bT",
   "pss", "jnd",
-  "k_pred"
+  "k_pred", "log_lik"
 )
 
 obs_dat <- with(av_dat, list(N = N, x = x, n = n, k = k, 
@@ -1368,21 +1382,24 @@ generated quantities {
   matrix[N_G, N_T] pss;
   matrix[N_G, N_T] jnd;
   vector[N] k_pred;
+  vector[N] log_lik;
 
   for (i in 1:N_G) {
     for (j in 1:N_T) {
-      real mu_b = exp(b + bGT[i, j]);
-      real mu_a =     a + aGT[i, j];
+      real mu_b = b + bGT[i, j];
+      real mu_a = a + aGT[i, j];
       pss[i, j] = mu_a;
-      jnd[i, j] = logit(0.84) / mu_b;
+      jnd[i, j] = logit(0.84) / exp(mu_b);
     }
   }
   
   for (i in 1:N) {
     real mu_b = b + bGT[G[i], trt[i]];
     real mu_a = a + aGT[G[i], trt[i]];
-    real p = inv_logit(exp(mu_b) * (x[i] - mu_a));
+    real theta = exp(mu_b) * (x[i] - mu_a);
+    real p = inv_logit(theta);
     k_pred[i] = binomial_rng(n[i], p);
+    log_lik[i] = binomial_logit_lpmf(k[i] | n[i], theta);
   }
 }
 ```
@@ -1410,7 +1427,7 @@ if (file.exists("models/m033.rds")) {
   m033 <- sampling(m033_stan, data = obs_dat, seed = 143, thin = 2,
                    iter = 4000, warmup = 2000, pars = keep_pars,
                    control = list(adapt_delta = 0.95),
-                   chains = 4, cores = 4, refresh = 0)
+                   chains = 4, cores = 4, refresh = 200)
   saveRDS(m033, "models/m033.rds")
 }
 ```
@@ -1529,7 +1546,7 @@ if (file.exists("models/m033vis.rds")) {
   m033vis <- sampling(m033_stan, data = obs_dat, seed = 143, thin = 2,
                       iter = 4000, warmup = 2000, pars = keep_pars,
                       control = list(adapt_delta = 0.95),
-                      chains = 4, cores = 4, refresh = 0)
+                      chains = 4, cores = 4, refresh = 200)
   saveRDS(m033vis, "models/m033vis.rds")
 }
 ```
@@ -1801,14 +1818,14 @@ init <- with(obs_dat, replicate(n_chains, list(
   lG = runif(N_G, 0, 0.05)),
 simplify = FALSE))
 
-if (file.exists("models/m034.rds")) {
-  m034 <- readRDS("models/m034.rds")
+if (file.exists("models/m034vis.rds")) {
+  m034vis <- readRDS("models/m034vis.rds")
 } else {
-  m034 <- sampling(m034_stan, data = obs_dat, seed = 626, init = init,
+  m034vis <- sampling(m034_stan, data = obs_dat, seed = 626, init = init,
                    iter = 4000, warmup = 2000, pars = keep_pars,
                    control = list(adapt_delta = 0.95), thin = 2,
                    chains = 4, cores = 4, refresh = 200)
-  saveRDS(m034, "models/m034.rds")
+  saveRDS(m034vis, "models/m034vis.rds")
 }
 ```
 
@@ -1818,7 +1835,7 @@ _Posterior Retrodictive Checks_
 The plot for the distribution of psychometric functions is repeated one more time below (figure \@ref(fig:ch034-Screaming-Proton)). There is now visual separation between the pre- and post-adaptation blocks, with the latter exhibiting a higher slope, which in turn implies a reduced just noticeable difference which is consistent with the audiovisual data in the previous model.
 
 ```{r ch034-Screaming-Proton, fig.cap="There is now a visual distinction between the two blocks unlike in the model without lapse rate. The lapse rate acts as a balance between steep slopes near the PSS and variation near the outer SOA values."}
-p034 <- extract(m034) 
+p034 <- extract(m034vis) 
 if (!file.exists("figures/ch034-Screaming-Proton.png")) {
   n <- 100
   idx <- sample(1:length(p034$a), n, replace = TRUE)

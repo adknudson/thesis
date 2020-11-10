@@ -1,3 +1,16 @@
+```{r ch050-setup, include=FALSE}
+library(loo)
+
+l031_av   <- loo(readRDS("models/m031.rds"))
+l032_av   <- loo(readRDS("models/m032.rds"))
+l032nc_av <- loo(readRDS("models/m032nc.rds"))
+l033_av   <- loo(readRDS("models/m033.rds"))
+l033_vis  <- loo(readRDS("models/m033vis.rds"))
+l034_vis  <- loo(readRDS("models/m034vis.rds"))
+l034s_vis <- loo(readRDS("models/m034s_vis.rds"))
+```
+
+
 # Predictive Inference {#predictive-inferences}
 
 _All models are wrong but some are useful_

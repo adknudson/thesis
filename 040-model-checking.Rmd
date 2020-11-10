@@ -16,7 +16,7 @@ p032nc <- as.array(m032nc)
 l032nc <- log_posterior(m032nc)
 n032nc <- nuts_params(m032nc)
 
-m034 <- readRDS("models/m034.rds")
+m034 <- readRDS("models/m034vis.rds")
 p034 <- as.array(m034)
 l034 <- log_posterior(m034)
 n034 <- nuts_params(m034)
