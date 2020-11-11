@@ -25,15 +25,15 @@ bookdown::gitbook:
       vk: no
       all: ['facebook', 'twitter', 'linkedin', 'weibo', 'instapaper']
     info: yes
-bookdown::pdf_book:
-  toc: false
-  includes:
-    in_header: latex/preamble.tex
-    before_body: latex/before_body.tex
-    after_body: latex/after_body.tex
-  pandoc_args: --top-level-division=chapter
-  keep_tex: yes
-  quote_footer: ["\\VA{", "}{}"]
-  citation_package: natbib
-  bibliography: [bibliography.bib, packages.bib]
-  template: latex/unr-template.tex
+# bookdown::pdf_book:
+#   toc: false
+#   includes:
+#     in_header: latex/preamble.tex
+#     before_body: latex/before_body.tex
+#     after_body: latex/after_body.tex
+#   pandoc_args: --top-level-division=chapter
+#   keep_tex: yes
+#   quote_footer: ["\\VA{", "}{}"]
+#   citation_package: natbib
+#   bibliography: [bibliography.bib, packages.bib]
+#   template: latex/unr-template.tex

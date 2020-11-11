@@ -64,7 +64,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-  pdftitle={Application of a Principaled Bayesian Workflow to Multilevel Modeling},
+  pdftitle={A Bayesian Multilevel Model for the Psychometric Function using R and Stan},
   pdfauthor={Alexander D. Knudson},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
@@ -72,6 +72,46 @@
 %==============================================================================09
 \usepackage[top=1in, left=1.5in, bottom=1.25in, right=1.5in]{geometry}
 %==============================================================================10
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 %==============================================================================11
 \usepackage{longtable,booktabs}
 \usepackage{multirow}
@@ -126,7 +166,7 @@
 University of Nevada, Reno
 
 \vspace{1.5in}
-\textbf{Application of a Principaled Bayesian Workflow to Multilevel Modeling}
+\textbf{A Bayesian Multilevel Model for the Psychometric Function using R and Stan}
 
 \vspace{1in}
 A thesis submitted in partial fulfillment of the \\
@@ -148,17 +188,6 @@ December, 2020
 \end{center}
 \end{titlepage}
 %==============================================================================22
-% Begin Copyright --------------------- (optional)
-\thispagestyle{empty}
-\begin{center}
-\vspace*{\fill}
-Copyright by Albert Einstein 1944 \\
-All Rights Reserved
-\vspace*{\fill}
-\end{center}
-%------------------------ End Copyright
-
-
 % Begin Committee Approval Page -------
 \newpage
 \thispagestyle{empty}
@@ -242,17 +271,86 @@ I would like to acknowledge my sister, Heather, my mentor, Grant, and my friend,
 \hypertarget{intro}{%
 \chapter{Introduction}\label{intro}}
 
+With the advances in computational power and the wide palette of statistical tools, statistical methods have evolved to be more flexible and expressive. Classical modeling tools like p-values and step-wise variable selection need not be the default as new modeling strategies founded on principles and informed decisions allow for creating bespoke models and domain-driven analyses.
+
+Advances in computational power have lead to a resurrection in statistics where Bayesian modeling has gained an incredible following due in part to fully Bayesian statistical inference modeling tools like \texttt{Stan}. The steady adoption of computer aided statistical workflows also brings the need for multidisciplinary techniques from numerical analysis, probability theory, statistics, computer science, and visualizations among others. There has also been a recent push towards reproducible research which ties in concepts of modular design, principled workflows, version control, and human-readable code.
+
+A common neuroscience topic is to detect the temporal order of two stimuli, and is often studied via a logistic model called a psychometric function. These studies are often interested in making inferences at the group level (age, gender, etc.) and at an individual level. Conventional practice is to use simple models that are easy to fit, but inflexible and vulnerable to fitting issues in the situation of complete separation. Bayesian multilevel models are flexible and easy to interpret, yet are not broadly adopted among practitioners. We describe a model selection process in a principled workflow, including specifying priors and implementing adaptive pooling. Then we propose and develop specialized quantities of interest and study their operating characteristics. In the development of the model we conduct prior predictive simulations studies into these proposed quantities of interest that provide insights into experimental design considerations. We discuss in detail a case study of real and previously unpublished data.
+
 \hypertarget{current-methods}{%
 \section{Current Methods}\label{current-methods}}
+
+Regression techniques commonly rely on maximum likelihood estimation (MLE) of parameters, and there are numerous resources on the subject of linear regression and MLE \citep{johnson2002applied, larsen2005introduction, sheather2009modern, navidi2015statistics}. Most introductory courses on statistics and regression center around classical techniques such as MLE, hypothesis testing, and residual analysis, and the emphasis for modeling has been on variable selection and goodness of fit tests. While these methods are well studied and broadly applied, there is often too much emphasis on p-values and significance testing which can lead to the omission of truly influential variables or the inclusion of confounding variables. Variable selection through step-wise algorithms or penalized maximum likelihood estimation \citep{hoerl1970ridge, tibshirani1996regression} may be appropriate in an exploratory data analysis, but improper for causal inference and other scientifically motivated experiments.
+
+The concept of basing scientific results on the falsifiability \citep{popper1959logic} or the refutability of a claim is a strong foundation for the scientific method, and is arguably much better than the previous grounds of verifiability -- just because something has been true for a very long time, doesn't mean it will always be true in the future. But hypothesis testing comes with its own set of problems. Null hypothesis testing for point estimates usually depends on calculating a confidence interval and seeing if the interval contains the point of interest. This can be misleading, as there is more than one confidence interval that can be calculated. For Gaussian distributions, the mean, median, and mode are the same, so a 95\% confidence interval is evenly distributed around the central measures. Some distributions are skewed, so an equal tail area confidence interval might not necessarily include the most likely value. The exponential distribution is a good example of a skewed distribution.
+
+\[X \sim \mathrm{exponential} (\lambda)\]
+
+An equal tail area 95\% confidence interval would be \(\left(-\ln(0.975)/\lambda, -\ln(0.025)/\lambda\right)\) which does not contain the most likely value -- zero. The skewness measure is not frequently reported with p-values and confidence intervals which leaves room for ambiguity.
+
+Because these classical techniques are so broadly applied and readily available in statistical software, there is strong potential for misunderstanding and misuse. The problem is that these classical techniques rest on having a strong foundation of statistical knowledge, both to produce and to properly understand. This requirement is stifling. Communicating statistical results is just as important as producing them, and with modern tools and a vast selection of expressive languages datacan be analyzed in a more intuitive and natural framework.
 
 \hypertarget{new-methods}{%
 \section{New Methods}\label{new-methods}}
 
+The Bayesian framework for modeling is a much more natural way to conduct scientific research where some kind of data analysis is involved. All prior domain knowledge may be incorporated into a model, and the entire posterior distribution is available to summarize, visualize, and draw inferences from. The uncertainty of reporting classic confidence intervals becomes trivial in a Bayesian framework; the distribution can be plotted or the highest posterior density interval (HPDI) may be reported.
+
+Bayesian statistics and modeling stems from Bayes theorem (equation \eqref{eq:bayesthm}). The prior \(\pi(\theta)\) is some distribution over the parameter space and the likelihood \(\pi(data | \theta)\) is the probability of an outcome in the sample space given a value in the parameter space.
+
+\begin{equation}
+  P(\theta | data) = \frac{P(data | \theta)\cdot P(\theta)}{\sum_i P(data | \theta_i)} =   \frac{P(data | \theta)\cdot P(\theta)}{\int_\Omega P(data | \theta)d\theta}
+  \label{eq:bayesthm}
+\end{equation}
+
+The posterior distribution is a probability distribution, which means that the sum or integral over the parameter space must evaluate to one. Because of this constraint, the denominator in \eqref{eq:bayesthm} acts as a scale factor to ensure that the posterior is valid. Since the denominator evaluates to a constant, it is generally omitted, and Bayes' theorem is simplified to saying that \emph{the posterior is proportional to the prior times the likelihood}.
+
+\[\pi(\theta \vert data) \propto \pi(\theta) \times \pi(data \vert \theta)\]
+
+For simple models, the posterior distribution can sometimes be evaluated analytically, but often it happens that the integral in the denominator is complex or of a high dimension. In the former situation, the integral may not be possible to evaluate, and in the latter there may not be enough computational resources in the world to perform a simple numerical approximation.
+
+The solution is to use Markov Chain Monte Carlo (MCMC) simulations to draw samples from the posterior distribution in a way that samples proportional to the density. This sampling is a form of approximation to the area under the curve -- an approximation to the denominator in \eqref{eq:bayesthm}. Rejection sampling \citep{gilks1992adaptive} and slice sampling \citep{neal2003slice} are basic methods for sampling from a target distribution, however they can often be inefficient -- large proportion of rejected samples. Gibbs sampling and the Metropolis-Hastings algorithm are more efficient, but do not scale well for models with hundreds or thousands of parameters.
+
+Hamiltonian Monte Carlo (HMC) simulation is a much more complex algorithm that can be compared to a physics simulation. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that indicate when the sampler is having trouble efficiently exploring the posterior. \texttt{Stan} is a probabilistic programming language (PPL) with an \texttt{R} interface that uses Hamiltonian dynamics to get full Bayesian statistical inference \citep{R-rstan}.
+
+\begin{itemize}
+\tightlist
+\item
+  Opportunity for presenting/summarizing model/results in expressive/rich ways
+\item
+  Need to build up a model in a principled way
+\item
+  Motivate the benefit of multilevel models
+\item
+  Thesis/proposal sentence
+\end{itemize}
+
 \hypertarget{organization}{%
 \section{Organization}\label{organization}}
 
-\hypertarget{motivating-data}{%
-\chapter{Motivating Data}\label{motivating-data}}
+\begin{itemize}
+\tightlist
+\item
+  \protect\hyperlink{data}{Chapter 2} - Background data
+\item
+  \protect\hyperlink{methods}{Chapter 3} - Background methods
+\item
+  \protect\hyperlink{application}{Chapter 4} - Application study
+\item
+  \protect\hyperlink{results}{Chapter 5} - Results
+\item
+  \protect\hyperlink{discussion}{Chapter 6} - Discussion
+\item
+  \protect\hyperlink{conclusion}{Chapter 7} - Conclusion
+\item
+  \protect\hyperlink{code}{Appendix A} - Supplementary code
+\item
+  \protect\hyperlink{model-dev}{Appendix B} - Developing a model
+\item
+  \protect\hyperlink{reproduce}{Appendix C} - Reproducible data cleaning
+\end{itemize}
+
+\hypertarget{data}{%
+\chapter{Motivating Data}\label{data}}
 
 It was Charles Darwin who in his book \emph{On the Origin of Species} developed the idea that living organisms adapt in order to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Though the dark side of statistics and hubris lead Galton to become a pioneer of eugenics, his works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that he was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
 
@@ -457,8 +555,8 @@ Now that I have introduced the motivating data and some of the theory behind psy
 \hypertarget{predictive-performance}{%
 \section{Predictive Performance}\label{predictive-performance}}
 
-\hypertarget{model-development-1}{%
-\chapter{Model Development}\label{model-development-1}}
+\hypertarget{application}{%
+\chapter{Model Development}\label{application}}
 
 \hypertarget{iter1}{%
 \section{Iteration 1}\label{iter1}}
@@ -916,6 +1014,9 @@ One way to remove the uncertainty of the lapse rate could be to have some trials
 \hypertarget{discussion}{%
 \chapter{Discussion}\label{discussion}}
 
+\hypertarget{causal-inference}{%
+\section{Causal Inference}\label{causal-inference}}
+
 \hypertarget{experimental-design}{%
 \section{Experimental Design}\label{experimental-design}}
 
@@ -925,54 +1026,179 @@ One way to remove the uncertainty of the lapse rate could be to have some trials
 \hypertarget{model-comparison-vs.-selection}{%
 \section{Model Comparison vs.~Selection}\label{model-comparison-vs.-selection}}
 
-\hypertarget{developing-a-model}{%
-\section{Developing a Model}\label{developing-a-model}}
-
-\hypertarget{reproducible-results}{%
-\section{Reproducible Results}\label{reproducible-results}}
-
 \hypertarget{conclusion}{%
 \chapter{Conclusion}\label{conclusion}}
 
 \begin{itemize}
 \tightlist
 \item
-  Rehash of results
+  clearly state contributions
 \item
-  Point out my direct contributions
-\item
-  Future work
+  Future directions
+
+  \begin{itemize}
+  \tightlist
+  \item
+    causation
+  \item
+    model averaging
+  \item
+    high dimensional models
+  \end{itemize}
 \item
   Final word
+
+  \begin{itemize}
+  \tightlist
+  \item
+    one to three sentences of reflection
+  \end{itemize}
 \end{itemize}
 
 \hypertarget{appendix-appendix}{%
 \appendix}
 
 
-\hypertarget{supplementary-code}{%
-\chapter{Supplementary Code}\label{supplementary-code}}
+\hypertarget{code}{%
+\chapter{Supplementary Code}\label{code}}
 
-\textbf{Eight Schools Model}
+\hypertarget{model-dev}{%
+\chapter{Developing a Model}\label{model-dev}}
+
+\protect\hyperlink{workflow}{Chapter 4} details the deeper considerations that went into building a model, but doesn't tell the full story of struggles and setbacks I faced. I find that I learn more from others when they share what didn't work along with the final path that did work. There is knowledge to be gained in failed experiments, because then there is one more way to not do something, just like a failing outcome reduces the variance of the Beta distribution.
+
+I knew that I wanted to apply Bayesian modeling techniques to the data, because it was something knew that I was learning. I tried using a classical GLM to first get a baseline understanding of the data, but the fact that some estimates for certain subjects failed due to complete separation reinforced my enthusiasm to employ non-classical techniques. My first Bayesian model was derived from \citet{lee2014bayesian} which used nested loops to iterate over subjects and SOA values. I felt that the data was stored in a complicated way and made it difficult to comprehend and extend.
+
+Next I moved on to using \texttt{arm::bayesglm} to remove convergence issues, but was met with other limitations such as linear parameterization and lack of hierarchical modeling. The book Statistical Rethinking \citep{mcelreath2020statistical} was my first introduction to Bayesian multilevel modeling. His \texttt{rethinking} package accompanies the book, and offers a compact yet expressive syntax for models that get translated into a Stan model. A model with age group and block can be written using \texttt{rethinking::ulam} as
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rethinking}\OperatorTok{::}\KeywordTok{ulam}\NormalTok{(}\KeywordTok{alist}\NormalTok{(}
+\NormalTok{  k }\OperatorTok{~}\StringTok{ }\KeywordTok{binomial_logit}\NormalTok{(n, p),}
+  \DataTypeTok{p =} \KeywordTok{exp}\NormalTok{(b }\OperatorTok{+}\StringTok{ }\NormalTok{bG[G] }\OperatorTok{+}\StringTok{ }\NormalTok{bT[trt]) }\OperatorTok{*}\StringTok{ }\NormalTok{(x }\OperatorTok{-}\StringTok{ }\NormalTok{(a }\OperatorTok{+}\StringTok{ }\NormalTok{aG[G] }\OperatorTok{+}\StringTok{ }\NormalTok{aT[trt])),}
+\NormalTok{  a }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.06}\NormalTok{),}
+\NormalTok{  aG[G] }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, sd_aG),}
+\NormalTok{  aT[trt] }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, sd_aT),}
+\NormalTok{  b }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{),}
+\NormalTok{  bG[G] }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, sd_bG),}
+\NormalTok{  bT[trt] }\OperatorTok{~}\StringTok{ }\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, sd_bT),}
+  \KeywordTok{c}\NormalTok{(sd_aG, sd_aT, sd_bG, sd_bT) }\OperatorTok{~}\StringTok{ }\KeywordTok{half_cauchy}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{5}\NormalTok{)}
+\NormalTok{), }\DataTypeTok{data =}\NormalTok{ df, }\DataTypeTok{chains =} \DecValTok{4}\NormalTok{, }\DataTypeTok{cores =} \DecValTok{4}\NormalTok{, }\DataTypeTok{log_lik =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+During my time learning about multilevel models, I tried writing my own package that generates a Stan program based on R formula syntax. At the time I didn't fully understand the concepts of no-pooling, complete pooling, and partial pooling, and my package was plagued by the same lack of flexibility that \texttt{rstanarm} and \texttt{brms} have. In fact I learned that \texttt{brms} and \texttt{rstanarm} already did what I was trying to do after I had already started making my library, but it was a fun learning and programming experience. The fossilized remains of my attempt can be viewed on github.
+
+I also tried using \texttt{lme4}, \texttt{rstanarm}, and \texttt{brms}, and learned more about the concepts of fixed and random effects. It was around this time that I noticed that parameterization can have a significant affect on the efficiency of a model and the inferential power of the estimated parameters. When fitting a classical model, there is little difference in estimating \texttt{a\ +\ bx} vs.~\texttt{d(x\ -\ c)} since the latter can just be expanded as \texttt{-cd\ +\ dx} which is essentially the same as the first parameterization, but there is a practical difference in the interpretation of the parameters. The second parameterization implies that there is a dependence among the parameters that can be factored out. In the context of psychometric functions, there is a stronger connection between PSS and \texttt{c} and the JND and \texttt{d}. This parameterization made it easier to specify priors and also increased the model efficiency. Since only \texttt{rethinking} and \texttt{Stan} allow for arbitrary parameterization, I left the others behind.
+
+I finally arrived at a model that worked well, but learned that using a binary indicator variable for the treatment comes with the assumption of higher uncertainty for one of the conditions. The linear model that I arrived at is displayed in equation \eqref{eq:badlinearmodel}.
+
+\begin{equation}
+  \theta = \exp(\beta + \beta_G +(\beta_T + \beta_{TG})\times trt) \left[x - (\alpha + \alpha_G + (\alpha_T + \alpha_{TG})\times trt)\right]
+  \label{eq:badlinearmodel}
+\end{equation}
+
+Using an indicator variable in this fashion also introduced an interaction effect into the model that I almost did not account for after I switched to using a factor variable. Interaction effects between factors is handled by creating a new factor that is essentially the cross-product of other factor variables. E.g. for factor variables \(x\) and \(y\)
+
+\[
+x = \begin{bmatrix}
+a \\
+b \\
+c
+\end{bmatrix}, y =  \begin{bmatrix}
+i \\
+j
+\end{bmatrix}\Longrightarrow x\times y = 
+\begin{bmatrix}
+ai & aj \\
+bi & bj \\
+ci & cj
+\end{bmatrix}
+\]
+
+The final round of reparameterization came in the form of adopting non-centered parameterization for more efficient models. To us, \(Z \sim N(0, 1^2);\quad X = 3 + 2Z\) is the same as \(X \sim N(3, 2^2)\), but to a computer the process of sampling from \(X\) can be more difficult than sampling from \(Z\) (discussed in \protect\hyperlink{model-checking}{chapter 4}).
+
+\hypertarget{reproduce}{%
+\chapter{Reproducible Results}\label{reproduce}}
+
+Data doesn't always come in a nice tidy\footnote{Tidy data is described by Hadley Wickham} format, and I had the pleasure of turning the raw experimental data into a clean data set that is ready for modeling. Sometimes the process is quick and straight forward, but other times, like with this psychometric data, it takes more effort and clever techniques. There is academic value in describing the steps I took up front to reduce the headache later.
+
+To begin, there is a strong push in recent years for reproducible data science. Scientific methods and results should be able to be replicated by other researchers, and part of that includes being able to replicate the process that takes the raw data and produces the tidy data that is ready for analysis. Tidy data is described by \citet{wickham2014tidy} and can be summed up by three principles
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Each variable forms a column
+\item
+  Each observation forms a row
+\item
+  Each type of observational unit forms a table
+\end{enumerate}
+
+One problem I have come across and have been guilty of in the past is having data in a spread sheet, modifying it, and then having no way of recovering the original data. Spread sheets are a convenient way to organize, transform, and lightly analyze date, but problems can quickly arise unless there is a good backup/snapshot system in place. Data is immutable\footnote{Mutability in computer science is the property of a data structure where its contents can be modified in place. Immutability means that the object cannot be modified without first making a copy.}, or at least that is the mindset that researchers must adopt in order to have truly reproducible workflows. The raw data that is collected or produced by a measurement device should never be modified without first being copied, even if for trivial reasons such as correcting a spelling mistake\footnote{If a change is made to the raw data, it should be carefully documented and reversible}.
+
+To begin the data cleaning journey, I'll introduce the directory system that I had been given to work with. Each task is separated into its own folder, and within each folder is a subdirectory of age groups.
+
+\begin{center}\includegraphics[width=0.3\linewidth]{figures/data_dir} \end{center}
+
+Within each age group subdirectory are the subdirectories for each subject named by their initials which then contain the experimental data in Matlab files.
+
+\begin{center}\includegraphics[width=0.35\linewidth]{figures/data_subdir} \end{center}
+
+At this point, the data appears manageable, there is information contained in the directory structure such as task, age group, and initials, and file name contains information about the experimental block. There is also an excel file that I was later given that contains more subject information like age and sex, though that information is not used in the model. The columns of the Matlab file depends on the task, but generally contains an SOA value and a response, but no column or row name information - that was provided by the researcher who collected the data.
+
+The next thing I did was to create a table of metadata - information extracted from the directory structure and file names combined with the the subject data and the file path. Regular expressions can be used to extract patterns from a string. With a list of all Matlab files within the \texttt{RecalibrationData} folder, I tried to extract the task, age group, initials, and block using the expression
 
 \begin{verbatim}
-data {
-  int<lower=0> J;
-  vector[J] y;
-  vector<lower=0>[J] sigma;
-}
-parameters {
-  real mu;
-  real<lower=0> tau;
-  vector[J] theta;
-}
-model {
-  mu ~ normal(0, 10);
-  tau ~ cauchy(0, 10);
-  theta ~ normal(mu, tau);
-  y ~ normal(theta, sigma);
-}
+"^(\\w+)/(\\w+)/(\\w+)/[A-Z]{2,3}_*[A-Z]*(adapt[0-9]|baseline[0-9]*).*"
 \end{verbatim}
+
+Breaking it apart, the \texttt{\^{}(\textbackslash{}\textbackslash{}w+)/} matches any word characters at the start and before the next slash. Since the directory structure is \texttt{Task/AgeGroup/Subject/file.mat}, the regular expression should match three words between slashes. The file name generally follows the pattern of \texttt{Initials\_\_block\#\_\_MAT.mat}, so \texttt{{[}A-Z{]}\{2,3\}\_*{[}A-Z{]}*} should match the initials, and \texttt{(adapt{[}0-9{]}\textbar{}baseline{[}0-9{]}*)} should match the block (baseline or adapt). This method works for \(536\) of the \(580\) individual records. For the ones it failed, it was generally do to misspellings or irregular capitalizing of ``baseline'' and ``adapt''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(feat_typ[,}\DecValTok{4}\NormalTok{])}
+\CommentTok{#> }
+\CommentTok{#>   AC   AG   BB   BC   BT   CB   CC   CE   CJ   CM   DB   DC   DD   DE  DTF   DW }
+\CommentTok{#>   13   12   13   13   13   13   10   12   13    4   13   13    7   12   12   13 }
+\CommentTok{#>   EM   ET   GB   GT   HG   IV   JM JM_F   JS   JW   KC   KK   LP   MC   MS   MW }
+\CommentTok{#>   13   13   13   13   13    4   12   13   13   13   13   11    7   13   13   26 }
+\CommentTok{#>   NP   PB   SB   SJ  SJF   TS   TW   VM   WL   WW   YG }
+\CommentTok{#>   12   13   12   26   13   13   13   13   13   12    7}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(feat_atyp[,}\DecValTok{4}\NormalTok{])}
+\CommentTok{#> }
+\CommentTok{#>  AG  CC  CE  CM  DD DTF  IV  JM  JS  KK  NP  SB  WW  YG }
+\CommentTok{#>   1   3   1   9   6   1   9   1   2   2   1   1   1   6}
+\end{Highlighting}
+\end{Shaded}
+
+Since there is only a handful of irregular block names, they can be dealt with a separate regular expression that properly extracts the block information. Other challenges in cleaning the data include the handling of subjects with the same initials. This becomes a problem because filtering by a subject's initials is not guaranteed to return a unique subject. Furthermore there are two middle age subjects with the same initials of ``JM'', so one was also identified with their sex ``JM\_F''. The solution is to create a unique identifier (labeled as SID) that is a combination of age group, sex, and initials. For an experiment identifier (labeled as RID), the task and block were prepended to the SID. Each of these IDs uniquely identify the subjects and their experimental records making it easier to filter and search.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{glimpse}\NormalTok{(features)}
+\CommentTok{#> Rows: 580}
+\CommentTok{#> Columns: 8}
+\CommentTok{#> $ rid       <fct> av-post1-M-f-CC, av-post1-M-f-DB, av-post1-M-f-HG, av-pos...}
+\CommentTok{#> $ sid       <fct> M-f-CC, M-f-DB, M-f-HG, M-f-JM, M-f-MS, M-f-SJF, M-f-TS, ...}
+\CommentTok{#> $ path      <chr> "Audiovisual/MiddleAge/CC/CCadapt1__MAT.mat", "Audiovisua...}
+\CommentTok{#> $ task      <chr> "audiovisual", "audiovisual", "audiovisual", "audiovisual...}
+\CommentTok{#> $ trial     <fct> post1, post1, post1, post1, post1, post1, post1, post1, p...}
+\CommentTok{#> $ age_group <fct> middle_age, middle_age, middle_age, middle_age, middle_ag...}
+\CommentTok{#> $ age       <dbl> 39, 44, 41, 48, 49, 43, 47, 49, 49, 44, 43, 44, 48, 48, 5...}
+\CommentTok{#> $ sex       <fct> F, F, F, F, F, F, F, F, F, M, M, M, M, M, M, F, F, F, F, ...}
+\end{Highlighting}
+\end{Shaded}
+
+Then with the table of clean metadata, the task is simply to loop through each row, read the Matlab file given by \texttt{path}, add the unique ID as a column, and then join the experimental data with the metadata to create a data set that is ready for model fitting and data exploration. The full code used to generate the clean data is not yet available online, but can be shared with the committee.
+
+The benefit of writing a script to generate the data is that others can look over my code and verify that it is doing what I intended for it to do, and I can go back to any step within the process to make changes if the need comes up. Another tool that contributed to the reproducibility is the version control management software, Git. With Git I can take a snapshot of the changes I make, and revert if necessary. This thesis is also hosted on Github, and the entire history of development can be viewed there.
 %==============================================================================26
 \backmatter
 %==============================================================================27

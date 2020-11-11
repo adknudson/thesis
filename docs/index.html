@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Application of a Principaled Bayesian Workflow to Multilevel Modeling</title>
-  <meta name="description" content="Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <title>A Bayesian Multilevel Model for the Psychometric Function using R and Stan</title>
+  <meta name="description" content="A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <meta property="og:title" content="A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="adkudson/thesis" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <meta name="twitter:title" content="A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   
   
   
@@ -31,7 +31,7 @@
   
   
 
-<link rel="next" href="motivating-data.html"/>
+<link rel="next" href="data.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -56,6 +56,70 @@
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 </head>
 
@@ -74,10 +138,10 @@
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#new-methods"><i class="fa fa-check"></i><b>1.2</b> New Methods</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i><b>1.3</b> Organization</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="motivating-data.html"><a href="motivating-data.html"><i class="fa fa-check"></i><b>2</b> Motivating Data</a><ul>
-<li class="chapter" data-level="2.1" data-path="motivating-data.html"><a href="motivating-data.html#psycho-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
-<li class="chapter" data-level="2.2" data-path="motivating-data.html"><a href="motivating-data.html#toj-task"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Task</a></li>
-<li class="chapter" data-level="2.3" data-path="motivating-data.html"><a href="motivating-data.html#data-visualizations-and-quirks"><i class="fa fa-check"></i><b>2.3</b> Data Visualizations and Quirks</a></li>
+<li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Motivating Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#psycho-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
+<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#toj-task"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Task</a></li>
+<li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#data-visualizations-and-quirks"><i class="fa fa-check"></i><b>2.3</b> Data Visualizations and Quirks</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>3</b> Methods</a><ul>
 <li class="chapter" data-level="3.1" data-path="methods.html"><a href="methods.html#model-development"><i class="fa fa-check"></i><b>3.1</b> Model Development</a></li>
@@ -85,12 +149,12 @@
 <li class="chapter" data-level="3.3" data-path="methods.html"><a href="methods.html#model-checking"><i class="fa fa-check"></i><b>3.3</b> Model Checking</a></li>
 <li class="chapter" data-level="3.4" data-path="methods.html"><a href="methods.html#predictive-performance"><i class="fa fa-check"></i><b>3.4</b> Predictive Performance</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="model-development-1.html"><a href="model-development-1.html"><i class="fa fa-check"></i><b>4</b> Model Development</a><ul>
-<li class="chapter" data-level="4.1" data-path="model-development-1.html"><a href="model-development-1.html#iter1"><i class="fa fa-check"></i><b>4.1</b> Iteration 1</a></li>
-<li class="chapter" data-level="4.2" data-path="model-development-1.html"><a href="model-development-1.html#iter2"><i class="fa fa-check"></i><b>4.2</b> Iteration 2</a></li>
-<li class="chapter" data-level="4.3" data-path="model-development-1.html"><a href="model-development-1.html#iter3"><i class="fa fa-check"></i><b>4.3</b> Iteration 3</a></li>
-<li class="chapter" data-level="4.4" data-path="model-development-1.html"><a href="model-development-1.html#iter4"><i class="fa fa-check"></i><b>4.4</b> Iteration 4</a></li>
-<li class="chapter" data-level="4.5" data-path="model-development-1.html"><a href="model-development-1.html#iter5"><i class="fa fa-check"></i><b>4.5</b> Iteration 5</a></li>
+<li class="chapter" data-level="4" data-path="application.html"><a href="application.html"><i class="fa fa-check"></i><b>4</b> Model Development</a><ul>
+<li class="chapter" data-level="4.1" data-path="application.html"><a href="application.html#iter1"><i class="fa fa-check"></i><b>4.1</b> Iteration 1</a></li>
+<li class="chapter" data-level="4.2" data-path="application.html"><a href="application.html#iter2"><i class="fa fa-check"></i><b>4.2</b> Iteration 2</a></li>
+<li class="chapter" data-level="4.3" data-path="application.html"><a href="application.html#iter3"><i class="fa fa-check"></i><b>4.3</b> Iteration 3</a></li>
+<li class="chapter" data-level="4.4" data-path="application.html"><a href="application.html#iter4"><i class="fa fa-check"></i><b>4.4</b> Iteration 4</a></li>
+<li class="chapter" data-level="4.5" data-path="application.html"><a href="application.html#iter5"><i class="fa fa-check"></i><b>4.5</b> Iteration 5</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Psychometric Results</a><ul>
 <li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#on-perceptual-synchrony"><i class="fa fa-check"></i><b>5.1</b> On Perceptual Synchrony</a></li>
@@ -98,15 +162,16 @@
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>5.3</b> Lapse Rate across Age Groups</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>6</b> Discussion</a><ul>
-<li class="chapter" data-level="6.1" data-path="discussion.html"><a href="discussion.html#experimental-design"><i class="fa fa-check"></i><b>6.1</b> Experimental Design</a></li>
-<li class="chapter" data-level="6.2" data-path="discussion.html"><a href="discussion.html#results-1"><i class="fa fa-check"></i><b>6.2</b> Results</a></li>
-<li class="chapter" data-level="6.3" data-path="discussion.html"><a href="discussion.html#model-comparison-vs.-selection"><i class="fa fa-check"></i><b>6.3</b> Model Comparison vs. Selection</a></li>
-<li class="chapter" data-level="6.4" data-path="discussion.html"><a href="discussion.html#developing-a-model"><i class="fa fa-check"></i><b>6.4</b> Developing a Model</a></li>
-<li class="chapter" data-level="6.5" data-path="discussion.html"><a href="discussion.html#reproducible-results"><i class="fa fa-check"></i><b>6.5</b> Reproducible Results</a></li>
+<li class="chapter" data-level="6.1" data-path="discussion.html"><a href="discussion.html#causal-inference"><i class="fa fa-check"></i><b>6.1</b> Causal Inference</a></li>
+<li class="chapter" data-level="6.2" data-path="discussion.html"><a href="discussion.html#experimental-design"><i class="fa fa-check"></i><b>6.2</b> Experimental Design</a></li>
+<li class="chapter" data-level="6.3" data-path="discussion.html"><a href="discussion.html#results-1"><i class="fa fa-check"></i><b>6.3</b> Results</a></li>
+<li class="chapter" data-level="6.4" data-path="discussion.html"><a href="discussion.html#model-comparison-vs.-selection"><i class="fa fa-check"></i><b>6.4</b> Model Comparison vs. Selection</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
-<li class="chapter" data-level="A" data-path="supplementary-code.html"><a href="supplementary-code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
+<li class="chapter" data-level="A" data-path="code.html"><a href="code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
+<li class="chapter" data-level="B" data-path="model-dev.html"><a href="model-dev.html"><i class="fa fa-check"></i><b>B</b> Developing a Model</a></li>
+<li class="chapter" data-level="C" data-path="reproduce.html"><a href="reproduce.html"><i class="fa fa-check"></i><b>C</b> Reproducible Results</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -117,7 +182,7 @@
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Application of a Principaled Bayesian Workflow to Multilevel Modeling</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Bayesian Multilevel Model for the Psychometric Function using R and Stan</a>
           </h1>
         </div>
 
@@ -126,21 +191,93 @@
 
             <section class="normal" id="section-">
 <div id="header">
-<h1 class="title">Application of a Principaled Bayesian Workflow to Multilevel Modeling</h1>
+<h1 class="title">A Bayesian Multilevel Model for the Psychometric Function using R and Stan</h1>
 <p class="author"><em>Alexander D. Knudson</em></p>
 <p class="date"><em>December, 2020</em></p>
 </div>
 <div id="intro" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
+<p>With the advances in computational power and the wide palette of statistical tools, statistical methods have evolved to be more flexible and expressive. Classical modeling tools like p-values and step-wise variable selection need not be the default as new modeling strategies founded on principles and informed decisions allow for creating bespoke models and domain-driven analyses.</p>
+<p>Advances in computational power have lead to a resurrection in statistics where Bayesian modeling has gained an incredible following due in part to fully Bayesian statistical inference modeling tools like <code>Stan</code>. The steady adoption of computer aided statistical workflows also brings the need for multidisciplinary techniques from numerical analysis, probability theory, statistics, computer science, and visualizations among others. There has also been a recent push towards reproducible research which ties in concepts of modular design, principled workflows, version control, and human-readable code.</p>
+<p>A common neuroscience topic is to detect the temporal order of two stimuli, and is often studied via a logistic model called a psychometric function. These studies are often interested in making inferences at the group level (age, gender, etc.) and at an individual level. Conventional practice is to use simple models that are easy to fit, but inflexible and vulnerable to fitting issues in the situation of complete separation. Bayesian multilevel models are flexible and easy to interpret, yet are not broadly adopted among practitioners. We describe a model selection process in a principled workflow, including specifying priors and implementing adaptive pooling. Then we propose and develop specialized quantities of interest and study their operating characteristics. In the development of the model we conduct prior predictive simulations studies into these proposed quantities of interest that provide insights into experimental design considerations. We discuss in detail a case study of real and previously unpublished data.</p>
 <div id="current-methods" class="section level2">
 <h2><span class="header-section-number">1.1</span> Current Methods</h2>
+<p>Regression techniques commonly rely on maximum likelihood estimation (MLE) of parameters, and there are numerous resources on the subject of linear regression and MLE <span class="citation">(Johnson, Wichern, and others <a href="#ref-johnson2002applied" role="doc-biblioref">2002</a>; Larsen and Marx <a href="#ref-larsen2005introduction" role="doc-biblioref">2005</a>; Sheather <a href="#ref-sheather2009modern" role="doc-biblioref">2009</a>; Navidi <a href="#ref-navidi2015statistics" role="doc-biblioref">2015</a>)</span>. Most introductory courses on statistics and regression center around classical techniques such as MLE, hypothesis testing, and residual analysis, and the emphasis for modeling has been on variable selection and goodness of fit tests. While these methods are well studied and broadly applied, there is often too much emphasis on p-values and significance testing which can lead to the omission of truly influential variables or the inclusion of confounding variables. Variable selection through step-wise algorithms or penalized maximum likelihood estimation <span class="citation">(Hoerl and Kennard <a href="#ref-hoerl1970ridge" role="doc-biblioref">1970</a>; Tibshirani <a href="#ref-tibshirani1996regression" role="doc-biblioref">1996</a>)</span> may be appropriate in an exploratory data analysis, but improper for causal inference and other scientifically motivated experiments.</p>
+<p>The concept of basing scientific results on the falsifiability <span class="citation">(Popper <a href="#ref-popper1959logic" role="doc-biblioref">1959</a>)</span> or the refutability of a claim is a strong foundation for the scientific method, and is arguably much better than the previous grounds of verifiability – just because something has been true for a very long time, doesn’t mean it will always be true in the future. But hypothesis testing comes with its own set of problems. Null hypothesis testing for point estimates usually depends on calculating a confidence interval and seeing if the interval contains the point of interest. This can be misleading, as there is more than one confidence interval that can be calculated. For Gaussian distributions, the mean, median, and mode are the same, so a 95% confidence interval is evenly distributed around the central measures. Some distributions are skewed, so an equal tail area confidence interval might not necessarily include the most likely value. The exponential distribution is a good example of a skewed distribution.</p>
+<p><span class="math display">\[X \sim \mathrm{exponential} (\lambda)\]</span></p>
+<p>An equal tail area 95% confidence interval would be <span class="math inline">\(\left(-\ln(0.975)/\lambda, -\ln(0.025)/\lambda\right)\)</span> which does not contain the most likely value – zero. The skewness measure is not frequently reported with p-values and confidence intervals which leaves room for ambiguity.</p>
+<p>Because these classical techniques are so broadly applied and readily available in statistical software, there is strong potential for misunderstanding and misuse. The problem is that these classical techniques rest on having a strong foundation of statistical knowledge, both to produce and to properly understand. This requirement is stifling. Communicating statistical results is just as important as producing them, and with modern tools and a vast selection of expressive languages datacan be analyzed in a more intuitive and natural framework.</p>
 </div>
 <div id="new-methods" class="section level2">
 <h2><span class="header-section-number">1.2</span> New Methods</h2>
+<p>The Bayesian framework for modeling is a much more natural way to conduct scientific research where some kind of data analysis is involved. All prior domain knowledge may be incorporated into a model, and the entire posterior distribution is available to summarize, visualize, and draw inferences from. The uncertainty of reporting classic confidence intervals becomes trivial in a Bayesian framework; the distribution can be plotted or the highest posterior density interval (HPDI) may be reported.</p>
+<p>Bayesian statistics and modeling stems from Bayes theorem (equation <a href="index.html#eq:bayesthm">(1.1)</a>). The prior <span class="math inline">\(\pi(\theta)\)</span> is some distribution over the parameter space and the likelihood <span class="math inline">\(\pi(data | \theta)\)</span> is the probability of an outcome in the sample space given a value in the parameter space.</p>
+<p><span class="math display" id="eq:bayesthm">\[\begin{equation}
+  P(\theta | data) = \frac{P(data | \theta)\cdot P(\theta)}{\sum_i P(data | \theta_i)} =   \frac{P(data | \theta)\cdot P(\theta)}{\int_\Omega P(data | \theta)d\theta}
+  \tag{1.1}
+\end{equation}\]</span></p>
+<p>The posterior distribution is a probability distribution, which means that the sum or integral over the parameter space must evaluate to one. Because of this constraint, the denominator in <a href="index.html#eq:bayesthm">(1.1)</a> acts as a scale factor to ensure that the posterior is valid. Since the denominator evaluates to a constant, it is generally omitted, and Bayes’ theorem is simplified to saying that <em>the posterior is proportional to the prior times the likelihood</em>.</p>
+<p><span class="math display">\[\pi(\theta \vert data) \propto \pi(\theta) \times \pi(data \vert \theta)\]</span></p>
+<p>For simple models, the posterior distribution can sometimes be evaluated analytically, but often it happens that the integral in the denominator is complex or of a high dimension. In the former situation, the integral may not be possible to evaluate, and in the latter there may not be enough computational resources in the world to perform a simple numerical approximation.</p>
+<p>The solution is to use Markov Chain Monte Carlo (MCMC) simulations to draw samples from the posterior distribution in a way that samples proportional to the density. This sampling is a form of approximation to the area under the curve – an approximation to the denominator in <a href="index.html#eq:bayesthm">(1.1)</a>. Rejection sampling <span class="citation">(Gilks and Wild <a href="#ref-gilks1992adaptive" role="doc-biblioref">1992</a>)</span> and slice sampling <span class="citation">(Neal <a href="#ref-neal2003slice" role="doc-biblioref">2003</a>)</span> are basic methods for sampling from a target distribution, however they can often be inefficient – large proportion of rejected samples. Gibbs sampling and the Metropolis-Hastings algorithm are more efficient, but do not scale well for models with hundreds or thousands of parameters.</p>
+<p>Hamiltonian Monte Carlo (HMC) simulation is a much more complex algorithm that can be compared to a physics simulation. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that indicate when the sampler is having trouble efficiently exploring the posterior. <code>Stan</code> is a probabilistic programming language (PPL) with an <code>R</code> interface that uses Hamiltonian dynamics to get full Bayesian statistical inference <span class="citation">(Guo et al. <a href="#ref-R-rstan" role="doc-biblioref">2020</a>)</span>.</p>
+<ul>
+<li>Opportunity for presenting/summarizing model/results in expressive/rich ways</li>
+<li>Need to build up a model in a principled way</li>
+<li>Motivate the benefit of multilevel models</li>
+<li>Thesis/proposal sentence</li>
+</ul>
+<!--
+We are proposing a fully Bayesian workflow to develop and analyze a statistical model. In this Bayesian workflow we highlight a set of principles used in the Bayesian community that utilize domain expertise to develop a multilevel model of the psychometric function. The combination of these two concepts yield better prediction results and greater inferential power. Finally, in lieu of p-values, predictive inference narrates the statistical results and strength of association within the model.
+-->
 </div>
 <div id="organization" class="section level2">
 <h2><span class="header-section-number">1.3</span> Organization</h2>
+<ul>
+<li><a href="data.html#data">Chapter 2</a> - Background data</li>
+<li><a href="methods.html#methods">Chapter 3</a> - Background methods</li>
+<li><a href="application.html#application">Chapter 4</a> - Application study</li>
+<li><a href="results.html#results">Chapter 5</a> - Results</li>
+<li><a href="discussion.html#discussion">Chapter 6</a> - Discussion</li>
+<li><a href="conclusion.html#conclusion">Chapter 7</a> - Conclusion</li>
+<li><a href="code.html#code">Appendix A</a> - Supplementary code</li>
+<li><a href="model-dev.html#model-dev">Appendix B</a> - Developing a model</li>
+<li><a href="reproduce.html#reproduce">Appendix C</a> - Reproducible data cleaning</li>
+</ul>
 
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-gilks1992adaptive">
+<p>Gilks, Walter R, and Pascal Wild. 1992. “Adaptive Rejection Sampling for Gibbs Sampling.” <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em> 41 (2): 337–48.</p>
+</div>
+<div id="ref-R-rstan">
+<p>Guo, Jiqiang, Jonah Gabry, Ben Goodrich, and Sebastian Weber. 2020. <em>Rstan: R Interface to Stan</em>. <a href="https://CRAN.R-project.org/package=rstan">https://CRAN.R-project.org/package=rstan</a>.</p>
+</div>
+<div id="ref-hoerl1970ridge">
+<p>Hoerl, Arthur E, and Robert W Kennard. 1970. “Ridge Regression: Biased Estimation for Nonorthogonal Problems.” <em>Technometrics</em> 12 (1): 55–67.</p>
+</div>
+<div id="ref-johnson2002applied">
+<p>Johnson, Richard Arnold, Dean W Wichern, and others. 2002. <em>Applied Multivariate Statistical Analysis</em>. Vol. 5. 8. Prentice hall Upper Saddle River, NJ.</p>
+</div>
+<div id="ref-larsen2005introduction">
+<p>Larsen, Richard J, and Morris L Marx. 2005. <em>An Introduction to Mathematical Statistics</em>. Prentice Hall.</p>
+</div>
+<div id="ref-navidi2015statistics">
+<p>Navidi, William. 2015. <em>Statistics for Engineers and Scientists</em>. McGraw-Hill Education.</p>
+</div>
+<div id="ref-neal2003slice">
+<p>Neal, Radford M. 2003. “Slice Sampling.” <em>Annals of Statistics</em>, 705–41.</p>
+</div>
+<div id="ref-popper1959logic">
+<p>Popper, KR. 1959. “The Logic of Scientific Discovery [Logik Der Forschung, 1935, Vienna, Austria].” London.</p>
+</div>
+<div id="ref-sheather2009modern">
+<p>Sheather, Simon. 2009. <em>A Modern Approach to Regression with R</em>. Springer Science &amp; Business Media.</p>
+</div>
+<div id="ref-tibshirani1996regression">
+<p>Tibshirani, Robert. 1996. “Regression Shrinkage and Selection via the Lasso.” <em>Journal of the Royal Statistical Society: Series B (Methodological)</em> 58 (1): 267–88.</p>
 </div>
 </div>
             </section>
@@ -149,7 +286,7 @@
         </div>
       </div>
 
-<a href="motivating-data.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="data.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

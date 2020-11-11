@@ -1,5 +1,5 @@
 ---
-title: "Application of a Principaled Bayesian Workflow to Multilevel Modeling"
+title: "A Bayesian Multilevel Model for the Psychometric Function using R and Stan"
 author: "Alexander D. Knudson"
 advisor: "A.G. Schissler"
 date: "December, 2020"
@@ -12,10 +12,88 @@ github-repo: adkudson/thesis
 
 
 
+
 # Introduction {#intro}
+
+
+With the advances in computational power and the wide palette of statistical tools, statistical methods have evolved to be more flexible and expressive. Classical modeling tools like p-values and step-wise variable selection need not be the default as new modeling strategies founded on principles and informed decisions allow for creating bespoke models and domain-driven analyses.
+
+
+Advances in computational power have lead to a resurrection in statistics where Bayesian modeling has gained an incredible following due in part to fully Bayesian statistical inference modeling tools like `Stan`. The steady adoption of computer aided statistical workflows also brings the need for multidisciplinary techniques from numerical analysis, probability theory, statistics, computer science, and visualizations among others. There has also been a recent push towards reproducible research which ties in concepts of modular design, principled workflows, version control, and human-readable code.
+
+
+
+A common neuroscience topic is to detect the temporal order of two stimuli, and is often studied via a logistic model called a psychometric function. These studies are often interested in making inferences at the group level (age, gender, etc.) and at an individual level. Conventional practice is to use simple models that are easy to fit, but inflexible and vulnerable to fitting issues in the situation of complete separation. Bayesian multilevel models are flexible and easy to interpret, yet are not broadly adopted among practitioners. We describe a model selection process in a principled workflow, including specifying priors and implementing adaptive pooling. Then we propose and develop specialized quantities of interest and study their operating characteristics. In the development of the model we conduct prior predictive simulations studies into these proposed quantities of interest that provide insights into experimental design considerations. We discuss in detail a case study of real and previously unpublished data.
+
 
 ## Current Methods
 
+
+Regression techniques commonly rely on maximum likelihood estimation (MLE) of parameters, and there are numerous resources on the subject of linear regression and MLE [@johnson2002applied; @larsen2005introduction; @sheather2009modern; @navidi2015statistics]. Most introductory courses on statistics and regression center around classical techniques such as MLE, hypothesis testing, and residual analysis, and the emphasis for modeling has been on variable selection and goodness of fit tests. While these methods are well studied and broadly applied, there is often too much emphasis on p-values and significance testing which can lead to the omission of truly influential variables or the inclusion of confounding variables. Variable selection through step-wise algorithms or penalized maximum likelihood estimation [@hoerl1970ridge; @tibshirani1996regression] may be appropriate in an exploratory data analysis, but improper for causal inference and other scientifically motivated experiments.
+
+
+The concept of basing scientific results on the falsifiability [@popper1959logic] or the refutability of a claim is a strong foundation for the scientific method, and is arguably much better than the previous grounds of verifiability -- just because something has been true for a very long time, doesn't mean it will always be true in the future. But hypothesis testing comes with its own set of problems. Null hypothesis testing for point estimates usually depends on calculating a confidence interval and seeing if the interval contains the point of interest. This can be misleading, as there is more than one confidence interval that can be calculated. For Gaussian distributions, the mean, median, and mode are the same, so a 95% confidence interval is evenly distributed around the central measures. Some distributions are skewed, so an equal tail area confidence interval might not necessarily include the most likely value. The exponential distribution is a good example of a skewed distribution.
+
+
+$$X \sim \mathrm{exponential} (\lambda)$$
+
+
+An equal tail area 95% confidence interval would be $\left(-\ln(0.975)/\lambda, -\ln(0.025)/\lambda\right)$ which does not contain the most likely value -- zero. The skewness measure is not frequently reported with p-values and confidence intervals which leaves room for ambiguity.
+
+
+Because these classical techniques are so broadly applied and readily available in statistical software, there is strong potential for misunderstanding and misuse. The problem is that these classical techniques rest on having a strong foundation of statistical knowledge, both to produce and to properly understand. This requirement is stifling. Communicating statistical results is just as important as producing them, and with modern tools and a vast selection of expressive languages datacan be analyzed in a more intuitive and natural framework.
+
+
 ## New Methods
 
+
+The Bayesian framework for modeling is a much more natural way to conduct scientific research where some kind of data analysis is involved. All prior domain knowledge may be incorporated into a model, and the entire posterior distribution is available to summarize, visualize, and draw inferences from. The uncertainty of reporting classic confidence intervals becomes trivial in a Bayesian framework; the distribution can be plotted or the highest posterior density interval (HPDI) may be reported. 
+
+
+Bayesian statistics and modeling stems from Bayes theorem (equation \@ref(eq:bayesthm)). The prior $\pi(\theta)$ is some distribution over the parameter space and the likelihood $\pi(data | \theta)$ is the probability of an outcome in the sample space given a value in the parameter space. 
+
+
+\begin{equation}
+  P(\theta | data) = \frac{P(data | \theta)\cdot P(\theta)}{\sum_i P(data | \theta_i)} =   \frac{P(data | \theta)\cdot P(\theta)}{\int_\Omega P(data | \theta)d\theta}
+  (\#eq:bayesthm)
+\end{equation}
+
+
+The posterior distribution is a probability distribution, which means that the sum or integral over the parameter space must evaluate to one. Because of this constraint, the denominator in \@ref(eq:bayesthm) acts as a scale factor to ensure that the posterior is valid. Since the denominator evaluates to a constant, it is generally omitted, and Bayes' theorem is simplified to saying that _the posterior is proportional to the prior times the likelihood_.
+
+
+$$\pi(\theta \vert data) \propto \pi(\theta) \times \pi(data \vert \theta)$$
+
+
+For simple models, the posterior distribution can sometimes be evaluated analytically, but often it happens that the integral in the denominator is complex or of a high dimension. In the former situation, the integral may not be possible to evaluate, and in the latter there may not be enough computational resources in the world to perform a simple numerical approximation.
+
+
+The solution is to use Markov Chain Monte Carlo (MCMC) simulations to draw samples from the posterior distribution in a way that samples proportional to the density. This sampling is a form of approximation to the area under the curve -- an approximation to the denominator in \@ref(eq:bayesthm). Rejection sampling [@gilks1992adaptive] and slice sampling [@neal2003slice] are basic methods for sampling from a target distribution, however they can often be inefficient -- large proportion of rejected samples. Gibbs sampling and the Metropolis-Hastings algorithm are more efficient, but do not scale well for models with hundreds or thousands of parameters.
+
+
+Hamiltonian Monte Carlo (HMC) simulation is a much more complex algorithm that can be compared to a physics simulation. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that indicate when the sampler is having trouble efficiently exploring the posterior. `Stan` is a probabilistic programming language (PPL) with an `R` interface that uses Hamiltonian dynamics to get full Bayesian statistical inference [@R-rstan].
+
+
+- Opportunity for presenting/summarizing model/results in expressive/rich ways
+- Need to build up a model in a principled way
+- Motivate the benefit of multilevel models
+- Thesis/proposal sentence
+
+
+<!--
+We are proposing a fully Bayesian workflow to develop and analyze a statistical model. In this Bayesian workflow we highlight a set of principles used in the Bayesian community that utilize domain expertise to develop a multilevel model of the psychometric function. The combination of these two concepts yield better prediction results and greater inferential power. Finally, in lieu of p-values, predictive inference narrates the statistical results and strength of association within the model.
+-->
+
+
 ## Organization
+
+
+- [Chapter 2](#data) - Background data
+- [Chapter 3](#methods) - Background methods
+- [Chapter 4](#application) - Application study
+- [Chapter 5](#results) - Results
+- [Chapter 6](#discussion) - Discussion
+- [Chapter 7](#conclusion) - Conclusion
+- [Appendix A](#code) - Supplementary code
+- [Appendix B](#model-dev) - Developing a model
+- [Appendix C](#reproduce) - Reproducible data cleaning
