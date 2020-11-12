@@ -86,15 +86,7 @@ The solution is to use Markov Chain Monte Carlo (MCMC) simulations to draw sampl
 Hamiltonian Monte Carlo (HMC) simulation is a much more complex algorithm that can be compared to a physics simulation. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that indicate when the sampler is having trouble efficiently exploring the posterior. `Stan` is a probabilistic programming language (PPL) with an `R` interface that uses Hamiltonian dynamics to get full Bayesian statistical inference [@R-rstan].
 
 
-- Opportunity for presenting/summarizing model/results in expressive/rich ways
-- Need to build up a model in a principled way
-- Motivate the benefit of multilevel models
-- Thesis/proposal sentence
-
-
-<!--
-We are proposing a fully Bayesian workflow to develop and analyze a statistical model. In this Bayesian workflow we highlight a set of principles used in the Bayesian community that utilize domain expertise to develop a multilevel model of the psychometric function. The combination of these two concepts yield better prediction results and greater inferential power. Finally, in lieu of p-values, predictive inference narrates the statistical results and strength of association within the model.
--->
+In the chapters to come, we produce a novel statistical model for temporal order judgment data by following a principled workflow and fitting a series of Bayesian models efficiently using Hamiltonian Monte Carlo in the `R` programming language with `Stan`.
 
 
 ## Organization
@@ -104,8 +96,7 @@ We are proposing a fully Bayesian workflow to develop and analyze a statistical 
 - [Chapter 3](#methods) - Background methods
 - [Chapter 4](#application) - Application study
 - [Chapter 5](#results) - Results
-- [Chapter 6](#discussion) - Discussion
-- [Chapter 7](#conclusion) - Conclusion
+- [Chapter 6](#conclusion) - Discussion and conclusion
 - [Appendix A](#code) - Supplementary code
 - [Appendix B](#model-dev) - Developing a model
 - [Appendix C](#reproduce) - Reproducible data cleaning

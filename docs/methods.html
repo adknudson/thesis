@@ -161,13 +161,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>5.2</b> On Temporal Sensitivity</a></li>
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>5.3</b> Lapse Rate across Age Groups</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>6</b> Discussion</a><ul>
-<li class="chapter" data-level="6.1" data-path="discussion.html"><a href="discussion.html#causal-inference"><i class="fa fa-check"></i><b>6.1</b> Causal Inference</a></li>
-<li class="chapter" data-level="6.2" data-path="discussion.html"><a href="discussion.html#experimental-design"><i class="fa fa-check"></i><b>6.2</b> Experimental Design</a></li>
-<li class="chapter" data-level="6.3" data-path="discussion.html"><a href="discussion.html#results-1"><i class="fa fa-check"></i><b>6.3</b> Results</a></li>
-<li class="chapter" data-level="6.4" data-path="discussion.html"><a href="discussion.html#model-comparison-vs.-selection"><i class="fa fa-check"></i><b>6.4</b> Model Comparison vs. Selection</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
+<li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="code.html"><a href="code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
 <li class="chapter" data-level="B" data-path="model-dev.html"><a href="model-dev.html"><i class="fa fa-check"></i><b>B</b> Developing a Model</a></li>
@@ -361,9 +355,8 @@ Figure 3.1: Diagram is copywrited material of Michael Betancourt and used under 
 </div>
 <div id="model-fitting" class="section level2">
 <h2><span class="header-section-number">3.2</span> Model Fitting</h2>
-<p><strong>Hamiltonian Monte Carlo</strong></p>
-<p><strong>R and Stan</strong></p>
-<p>The NUTS algorithm samples in two phases: a warm-up phase and a sampling phase. During the warm-up phase, the sampler is automatically tuning three internal parameters that can significantly affect the sampling efficiency.</p>
+<p>We will be using the <code>Stan</code> PPL for model fitting throughout this paper. <code>Stan</code> allows for MCMC sampling of Bayesian models using a variant of Hamiltonian Monte Carlo call the No-U-Turn sampler (NUTS). NUTS is a much more complex algorithm that can be compared to a physics simulation. A massless “particle” is imparted with a random direction and some amount of kinetic energy in a probability field, and is stopped randomly. The stopping point is the new proposal sample. The No U-Turn part means that when the algorithm detects that the particle is turning around, it will stop so as not to return to the starting position. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that let us know when the sampler is having trouble efficiently exploring the posterior.</p>
+<p>The NUTS algorithm samples in two phases: a warm-up phase and a sampling phase. During the warm-up phase, the sampler is automatically tuning three internal parameters that can significantly affect the sampling efficiency. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle <span class="citation">(Stan Development Team <a href="#ref-stanref" role="doc-biblioref">2020</a>)</span>. The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called <em>leapfrog steps</em> (see <span class="citation">Leimkuhler and Reich (<a href="#ref-leimkuhler2004simulating" role="doc-biblioref">2004</a>)</span> for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.</p>
 </div>
 <div id="model-checking" class="section level2">
 <h2><span class="header-section-number">3.3</span> Model Checking</h2>
@@ -431,6 +424,7 @@ tau
 </tbody>
 </table>
 <p>To calculate the (non split) <span class="math inline">\(\hat{R}\)</span>, first calculate the between-chain variance, and then the average chain variance. For <span class="math inline">\(M\)</span> independent Markov chains, <span class="math inline">\(\theta_m\)</span>, with <span class="math inline">\(N\)</span> samples each, the between-chain variance is</p>
+
 <p><span class="math display">\[
 B = \frac{N}{M-1}\sum_{m=1}^{M}\left(\bar{\theta}_m - \bar{\theta}\right)^2
 \]</span></p>
@@ -475,6 +469,7 @@ s_{m}^2 = \frac{1}{N-1}\sum_{n=1}^{N}\left(\theta_{m}^{(n)} - \bar{\theta}_m\rig
 <span id="cb3-14"><a href="methods.html#cb3-14"></a></span>
 <span id="cb3-15"><a href="methods.html#cb3-15"></a>(mu_Rhat &lt;-<span class="st"> </span><span class="kw">sqrt</span>(var_hat <span class="op">/</span><span class="st"> </span>W))</span>
 <span id="cb3-16"><a href="methods.html#cb3-16"></a><span class="co">#&gt; [1] 1.409</span></span></code></pre></div>
+
 <p>The <span class="math inline">\(\hat{R}\)</span> statistic is smaller than the split <span class="math inline">\(\hat{R}\)</span> value provided by <code>Stan</code>. This is a consequence of steadily increasing or decreasing chains. The split value does what it sounds like, and splits the samples from the chains in half – effectively doubling the number of chains and halving the number of samples per chain. In this way, the measure is more robust in detecting unhealthy chains. This also highlights the utility in using both visual and statistical tools to evaluate models. Here is the calculation of the split <span class="math inline">\(\hat{R}\)</span>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="methods.html#cb4-1"></a>param &lt;-<span class="st"> &quot;mu&quot;</span></span>
 <span id="cb4-2"><a href="methods.html#cb4-2"></a>theta_tmp &lt;-<span class="st"> </span>p_cp[,,param]</span>

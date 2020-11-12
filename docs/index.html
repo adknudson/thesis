@@ -161,13 +161,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>5.2</b> On Temporal Sensitivity</a></li>
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>5.3</b> Lapse Rate across Age Groups</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>6</b> Discussion</a><ul>
-<li class="chapter" data-level="6.1" data-path="discussion.html"><a href="discussion.html#causal-inference"><i class="fa fa-check"></i><b>6.1</b> Causal Inference</a></li>
-<li class="chapter" data-level="6.2" data-path="discussion.html"><a href="discussion.html#experimental-design"><i class="fa fa-check"></i><b>6.2</b> Experimental Design</a></li>
-<li class="chapter" data-level="6.3" data-path="discussion.html"><a href="discussion.html#results-1"><i class="fa fa-check"></i><b>6.3</b> Results</a></li>
-<li class="chapter" data-level="6.4" data-path="discussion.html"><a href="discussion.html#model-comparison-vs.-selection"><i class="fa fa-check"></i><b>6.4</b> Model Comparison vs. Selection</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
+<li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="code.html"><a href="code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
 <li class="chapter" data-level="B" data-path="model-dev.html"><a href="model-dev.html"><i class="fa fa-check"></i><b>B</b> Developing a Model</a></li>
@@ -221,15 +215,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>For simple models, the posterior distribution can sometimes be evaluated analytically, but often it happens that the integral in the denominator is complex or of a high dimension. In the former situation, the integral may not be possible to evaluate, and in the latter there may not be enough computational resources in the world to perform a simple numerical approximation.</p>
 <p>The solution is to use Markov Chain Monte Carlo (MCMC) simulations to draw samples from the posterior distribution in a way that samples proportional to the density. This sampling is a form of approximation to the area under the curve – an approximation to the denominator in <a href="index.html#eq:bayesthm">(1.1)</a>. Rejection sampling <span class="citation">(Gilks and Wild <a href="#ref-gilks1992adaptive" role="doc-biblioref">1992</a>)</span> and slice sampling <span class="citation">(Neal <a href="#ref-neal2003slice" role="doc-biblioref">2003</a>)</span> are basic methods for sampling from a target distribution, however they can often be inefficient – large proportion of rejected samples. Gibbs sampling and the Metropolis-Hastings algorithm are more efficient, but do not scale well for models with hundreds or thousands of parameters.</p>
 <p>Hamiltonian Monte Carlo (HMC) simulation is a much more complex algorithm that can be compared to a physics simulation. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that indicate when the sampler is having trouble efficiently exploring the posterior. <code>Stan</code> is a probabilistic programming language (PPL) with an <code>R</code> interface that uses Hamiltonian dynamics to get full Bayesian statistical inference <span class="citation">(Guo et al. <a href="#ref-R-rstan" role="doc-biblioref">2020</a>)</span>.</p>
-<ul>
-<li>Opportunity for presenting/summarizing model/results in expressive/rich ways</li>
-<li>Need to build up a model in a principled way</li>
-<li>Motivate the benefit of multilevel models</li>
-<li>Thesis/proposal sentence</li>
-</ul>
-<!--
-We are proposing a fully Bayesian workflow to develop and analyze a statistical model. In this Bayesian workflow we highlight a set of principles used in the Bayesian community that utilize domain expertise to develop a multilevel model of the psychometric function. The combination of these two concepts yield better prediction results and greater inferential power. Finally, in lieu of p-values, predictive inference narrates the statistical results and strength of association within the model.
--->
+<p>In the chapters to come, we produce a novel statistical model for temporal order judgment data by following a principled workflow and fitting a series of Bayesian models efficiently using Hamiltonian Monte Carlo in the <code>R</code> programming language with <code>Stan</code>.</p>
 </div>
 <div id="organization" class="section level2">
 <h2><span class="header-section-number">1.3</span> Organization</h2>
@@ -238,8 +224,7 @@ We are proposing a fully Bayesian workflow to develop and analyze a statistical 
 <li><a href="methods.html#methods">Chapter 3</a> - Background methods</li>
 <li><a href="application.html#application">Chapter 4</a> - Application study</li>
 <li><a href="results.html#results">Chapter 5</a> - Results</li>
-<li><a href="discussion.html#discussion">Chapter 6</a> - Discussion</li>
-<li><a href="conclusion.html#conclusion">Chapter 7</a> - Conclusion</li>
+<li><a href="conclusion.html#conclusion">Chapter 6</a> - Discussion and conclusion</li>
 <li><a href="code.html#code">Appendix A</a> - Supplementary code</li>
 <li><a href="model-dev.html#model-dev">Appendix B</a> - Developing a model</li>
 <li><a href="reproduce.html#reproduce">Appendix C</a> - Reproducible data cleaning</li>

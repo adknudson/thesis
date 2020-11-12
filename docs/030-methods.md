@@ -169,13 +169,11 @@ After going through the tedious process of iteratively developing a model, it is
 
 ## Model Fitting {#model-fitting}
 
-**Hamiltonian Monte Carlo**
+
+We will be using the `Stan` PPL for model fitting throughout this paper. `Stan` allows for MCMC sampling of Bayesian models using a variant of Hamiltonian Monte Carlo call the No-U-Turn sampler (NUTS). NUTS is a much more complex algorithm that can be compared to a physics simulation. A massless "particle" is imparted with a random direction and some amount of kinetic energy in a probability field, and is stopped randomly. The stopping point is the new proposal sample. The No U-Turn part means that when the algorithm detects that the particle is turning around, it will stop so as not to return to the starting position. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that let us know when the sampler is having trouble efficiently exploring the posterior.
 
 
-
-**R and Stan**
-
-The NUTS algorithm samples in two phases: a warm-up phase and a sampling phase. During the warm-up phase, the sampler is automatically tuning three internal parameters that can significantly affect the sampling efficiency.
+The NUTS algorithm samples in two phases: a warm-up phase and a sampling phase. During the warm-up phase, the sampler is automatically tuning three internal parameters that can significantly affect the sampling efficiency. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle [@stanref]. The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called _leapfrog steps_ (see @leimkuhler2004simulating for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.
 
 
 ## Model Checking {#model-checking}
@@ -279,6 +277,7 @@ tau & 1.169\\
 To calculate the (non split) $\hat{R}$, first calculate the between-chain variance, and then the average chain variance. For $M$ independent Markov chains, $\theta_m$, with $N$ samples each, the between-chain variance is
 
 
+\setstretch{1.0}
 $$
 B = \frac{N}{M-1}\sum_{m=1}^{M}\left(\bar{\theta}_m - \bar{\theta}\right)^2
 $$
@@ -354,6 +353,7 @@ var_hat <- W * (N - 1) / N + B / N
 (mu_Rhat <- sqrt(var_hat / W))
 #> [1] 1.409
 ```
+\setstretch{2.0}
 
 
 The $\hat{R}$ statistic is smaller than the split $\hat{R}$ value provided by `Stan`. This is a consequence of steadily increasing or decreasing chains. The split value does what it sounds like, and splits the samples from the chains in half -- effectively doubling the number of chains and halving the number of samples per chain. In this way, the measure is more robust in detecting unhealthy chains. This also highlights the utility in using both visual and statistical tools to evaluate models. Here is the calculation of the split $\hat{R}$:

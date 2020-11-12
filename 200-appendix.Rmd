@@ -71,13 +71,13 @@ transformed parameters {
 # Developing a Model {#model-dev}
 
 
-[Chapter 4](#application) details the deeper considerations that went into building a model, but doesn't tell the full story of struggles and setbacks I faced. I find that I learn more from others when they share what didn't work along with the final path that did work. There is knowledge to be gained in failed experiments, because then there is one more way to not do something, just like a failing outcome reduces the variance of the Beta distribution.
+Our final modeling strategy is an evolution from other attempts. The development proceeded through multiple iterations described in [chapter 4](#application), but doesn't tell the full story. We learn more from others when they share what didn't work along with the final path that did work. There is knowledge to be gained in failed experiments, because then there is one more way to not do something, just like a failing outcome reduces the variance of the Beta distribution.
 
 
-I knew that I wanted to apply Bayesian modeling techniques to the data, because it was something knew that I was learning. I tried using a classical GLM to first get a baseline understanding of the data, but the fact that some estimates for certain subjects failed due to complete separation reinforced my enthusiasm to employ non-classical techniques. My first Bayesian model was derived from @lee2014bayesian which used nested loops to iterate over subjects and SOA values. I felt that the data was stored in a complicated way and made it difficult to comprehend and extend.
+In the first attempt at modeling, we used a classical GLM to get a baseline understanding of the data, but the fact that some estimates for certain subjects failed due to complete separation reinforced the our adoption of non-classical techniques. Our first Bayesian model was derived from @lee2014bayesian which used nested loops to iterate over subjects and SOA values. The data were required to be stored in a complicated way that made it difficult to comprehend and extend.
 
 
-Next I moved on to using `arm::bayesglm` to remove convergence issues, but was met with other limitations such as linear parameterization and lack of hierarchical modeling. The book Statistical Rethinking [@mcelreath2020statistical] was my first introduction to Bayesian multilevel modeling. His `rethinking` package accompanies the book, and offers a compact yet expressive syntax for models that get translated into a Stan model. A model with age group and block can be written using `rethinking::ulam` as
+We moved on to using `arm::bayesglm` to remove convergence issues, but we were met with other limitations such as linear parameterization and lack of hierarchical modeling. The book Statistical Rethinking [@mcelreath2020statistical] offers a great first introduction to Bayesian multilevel modeling. McElreath's `rethinking` package accompanies the book, and offers a compact yet expressive syntax for models that get translated into a Stan model. A model with age group and block can be written using `rethinking::ulam` as
 
 
 ```{r ch220-Rubber Modern, echo=TRUE, eval=FALSE}
@@ -95,13 +95,13 @@ rethinking::ulam(alist(
 ```
 
 
-During my time learning about multilevel models, I tried writing my own package that generates a Stan program based on R formula syntax. At the time I didn't fully understand the concepts of no-pooling, complete pooling, and partial pooling, and my package was plagued by the same lack of flexibility that `rstanarm` and `brms` have. In fact I learned that `brms` and `rstanarm` already did what I was trying to do after I had already started making my library, but it was a fun learning and programming experience. The fossilized remains of my attempt can be viewed on github.
+While learning about multilevel models, we tried writing a package that generates a `Stan` program based on `R` formula syntax. At the time the concepts of no-pooling, complete pooling, and partial pooling were vaguely understood, and the package was plagued by the same lack of flexibility that `rstanarm` and `brms` have. Then it was discovered that `brms` and `rstanarm` already did what we were trying to do, but programming experience was invaluable.
 
 
-I also tried using `lme4`, `rstanarm`, and `brms`, and learned more about the concepts of fixed and random effects. It was around this time that I noticed that parameterization can have a significant affect on the efficiency of a model and the inferential power of the estimated parameters. When fitting a classical model, there is little difference in estimating `a + bx` vs. `d(x - c)` since the latter can just be expanded as `-cd + dx` which is essentially the same as the first parameterization, but there is a practical difference in the interpretation of the parameters. The second parameterization implies that there is a dependence among the parameters that can be factored out. In the context of psychometric functions, there is a stronger connection between PSS and `c` and the JND and `d`. This parameterization made it easier to specify priors and also increased the model efficiency. Since only `rethinking` and `Stan` allow for arbitrary parameterization, I left the others behind.
+We also tried using `lme4`, `rstanarm`, and `brms`, and learned more about the concepts of fixed and random effects. We noticed that parameterization can have a significant affect on the efficiency of a model and the inferential power of the estimated parameters. When fitting a classical model, there is little difference in estimating `a + bx` vs. `d(x - c)` since the latter can just be expanded as `-cd + dx` which is essentially the same as the first parameterization, but there is a practical difference in the interpretation of the parameters. The second parameterization implies that there is a dependence among the parameters that can be factored out. In the context of psychometric functions, there is a stronger connection between PSS and `c` and the JND and `d`. This parameterization made it easier to specify priors and also increased the model efficiency. Of the modeling tools mentioned, only `rethinking` and `Stan` allow for arbitrary parameterization.
 
 
-I finally arrived at a model that worked well, but learned that using a binary indicator variable for the treatment comes with the assumption of higher uncertainty for one of the conditions. The linear model that I arrived at is displayed in equation \@ref(eq:badlinearmodel).
+We finally arrived at a model that worked well, but learned that using a binary indicator variable for the treatment comes with the assumption of higher uncertainty for one of the conditions. The linear model that we arrived at is displayed in equation \@ref(eq:badlinearmodel).
 
 
 \begin{equation}
@@ -110,7 +110,7 @@ I finally arrived at a model that worked well, but learned that using a binary i
 \end{equation}
 
 
-Using an indicator variable in this fashion also introduced an interaction effect into the model that I almost did not account for after I switched to using a factor variable. Interaction effects between factors is handled by creating a new factor that is essentially the cross-product of other factor variables. E.g. for factor variables $x$ and $y$
+Using an indicator variable in this fashion also introduced an interaction effect into the model that we almost did not account for after switching to using a factor variable. Interaction effects between factors is handled by creating a new factor that is essentially the cross-product of other factor variables. E.g. for factor variables $x$ and $y$
 
 
 $$
@@ -130,7 +130,7 @@ ci & cj
 $$
 
 
-The final round of reparameterization came in the form of adopting non-centered parameterization for more efficient models. To us, $Z \sim N(0, 1^2);\quad X = 3 + 2Z$ is the same as $X \sim N(3, 2^2)$, but to a computer the process of sampling from $X$ can be more difficult than sampling from $Z$ (discussed in [chapter 4](#model-checking)).
+The final round of reparameterization came in the form of adopting non-centered parameterization for more efficient models. To us, $Z \sim N(0, 1^2);\quad X = 3 + 2Z$ is the same as $X \sim N(3, 2^2)$, but to a computer the process of sampling from $X$ can be more difficult than sampling from $Z$ (discussed in [chapter 3](#methods)).
 
 
 # Reproducible Results {#reproduce}
@@ -275,7 +275,7 @@ features <- feature_tbl %>%
 ```
 
 
-Data doesn't always come in a nice tidy^[Tidy data is described by Hadley Wickham] format, and I had the pleasure of turning the raw experimental data into a clean data set that is ready for modeling. Sometimes the process is quick and straight forward, but other times, like with this psychometric data, it takes more effort and clever techniques. There is academic value in describing the steps I took up front to reduce the headache later.
+Data doesn't always come in a nice tidy format, and we had to turn the raw experimental data into a clean data set that is ready for modeling. Sometimes the process is quick and straight forward, but other times, like with this psychometric data, it takes more effort and clever techniques. There is academic value in describing the steps taken to reduce the headache later.
 
 
 To begin, there is a strong push in recent years for reproducible data science. Scientific methods and results should be able to be replicated by other researchers, and part of that includes being able to replicate the process that takes the raw data and produces the tidy data that is ready for analysis. Tidy data is described by @wickham2014tidy and can be summed up by three principles
@@ -286,10 +286,10 @@ To begin, there is a strong push in recent years for reproducible data science. 
 3. Each type of observational unit forms a table
 
 
-One problem I have come across and have been guilty of in the past is having data in a spread sheet, modifying it, and then having no way of recovering the original data. Spread sheets are a convenient way to organize, transform, and lightly analyze date, but problems can quickly arise unless there is a good backup/snapshot system in place. Data is immutable^[Mutability in computer science is the property of a data structure where its contents can be modified in place. Immutability means that the object cannot be modified without first making a copy.], or at least that is the mindset that researchers must adopt in order to have truly reproducible workflows. The raw data that is collected or produced by a measurement device should never be modified without first being copied, even if for trivial reasons such as correcting a spelling mistake^[If a change is made to the raw data, it should be carefully documented and reversible].
+One problem is having data in a spread sheet, modifying it, and then having no way of recovering the original data. Spread sheets are a convenient way to organize, transform, and lightly analyze data, but problems can quickly arise unless there is a good backup/snapshot system in place. Mutability in computer science is the property of a data structure where its contents can be modified in place. Immutability means that the object cannot be modified without first making a copy.  Data is immutable, or at least that is the mindset that researchers must adopt in order to have truly reproducible workflows. The raw data that is collected or produced by a measurement device should never be modified without first being copied, even if for trivial reasons such as correcting a spelling mistake. If a change is made to the raw data, it should be carefully documented and reversible.
 
 
-To begin the data cleaning journey, I'll introduce the directory system that I had been given to work with. Each task is separated into its own folder, and within each folder is a subdirectory of age groups.
+To begin the data cleaning journey, we introduce the directory system that we had been given to work with. Each task is separated into its own folder, and within each folder is a subdirectory of age groups.
 
 
 ```{r ch230-Lama Everyday, out.width="30%"}
@@ -305,10 +305,10 @@ knitr::include_graphics("figures/data_subdir.png")
 ```
 
 
-At this point, the data appears manageable, there is information contained in the directory structure such as task, age group, and initials, and file name contains information about the experimental block. There is also an excel file that I was later given that contains more subject information like age and sex, though that information is not used in the model. The columns of the Matlab file depends on the task, but generally contains an SOA value and a response, but no column or row name information - that was provided by the researcher who collected the data. 
+The data appears manageable, and there is information contained in the directory structure such as task, age group, and initials, and file name contains information about the experimental block. There is also an excel file that we were later given that contains more subject information like age and sex, though that information is not used in the model. The columns of the Matlab file depend on the task, but generally they contain an SOA value and a response, but no column or row name information -- that was provided by the researcher who collected the data. 
 
 
-The next thing I did was to create a table of metadata - information extracted from the directory structure and file names combined with the the subject data and the file path. Regular expressions can be used to extract patterns from a string. With a list of all Matlab files within the `RecalibrationData` folder, I tried to extract the task, age group, initials, and block using the expression
+We then created a table of metadata -- information extracted from the directory structure and file names combined with the the subject data and the file path. Regular expressions can be used to extract patterns from a string. With a list of all Matlab files within the `RecalibrationData` folder, we tried to extract the task, age group, initials, and block using the regular expression:
 
 
 ```
@@ -316,28 +316,18 @@ The next thing I did was to create a table of metadata - information extracted f
 ```
 
 
-Breaking it apart, the `^(\\w+)/` matches any word characters at the start and before the next slash. Since the directory structure is `Task/AgeGroup/Subject/file.mat`, the regular expression should match three words between slashes. The file name generally follows the pattern of `Initials__block#__MAT.mat`, so `[A-Z]{2,3}_*[A-Z]*` should match the initials, and `(adapt[0-9]|baseline[0-9]*)` should match the block (baseline or adapt). This method works for $536$ of the $580$ individual records. For the ones it failed, it was generally do to misspellings or irregular capitalizing of "baseline" and "adapt".
+The `^(\\w+)/` matches any word characters at the start and before the next slash. Since the directory is structured as `Task/AgeGroup/Subject/file.mat`, the regular expression should match three words between slashes. The file name generally follows the pattern of `Initials__block#__MAT.mat`, so `[A-Z]{2,3}_*[A-Z]*` should match the initials, and `(adapt[0-9]|baseline[0-9]*)` should match the block (baseline or adapt). This method works for $536$ of the $580$ individual records. For the ones it failed, it was generally do to misspellings or irregular capitalizing of "baseline" and "adapt".
 
 
-```{r ch230-Lonesome Helium, echo=TRUE}
-table(feat_typ[,4])
-```
-
-
-```{r ch230-Brave Gamma, echo=TRUE}
-table(feat_atyp[,4])
-```
-
-
-Since there is only a handful of irregular block names, they can be dealt with a separate regular expression that properly extracts the block information. Other challenges in cleaning the data include the handling of subjects with the same initials. This becomes a problem because filtering by a subject's initials is not guaranteed to return a unique subject. Furthermore there are two middle age subjects with the same initials of "JM", so one was also identified with their sex "JM_F". The solution is to create a unique identifier (labeled as SID) that is a combination of age group, sex, and initials. For an experiment identifier (labeled as RID), the task and block were prepended to the SID. Each of these IDs uniquely identify the subjects and their experimental records making it easier to filter and search.
+Since there is only a handful of irregular block names, they can be dealt with by a separate regular expression that properly extracts the block information. Other challenges in cleaning the data include the handling of subjects with the same initials. This becomes a problem when filtering by a subject's initials is not guaranteed to return a unique subject. Furthermore there are two middle age subjects with the same initials of "JM", so one was also identified with their sex "JM_F". The solution is to create a unique identifier (labeled as SID) that is a combination of age group, sex, and initials. For an experiment identifier (labeled as RID), the task and block were prepended to the SID. Each of these IDs uniquely identify the subjects and their experimental records making it easier to filter and search.
 
 
 ```{r ch230-Remote Monkey, echo=TRUE}
-glimpse(features)
+glimpse(features, width = 60)
 ```
 
 
 Then with the table of clean metadata, the task is simply to loop through each row, read the Matlab file given by `path`, add the unique ID as a column, and then join the experimental data with the metadata to create a data set that is ready for model fitting and data exploration. The full code used to generate the clean data is not yet available online, but can be shared with the committee.
 
 
-The benefit of writing a script to generate the data is that others can look over my code and verify that it is doing what I intended for it to do, and I can go back to any step within the process to make changes if the need comes up. Another tool that contributed to the reproducibility is the version control management software, Git. With Git I can take a snapshot of the changes I make, and revert if necessary. This thesis is also hosted on Github, and the entire history of development can be viewed there.
+The benefit of writing a script to generate the data is that others can look over the code and verify that it is doing what it is intended to do, and we can go back to any step within the process to make changes if the need comes up. Another tool that contributed to the reproducibility is the version control management software, Git. With Git we can take a snapshot of the changes made, and revert if necessary. This thesis is also hosted on Github, and the entire history of development can be viewed there.
