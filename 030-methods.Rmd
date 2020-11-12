@@ -21,13 +21,13 @@ Since everyone asks different questions, the value of a model is not in how well
 
 
 1. Domain Expertise Consistency
-  - Is our model consistent with our domain expertise?
+    - Is our model consistent with our domain expertise?
 2. Computational Faithfulness
-  - Will our computational tools be sufficient to accurately fit our posteriors?
+    - Will our computational tools be sufficient to accurately fit our posteriors?
 3. Inferential Adequacy
-  - Will our inferences provide enough information to answer our questions?
+    - Will our inferences provide enough information to answer our questions?
 4. Model Adequacy
-  - Is our model rich enough to capture the relevant structure of the true data generating process?
+    - Is our model rich enough to capture the relevant structure of the true data generating process?
 
 
 Like any good Bayesian, much work is done before seeing the data or building a model. This may include talking with experts to gain domain knowledge or to elicit priors. Domain experts know something about a particular measure, perhaps the mean or variability of the data from years of research, and different experts may provide different estimates of a measure. The benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the posterior distribution. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints.
@@ -143,7 +143,7 @@ Did the model fit well? Can a poorly performing algorithm be fixed by tweaking t
 
 _Posterior Retrodictive Checks_
 
-
+Do the posterior retrodictions match the observed data well, or are there still apparent discrepancies between what is expected and what is predicted by the model? It is important that any changes to the model going forward are motivated by domain expertise so as to mitigate the risk of overfitting.
 
 
 _Celebrate_
@@ -160,7 +160,12 @@ knitr::include_graphics("figures/workflow-diagram.png")
 
 **Hamiltonian Monte Carlo**
 
+
+
 **R and Stan**
+
+The NUTS algorithm samples in two phases: a warm-up phase and a sampling phase. During the warm-up phase, the sampler is automatically tuning three internal parameters that can significantly affect the sampling efficiency.
+
 
 ## Model Checking {#model-checking}
 

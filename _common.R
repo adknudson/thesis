@@ -23,12 +23,3 @@ knitr::opts_chunk$set(
 )
 
 # options(dplyr.print_min = 6, dplyr.print_max = 6)
-
-logit <- function(p) qlogis(p)
-inv_logit <- function(x) plogis(x)
-logistic <- function(x) inv_logit(x)
-fn <- function(x, a, b) logistic(b * (x - a))
-
-stan_summary <- function(object, ...) {
-  round(summary(object, ...)$summary, 4)[,c(1,2,3,4,8,9,10)]
-}

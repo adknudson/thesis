@@ -197,29 +197,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>A principled workflow is a method of employing domain expertise and statistical knowledge to iteratively build a statistical model that satisfies the constraints and goals set forth by the researcher. There are many great resources out there for following along with an analysis of some data or problem, and there is an abundance of tips, tricks, techniques, and testimonies to good modeling practices. The problem is that many of these prescriptions are given without context for when they are appropriate to be taken. According to <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span>, this leaves “practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics.” The concept of a principled workflow is that for any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather great consideration must be given to domain expertise and the questions that one is trying to answer with the statistical model.</p>
 <p>Since everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in how consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by:</p>
 <ol style="list-style-type: decimal">
-<li>Domain Expertise Consistency</li>
-</ol>
+<li>Domain Expertise Consistency
 <ul>
 <li>Is our model consistent with our domain expertise?</li>
-</ul>
-<ol start="2" style="list-style-type: decimal">
-<li>Computational Faithfulness</li>
-</ol>
+</ul></li>
+<li>Computational Faithfulness
 <ul>
 <li>Will our computational tools be sufficient to accurately fit our posteriors?</li>
-</ul>
-<ol start="3" style="list-style-type: decimal">
-<li>Inferential Adequacy</li>
-</ol>
+</ul></li>
+<li>Inferential Adequacy
 <ul>
 <li>Will our inferences provide enough information to answer our questions?</li>
-</ul>
-<ol start="4" style="list-style-type: decimal">
-<li>Model Adequacy</li>
-</ol>
+</ul></li>
+<li>Model Adequacy
 <ul>
 <li>Is our model rich enough to capture the relevant structure of the true data generating process?</li>
-</ul>
+</ul></li>
+</ol>
 <p>Like any good Bayesian, much work is done before seeing the data or building a model. This may include talking with experts to gain domain knowledge or to elicit priors. Domain experts know something about a particular measure, perhaps the mean or variability of the data from years of research, and different experts may provide different estimates of a measure. The benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the posterior distribution. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints.</p>
 <p>In this section we describe a principled workflow proposed by <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span> and broadly adopted by many members of the Bayesian community. In its simplest form, the workflow consists of prior predictive checks, fitting a model, posterior predictive checks, and repeat. The comprehensive list steps are in table <a href="methods.html#tab:ch030-workflow-steps">3.1</a>.</p>
 <table class="table" style="margin-left: auto; margin-right: auto;">
@@ -324,43 +318,56 @@ celebrate
 </tbody>
 </table>
 <p>These steps are not meant to be followed in a strictly linear fashion. If a conceptual misunderstanding is discovered at any step in the process, then it is recommended to go back to an earlier step and start over. The workflow is a process of model expansion, and multiple iterations are required to get to a final model (or collection of models). Similarly if the model fails prior predictive checks, then one may need to return to the model development step. A full diagram of the workflow is displayed in figure <a href="methods.html#fig:ch030-workflow-diagram">3.1</a>.</p>
+<p><strong>Pre-Model, Pre-Data</strong></p>
+<p>The modeling process begins by modeling the experiment according to the description of how it occurred and how the data were collected. This first part consists of conceptual analysis, defining the observational space, and constructing summary statistics that can help identify issues in the model specification.</p>
+<p><em>Conceptual Analysis</em></p>
+<p>Write down the inferential goals and consider how the variables of interest interact with the environment and how those interactions work to generate observations.</p>
+<p><em>Define Observational Space</em></p>
+<p>What are the possible values that the observed data can take on? The observational space can help inform the statistical model such as in count data.</p>
+<p><em>Construct Summary Statistics</em></p>
+<p>What measurements and estimates can be used to help ensure that the inferential goals are met? Prior predictive checks and posterior retrodictive checks are founded on summary statistics that answer the questions of domain expertise consistency and model adequacy.</p>
+<p><strong>Post-Model, Pre-Data</strong></p>
+<p><em>Develop Model</em></p>
+<p>Build an observational model that is consistent with the conceptual analysis and observational space, and then specify the complementary prior model.</p>
+<p><em>Construct Summary Functions</em></p>
+<p>Use the developed model to construct explicit summary functions that can be used in prior predictive checks and posterior retrodictive checks.</p>
+<p><em>Simulate Bayesian Ensemble</em></p>
+<p>Since the model is a data generating model, it can be used to simulate observations from the prior predictive distribution without yet having seen any data.</p>
+<p><em>Prior Checks</em></p>
+<p>Check that the prior predictive distribution is consistent with domain expertise using the summary functions developed in the previous step.</p>
+<p><em>Configure Algorithm</em></p>
+<p>Having simulated data, the next step is to fit the data generating model to the generated data. There are many different MCMC samplers with their own configurable parameters, so here is where those settings are tweaked.</p>
+<p><em>Fit Simulated Ensemble</em></p>
+<p>Fit the simulated data to the model using the algorithm configured in the previous step.</p>
+<p><em>Algorithmic Calibration</em></p>
+<p>How well did the algorithm do in fitting the simulated data? This step helps to answer the question regarding computational faithfulness. A model may be well specified, but if the algorithm used is unreliable then the posterior distribution is also unreliable, and this can lead to poor inferences. Methods for checking models is discussed in (#model-checking).</p>
+<p><em>Inferential Calibration</em></p>
+<p>Are there any pathological behaviors in the model such as overfitting or non-identifiability? This step helps to answer the question of inferential adequacy.</p>
+<p><strong>Post-Model, Post-Data</strong></p>
+<p><em>Fit Observed Data</em></p>
+<p>After performing the prior predictive checks and being satisfied with the model, the next step is to fit the model to the observed data.</p>
+<p><em>Diagnose Posterior Fit</em></p>
+<p>Did the model fit well? Can a poorly performing algorithm be fixed by tweaking the algorithmic configuration, or is there a problem with the model itself where it is not rich enough to capture the structure of the observed data? Utilize the diagnostic tools available for the algorithm to check the computational faithfulness.</p>
+<p><em>Posterior Retrodictive Checks</em></p>
+<p>Do the posterior retrodictions match the observed data well, or are there still apparent discrepancies between what is expected and what is predicted by the model? It is important that any changes to the model going forward are motivated by domain expertise so as to mitigate the risk of overfitting.</p>
+<p><em>Celebrate</em></p>
+<p>After going through the tedious process of iteratively developing a model, it is okay to celebrate before moving on to answer the research questions.</p>
 <div class="figure" style="text-align: center"><span id="fig:ch030-workflow-diagram"></span>
 <img src="figures/workflow-diagram.png" alt="Diagram is copywrited material of Michael Betancourt and used under the CC BY-NC 4.0 license. Image taken from https://betanalpha.github.io/" width="100%" />
 <p class="caption">
 Figure 3.1: Diagram is copywrited material of Michael Betancourt and used under the CC BY-NC 4.0 license. Image taken from <a href="https://betanalpha.github.io/" class="uri">https://betanalpha.github.io/</a>
 </p>
 </div>
-<p><strong>Pre-Model, Pre-Data</strong></p>
-<p>The modeling process begins by modeling the experiment according to the description of how it occurred and how the data were collected. This first part consists of conceptual analysis, defining the observational space, and constructing summary statistics that can help identify issues in the model specification.</p>
-<p><em>Conceptual Analysis</em></p>
-<p><em>Define Observational Space</em></p>
-<p><em>Construct Summary Statistics</em></p>
-<p><strong>Post-Model, Pre-Data</strong></p>
-<p><em>Develop Model</em></p>
-<p><em>Construct Summary Functions</em></p>
-<p><em>Simulate Bayesian Ensemble</em></p>
-<p><em>Prior Checks</em></p>
-<p><em>Configure Algorithm</em></p>
-<p><em>Fit Simulated Ensemble</em></p>
-<p><em>Algorithmic Calibration</em></p>
-<p><em>Inferential Calibration</em></p>
-<p><strong>Post-Model, Post-Data</strong></p>
-<p><em>Fit Observed Data</em></p>
-<p><em>Diagnose Posterior Fit</em></p>
-<p><em>Posterior Retrodictive Checks</em></p>
-<p><em>Celebrate</em></p>
 </div>
 <div id="model-fitting" class="section level2">
 <h2><span class="header-section-number">3.2</span> Model Fitting</h2>
 <p><strong>Hamiltonian Monte Carlo</strong></p>
 <p><strong>R and Stan</strong></p>
+<p>The NUTS algorithm samples in two phases: a warm-up phase and a sampling phase. During the warm-up phase, the sampler is automatically tuning three internal parameters that can significantly affect the sampling efficiency.</p>
 </div>
 <div id="model-checking" class="section level2">
 <h2><span class="header-section-number">3.3</span> Model Checking</h2>
-<ul>
-<li>Introduce 8 Schools</li>
-<li>Discuss</li>
-</ul>
+<p>Below is the 8 Schools data <span class="citation">(Gelman et al. <a href="#ref-gelman2013bayesian" role="doc-biblioref">2013</a>)</span> which is a classical example for introducing Stan and testing the operating characteristics of a model. We use it in this section to illustrate the essential MCMC model checking tools.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="methods.html#cb1-1"></a>schools_dat &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
 <span id="cb1-2"><a href="methods.html#cb1-2"></a>  <span class="dt">J =</span> <span class="dv">8</span>,</span>
 <span id="cb1-3"><a href="methods.html#cb1-3"></a>  <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">28</span>,  <span class="dv">8</span>, <span class="dv">-3</span>,  <span class="dv">7</span>, <span class="dv">-1</span>,  <span class="dv">1</span>, <span class="dv">18</span>, <span class="dv">12</span>),</span>
@@ -548,8 +555,8 @@ y &amp;\sim \mathcal{N}(\mu, 1^2) \\
 Figure 3.9: 95% Prediction intervals for the four polynomial models, as well as the true value (dashed line).
 </p>
 </div>
-<p>This is just a toy example, and real-world real-data models are often more complex, but they do present the same headaches when it comes to model/feature selection and goodness of fit checks. Clearly the quartic model has the best fit to the data, but it is too variable and doesn’t capture the regular features of the data, so it does poorly for the out-of-sample prediction. The linear model suffers as well by being less biased and too inflexible to capture the structure of the data. The quadratic and cubic are in the middle of the road, but the quadratic does well and makes fewer assumptions about the data. In other words, the quadratic model is just complex enough to predict well while making fewer assumptions. <em>Information criteria</em> is a way of weighing the prediction quality of a model against its complexity, and is arguably a better system for model selection/comparison than other goodness of fit statistics such as <span class="math inline">\(R^2\)</span> or p-values.</p>
-<p>We don’t always have the observed data to compare predictions against (nor the data generating model). Some techniques to compensate for this limitation include cross validation, where the data is split into <em>training</em> data and <em>testing</em> data. The model is fit to the training data, and then predictions are made with the testing data and compared to the observed values. This can often give a good estimate for out-of-sample prediction error. Cross validation can be extended into k-fold cross validation. The idea is to <em>fold</em> the data into <span class="math inline">\(k\)</span> disjoint partitions, and predict partition <span class="math inline">\(i\)</span> using the rest of the data to train on. The prediction error of the <span class="math inline">\(k\)</span>-folds can then be averaged over to get an estimate for out-of-sample prediction error.</p>
+<p>This is just a toy example, and real-world real-data models are often more complex, but they do present the same headaches when it comes to model/feature selection and goodness of fit checks. Clearly the quartic model has the best fit to the data, but it is too variable and doesn’t capture the regular features of the data, so it does poorly for the out-of-sample prediction. The linear model suffers as well by being less biased and too inflexible to capture the structure of the data. The quadratic and cubic are in the middle of the road, but the quadratic does well and makes fewer assumptions about the data. In other words, the quadratic model is just complex enough to predict well while making fewer assumptions. Information criteria is a way of weighing the prediction quality of a model against its complexity, and is arguably a better system for model selection/comparison than other goodness of fit statistics such as <span class="math inline">\(R^2\)</span> or p-values.</p>
+<p>We don’t always have the observed data to compare predictions against (nor the data generating model). Some techniques to compensate for this limitation include cross validation, where the data is split into training data and testing data. The model is fit to the training data, and then predictions are made with the testing data and compared to the observed values. This can often give a good estimate for out-of-sample prediction error. Cross validation can be extended into k-fold cross validation. The idea is to <em>fold</em> the data into <span class="math inline">\(k\)</span> disjoint partitions, and predict partition <span class="math inline">\(i\)</span> using the rest of the data to train on. The prediction error of the <span class="math inline">\(k\)</span>-folds can then be averaged over to get an estimate for out-of-sample prediction error.</p>
 <p>Taking <span class="math inline">\(k\)</span>-fold CV to the limit by letting <span class="math inline">\(k\)</span> equal the number of observations results in something called leave one out cross validation (LOOCV), where for each observation in the data, the model is fit to the remaining data and predicted for the left out observation. The downside of <span class="math inline">\(k\)</span>-fold cross validation is that it requires fitting the model <span class="math inline">\(k\)</span> times, which can be computationally expensive for complex Bayesian models. Thankfully there is a way to approximate LOOCV without having to refit the model many times.</p>
 <p><strong>Importance Sampling</strong></p>
 <p>LOOCV and many other evaluation tools such as the widely applicable information criterion (WAIC) rest on the log-pointwise-predictive-density (lppd), which is a loose measure of deviance from some “true” probability distribution. Typically we don’t have the analytic form of the predictive posterior density, so instead we use <span class="math inline">\(S\)</span> MCMC draws to approximate the lppd <span class="citation">(Vehtari, Gelman, and Gabry <a href="#ref-vehtari2017practical" role="doc-biblioref">2017</a>)</span>:</p>

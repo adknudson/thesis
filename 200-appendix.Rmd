@@ -3,7 +3,9 @@
 
 # Supplementary Code {#code}
 
+
 **Eight Schools Model**
+
 
 ```
 data {
@@ -29,6 +31,39 @@ generated quantities {
   for (j in 1:J) {
     log_lik[j] = normal_lpdf(y[j] | theta[j], sigma[j]);
   }
+}
+```
+
+
+**Model with Lapse and Subject-level Parameters**
+
+
+```{r ch210-Minimum Dagger, comment=NA}
+cat(writeLines(readLines("models/universal_pf.stan")))
+```
+
+
+**Stan Algebraic Solver**
+
+
+```
+functions {
+  vector system(vector y, vector theta, real[] x_r, int[] x_i) {
+    vector[2] z;
+    z[1] = exp(y[1] + y[2]^2 / 2) - theta[1];
+    z[2] = 0.5 + 0.5 * erf(-y[1] / (sqrt(2) * y[2])) - theta[2];
+    return z;
+  }
+}
+transformed data {
+  vector[2] y_guess = [1, 1]';
+  real x_r[0];
+  int x_i[0];
+}
+transformed parameters {
+  vector[2] theta = [0.100, 0.99]';
+  vector[2] y;
+  y = algebra_solver(system, y_guess, theta, x_r, x_i);
 }
 ```
 
