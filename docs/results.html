@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>6 Psychometric Results | Application of a Principaled Bayesian Workflow to Multilevel Modeling</title>
-  <meta name="description" content="6 Psychometric Results | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <title>5 Psychometric Results | A Bayesian Multilevel Model for the Psychometric Function using R and Stan</title>
+  <meta name="description" content="5 Psychometric Results | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="6 Psychometric Results | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <meta property="og:title" content="5 Psychometric Results | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="adkudson/thesis" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6 Psychometric Results | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <meta name="twitter:title" content="5 Psychometric Results | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   
   
   
@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="predictive-inferences.html"/>
+<link rel="prev" href="application.html"/>
 <link rel="next" href="discussion.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -134,48 +134,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#ch010-classical-methods"><i class="fa fa-check"></i><b>1.1</b> Everything can be Blamed on Fisher</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#ch010-new-methods"><i class="fa fa-check"></i><b>1.2</b> Proposal of New Methods</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#ch010-organization"><i class="fa fa-check"></i><b>1.3</b> Organization</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#current-methods"><i class="fa fa-check"></i><b>1.1</b> Current Methods</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#new-methods"><i class="fa fa-check"></i><b>1.2</b> New Methods</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i><b>1.3</b> Organization</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="motivating-data.html"><a href="motivating-data.html"><i class="fa fa-check"></i><b>2</b> What is a Model without Data</a><ul>
-<li class="chapter" data-level="2.1" data-path="motivating-data.html"><a href="motivating-data.html#psycho-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
-<li class="chapter" data-level="2.2" data-path="motivating-data.html"><a href="motivating-data.html#toj-task"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Data</a></li>
-<li class="chapter" data-level="2.3" data-path="motivating-data.html"><a href="motivating-data.html#data-visualizations-and-quirks"><i class="fa fa-check"></i><b>2.3</b> Data Visualizations and Quirks</a></li>
+<li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Motivating Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#psycho-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
+<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#toj-task"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Task</a></li>
+<li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#data-visualizations-and-quirks"><i class="fa fa-check"></i><b>2.3</b> Data Visualizations and Quirks</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>3</b> Principled Bayesian Workflow</a><ul>
-<li class="chapter" data-level="3.1" data-path="workflow.html"><a href="workflow.html#iter1"><i class="fa fa-check"></i><b>3.1</b> Iteration 1 (journey of a thousand miles)</a></li>
-<li class="chapter" data-level="3.2" data-path="workflow.html"><a href="workflow.html#iter2"><i class="fa fa-check"></i><b>3.2</b> Iteration 2 (electric boogaloo)</a></li>
-<li class="chapter" data-level="3.3" data-path="workflow.html"><a href="workflow.html#iter3"><i class="fa fa-check"></i><b>3.3</b> Iteration 3 (the one for me)</a></li>
-<li class="chapter" data-level="3.4" data-path="workflow.html"><a href="workflow.html#iter4"><i class="fa fa-check"></i><b>3.4</b> Iteration 4 (what’s one more)</a></li>
-<li class="chapter" data-level="3.5" data-path="workflow.html"><a href="workflow.html#celebrate"><i class="fa fa-check"></i><b>3.5</b> Celebrate</a></li>
+<li class="chapter" data-level="3" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>3</b> Methods</a><ul>
+<li class="chapter" data-level="3.1" data-path="methods.html"><a href="methods.html#model-development"><i class="fa fa-check"></i><b>3.1</b> Model Development</a></li>
+<li class="chapter" data-level="3.2" data-path="methods.html"><a href="methods.html#model-fitting"><i class="fa fa-check"></i><b>3.2</b> Model Fitting</a></li>
+<li class="chapter" data-level="3.3" data-path="methods.html"><a href="methods.html#model-checking"><i class="fa fa-check"></i><b>3.3</b> Model Checking</a></li>
+<li class="chapter" data-level="3.4" data-path="methods.html"><a href="methods.html#predictive-performance"><i class="fa fa-check"></i><b>3.4</b> Predictive Performance</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>4</b> Model Fitting/Checking</a><ul>
-<li class="chapter" data-level="4.1" data-path="model-checking.html"><a href="model-checking.html#fitting-using-hmc"><i class="fa fa-check"></i><b>4.1</b> Fitting using HMC</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="model-checking.html"><a href="model-checking.html#diagnostic-tools"><i class="fa fa-check"></i><b>4.1.1</b> Diagnostic Tools</a></li>
+<li class="chapter" data-level="4" data-path="application.html"><a href="application.html"><i class="fa fa-check"></i><b>4</b> Model Development</a><ul>
+<li class="chapter" data-level="4.1" data-path="application.html"><a href="application.html#iter1"><i class="fa fa-check"></i><b>4.1</b> Iteration 1</a></li>
+<li class="chapter" data-level="4.2" data-path="application.html"><a href="application.html#iter2"><i class="fa fa-check"></i><b>4.2</b> Iteration 2</a></li>
+<li class="chapter" data-level="4.3" data-path="application.html"><a href="application.html#iter3"><i class="fa fa-check"></i><b>4.3</b> Iteration 3</a></li>
+<li class="chapter" data-level="4.4" data-path="application.html"><a href="application.html#iter4"><i class="fa fa-check"></i><b>4.4</b> Iteration 4</a></li>
+<li class="chapter" data-level="4.5" data-path="application.html"><a href="application.html#iter5"><i class="fa fa-check"></i><b>4.5</b> Iteration 5</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="model-checking.html"><a href="model-checking.html#prior-predictive-checks"><i class="fa fa-check"></i><b>4.2</b> Prior Predictive Checks</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Psychometric Results</a><ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#on-perceptual-synchrony"><i class="fa fa-check"></i><b>5.1</b> On Perceptual Synchrony</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>5.2</b> On Temporal Sensitivity</a></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>5.3</b> Lapse Rate across Age Groups</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="predictive-inferences.html"><a href="predictive-inferences.html"><i class="fa fa-check"></i><b>5</b> Predictive Inference</a><ul>
-<li class="chapter" data-level="5.1" data-path="predictive-inferences.html"><a href="predictive-inferences.html#model-comparison-via-predictive-performance"><i class="fa fa-check"></i><b>5.1</b> Model Comparison via Predictive Performance</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="predictive-inferences.html"><a href="predictive-inferences.html#loocv-and-importance-sampling"><i class="fa fa-check"></i><b>5.1.1</b> LOOCV and Importance Sampling</a></li>
+<li class="chapter" data-level="6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>6</b> Discussion</a><ul>
+<li class="chapter" data-level="6.1" data-path="discussion.html"><a href="discussion.html#causal-inference"><i class="fa fa-check"></i><b>6.1</b> Causal Inference</a></li>
+<li class="chapter" data-level="6.2" data-path="discussion.html"><a href="discussion.html#experimental-design"><i class="fa fa-check"></i><b>6.2</b> Experimental Design</a></li>
+<li class="chapter" data-level="6.3" data-path="discussion.html"><a href="discussion.html#results-1"><i class="fa fa-check"></i><b>6.3</b> Results</a></li>
+<li class="chapter" data-level="6.4" data-path="discussion.html"><a href="discussion.html#model-comparison-vs.-selection"><i class="fa fa-check"></i><b>6.4</b> Model Comparison vs. Selection</a></li>
 </ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>6</b> Psychometric Results</a><ul>
-<li class="chapter" data-level="6.1" data-path="results.html"><a href="results.html#affect-of-adaptation-across-age-groups"><i class="fa fa-check"></i><b>6.1</b> Affect of Adaptation across Age Groups</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="results.html"><a href="results.html#on-perceptual-synchrony"><i class="fa fa-check"></i><b>6.1.1</b> On Perceptual Synchrony</a></li>
-<li class="chapter" data-level="6.1.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>6.1.2</b> On Temporal Sensitivity</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>6.2</b> Lapse Rate across Age Groups</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>7</b> Discussion</a><ul>
-<li class="chapter" data-level="7.1" data-path="discussion.html"><a href="discussion.html#model-selection-is-not-always-the-goal"><i class="fa fa-check"></i><b>7.1</b> Model selection is not always the goal</a></li>
-<li class="chapter" data-level="7.2" data-path="discussion.html"><a href="discussion.html#data-cleaning-and-reproducibility"><i class="fa fa-check"></i><b>7.2</b> Data Cleaning and Reproducibility</a></li>
-<li class="chapter" data-level="7.3" data-path="discussion.html"><a href="discussion.html#developing-a-model"><i class="fa fa-check"></i><b>7.3</b> Developing a model</a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>8</b> Conclusion</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
-<li class="chapter" data-level="A" data-path="supplementary-code.html"><a href="supplementary-code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
+<li class="chapter" data-level="A" data-path="code.html"><a href="code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
+<li class="chapter" data-level="B" data-path="model-dev.html"><a href="model-dev.html"><i class="fa fa-check"></i><b>B</b> Developing a Model</a></li>
+<li class="chapter" data-level="C" data-path="reproduce.html"><a href="reproduce.html"><i class="fa fa-check"></i><b>C</b> Reproducible Results</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -186,7 +182,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Application of a Principaled Bayesian Workflow to Multilevel Modeling</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Bayesian Multilevel Model for the Psychometric Function using R and Stan</a>
           </h1>
         </div>
 
@@ -195,153 +191,150 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="results" class="section level1">
-<h1><span class="header-section-number">6</span> Psychometric Results</h1>
-<p>What was the point of going through all the work of building a model if not to answer the questions that motivated the model in the first place? To reiterate, the questions pertain to how the brain reconciles stimuli originating from different sources, and if biological (age) and contextual (task, temporal recalibration) factors contribute to global percepts. The way through which these questions are answered is through a psychometric experiment and the resulting psychometric function (<a href="motivating-data.html#motivating-data">chapter 2</a>). I’ve divided this chapter into two sections - the affects of temporal recalibration and the consideration of a lapse rate. Temporal recalibration is considered in the context of perceptual synchrony and temporal sensitivity, and the results are broken down by age group. Also recall that there are four separate tasks - audiovisual, visual, duration, and sensorimotor.</p>
-<div id="affect-of-adaptation-across-age-groups" class="section level2">
-<h2><span class="header-section-number">6.1</span> Affect of Adaptation across Age Groups</h2>
-<p>Temporal recalibration consists of presenting a subject with an adapting stimulus throughout a block of a psychometric experiment. Depending on the mechanisms at work, the resulting psychometric function can either be shifted (biased) towards the adapting stimulus (lag adaption) or away (Bayesian adaptation). The theory of integrating sensory signals is beyond my scope, but some papers discussing sensory adaptation in more detail are <span class="citation">Miyazaki et al. (<a href="#ref-miyazaki2006bayesian" role="doc-biblioref">2006</a>)</span>, <span class="citation">Sato and Aihara (<a href="#ref-sato2011bayesian" role="doc-biblioref">2011</a>)</span>, and <span class="citation">Stocker and Simoncelli (<a href="#ref-stocker2005sensory" role="doc-biblioref">2005</a>)</span>. I will be discussing the statistical results without considering the deeper psychological theory.</p>
-<div id="on-perceptual-synchrony" class="section level3">
-<h3><span class="header-section-number">6.1.1</span> On Perceptual Synchrony</h3>
-<p>Perceptual synchrony is when the temporal delay between two stimuli is small enough so that the brain integrates the two signals into a global percept - perceived as happening simultaneously. Perceptual synchrony is studied through the point of subjective simultaneity (PSS), and in a simple sense represents the bias towards a given stimulus. Ideally the bias would be zero, but human perception is liable to change due to every day experiences. The pre-adaptation block is a proxy for implicit bias, and the post-adaptation indicates whether lag or Bayesian adaptation is taking place. Some researchers believe that both forms of adaptation are taking place at all times and that the mixture rates are determined by biological and contextual factors. I will try to stay away from making any strong determinations and will only present the results conditional on the model and the data.</p>
+<h1><span class="header-section-number">5</span> Psychometric Results</h1>
+<p>What was the point of going through all the work of building a model if not to answer the questions that motivated the model in the first place? To reiterate, the questions pertain to how the brain reconciles stimuli originating from different sources, and if biological (age) and contextual (task, temporal recalibration) factors contribute to global percepts. The way through which these questions are answered is through a psychometric experiment and the resulting psychometric function (<a href="data.html#data">chapter 2</a>). This chapter is divided into three sections: the affects of temporal recalibration on perceptual synchrony, the affects of temporal recalibration on temporal sensitivity, and the consideration of a lapse rate. Also recall that there are four separate tasks - audiovisual, visual, duration, and sensorimotor.</p>
+<p>Temporal recalibration consists of presenting a subject with an adapting stimulus throughout a block of a psychometric experiment. Depending on the mechanisms at work, the resulting psychometric function can either be shifted (biased) towards the adapting stimulus (lag adaption) or away (Bayesian adaptation). The theory of integrating sensory signals is beyond the scope of this paper, but some papers discussing sensory adaptation in more detail are <span class="citation">Miyazaki et al. (<a href="#ref-miyazaki2006bayesian" role="doc-biblioref">2006</a>)</span>, <span class="citation">Sato and Aihara (<a href="#ref-sato2011bayesian" role="doc-biblioref">2011</a>)</span>, and <span class="citation">Stocker and Simoncelli (<a href="#ref-stocker2005sensory" role="doc-biblioref">2005</a>)</span>. The statistical associations are reported without consideration for the deeper psychological theory.</p>
+<div id="on-perceptual-synchrony" class="section level2">
+<h2><span class="header-section-number">5.1</span> On Perceptual Synchrony</h2>
+<p>Perceptual synchrony is when the temporal delay between two stimuli is small enough so that the brain integrates the two signals into a global percept - perceived as happening simultaneously. Perceptual synchrony is studied through the point of subjective simultaneity (PSS), and in a simple sense represents the bias towards a given stimulus. Ideally the bias would be zero, but human perception is liable to change due to every day experiences. The pre-adaptation block is a proxy for implicit bias, and the post-adaptation indicates whether lag or Bayesian adaptation is taking place. Some researchers believe that both forms of adaptation are taking place at all times and that the mixture rates are determined by biological and contextual factors. We try to stay away from making any strong determinations and will only present the results conditional on the model and the data.</p>
 <p><strong>Audiovisual TOJ Task</strong></p>
-<p>There are two ways that we can visually draw inferences across the 6 different age-block combinations. The distributions can either be faceted by age group, or they can be faceted by block. There are actually many ways that the data can be presented, but these two methods of juxtaposition help to answer two questions - how does the effect of adaptation vary by age group, and is there a difference in age groups by block? The left hand plot of figure <a href="results.html#fig:ch060-Eastern-Cat">6.1</a> answers the former, and the right hand plot answers the latter.</p>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Eastern-Cat"></span>
-<img src="060-results_files/figure-html/ch060-Eastern-Cat-1.png" alt="Posterior distribution of PSS values for the audiovisual task." width="85%" />
+<p>There are two ways that we can visually draw inferences across the six different age-block combinations. The distributions can either be faceted by age group, or they can be faceted by block. There are actually many ways that the data can be presented, but these two methods of juxtaposition help to answer two questions - how does the effect of adaptation vary by age group, and is there a difference in age groups by block? The left hand plot of figure <a href="results.html#fig:ch050-Eastern-Cat">5.1</a> answers the former, and the right hand plot answers the latter.</p>
+<div class="figure" style="text-align: center"><span id="fig:ch050-Eastern-Cat"></span>
+<img src="050-results_files/figure-html/ch050-Eastern-Cat-1.png" alt="Posterior distribution of PSS values for the audiovisual task." width="85%" />
 <p class="caption">
-Figure 6.1: Posterior distribution of PSS values for the audiovisual task.
+Figure 5.1: Posterior distribution of PSS values for the audiovisual task.
 </p>
 </div>
-<p>Across all age groups, temporal recalibration results in a negative shift towards zero in the PSS (as shown by the left hand plot), but there is no significant difference in the PSS between age groups (right hand plot). A very convenient consequence of using MCMC is that the samples from the posterior can be recombined in many ways to describe new phenomena. The PSS values can even be pooled across age groups so that the marginal affect of recalibration may be considered (left hand plot of figure <a href="results.html#fig:ch060-Beta-Lonesome">6.2</a>).</p>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Beta-Lonesome"></span>
-<img src="060-results_files/figure-html/ch060-Beta-Lonesome-1.png" alt="Posterior distribution of PSS values for the audiovisual task. Left: Marginal over age group. Right: Marginal over block." width="85%" />
+<p>Across all age groups, temporal recalibration results in a negative shift towards zero in the PSS (as shown by the left hand plot), but there is no significant difference in the PSS between age groups (right hand plot). A very convenient consequence of using MCMC is that the samples from the posterior can be recombined in many ways to describe new phenomena. The PSS values can even be pooled across age groups so that the marginal affect of recalibration may be considered (left hand plot of figure <a href="results.html#fig:ch050-Beta-Lonesome">5.2</a>).</p>
+<div class="figure" style="text-align: center"><span id="fig:ch050-Beta-Lonesome"></span>
+<img src="050-results_files/figure-html/ch050-Beta-Lonesome-1.png" alt="Posterior distribution of PSS values for the audiovisual task. Left: Marginal over age group. Right: Marginal over block." width="85%" />
 <p class="caption">
-Figure 6.2: Posterior distribution of PSS values for the audiovisual task. Left: Marginal over age group. Right: Marginal over block.
+Figure 5.2: Posterior distribution of PSS values for the audiovisual task. Left: Marginal over age group. Right: Marginal over block.
 </p>
 </div>
-<p>Now with the marginal of age group, the distribution of differences between pre- and post-adaptation blocks can be calculated. I could report a simple credible interval, but it almost seems disingenuous given that the entire distribution is available. I could report that the <span class="math inline">\(90\%\)</span> highest posterior density interval (HPDI) of the difference is <span class="math inline">\((-0.036, 0.003)\)</span>, but consider the following figure instead.</p>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Omega-Permanent"></span>
-<img src="060-results_files/figure-html/ch060-Omega-Permanent-1.png" alt="Distribution of differences for pre- and post-adaptation PSS values with 90% HPDI." width="85%" />
+<p>Now with the marginal of age group, the distribution of differences between pre- and post-adaptation blocks can be calculated. We could report a simple credible interval, but it almost seems disingenuous given that the entire distribution is available. We could report that the <span class="math inline">\(90\%\)</span> highest posterior density interval (HPDI) of the difference is <span class="math inline">\((-0.036, 0.003)\)</span>, but consider the following figure instead (figure <a href="results.html#fig:ch050-Omega-Permanent">5.3</a>).</p>
+<div class="figure" style="text-align: center"><span id="fig:ch050-Omega-Permanent"></span>
+<img src="050-results_files/figure-html/ch050-Omega-Permanent-1.png" alt="Distribution of differences for pre- and post-adaptation PSS values with 90\% HPDI." width="85%" />
 <p class="caption">
-Figure 6.3: Distribution of differences for pre- and post-adaptation PSS values with 90% HPDI.
+Figure 5.3: Distribution of differences for pre- and post-adaptation PSS values with 90% HPDI.
 </p>
 </div>
-<p>Figure <a href="results.html#fig:ch060-Omega-Permanent">6.3</a> shows the distribution of differences with the <span class="math inline">\(90\%\)</span> HPDI region shaded. From this figure, one might conclude that the effect of recalibration, while small, is still noticeable for the audiovisual task. While this could be done for every task in the rest of this chapter, I do not think it is worth repeating as I am not trying to prove anything about the psychometric experiment itself (that is for a later paper). The point of this demonstration is simply that it can be done (and easily), and how to summarize the data both visually and quantitatively.</p>
+<p>Figure <a href="results.html#fig:ch050-Omega-Permanent">5.3</a> shows the distribution of differences with the <span class="math inline">\(90\%\)</span> HPDI region shaded. From this figure, one might conclude that the effect of recalibration, while small, is still noticeable for the audiovisual task. While this could be done for every task in the rest of this chapter, it is not worth repeating as we are not trying to prove anything about the psychometric experiment itself (that is for a later paper). The point of this demonstration is simply that it can be done (and easily), and how to summarize the data both visually and quantitatively.</p>
 <p><strong>Visual TOJ Task</strong></p>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Gruesome-Waffle"></span>
-<img src="060-results_files/figure-html/ch060-Gruesome-Waffle-1.png" alt="Posterior distribution of PSS values for the visual task." width="85%" />
+<div class="figure" style="text-align: center"><span id="fig:ch050-Gruesome-Waffle"></span>
+<img src="050-results_files/figure-html/ch050-Gruesome-Waffle-1.png" alt="Posterior distribution of PSS values for the visual task." width="85%" />
 <p class="caption">
-Figure 6.4: Posterior distribution of PSS values for the visual task.
+Figure 5.4: Posterior distribution of PSS values for the visual task.
 </p>
 </div>
-<p>Here there is no clear determination if recalibration has an effect on perceptual synchrony, as it is only the middle age group that shows a shift in bias. Even more, there is a lot of overlap between age group. Looking at the marginal distributions (figure <a href="results.html#fig:ch060-Cold-Gamma">6.5</a>), there may be a difference between the younger and older age groups, and the middle age and older age groups.</p>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Cold-Gamma"></span>
-<img src="060-results_files/figure-html/ch060-Cold-Gamma-1.png" alt="The difference between the older age group and the two others is noticeable, but not likely significant." width="85%" />
+<p>Here there is no clear determination if recalibration has an effect on perceptual synchrony, as it is only the middle age group that shows a shift in bias. Even more, there is a lot of overlap between age group. Looking at the marginal distributions (figure <a href="results.html#fig:ch050-Cold-Gamma">5.5</a>), there may be a difference between the younger and older age groups, and the middle age and older age groups.</p>
+<div class="figure" style="text-align: center"><span id="fig:ch050-Cold-Gamma"></span>
+<img src="050-results_files/figure-html/ch050-Cold-Gamma-1.png" alt="The difference between the older age group and the two others is noticeable, but not likely significant." width="85%" />
 <p class="caption">
-Figure 6.5: The difference between the older age group and the two others is noticeable, but not likely significant.
+Figure 5.5: The difference between the older age group and the two others is noticeable, but not likely significant.
 </p>
 </div>
-<p>These plots are useful for quickly being able to determine if there is a difference in factors. If there is a suspected difference, then the distribution can be calculated from the posterior samples as needed. I suspect that there may be a difference between the older age group and the other two, so I calculated the differences, and summarize them with the histogram in figure <a href="results.html#fig:ch060-Rapid-Postal">6.6</a>.</p>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Rapid-Postal"></span>
-<img src="060-results_files/figure-html/ch060-Rapid-Postal-1.png" alt="The bulk of the distribution is above zero, but there is still a chance that there is no difference in the distribution of PSS values between the age groups during the visual TOJ experiment." width="85%" />
+<p>These plots are useful for quickly being able to determine if there is a difference in factors. If there is a suspected difference, then the distribution can be calculated from the posterior samples as needed. We suspect that there may be a difference between the older age group and the other two, so we calculate the differences and summarize them with the histogram in figure <a href="results.html#fig:ch050-Rapid-Postal">5.6</a>.</p>
+<div class="figure" style="text-align: center"><span id="fig:ch050-Rapid-Postal"></span>
+<img src="050-results_files/figure-html/ch050-Rapid-Postal-1.png" alt="The bulk of the distribution is above zero, but there is still a chance that there is no difference in the distribution of PSS values between the age groups during the visual TOJ experiment." width="85%" />
 <p class="caption">
-Figure 6.6: The bulk of the distribution is above zero, but there is still a chance that there is no difference in the distribution of PSS values between the age groups during the visual TOJ experiment.
+Figure 5.6: The bulk of the distribution is above zero, but there is still a chance that there is no difference in the distribution of PSS values between the age groups during the visual TOJ experiment.
 </p>
 </div>
 <p>The bulk of the distribution is above zero, but there is still a chance that there is no difference in the distribution of PSS values between the age groups during the visual TOJ experiment.</p>
 <p><strong>Duration TOJ Task</strong></p>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Stormy-Frostbite"></span>
-<img src="060-results_files/figure-html/ch060-Stormy-Frostbite-1.png" alt="Posterior distribution of PSS values for the duration task." width="85%" />
+<div class="figure" style="text-align: center"><span id="fig:ch050-Stormy-Frostbite"></span>
+<img src="050-results_files/figure-html/ch050-Stormy-Frostbite-1.png" alt="Posterior distribution of PSS values for the duration task." width="85%" />
 <p class="caption">
-Figure 6.7: Posterior distribution of PSS values for the duration task.
+Figure 5.7: Posterior distribution of PSS values for the duration task.
 </p>
 </div>
-<p>The duration TOJ task is very interesting because 1) recalibration had a visually significant effect across all age groups, and 2) there is virtually no difference between the age groups. I could plot the marginal distribution, but it wouldn’t likely give any more insight. What I might ask is what is it about the duration task that lets temporal recalibration have such a significant effect? Is human perception of time duration more malleable than our perception to other sensory signals?</p>
+<p>The duration TOJ task is very interesting because 1) recalibration had a visually significant effect across all age groups, and 2) there is virtually no difference between the age groups. We could plot the marginal distribution, but it would not give any more insight. What we might ask is what is it about the duration task that lets temporal recalibration have such a significant effect? Is human perception of time duration more malleable than our perception to other sensory signals?</p>
 <p><strong>Sensorimotor TOJ Task</strong></p>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Homeless-Anaconda"></span>
-<img src="060-results_files/figure-html/ch060-Homeless-Anaconda-1.png" alt="Posterior distribution of PSS values for the sensorimotor task." width="85%" />
+<div class="figure" style="text-align: center"><span id="fig:ch050-Homeless-Anaconda"></span>
+<img src="050-results_files/figure-html/ch050-Homeless-Anaconda-1.png" alt="Posterior distribution of PSS values for the sensorimotor task." width="85%" />
 <p class="caption">
-Figure 6.8: Posterior distribution of PSS values for the sensorimotor task.
+Figure 5.8: Posterior distribution of PSS values for the sensorimotor task.
 </p>
 </div>
 <p>There are no differences between age groups or blocks when it comes to perceptual synchrony in the sensorimotor task.</p>
 </div>
-<div id="on-temporal-sensitivity" class="section level3">
-<h3><span class="header-section-number">6.1.2</span> On Temporal Sensitivity</h3>
+<div id="on-temporal-sensitivity" class="section level2">
+<h2><span class="header-section-number">5.2</span> On Temporal Sensitivity</h2>
 <p>Temporal sensitivity is the ability to successfully integrate signals arising from the same event, or segregate signals from different events. When the stimulus onset asynchrony increases, the ability to bind the signals into a single percept is reduced until they are perceived as distinct events with a temporal order. Those that are more readily able to determine temporal order have a higher temporal sensitivity, and it is measured through the slope of a psychometric function - specifically the quantity known as the just noticeable difference.</p>
 <p><strong>Audiovisual TOJ Task</strong></p>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Timely-Toupee"></span>
-<img src="060-results_files/figure-html/ch060-Timely-Toupee-1.png" alt="Posterior distribution of JND values for the audiovisual task." width="85%" />
+<div class="figure" style="text-align: center"><span id="fig:ch050-Timely-Toupee"></span>
+<img src="050-results_files/figure-html/ch050-Timely-Toupee-1.png" alt="Posterior distribution of JND values for the audiovisual task." width="85%" />
 <p class="caption">
-Figure 6.9: Posterior distribution of JND values for the audiovisual task.
+Figure 5.9: Posterior distribution of JND values for the audiovisual task.
 </p>
 </div>
 <p>All age groups experienced an increase in temporal sensitivity, but the effect is largest in the older age group which also had the largest pre-adaptation JND estimates. There also appears to be some distinction between the older age group and the younger ones in the pre-adaptation block, but recalibration closes the gap.</p>
 <p><strong>Visual TOJ Task</strong></p>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Mercury-Rainbow"></span>
-<img src="060-results_files/figure-html/ch060-Mercury-Rainbow-1.png" alt="Posterior distribution of JND values for the visual task." width="85%" />
+<div class="figure" style="text-align: center"><span id="fig:ch050-Mercury-Rainbow"></span>
+<img src="050-results_files/figure-html/ch050-Mercury-Rainbow-1.png" alt="Posterior distribution of JND values for the visual task." width="85%" />
 <p class="caption">
-Figure 6.10: Posterior distribution of JND values for the visual task.
+Figure 5.10: Posterior distribution of JND values for the visual task.
 </p>
 </div>
 <p>The story for the visual TOJ task is similar to the audiovisual one - each age group experience heightened temporal sensitivity after recalibration, with the two older age groups receiving more benefit than the younger age group. It’s also worth noting that the younger age groups have higher baseline temporal sensitivity, so there may not be as much room for improvement.</p>
 <p><strong>Duration TOJ Task</strong></p>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Aimless-Planet"></span>
-<img src="060-results_files/figure-html/ch060-Aimless-Planet-1.png" alt="Posterior distribution of JND values for the duration task." width="85%" />
+<div class="figure" style="text-align: center"><span id="fig:ch050-Aimless-Planet"></span>
+<img src="050-results_files/figure-html/ch050-Aimless-Planet-1.png" alt="Posterior distribution of JND values for the duration task." width="85%" />
 <p class="caption">
-Figure 6.11: Posterior distribution of JND values for the duration task.
+Figure 5.11: Posterior distribution of JND values for the duration task.
 </p>
 </div>
 <p>This time the effects of recalibration are not so strong, and just like for the PSS, there is no significant difference between age groups in the duration task.</p>
 <p><strong>Sensorimotor TOJ Task</strong></p>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Tombstone-Cold"></span>
-<img src="060-results_files/figure-html/ch060-Tombstone-Cold-1.png" alt="Posterior distribution of JND values for the sensorimotor task." width="85%" />
+<div class="figure" style="text-align: center"><span id="fig:ch050-Tombstone-Cold"></span>
+<img src="050-results_files/figure-html/ch050-Tombstone-Cold-1.png" alt="Posterior distribution of JND values for the sensorimotor task." width="85%" />
 <p class="caption">
-Figure 6.12: Posterior distribution of JND values for the sensorimotor task.
+Figure 5.12: Posterior distribution of JND values for the sensorimotor task.
 </p>
 </div>
 <p>Finally in the sensorimotor task there are mixed results. Temporal recalibration increased the temporal sensitivity in the younger age group, reduced it in the middle age group, and had no effect on the older age group. Clearly the biological factors at play are complex, and the data here is a relatively thin slice of the population. More data and a better calibrated experiment may give better insights into the effects of temporal recalibration.</p>
 </div>
-</div>
 <div id="lapse-rate-across-age-groups" class="section level2">
-<h2><span class="header-section-number">6.2</span> Lapse Rate across Age Groups</h2>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Waffle-Hollow"></span>
-<img src="060-results_files/figure-html/ch060-Waffle-Hollow-1.png" alt="Process model of the result of a psychometric experiment with the assumption that lapses occur at random and at a fixed rate, and that the subject guesses randomly in the event of a lapse." width="85%" />
+<h2><span class="header-section-number">5.3</span> Lapse Rate across Age Groups</h2>
+<div class="figure" style="text-align: center"><span id="fig:ch050-Waffle-Hollow"></span>
+<img src="050-results_files/figure-html/ch050-Waffle-Hollow-1.png" alt="Process model of the result of a psychometric experiment with the assumption that lapses occur at random and at a fixed rate, and that the subject guesses randomly in the event of a lapse." width="85%" />
 <p class="caption">
-Figure 6.13: Process model of the result of a psychometric experiment with the assumption that lapses occur at random and at a fixed rate, and that the subject guesses randomly in the event of a lapse.
+Figure 5.13: Process model of the result of a psychometric experiment with the assumption that lapses occur at random and at a fixed rate, and that the subject guesses randomly in the event of a lapse.
 </p>
 </div>
-<p>In the above figure, the outcome of one experiment can be represented as a directed acyclic graph (DAG) where at the start of the experiment, the subject either experiences a lapse in judgment with probability <span class="math inline">\(\gamma\)</span> or they do not experience a lapse in judgment. If there is no lapse, then they will give a positive response with probability <span class="math inline">\(F(x)\)</span>. If there is a lapse in judgment, then it is assumed that they will respond randomly - e.g. a fifty-fifty chance of a positive response. In this model of an experiment, the probability of a positive response is the sum of the two paths.</p>
-<p><span class="math display">\[\begin{align}
+<p>In the above figure, the outcome of one experiment can be represented as a directed acyclic graph (DAG) where at the start of the experiment, the subject either experiences a lapse in judgment with probability <span class="math inline">\(\gamma\)</span> or they do not experience a lapse in judgment. If there is no lapse, then they will give a positive response with probability <span class="math inline">\(F(x)\)</span>. If there is a lapse in judgment, then it is assumed that they will respond randomly – e.g. a fifty-fifty chance of a positive response. In this model of an experiment, the probability of a positive response is the sum of the two paths.</p>
+<p><span class="math display">\[\begin{align*}
 \mathrm{P}(\textrm{positive}) &amp;= 
   \mathrm{P}(\textrm{lapse}) \cdot \mathrm{P}(\textrm{positive} | \textrm{lapse}) \\
   &amp;\quad + \mathrm{P}(\textrm{no lapse}) \cdot \mathrm{P}(\textrm{positive} | \textrm{no lapse}) \\
   &amp;= \frac{1}{2} \gamma + (1 - \gamma) \cdot F(x)
-\end{align}\]</span></p>
+\end{align*}\]</span></p>
 <p>If we then let <span class="math inline">\(\gamma = 2\lambda\)</span> then the probability of a positive response becomes</p>
 <p><span class="math display">\[
 \mathrm{P}(\textrm{positive}) = \lambda + (1 - 2\lambda) \cdot F(x)
 \]</span></p>
-<p>This is the lapse model described in <a href="workflow.html#eq:Psi">(3.10)</a>! But now there is a little bit more insight into what the parameter <span class="math inline">\(\lambda\)</span> is. If <span class="math inline">\(\gamma\)</span> is the true lapse rate, then <span class="math inline">\(\lambda\)</span> is half the lapse rate. This may sound strange at first, but remember that equation <a href="workflow.html#eq:Psi">(3.10)</a> was motivated as a lower and upper bound to the psychometric function, and where the bounds are constrained by the same amount. Here the motivation is from a process model, yet the two lines of reasoning arrive at the same model.</p>
-<p>Figure <a href="results.html#fig:ch060-Magenta-Finger">6.14</a> shows the distribution of lapse rates for each age group across the four separate tasks. There is no visual trend in the ranks of lapse rates, meaning that no single age group definitively experiences a lower lapse rate than the others, though the middle age group comes close to being the winner and the older age group is more likely to be trailing behind. The distribution of lapse rates does reveal something about the tasks themselves.</p>
-<div class="figure" style="text-align: center"><span id="fig:ch060-Magenta-Finger"></span>
-<img src="060-results_files/figure-html/ch060-Magenta-Finger-1.png" alt="Lapse rates for the different age groups across the four separate tasks. Visually there is no clear trend in lapses by age group, but the concentration of the distributions give insight into the perceived difficulty of a task where more diffuse distributions may indiciate more difficult tasks." width="85%" />
+<p>This is the same lapse model described in <a href="application.html#eq:Psi">(4.10)</a>! But now there is more insight into what the parameter <span class="math inline">\(\lambda\)</span> is. If <span class="math inline">\(\gamma\)</span> is the true lapse rate, then <span class="math inline">\(\lambda\)</span> is half the lapse rate. This may sound strange at first, but remember that equation <a href="application.html#eq:Psi">(4.10)</a> was motivated as a lower and upper bound to the psychometric function where the bounds are constrained by the same amount. Here the motivation is from an illustrative diagram, yet the two lines of reasoning arrive at the same model.</p>
+<p>Figure <a href="results.html#fig:ch050-Magenta-Finger">5.14</a> shows the distribution of lapse rates for each age group across the four separate tasks. There is no visual trend in the ranks of lapse rates, meaning that no single age group definitively experiences a lower lapse rate than the others, though the middle age group comes close to being the winner and the older age group is more likely to be trailing behind. The distribution of lapse rates does reveal something about the tasks themselves.</p>
+<div class="figure" style="text-align: center"><span id="fig:ch050-Magenta-Finger"></span>
+<img src="050-results_files/figure-html/ch050-Magenta-Finger-1.png" alt="Lapse rates for the different age groups across the four separate tasks. Visually there is no clear trend in lapses by age group, but the concentration of the distributions give insight into the perceived difficulty of a task where more diffuse distributions may indiciate more difficult tasks." width="85%" />
 <p class="caption">
-Figure 6.14: Lapse rates for the different age groups across the four separate tasks. Visually there is no clear trend in lapses by age group, but the concentration of the distributions give insight into the perceived difficulty of a task where more diffuse distributions may indiciate more difficult tasks.
+Figure 5.14: Lapse rates for the different age groups across the four separate tasks. Visually there is no clear trend in lapses by age group, but the concentration of the distributions give insight into the perceived difficulty of a task where more diffuse distributions may indiciate more difficult tasks.
 </p>
 </div>
-<p>I used the audiovisual data in the first few iterations of building a model and there were no immediate issues, but when I tested the model on the visual data it had trouble expressing the variability at outer SOA values. I noted that one subject had a near perfect response set, and many others had equally impressive performance. The model without a lapse rate was being torn between a very steep slope near the PSS and random variability near the outer SOAs. The remedy was to include a lapse rate (motivated by domain expertise) which allowed for that one extra degree of freedom necessary to reconcile the opposing forces.</p>
-<p>Why did the visual data behave this way when the audiovisual data had no issue? That gets deep into the theory of how our brains integrate signals arising from different modalities. Detecting the temporal order of two visual stimuli may be an easier mental task than that of heterogeneous signals. Then consider audiovisual versus duration or sensorimotor. Visual-speech synthesis is a much more common task throughout the day than visual-tactile (sensorimotor), and so perhaps we are better adjusted to such a task as audiovisual. The latent measure of relative performance or task difficulty might be picked up through the lapse rate.</p>
-<p>To test this idea, the TOJ experiment could be repeated, and then ask the subject afterwards how they would rate the difficulty of each task. For now, a post-hoc test can be done by comparing the mean and spread of the lapse rates to a <em>pseuedo difficulty</em> measure as defined by the mean of the incorrect responses. A response is correct when the sign of the SOA value is concordant with the response, e.g. a positive SOA and the subject gives the “positive” response or a negative SOA and the subject gives the “negative” response. Looking at figure <a href="results.html#fig:ch060-Magenta-Finger">6.14</a>, I would subjectively rate the tasks from easiest to hardest based on ocular analysis as</p>
+<p>We used the audiovisual data in the first few iterations of building a model and there were no immediate issues, but when we tested the model on the visual data it had trouble expressing the variability at outer SOA values. We also noted that one subject had a near perfect response set, and many others had equally impressive performance. The model without a lapse rate was being torn between a very steep slope near the PSS and random variability near the outer SOAs. The remedy was to include a lapse rate (motivated by domain expertise) which allowed for that one extra degree of freedom necessary to reconcile the opposing forces.</p>
+<p>Why did the visual data behave this way when the audiovisual data had no issue? That gets deep into the theory of how our brains integrate signals arising from different modalities. Detecting the temporal order of two visual stimuli may be an easier mental task than that of heterogeneous signals. Then consider the audiovisual task versus the duration or sensorimotor task. Visual-speech synthesis is a much more common task throughout the day than visual-tactile (sensorimotor), and so perhaps we are better adjusted to such a task as audiovisual. The latent measure of relative performance or task difficulty might be picked up through the lapse rate.</p>
+<p>To test this idea, the TOJ experiment could be repeated, but also ask the subject afterwards how they would rate the difficulty of each task. For now, a post-hoc test can be done by comparing the mean and spread of the lapse rates to a <em>pseuedo difficulty</em> measure as defined by the proportion of the incorrect responses. A response is correct when the sign of the SOA value is concordant with the response, e.g. a positive SOA and the subject gives the “positive” response or a negative SOA and the subject gives the “negative” response. Looking at figure <a href="results.html#fig:ch050-Magenta-Finger">5.14</a>, we would subjectively rate the tasks from easiest to hardest based on ocular analysis as</p>
 <ol style="list-style-type: decimal">
 <li>Visual</li>
 <li>Audiovisual</li>
 <li>Duration</li>
 <li>Sensorimotor</li>
 </ol>
-<p>Again, this ranking is based on the mean (lower intrinsically meaning easier) and the spread (less diffuse implying more agreement of difficulty between age groups). The visual task has the tightest distribution of lapse rates, and the sensorimotor has the widest spread, so I can rank those first and last respectively. Audiovisual and duration are very similar in mean and spread, but the audiovisual has a bit more agreement between the young and middle age groups, so second and third go to audiovisual and duration. Table <a href="results.html#tab:ch060-Orange-Tigerfish">6.1</a> shows the results arranged by increasing pseudo difficulty. As predicted, the visual task is squarely at the top and the sensorimotor is fully at the bottom. The only out of place group is the audiovisual task for the older age group, which is about equal to the older age group during the duration task. In fact, within tasks, the older age group always comes in last in terms of proportion of correct responses, while the young and middle age groups trade back and forth.</p>
+<p>Again, this ranking is based on the mean (lower intrinsically meaning easier) and the spread (less diffuse implying more agreement of difficulty between age groups). The visual task has the tightest distribution of lapse rates, and the sensorimotor has the widest spread, so we can rank those first and last respectively. Audiovisual and duration are very similar in mean and spread, but the audiovisual has a bit more agreement between the young and middle age groups, so second and third go to audiovisual and duration. Table <a href="results.html#tab:ch050-Orange-Tigerfish">5.1</a> shows the results arranged by increasing pseudo difficulty. As predicted, the visual task is squarely at the top and the sensorimotor is fully at the bottom. The only out of place group is the audiovisual task for the older age group, which is about equal to the older age group during the duration task. In fact, within tasks, the older age group always comes in last in terms of proportion of correct responses, while the young and middle age groups trade back and forth.</p>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:ch060-Orange-Tigerfish">Table 6.1: </span>Relative difficulty of the different tasks by age group. The difficulty is measured by the proportion of incorrect responses.
+<span id="tab:ch050-Orange-Tigerfish">Table 5.1: </span>Relative difficulty of the different tasks by age group. The difficulty is measured by the proportion of incorrect responses.
 </caption>
 <thead>
 <tr>
@@ -519,7 +512,7 @@ Older Adult
           </div>
         </div>
       </div>
-<a href="predictive-inferences.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="application.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="discussion.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
@@ -556,7 +549,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/adknudson/thesis/blob/master/060-results.Rmd",
+"link": "https://github.com/adknudson/thesis/blob/master/050-results.Rmd",
 "text": null
 },
 "download": ["adknudson-thesis.pdf"],

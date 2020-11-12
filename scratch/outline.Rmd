@@ -10,38 +10,36 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 - Introduction
-  - Advances in CS as a lead-in to discussing newer modeling workflows
-  - Classical Approaches to Modeling
-  - Proposal of new methods (Thesis)
+  - Current methods
+  - Proposal of new methods
   - Organization
-- Psychometrics and Motivating Data
+- Data Background
   - Psychometric Experiments
-  - TOJ tasks
-  - Data Viz and Quirks
-- Principaled Bayesian Workflow
-  - Discussion
-  - Introduce concepts but save details for later sections
-  - Building a model in steps
-    - Iter1
-    - Iter2
-    - ...
-  - Segue
-- Model Checking
-  - Diagnostics
-  - Simulation study (bigsimr?)
-  - Consequence of using "wrong" model
-- Predictive Inference
-  - Simulating/Predicting at different levels
-  - Average vs. Marginal effects
-- Application Results
-  - Age Groups
-    - Parameter Scale (relative)
-    - Prediction Scale (absolute)
-  - Predictive distribution of new subject
-  - Consequence of removing outlier(s)
+  - Temporal Order Judgment Data
+  - Data Visualizations and Quirks
+- Methods Background
+  - Model Development (example data)
+  - Model Fitting
+  - Model Checking
+  - LOO
+- Workflow
+  - Iteration 1 (base model)
+  - Iteration 2 (add age/block)
+  - Iteration 3 (add age/block interaction)
+  - Iteration 4 (add lapse rate)
+  - Iteration 5 (add subject level)
+- Results
+  - Perceptual Synchrony
+  - Temporal Sensitivity
+  - Lapse Rates
 - Discussion
-  - Project history
-    - Data cleaning
-    - Model development
-  - Model comparison, but not model selection
+  - TOJ Experimental Design
+  - More theoretical consequences of the results
+  - Model comparison vs. selection
+  - Developing a model
+  - Data cleaning and reproducibility
 - Conclusion
+  - Rehash of results
+  - Point out my direct contributions
+  - Future work
+  - Final word

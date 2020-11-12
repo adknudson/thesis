@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>8 Conclusion | Application of a Principaled Bayesian Workflow to Multilevel Modeling</title>
-  <meta name="description" content="8 Conclusion | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <title>7 Conclusion | A Bayesian Multilevel Model for the Psychometric Function using R and Stan</title>
+  <meta name="description" content="7 Conclusion | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="8 Conclusion | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <meta property="og:title" content="7 Conclusion | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="adkudson/thesis" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="8 Conclusion | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <meta name="twitter:title" content="7 Conclusion | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   
   
   
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="discussion.html"/>
-<link rel="next" href="supplementary-code.html"/>
+<link rel="next" href="code.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -134,48 +134,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#ch010-classical-methods"><i class="fa fa-check"></i><b>1.1</b> Everything can be Blamed on Fisher</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#ch010-new-methods"><i class="fa fa-check"></i><b>1.2</b> Proposal of New Methods</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#ch010-organization"><i class="fa fa-check"></i><b>1.3</b> Organization</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#current-methods"><i class="fa fa-check"></i><b>1.1</b> Current Methods</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#new-methods"><i class="fa fa-check"></i><b>1.2</b> New Methods</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i><b>1.3</b> Organization</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="motivating-data.html"><a href="motivating-data.html"><i class="fa fa-check"></i><b>2</b> What is a Model without Data</a><ul>
-<li class="chapter" data-level="2.1" data-path="motivating-data.html"><a href="motivating-data.html#psycho-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
-<li class="chapter" data-level="2.2" data-path="motivating-data.html"><a href="motivating-data.html#toj-task"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Data</a></li>
-<li class="chapter" data-level="2.3" data-path="motivating-data.html"><a href="motivating-data.html#data-visualizations-and-quirks"><i class="fa fa-check"></i><b>2.3</b> Data Visualizations and Quirks</a></li>
+<li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Motivating Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#psycho-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
+<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#toj-task"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Task</a></li>
+<li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#data-visualizations-and-quirks"><i class="fa fa-check"></i><b>2.3</b> Data Visualizations and Quirks</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>3</b> Principled Bayesian Workflow</a><ul>
-<li class="chapter" data-level="3.1" data-path="workflow.html"><a href="workflow.html#iter1"><i class="fa fa-check"></i><b>3.1</b> Iteration 1 (journey of a thousand miles)</a></li>
-<li class="chapter" data-level="3.2" data-path="workflow.html"><a href="workflow.html#iter2"><i class="fa fa-check"></i><b>3.2</b> Iteration 2 (electric boogaloo)</a></li>
-<li class="chapter" data-level="3.3" data-path="workflow.html"><a href="workflow.html#iter3"><i class="fa fa-check"></i><b>3.3</b> Iteration 3 (the one for me)</a></li>
-<li class="chapter" data-level="3.4" data-path="workflow.html"><a href="workflow.html#iter4"><i class="fa fa-check"></i><b>3.4</b> Iteration 4 (what’s one more)</a></li>
-<li class="chapter" data-level="3.5" data-path="workflow.html"><a href="workflow.html#celebrate"><i class="fa fa-check"></i><b>3.5</b> Celebrate</a></li>
+<li class="chapter" data-level="3" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>3</b> Methods</a><ul>
+<li class="chapter" data-level="3.1" data-path="methods.html"><a href="methods.html#model-development"><i class="fa fa-check"></i><b>3.1</b> Model Development</a></li>
+<li class="chapter" data-level="3.2" data-path="methods.html"><a href="methods.html#model-fitting"><i class="fa fa-check"></i><b>3.2</b> Model Fitting</a></li>
+<li class="chapter" data-level="3.3" data-path="methods.html"><a href="methods.html#model-checking"><i class="fa fa-check"></i><b>3.3</b> Model Checking</a></li>
+<li class="chapter" data-level="3.4" data-path="methods.html"><a href="methods.html#predictive-performance"><i class="fa fa-check"></i><b>3.4</b> Predictive Performance</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>4</b> Model Fitting/Checking</a><ul>
-<li class="chapter" data-level="4.1" data-path="model-checking.html"><a href="model-checking.html#fitting-using-hmc"><i class="fa fa-check"></i><b>4.1</b> Fitting using HMC</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="model-checking.html"><a href="model-checking.html#diagnostic-tools"><i class="fa fa-check"></i><b>4.1.1</b> Diagnostic Tools</a></li>
+<li class="chapter" data-level="4" data-path="application.html"><a href="application.html"><i class="fa fa-check"></i><b>4</b> Model Development</a><ul>
+<li class="chapter" data-level="4.1" data-path="application.html"><a href="application.html#iter1"><i class="fa fa-check"></i><b>4.1</b> Iteration 1</a></li>
+<li class="chapter" data-level="4.2" data-path="application.html"><a href="application.html#iter2"><i class="fa fa-check"></i><b>4.2</b> Iteration 2</a></li>
+<li class="chapter" data-level="4.3" data-path="application.html"><a href="application.html#iter3"><i class="fa fa-check"></i><b>4.3</b> Iteration 3</a></li>
+<li class="chapter" data-level="4.4" data-path="application.html"><a href="application.html#iter4"><i class="fa fa-check"></i><b>4.4</b> Iteration 4</a></li>
+<li class="chapter" data-level="4.5" data-path="application.html"><a href="application.html#iter5"><i class="fa fa-check"></i><b>4.5</b> Iteration 5</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="model-checking.html"><a href="model-checking.html#prior-predictive-checks"><i class="fa fa-check"></i><b>4.2</b> Prior Predictive Checks</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Psychometric Results</a><ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#on-perceptual-synchrony"><i class="fa fa-check"></i><b>5.1</b> On Perceptual Synchrony</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>5.2</b> On Temporal Sensitivity</a></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>5.3</b> Lapse Rate across Age Groups</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="predictive-inferences.html"><a href="predictive-inferences.html"><i class="fa fa-check"></i><b>5</b> Predictive Inference</a><ul>
-<li class="chapter" data-level="5.1" data-path="predictive-inferences.html"><a href="predictive-inferences.html#model-comparison-via-predictive-performance"><i class="fa fa-check"></i><b>5.1</b> Model Comparison via Predictive Performance</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="predictive-inferences.html"><a href="predictive-inferences.html#loocv-and-importance-sampling"><i class="fa fa-check"></i><b>5.1.1</b> LOOCV and Importance Sampling</a></li>
+<li class="chapter" data-level="6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>6</b> Discussion</a><ul>
+<li class="chapter" data-level="6.1" data-path="discussion.html"><a href="discussion.html#causal-inference"><i class="fa fa-check"></i><b>6.1</b> Causal Inference</a></li>
+<li class="chapter" data-level="6.2" data-path="discussion.html"><a href="discussion.html#experimental-design"><i class="fa fa-check"></i><b>6.2</b> Experimental Design</a></li>
+<li class="chapter" data-level="6.3" data-path="discussion.html"><a href="discussion.html#results-1"><i class="fa fa-check"></i><b>6.3</b> Results</a></li>
+<li class="chapter" data-level="6.4" data-path="discussion.html"><a href="discussion.html#model-comparison-vs.-selection"><i class="fa fa-check"></i><b>6.4</b> Model Comparison vs. Selection</a></li>
 </ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>6</b> Psychometric Results</a><ul>
-<li class="chapter" data-level="6.1" data-path="results.html"><a href="results.html#affect-of-adaptation-across-age-groups"><i class="fa fa-check"></i><b>6.1</b> Affect of Adaptation across Age Groups</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="results.html"><a href="results.html#on-perceptual-synchrony"><i class="fa fa-check"></i><b>6.1.1</b> On Perceptual Synchrony</a></li>
-<li class="chapter" data-level="6.1.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>6.1.2</b> On Temporal Sensitivity</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>6.2</b> Lapse Rate across Age Groups</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>7</b> Discussion</a><ul>
-<li class="chapter" data-level="7.1" data-path="discussion.html"><a href="discussion.html#model-selection-is-not-always-the-goal"><i class="fa fa-check"></i><b>7.1</b> Model selection is not always the goal</a></li>
-<li class="chapter" data-level="7.2" data-path="discussion.html"><a href="discussion.html#data-cleaning-and-reproducibility"><i class="fa fa-check"></i><b>7.2</b> Data Cleaning and Reproducibility</a></li>
-<li class="chapter" data-level="7.3" data-path="discussion.html"><a href="discussion.html#developing-a-model"><i class="fa fa-check"></i><b>7.3</b> Developing a model</a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>8</b> Conclusion</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
-<li class="chapter" data-level="A" data-path="supplementary-code.html"><a href="supplementary-code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
+<li class="chapter" data-level="A" data-path="code.html"><a href="code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
+<li class="chapter" data-level="B" data-path="model-dev.html"><a href="model-dev.html"><i class="fa fa-check"></i><b>B</b> Developing a Model</a></li>
+<li class="chapter" data-level="C" data-path="reproduce.html"><a href="reproduce.html"><i class="fa fa-check"></i><b>C</b> Reproducible Results</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -186,7 +182,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Application of a Principaled Bayesian Workflow to Multilevel Modeling</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Bayesian Multilevel Model for the Psychometric Function using R and Stan</a>
           </h1>
         </div>
 
@@ -195,9 +191,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="conclusion" class="section level1">
-<h1><span class="header-section-number">8</span> Conclusion</h1>
-<p>The real story of developing this psychometric model (the one here and not in the workflow section) is more revealing of the real struggles of performing data analysis than the principled workflow would let on. Often I found myself putting in vast amounts of unnecessary work - but necessary for me to do in order to realize that it is unnecessary - just because I hadn’t yet learned what the likely paths to take were. On a more personal level, my struggles were not ever really in developing a model or coding it up - in fact I could tinker with a program for hours, improving it in this way or that. For me, programming was a puzzle and an art, and I internalized the idea that I could figure out any numerical task given enough time and focus. To the contrary, I believed that writing was a chore, that writing this thesis would be like trying to dam up all the deltas in an attempt to keep the main river on course.</p>
-<p>I think of learning mathematics as learning a puzzle game. The first few puzzles are easy, but then get progressively harder. But even as the puzzles get harder, your intuitive understanding of the game improves, and you can throw away the obviously poor moves from consideration, and try paths that are more likely to move you in the direction of the correct solution. I started my journey towards obtaining a Master of Science in Statistics precisely because I knew that I could obtain a more intuitive understanding of the quantitative world that I live in, and pick up some new tools along the way to create and solve more impressive puzzles.</p>
+<h1><span class="header-section-number">7</span> Conclusion</h1>
+<ul>
+<li>clearly state contributions</li>
+<li>Future directions
+<ul>
+<li>causation</li>
+<li>model averaging</li>
+<li>high dimensional models</li>
+</ul></li>
+<li>Final word
+<ul>
+<li>one to three sentences of reflection</li>
+</ul></li>
+</ul>
+<!--
+The real story of developing this psychometric model (the one here and not in the workflow section) is more revealing of the real struggles of performing data analysis than the principled workflow would let on. Often I found myself putting in vast amounts of unnecessary work - but necessary for me to do in order to realize that it is unnecessary - just because I hadn't yet learned what the likely paths to take were. On a more personal level, my struggles were not ever really in developing a model or coding it up - in fact I could tinker with a program for hours, improving it in this way or that. For me, programming was a puzzle and an art, and I internalized the idea that I could figure out any numerical task given enough time and focus. To the contrary, I believed that writing was a chore, that writing this thesis would be like trying to dam up all the deltas in an attempt to keep the main river on course.
+
+I think of learning mathematics as learning a puzzle game. The first few puzzles are easy, but then get progressively harder. But even as the puzzles get harder, your intuitive understanding of the game improves, and you can throw away the obviously poor moves from consideration, and try paths that are more likely to move you in the direction of the correct solution. I started my journey towards obtaining a Master of Science in Statistics precisely because I knew that I could obtain a more intuitive understanding of the quantitative world that I live in, and pick up some new tools along the way to create and solve more impressive puzzles.
+-->
 
 </div>
 
@@ -209,7 +221,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 <a href="discussion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="supplementary-code.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="code.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

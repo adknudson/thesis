@@ -7,11 +7,10 @@ view: https://github.com/adknudson/thesis/blob/master/%s
 rmd_files: [
   "index.Rmd",
   "020-psychometrics.Rmd",
-  "030-workflow.Rmd",
-  "040-model-checking.Rmd",
-  "050-predictive-inference.Rmd",
-  "060-results.Rmd",
-  "070-discussion.Rmd",
+  "030-methods.Rmd",
+  "040-workflow.Rmd",
+  "050-results.Rmd",
+  "060-discussion.Rmd",
   "100-conclusion.Rmd",
   "200-appendix.Rmd",
   "300-references.Rmd"

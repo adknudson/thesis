@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Application of a Principaled Bayesian Workflow to Multilevel Modeling</title>
-  <meta name="description" content="References | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <title>References | A Bayesian Multilevel Model for the Psychometric Function using R and Stan</title>
+  <meta name="description" content="References | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <meta property="og:title" content="References | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="adkudson/thesis" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Application of a Principaled Bayesian Workflow to Multilevel Modeling" />
+  <meta name="twitter:title" content="References | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   
   
   
@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="supplementary-code.html"/>
+<link rel="prev" href="reproduce.html"/>
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -134,48 +134,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#ch010-classical-methods"><i class="fa fa-check"></i><b>1.1</b> Everything can be Blamed on Fisher</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#ch010-new-methods"><i class="fa fa-check"></i><b>1.2</b> Proposal of New Methods</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#ch010-organization"><i class="fa fa-check"></i><b>1.3</b> Organization</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#current-methods"><i class="fa fa-check"></i><b>1.1</b> Current Methods</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#new-methods"><i class="fa fa-check"></i><b>1.2</b> New Methods</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i><b>1.3</b> Organization</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="motivating-data.html"><a href="motivating-data.html"><i class="fa fa-check"></i><b>2</b> What is a Model without Data</a><ul>
-<li class="chapter" data-level="2.1" data-path="motivating-data.html"><a href="motivating-data.html#psycho-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
-<li class="chapter" data-level="2.2" data-path="motivating-data.html"><a href="motivating-data.html#toj-task"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Data</a></li>
-<li class="chapter" data-level="2.3" data-path="motivating-data.html"><a href="motivating-data.html#data-visualizations-and-quirks"><i class="fa fa-check"></i><b>2.3</b> Data Visualizations and Quirks</a></li>
+<li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Motivating Data</a><ul>
+<li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#psycho-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
+<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#toj-task"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Task</a></li>
+<li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#data-visualizations-and-quirks"><i class="fa fa-check"></i><b>2.3</b> Data Visualizations and Quirks</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>3</b> Principled Bayesian Workflow</a><ul>
-<li class="chapter" data-level="3.1" data-path="workflow.html"><a href="workflow.html#iter1"><i class="fa fa-check"></i><b>3.1</b> Iteration 1 (journey of a thousand miles)</a></li>
-<li class="chapter" data-level="3.2" data-path="workflow.html"><a href="workflow.html#iter2"><i class="fa fa-check"></i><b>3.2</b> Iteration 2 (electric boogaloo)</a></li>
-<li class="chapter" data-level="3.3" data-path="workflow.html"><a href="workflow.html#iter3"><i class="fa fa-check"></i><b>3.3</b> Iteration 3 (the one for me)</a></li>
-<li class="chapter" data-level="3.4" data-path="workflow.html"><a href="workflow.html#iter4"><i class="fa fa-check"></i><b>3.4</b> Iteration 4 (what’s one more)</a></li>
-<li class="chapter" data-level="3.5" data-path="workflow.html"><a href="workflow.html#celebrate"><i class="fa fa-check"></i><b>3.5</b> Celebrate</a></li>
+<li class="chapter" data-level="3" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>3</b> Methods</a><ul>
+<li class="chapter" data-level="3.1" data-path="methods.html"><a href="methods.html#model-development"><i class="fa fa-check"></i><b>3.1</b> Model Development</a></li>
+<li class="chapter" data-level="3.2" data-path="methods.html"><a href="methods.html#model-fitting"><i class="fa fa-check"></i><b>3.2</b> Model Fitting</a></li>
+<li class="chapter" data-level="3.3" data-path="methods.html"><a href="methods.html#model-checking"><i class="fa fa-check"></i><b>3.3</b> Model Checking</a></li>
+<li class="chapter" data-level="3.4" data-path="methods.html"><a href="methods.html#predictive-performance"><i class="fa fa-check"></i><b>3.4</b> Predictive Performance</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="model-checking.html"><a href="model-checking.html"><i class="fa fa-check"></i><b>4</b> Model Fitting/Checking</a><ul>
-<li class="chapter" data-level="4.1" data-path="model-checking.html"><a href="model-checking.html#fitting-using-hmc"><i class="fa fa-check"></i><b>4.1</b> Fitting using HMC</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="model-checking.html"><a href="model-checking.html#diagnostic-tools"><i class="fa fa-check"></i><b>4.1.1</b> Diagnostic Tools</a></li>
+<li class="chapter" data-level="4" data-path="application.html"><a href="application.html"><i class="fa fa-check"></i><b>4</b> Model Development</a><ul>
+<li class="chapter" data-level="4.1" data-path="application.html"><a href="application.html#iter1"><i class="fa fa-check"></i><b>4.1</b> Iteration 1</a></li>
+<li class="chapter" data-level="4.2" data-path="application.html"><a href="application.html#iter2"><i class="fa fa-check"></i><b>4.2</b> Iteration 2</a></li>
+<li class="chapter" data-level="4.3" data-path="application.html"><a href="application.html#iter3"><i class="fa fa-check"></i><b>4.3</b> Iteration 3</a></li>
+<li class="chapter" data-level="4.4" data-path="application.html"><a href="application.html#iter4"><i class="fa fa-check"></i><b>4.4</b> Iteration 4</a></li>
+<li class="chapter" data-level="4.5" data-path="application.html"><a href="application.html#iter5"><i class="fa fa-check"></i><b>4.5</b> Iteration 5</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="model-checking.html"><a href="model-checking.html#prior-predictive-checks"><i class="fa fa-check"></i><b>4.2</b> Prior Predictive Checks</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Psychometric Results</a><ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#on-perceptual-synchrony"><i class="fa fa-check"></i><b>5.1</b> On Perceptual Synchrony</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>5.2</b> On Temporal Sensitivity</a></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>5.3</b> Lapse Rate across Age Groups</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="predictive-inferences.html"><a href="predictive-inferences.html"><i class="fa fa-check"></i><b>5</b> Predictive Inference</a><ul>
-<li class="chapter" data-level="5.1" data-path="predictive-inferences.html"><a href="predictive-inferences.html#model-comparison-via-predictive-performance"><i class="fa fa-check"></i><b>5.1</b> Model Comparison via Predictive Performance</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="predictive-inferences.html"><a href="predictive-inferences.html#loocv-and-importance-sampling"><i class="fa fa-check"></i><b>5.1.1</b> LOOCV and Importance Sampling</a></li>
+<li class="chapter" data-level="6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>6</b> Discussion</a><ul>
+<li class="chapter" data-level="6.1" data-path="discussion.html"><a href="discussion.html#causal-inference"><i class="fa fa-check"></i><b>6.1</b> Causal Inference</a></li>
+<li class="chapter" data-level="6.2" data-path="discussion.html"><a href="discussion.html#experimental-design"><i class="fa fa-check"></i><b>6.2</b> Experimental Design</a></li>
+<li class="chapter" data-level="6.3" data-path="discussion.html"><a href="discussion.html#results-1"><i class="fa fa-check"></i><b>6.3</b> Results</a></li>
+<li class="chapter" data-level="6.4" data-path="discussion.html"><a href="discussion.html#model-comparison-vs.-selection"><i class="fa fa-check"></i><b>6.4</b> Model Comparison vs. Selection</a></li>
 </ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>6</b> Psychometric Results</a><ul>
-<li class="chapter" data-level="6.1" data-path="results.html"><a href="results.html#affect-of-adaptation-across-age-groups"><i class="fa fa-check"></i><b>6.1</b> Affect of Adaptation across Age Groups</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="results.html"><a href="results.html#on-perceptual-synchrony"><i class="fa fa-check"></i><b>6.1.1</b> On Perceptual Synchrony</a></li>
-<li class="chapter" data-level="6.1.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>6.1.2</b> On Temporal Sensitivity</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>6.2</b> Lapse Rate across Age Groups</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>7</b> Discussion</a><ul>
-<li class="chapter" data-level="7.1" data-path="discussion.html"><a href="discussion.html#model-selection-is-not-always-the-goal"><i class="fa fa-check"></i><b>7.1</b> Model selection is not always the goal</a></li>
-<li class="chapter" data-level="7.2" data-path="discussion.html"><a href="discussion.html#data-cleaning-and-reproducibility"><i class="fa fa-check"></i><b>7.2</b> Data Cleaning and Reproducibility</a></li>
-<li class="chapter" data-level="7.3" data-path="discussion.html"><a href="discussion.html#developing-a-model"><i class="fa fa-check"></i><b>7.3</b> Developing a model</a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>8</b> Conclusion</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
-<li class="chapter" data-level="A" data-path="supplementary-code.html"><a href="supplementary-code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
+<li class="chapter" data-level="A" data-path="code.html"><a href="code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
+<li class="chapter" data-level="B" data-path="model-dev.html"><a href="model-dev.html"><i class="fa fa-check"></i><b>B</b> Developing a Model</a></li>
+<li class="chapter" data-level="C" data-path="reproduce.html"><a href="reproduce.html"><i class="fa fa-check"></i><b>C</b> Reproducible Results</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -186,7 +182,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Application of a Principaled Bayesian Workflow to Multilevel Modeling</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Bayesian Multilevel Model for the Psychometric Function using R and Stan</a>
           </h1>
         </div>
 
@@ -197,16 +193,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
 
-
 <div id="refs" class="references">
 <div>
-<p>Betancourt, Michael. 2017. “A Conceptual Introduction to Hamiltonian Monte Carlo.” <em>arXiv Preprint arXiv: 1701.02434</em>.</p>
-</div>
-<div>
-<p>———. 2020. “Towards a Principled Bayesian Workflow.” <em>Betanalpha</em>. <a href="betanalpha.github.io">betanalpha.github.io</a>.</p>
-</div>
-<div>
-<p>Bolstad, William M, and James M Curran. 2016. <em>Introduction to Bayesian Statistics</em>. John Wiley &amp; Sons.</p>
+<p>Betancourt, Michael. 2020. “Towards a Principled Bayesian Workflow.” <em>Betanalpha</em>. <a href="betanalpha.github.io">betanalpha.github.io</a>.</p>
 </div>
 <div>
 <p>Boring, Edwin G. 1917. “A Chart of the Psychometric Function.” <em>The American Journal of Psychology</em> 28 (4): 465–70.</p>
@@ -219,9 +208,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div>
 <p>Gabry, Jonah, and Ben Goodrich. 2020. <em>Rstanarm: Bayesian Applied Regression Modeling via Stan</em>. <a href="https://CRAN.R-project.org/package=rstanarm">https://CRAN.R-project.org/package=rstanarm</a>.</p>
-</div>
-<div>
-<p>Gabry, Jonah, Daniel Simpson, Aki Vehtari, Michael Betancourt, and Andrew Gelman. 2019. “Visualization in Bayesian Workflow.” <em>Journal of the Royal Statistical Society: Series A (Statistics in Society)</em> 182 (2): 389–402.</p>
 </div>
 <div>
 <p>Gelman, Andrew, John B Carlin, Hal S Stern, David B Dunson, Aki Vehtari, and Donald B Rubin. 2013. <em>Bayesian Data Analysis</em>. CRC press.</p>
@@ -308,6 +294,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Vehtari, Aki, Andrew Gelman, Daniel Simpson, Bob Carpenter, Paul-Christian Bürkner, and others. 2020. “Rank-Normalization, Folding, and Localization: An Improved R-Hat for Assessing Convergence of Mcmc.” <em>Bayesian Analysis</em>.</p>
 </div>
 <div>
+<p>Vehtari, Aki, Daniel Simpson, Andrew Gelman, Yuling Yao, and Jonah Gabry. 2015. “Pareto Smoothed Importance Sampling.” <em>arXiv Preprint arXiv:1507.02646</em>.</p>
+</div>
+<div>
 <p>Vroomen, Jean, Mirjam Keetels, Beatrice De Gelder, and Paul Bertelson. 2004. “Recalibration of Temporal Order Perception by Exposure to Audio-Visual Asynchrony.” <em>Cognitive Brain Research</em> 22 (1): 32–35.</p>
 </div>
 <div>
@@ -329,21 +318,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-
-
-
-
-
-
-
-
-
             </section>
 
           </div>
         </div>
       </div>
-<a href="supplementary-code.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="reproduce.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>
