@@ -35,5 +35,4 @@ bookdown::gitbook:
 #   keep_tex: yes
 #   quote_footer: ["\\VA{", "}{}"]
 #   citation_package: natbib
-#   bibliography: [bibliography.bib, packages.bib]
 #   template: latex/unr-template.tex
