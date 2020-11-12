@@ -22,6 +22,6 @@ docs/*.log
 _bookdown_files
 
 # WHEN FINISHED, UNCOMMENT THE NEXT LINE
-# !docs/*.pdf
+!docs/*.pdf
 *.rds
 *.Rds

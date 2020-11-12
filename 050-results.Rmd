@@ -163,13 +163,13 @@ HPDI <- rethinking::HPDI
 two_colors   <- c("orangered3", "steelblue4")
 three_colors <- c("goldenrod2", "turquoise3", "indianred4")
 
-av  <- post_table(readRDS("models/p034s_av.rds")) %>% 
+av  <- post_table(readRDS("models/p044s_av.rds")) %>% 
   add_column(Task = "Audiovisual", .before = 1)
-vis <- post_table(readRDS("models/p034s_vis.rds")) %>% 
+vis <- post_table(readRDS("models/p044s_vis.rds")) %>% 
   add_column(Task = "Visual", .before = 1)
-dur <- post_table(readRDS("models/p034s_dur.rds")) %>% 
+dur <- post_table(readRDS("models/p044s_dur.rds")) %>% 
   add_column(Task = "Duration", .before = 1)
-sm  <- post_table(readRDS("models/p034s_sm.rds")) %>% 
+sm  <- post_table(readRDS("models/p044s_sm.rds")) %>% 
   add_column(Task = "Sensorimotor", .before = 1)
 
 post <- bind_rows(av, vis, dur, sm) %>%
