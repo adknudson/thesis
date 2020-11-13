@@ -28,7 +28,7 @@ knitr::write_bib(c(
 # Introduction {#intro}
 
 
-With the advances in computational power and the wide palette of statistical tools, statistical methods have evolved to be more flexible and expressive. Classical modeling tools like p-values and step-wise variable selection need not be the default as new modeling strategies founded on principles and informed decisions allow for creating bespoke models and domain-driven analyses.
+With the advances in computational power and the wide palette of statistical tools, statistical methods have evolved to be more flexible and expressive. Conventional modeling tools, such as p-values from classical regression coefficient testings for step-wise variable selection, are being replaced by recently available modeling strategies founded on principles and informed decisions allow for creating bespoke models and domain-driven analyses.
 
 
 Advances in computational power have lead to a resurrection in statistics where Bayesian modeling has gained an incredible following due in part to fully Bayesian statistical inference modeling tools like `Stan`. The steady adoption of computer aided statistical workflows also brings the need for multidisciplinary techniques from numerical analysis, probability theory, statistics, computer science, and visualizations among others. There has also been a recent push towards reproducible research which ties in concepts of modular design, principled workflows, version control, and human-readable code.
