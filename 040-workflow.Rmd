@@ -55,11 +55,12 @@ stan_summary <- function(object, ...) {
 # Model Development {#application}
 
 
-Multilevel models should be the default. The alternatives are models with complete pooling, or models with no pooling. Pooling vs. no pooling considers modeling all the data as a whole, or each of the the smallest components individually. The former implies that the variation between groups is zero (all groups are the same), and the latter implies that the variation between groups is infinite (no groups are the same). Multilevel models assume that the truth is somewhere between of zero and infinity.
+<!-- insert 1st paragraph transitioning to ch. 4 . suggested start-->
 
+Now we apply the workflow to our data set, seeking to build a model that satistifies the four criteria in Ch. 3. During model refinement, we'll pick up on the _regular_ features while assessing the "statistical significance" of covariates through predictive comparison. In our final model, we'll model well-known data quality issuses (from participant _lapses_ in judgement) and show this improves model prediction.
 
-Hierarchical models are a specific kind of multilevel model where one or more groups are nested within a larger one. In the case of the psychometric data, there are three age groups, and within each age group are individual subjects. Multilevel modeling provides a way to quantify and apportion the variation within the data to each level in the model. For an in-depth introduction to multilevel modeling, see @gelman2006data.
-
+<!-- connect this to the background -->
+As we iterate through our model development workflow, we have a preference for multilevel models.(for the reasons discussed in Ch. 3). ~~The alternatives are models with complete pooling, or models with no pooling. Pooling vs. no pooling considers modeling all the data as a whole, or each of the the smallest components individually. The former implies that the variation between groups is zero (all groups are the same), and the latter implies that the variation between groups is infinite (no groups are the same). Multilevel models assume that the truth is somewhere between of zero and infinity.~~Hierarchical models are a specific kind of multilevel model where one or more groups are nested within a larger one. In the case of the psychometric data, there are three age groups, and within each age group are individual subjects. Multilevel modeling provides a way to quantify and apportion the variation within the data to each level in the model. For an in-depth introduction to multilevel modeling, see @gelman2006data.
 
 ## Iteration 1 {#iter1}
 
@@ -112,6 +113,8 @@ This data storage representation can later be exploited for the `Stan` model.
 
 The pre- and post-adaptation categories are treated as a binary indicator referred to as $trt$ (short for treatment) since there are only two levels in the category. In this setup, a value of 1 indicates a post-adaptation block. This encoding is chosen over the reverse because the pre-adaptation block is like the baseline performance, and it is more appropriate to interpret the post-adaptation block as turning on some effect. Using a binary indicator in a regression setting may not be the best practice as we discuss in section \@ref(iter2).
 
+
+<!-- revise the following section by cutting half the words and combining paragraphs. -->
 
 _Construct Summary Statistics_
 
