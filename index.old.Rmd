@@ -1,0 +1,128 @@
+---
+title: "A Bayesian Multilevel Model for the Psychometric Function using R and Stan"
+author: "Alexander D. Knudson"
+advisor: "A.G. Schissler"
+date: "December, 2020"
+site: bookdown::bookdown_site
+bibliography: [bibliography.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: adkudson/thesis
+---
+
+```{r ch010-setup, include=FALSE}
+knitr::write_bib(c(
+  'arm',
+  'bookdown',
+  'knitr',
+  'loo',
+  'patchwork',
+  'rstan',
+  'rstanarm',
+  'rethinking',
+  'stats'
+), 'packages.bib', width = 80)
+```
+
+
+# Introduction {#intro}
+
+
+With the advances in computational power and the wide palette of statistical tools, statistical methods have evolved to be more flexible and expressive. Conventional modeling tools, such as p-values from classical regression coefficient testings for step-wise variable selection, are being replaced by recently available modeling strategies founded on principles and informed decisions allow for creating bespoke models and domain-driven analyses.
+
+
+Advances in computational power have lead to a resurrection in statistics where Bayesian modeling has gained an incredible following due in part to fully Bayesian statistical inference modeling tools like `Stan`. The steady adoption of computer aided statistical workflows also brings the need for multidisciplinary techniques from numerical analysis, probability theory, statistics, computer science, and visualizations. There has also been a recent push towards reproducible research which ties in concepts of modular design, principled workflows, version control, and literate programming.
+
+
+
+A common neuroscience topic is to detect the temporal order of two stimuli, and is often studied via a logistic model called a psychometric function. These studies are often interested in making inferences at the group level (age, gender, etc.) and at an individual level. Conventional practice is to use simple models that are easy to fit, but inflexible and vulnerable to fitting issues in the situation of complete separation. Bayesian multilevel models are flexible and easy to interpret, yet are not broadly adopted among practitioners. We describe a model selection process in a principled workflow, including specifying priors and implementing adaptive pooling. Then we propose and develop specialized quantities of interest and study their operating characteristics. In the development of the model we conduct prior predictive simulations studies into these proposed quantities of interest that provide insights into experimental design considerations. We discuss in detail a case study of real and previously unpublished data.
+
+
+## Conventional (classical) statistics
+
+
+Regression techniques commonly rely on maximum likelihood estimation (MLE) of parameters, and there are numerous resources on the subject of linear regression and MLE [@johnson2002applied; @larsen2005introduction; @sheather2009modern; @navidi2015statistics]. Most introductory courses on statistics and regression describe frequentist-centered methods and estimation such as MLE, data transformations, hypothesis testing, residual analysis/goodness-of-fit test, and model variable selection through coefficient testing. While these methods are well studied and broadly applied (largely due to software availability and domain traditions), the injudicious use of classical hypothesis testing and associated p-values has lead suboptimal model selection/comparison -- such as omission of truly influential variables or the inclusion of confounding variables. Variable selection through step-wise algorithms or penalized maximum likelihood estimation [@hoerl1970ridge; @tibshirani1996regression] may be appropriate in an exploratory data analysis, but fails to produce quality prediction or determine the most statistical important associations with an outcome variable.
+
+
+<!-- mention/cite Statistical Methods for Research Workers -->
+
+<!-- What is the main point of the discussion below? I didn't get the whole CI thing. If you want to critique CIs, I would focus on the fact that frequentist believe in a infinite sampling process that didn't happen (and you can't say with probability how often your CI captures the parameter). Further many CIs are approximate and don't have the right coverage. I'd focus the limitation that data summarization is information poor compared to a full distribution.-->
+
+
+~~The concept of basing scientific results on the falsifiability [@popper1959logic] or the refutability of a claim is a strong foundation for the scientific method, and is arguably much better than the previous grounds of verifiability -- just because something has been true for a very long time, doesn't mean it will always be true in the future.~~
+
+But hypothesis testing comes with its own set of problems. Null hypothesis testing for point estimates usually depends on calculating a confidence interval and seeing if the interval contains the point of interest
+
+<!-- this is not true usually. CIs are used to estimate and sometimes correspond exactly with an hypothesis test. Consider the 1-prop z test and the 1-prop z interval. they do not agree in general as the CI uses p_bar whereas in testing z is formed from the null value p0. -->
+
+~~. This can be misleading, as there is more than one confidence interval that can be calculated. For Gaussian distributions, the mean, median, and mode are the same, so a 95% confidence interval is evenly distributed around the central measures. Some distributions are skewed, so an equal tail area confidence interval might not necessarily include the most likely value. The exponential distribution is a good example of a skewed distribution.~~
+
+
+~~An equal tail area 95% confidence interval would be $\left(-\ln(0.975)/\lambda, -\ln(0.025)/\lambda\right)$ which does not contain the most likely value -- zero. The skewness measure is not frequently reported with p-values and confidence intervals which leaves room for ambiguity.~~
+
+
+Because these classical techniques are so broadly applied and readily available in statistical software, there is strong potential for misunderstanding and misuse.
+
+<!-- same could be said for using stan... -->
+
+~~The problem is that these classical techniques rest on having a strong foundation of statistical knowledge, both to produce and to properly understand. This requirement is stifling. Communicating statistical results is just as important as producing them, and with modern tools and a vast selection of expressive languages data can be analyzed in a more intuitive and natural framework.~~
+
+<!-- I would argue that you need more stat knowledge to properly fit a model in stan then to use base::lm() properly -->
+
+
+## Bayesian statistics
+
+
+<!-- some of this you may want to move to the above section -->
+
+
+Bayesian statistics (or _inverse probability_ as it was once called) has a long history, with origins prior to now "classical" statistical methods  of R.A. Fisher and Karl Pearson developed during the 1930s (Fisher, Ronald Aylmer. "Statistical methods for research workers." Statistical methods for research workers. 5th Ed (1934).). These researchers thought Bayesian statistics was founded on a logical error and should be "wholly rejected". Later, the foundational work of Dennis Lindley (Lindley, Dennis V. "The philosophy of statistics." Journal of the Royal Statistical Society: Series D (The Statistician) 49.3 (2000): 293-337.) refuted these ideas. But the widespread acceptance of classical methods was already underway as Fisher developed a robust theory of MLE, made possible through normal approximations, that dominates statistical inference to this day. This was in part due to philosophical reasons, but also due to a limited class of Bayesian models that could actually be conducted in a real data analysis.
+
+
+In contrast to frequentist methods that use the fanciful idea of an infinite sampling process, Bayes' Theorem (Equation \@ref(eq:bayesthm)) offers a philosophically coherent procedure to learn from data. It is a simple restatement of conditional probability with deep and powerful consequences. From a Bayesian standpoint, we model all quantities as having a (joint) probability distribution, since we are *uncertain of their values*. The goal is to update our current state of information (the *prior*) with the incoming data (given its *likelihood*) to receive an entire probability distribution reflecting our new beliefs (the *posterior*), with all modeling assuptions made explicit.
+
+
+\begin{equation}
+  P(\theta | data) = \frac{P(data | \theta) P(\theta)}{\int_\Omega P(data | \theta) P(\theta) d\theta}
+  (\#eq:bayesthm)
+\end{equation}
+
+
+Prior knowledge must be stated explicitly in a given model and the entire posterior distribution is available to summarize, visualize, and draw inferences from.  The prior $\pi(\theta)$ is some distribution over the parameter space and the likelihood $\pi(data | \theta)$ is the probability of an outcome in the sample space given a value in the parameter space.
+
+
+~~The uncertainty of reporting classic confidence intervals becomes trivial in a Bayesian framework; the distribution can be plotted or the highest posterior density interval (HPDI) may be reported~~
+
+
+Since the posterior is probability distribution, the sum or integral over the parameter space must evaluate to one. Because of this constraint, the denominator in \@ref(eq:bayesthm) acts as a scale factor to ensure that the posterior is valid. Computing this integral for multiple parameters was the major roadblock to the practical application of Bayesian statistics. But as we describe below, using computers to execute cleverly designed algorthims, the denominator need not be evaluated. Further, since it evaluates to a constant, it is generally omitted. And so Bayes' theorem can be informally restated as _the posterior is proportional to the prior times the likelihood_:
+
+
+$$\pi(\theta \vert data) \propto \pi(\theta) \times \pi(data \vert \theta)$$.
+
+
+## Markov Chain Monte Carlo enables modern Bayesian models
+
+
+For simple models, the posterior distribution can sometimes be evaluated analytically, but often it happens that the integral in the denominator is complex or of a high dimension. In the former situation, the integral may not be possible to evaluate, and in the latter there may not be enough computational resources in the world to perform a simple numerical approximation.
+
+
+A solution is to use Markov Chain Monte Carlo (MCMC) simulations to draw samples from the posterior distribution in a way that samples proportional to the density. This sampling is a form of approximation to the area under the curve -- an approximation to the denominator in \@ref(eq:bayesthm). Rejection sampling [@gilks1992adaptive] and slice sampling [@neal2003slice] are basic methods for sampling from a target distribution, however they can often be inefficient -- large proportion of rejected samples. Gibbs sampling and the Metropolis-Hastings algorithm are more efficient, but do not scale well for models with hundreds or thousands of parameters.
+
+
+Hamiltonian Monte Carlo (HMC) simulation is the current state-of-the-art as a general-purpose Baysesian inference algorithm, motivated by a particle simulation, to sample the posterior. In particular, HMC and its variants sample high-dimensional probability spaces with high efficiency and also comes with informative diagnostic tools that indicate when the sampler is having trouble efficiently exploring the posterior. `Stan` is a probabilistic programming language (PPL) with an `R` interface that uses Hamiltonian dynamics to conduct Bayesian statistical inference [@R-rstan].
+
+
+In the chapters to come, we produce a novel statistical model for temporal order judgment data by following a principled workflow to fit a series of Bayesian models efficiently using Hamiltonian Monte Carlo in the `R` programming language with `Stan`.
+
+
+## Organization
+
+
+- [Chapter 2](#data) - Background data
+- [Chapter 3](#methods) - Background methods
+- [Chapter 4](#application) - Application study
+- [Chapter 5](#results) - Results
+- [Chapter 6](#conclusion) - Discussion and conclusion
+- [Appendix A](#code) - Supplementary code
+- [Appendix B](#model-dev) - Developing a model
+- [Appendix C](#reproduce) - Reproducible data cleaning
