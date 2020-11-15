@@ -13,22 +13,33 @@ library(loo)
 
 ## Model Design and Development
 
-A principled workflow is a method of employing domain expertise and statistical knowledge to iteratively build a statistical model that satisfies the constraints and goals set forth by the researcher. ~~There are many great resources out there for following along with an analysis of some data or problem, and there is an abundance of tips, tricks, techniques, and testimonies to good modeling practices.~~ The problem is that many of these prescriptions are given without context for when they are appropriate to be taken. According to @betancourt2020, this leaves "practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics." The concept of a principled workflow is that for any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather consideration must be given to domain expertise and the questions that one is trying to answer with the statistical model.
+A principled workflow is a method of employing domain expertise and statistical knowledge to iteratively build a statistical model that satisfies the constraints and goals set forth by the researcher. The problem is that many of these prescriptions are given without context for when they are appropriate to be taken. According to @betancourt2020, this leaves "practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics." The concept of a principled workflow is that for any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather consideration must be given to domain expertise and the questions that one is trying to answer with the statistical model.
 
-Since everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in how consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by:
-
-
-1. Domain Expertise Consistency
-    - Is our model consistent with our domain expertise?
-2. Computational Faithfulness
-    - Will our computational tools be sufficient to accurately fit our posteriors?
-3. Inferential Adequacy
-    - Will our inferences provide enough information to answer our questions?
-4. Model Adequacy
-    - Is our model rich enough to capture the relevant structure of the true data generating process?
+Since everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in how consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by, summarized in table \@ref(tab:ch030-Confidential-Proton).
 
 
-~~Like any good Bayesian,~~ Much work is done before seeing the data or building a model. This may include talking with experts to gain domain knowledge or to elicit priors. Domain experts know something about a particular measure, perhaps the mean or variability of the data from years of research, and different experts may provide different estimates of a measure. A benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the posterior distribution. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints.
+```{r ch030-Confidential-Proton}
+data.frame(
+  Evaluation = c(
+    "1. Domain Expertise Consistency",
+    "2. Computational Faithfulness",
+    "3. Inferential Adequacy",
+    "4. Model Adequacy"
+  ),
+  Question = c(
+    "Is our model consistent with our domain expertise?",
+    "Will our computational tools be sufficient to accurately fit our posteriors?",
+    "Will our inferences provide enough information to answer our questions?",
+    "Is our model rich enough to capture the relevant structure of the true data generating process?"
+  )
+) %>%
+  kable(booktabs=TRUE, caption = "Questions for model evaluation.") %>%
+  kable_styling(latex_options = "hold_position")
+```
+
+
+
+Much work is done before seeing the data or building a model. This may include talking with experts to gain domain knowledge or to elicit priors. Domain experts know something about a particular measure, perhaps the mean or variability of the data from years of research, and different experts may provide different estimates of a measure. A benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the posterior distribution. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints.
 
 
 In this section we describe a simulation-based, principled workflow proposed by @betancourt2020 and broadly adopted by many members of the Bayesian community. In its simplest form, the workflow consists of specifying the likelihood and prior, prior predictive checks, fitting a model, posterior predictive checks, and repeat. The comprehensive list steps are in table \@ref(tab:ch030-workflow-steps).
@@ -70,86 +81,64 @@ These steps are not meant to be followed in a strictly linear fashion. If a conc
 The modeling process begins by modeling the experiment according to the description of how it occurred and how the data were collected. This first part consists of conceptual analysis, defining the observational space, and constructing summary statistics that can help identify issues in the model specification.
 
 
-_Conceptual Analysis_
-
-Write down the inferential goals and consider how the variables of interest interact with the environment and how those interactions work to generate observations.
-
-
-_Define Observational Space_
-
-What are the possible values that the observed data can take on? The observational space can help inform the statistical model such as in count data.
-
-
-_Construct Summary Statistics_
-
-What measurements and estimates can be used to help ensure that the inferential goals are met? Prior predictive checks and posterior retrodictive checks are founded on summary statistics that answer the questions of domain expertise consistency and model adequacy.
+```{r ch030-Reborn-Space}
+data.frame(Step = c("Conceptual Analysis", 
+                    "Define Observational Space",
+                    "Construct Summary Statistics"),
+           Description = c("Write down the inferential goals and consider how the variables of interest interact with the environment and how those interactions work to generate observations.",
+                           "What are the possible values that the observed data can take on? The observational space can help inform the statistical model such as in count data.",
+                           "What measurements and estimates can be used to help ensure that the inferential goals are met? Prior predictive checks and posterior retrodictive checks are founded on summary statistics that answer the questions of domain expertise consistency and model adequacy.")) %>%
+  kable(booktabs=TRUE, caption="Pre-Model, Pre-Data steps.") %>%
+  kable_styling(latex_options = "hold_position")
+```
 
 
 **Post-Model, Pre-Data**
 
-_Develop Model_
 
-Build an observational model that is consistent with the conceptual analysis and observational space, and then specify the complementary prior model.
-
-
-_Construct Summary Functions_
-
-Use the developed model to construct explicit summary functions that can be used in prior predictive checks and posterior retrodictive checks. 
-
-
-_Simulate Bayesian Ensemble_
-
-Since the model is a data generating model, it can be used to simulate observations from the prior predictive distribution without yet having seen any data.
-
-
-_Prior Checks_
-
-Check that the prior predictive distribution is consistent with domain expertise using the summary functions developed in the previous step.
-
-
-_Configure Algorithm_
-
-Having simulated data, the next step is to fit the data generating model to the generated data. There are many different MCMC samplers with their own configurable parameters, so here is where those settings are tweaked.
-
-
-_Fit Simulated Ensemble_
-
-Fit the simulated data to the model using the algorithm configured in the previous step.
-
-
-_Algorithmic Calibration_
-
-How well did the algorithm do in fitting the simulated data? This step helps to answer the question regarding computational faithfulness. A model may be well specified, but if the algorithm used is unreliable then the posterior distribution is also unreliable, and this can lead to poor inferences. Methods for checking models is discussed in (#model-checking).
-
-
-_Inferential Calibration_
-
-Are there any pathological behaviors in the model such as overfitting or non-identifiability? This step helps to answer the question of inferential adequacy.
+```{r ch030-Freaky-Sledgehammer}
+data.frame(Step = c("Develop Model",
+                    "Construct Summary Functions",
+                    "Simulate Bayesian Ensemble",
+                    "Prior Checks",
+                    "Configure Algorithm",
+                    "Fit Simulated Ensemble",
+                    "Algorithmic Calibration",
+                    "Inferential Calibration"),
+           Description = c(
+             "Build an observational model that is consistent with the conceptual analysis and observational space, and then specify the complementary prior model.",
+             "Use the developed model to construct explicit summary functions that can be used in prior predictive checks and posterior retrodictive checks.",
+             "Since the model is a data generating model, it can be used to simulate observations from the prior predictive distribution without yet having seen any data.",
+             "Check that the prior predictive distribution is consistent with domain expertise using the summary functions developed in the previous step.",
+             "Having simulated data, the next step is to fit the data generating model to the generated data. There are many different MCMC samplers with their own configurable parameters, so here is where those settings are tweaked.",
+             "Fit the simulated data to the model using the algorithm configured in the previous step.",
+             "How well did the algorithm do in fitting the simulated data? This step helps to answer the question regarding computational faithfulness. A model may be well specified, but if the algorithm used is unreliable then the posterior distribution is also unreliable, and this can lead to poor inferences. Methods for checking models is discussed in (#model-checking).",
+             "Are there any pathological behaviors in the model such as overfitting or non-identifiability? This step helps to answer the question of inferential adequacy."
+             )) %>%
+  kable(booktabs=TRUE, caption="Post-Model, Pre-Data steps.") %>%
+  kable_styling(latex_options = "hold_position")
+```
 
 
 **Post-Model, Post-Data**
 
-_Fit Observed Data_
-
-After performing the prior predictive checks and being satisfied with the model, the next step is to fit the model to the observed data.
-
-
-_Diagnose Posterior Fit_
-
-Did the model fit well? Can a poorly performing algorithm be fixed by tweaking the algorithmic configuration, or is there a problem with the model itself where it is not rich enough to capture the structure of the observed data? Utilize the diagnostic tools available for the algorithm to check the computational faithfulness.
-
-
-_Posterior Retrodictive Checks_
-
-Do the posterior retrodictions match the observed data well, or are there still apparent discrepancies between what is expected and what is predicted by the model? It is important that any changes to the model going forward are motivated by domain expertise so as to mitigate the risk of overfitting.
-
-
-_Celebrate_
-
-After going through the tedious process of iteratively developing a model, it is okay to celebrate before moving on to answer the research questions.
+```{r ch030-Bleeding-Liquid-Dagger}
+data.frame(Step = c("Fit Observed Data",
+                    "Diagnose Posterior Fit",
+                    "Posterior Retrodictive Checks",
+                    "Celebrate"),
+           Description = c(
+             "After performing the prior predictive checks and being satisfied with the model, the next step is to fit the model to the observed data.",
+             "Did the model fit well? Can a poorly performing algorithm be fixed by tweaking the algorithmic configuration, or is there a problem with the model itself where it is not rich enough to capture the structure of the observed data? Utilize the diagnostic tools available for the algorithm to check the computational faithfulness.",
+             "Do the posterior retrodictions match the observed data well, or are there still apparent discrepancies between what is expected and what is predicted by the model? It is important that any changes to the model going forward are motivated by domain expertise so as to mitigate the risk of overfitting.",
+             "After going through the tedious process of iteratively developing a model, it is okay to celebrate before moving on to answer the research questions."
+           )) %>%
+  kable(booktabs=TRUE, caption="Post-Model, Post-Data steps.") %>%
+  kable_styling(latex_options = "hold_position")
+```
 
 
-```{r ch030-workflow-diagram, fig.cap="Diagram is copywrited material of Michael Betancourt and used under the CC BY-NC 4.0 license. Image taken from https://betanalpha.github.io/", out.width="100%"}
+```{r ch030-workflow-diagram, fig.cap="Diagram is copywrited material of Michael Betancourt and used under the CC BY-NC 4.0 license. Image created with Lucid app.", out.width="100%"}
 knitr::include_graphics("figures/workflow-diagram.png")
 ```
 
