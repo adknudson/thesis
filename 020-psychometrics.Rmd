@@ -39,12 +39,10 @@ $$\frac{\Delta I}{10} = 0.2 \Rightarrow \Delta I = 2$$
 The difference between a 10 kg and a 12 kg weight is expected to be just barely perceptible. Note that the difference in the first set of weights is 0.2, and in the second set it is 2. The perception of the difference in stimulus intensities is not absolute, but relative. G.T. Fechner devised the law (Weber-Fechner Law, Equation \@ref(eq:weber-fechner-law)) that the strength of a sensation grows as the logarithm of the stimulus intensity.
 
 
-$$
 \begin{equation}
   S = K \ln I
   (\#eq:weber-fechner-law)
 \end{equation}
-$$
 
 
 Consider two light sources: one that is 100 lumens ($S_1 = K \ln 100$) and another that is 200 lumens ($S_2 = K \ln 200$). The intensity of the second light is not perceived as twice as bright, but only about 1.15 times as bright according to \@ref(eq:weber-fechner-law):
@@ -174,14 +172,296 @@ tibble(
 After the first block of each task was completed, the participants went through an adaptation period where they were presented with the respective stimuli from each task repeatedly at fixed temporal delays, then the TOJ task was repeated. To ensure that the adaptation affect persisted, the subject was presented with the adapter stimulus at regular intervals throughout the second block. The blocks are designated as `pre` and `post1`, `post2`, etc. in the data set. In this paper we only focus on the `pre` and `post1` blocks.
 
 
-## Fitting using generalized linear models
+## Fitting the psychometric function using GLMs {#glms}
 
 
+Psychometric functions are commonly fit using generalized linear models which allows for the linear model to be related to the response variable via a link function, which for psychometric functions comes from the family of S-shaped curves called a sigmoid.
 
-## Multilevel modeling
 
+Commonly GLMs are fit using maximum likelihood estimation (MLE). The outcome of a single experiment can be represented as the result of a Bernoulli trial. The psychometric function, $F(x; \theta)$, determines the probability that the outcome is 1:
+
+
+\begin{align*}
+Y &\sim \textrm{Bernoulli}(\pi) \\
+\pi &= P(Y=1 \vert x; \theta) = F(x; \theta)
+\end{align*}
+
+
+If $P(Y=1 | x; \theta) = F(x;\theta)$, then $P(Y = 0 | x; \theta) = 1 - F(x;\theta)$, and hence the probability of an outcome is:
+
+
+\begin{equation}
+  P(Y=y | x; \theta) = F(x;\theta)^y(1-F(x;\theta))^{1-y}
+  (\#eq:bernproby)
+\end{equation}
+
+
+The likelihood $\mathcal{L}$ of observing a set of independent and identically distributed data given the parameterization $\theta$ is determined by taking the product of the probabilities for each datum:
+
+$$
+\begin{equation}
+  \begin{split}
+    \mathcal{L} &= \prod_{i}^{N} P(y_i | x_i; \theta) \\
+    &= \prod_{i}^{N}F(x_i;\theta)^{y_i}(1-F(x_i;\theta))^{1-y_i}
+  \end{split}
+  (\#eq:bernlik)
+\end{equation}
+$$
+
+For some $\theta$, $\mathcal{L}$ achieves a maximum value, so maximum likelihood estimation determines the parameters that maximizes the likelihood of the observed data. Equation \@ref(eq:bernlik) is commonly expressed in terms of its logarithm as a function of $\theta$:
+
+
+\begin{equation}
+  \ln \mathcal{L}(\theta | y, x) = \sum_{i}^{N} y_i \ln\left(F(x_i;\theta)\right) + (1-y_i) \ln\left(1 - F(x_i;\theta))\right)
+  (\#eq:bernloglik)
+\end{equation}
+
+
+The classical approach is to differentiate \@ref(eq:bernloglik) with respect to $\theta$, set the equation equal to $0$, and solve for $\theta$:
+
+
+\begin{equation}
+  \frac{d}{d\theta} \ln \mathcal{L}(\theta) = 0
+  (\#eq:ddthetaloglik)
+\end{equation}
+
+
+However, no closed form expression exists for the solution to \@ref(eq:ddthetaloglik), and so numerical root finding methods such as gradient descent are used to iteratively find the maximum likelihood solution. The likelihood function, $\mathcal{L}(\theta | y)$, also has a connection to Bayes' Theorem:
+
+
+\begin{equation}
+  \mathcal{L}(\theta | y) = \frac{P(y | \theta) P(\theta)}{P(y)}
+  (\#eq:bayeslik)
+\end{equation}
+
+
+In \@ref(eq:bayeslik), $P(y | \theta)$ is the likelihood of the data given $\theta$, $P(\theta)$ is the prior distribution for the parameter $\theta$, and $P(y)$ is the probability of the data averaged over the parameter space. When the prior distribution is uniform over the parameter space, then the Bayesian _maximum a posteriori_ (MAP) estimate coincides with the maximum likelihood estimate.
+
+
+There are common situations where MLE fails such as complete separation in the data. This is when the positive class can be separated from the negative class by a set of linear predictors (shown in figure \@ref(fig:ch020-comp-sep)).
+
+
+```{r ch020-comp-sep, fig.cap="Example of complete separation in the data. All of the \`0\`-responses can be separated from the \`1\`-responses by some value of \`x\` between \`-1\` and \`0\`."}
+y <- c(0, 0, 1, 1, 1)
+x <- c(-2, -1, 0, 1, 2)
+sep_data <- data.frame(y=y, x=x)
+ggplot(sep_data, aes(x, y)) +
+  geom_point(size = 3) +
+  theme_minimal()
+```
+
+
+For a slope-intercept model, the MLE for the slope is infinity, and the location is undefined. Figure \@ref(fig:ch020-mle-comp-sep) displays a grid of log-likelihoods for a range of scale (inverse slope) and location parameters. The log-likelihood increases to zero as the scale decreases to zero (slope increases to infinity). Numerical root finding methods will converge after a finite number of iterations -- usually by a stopping condition such as the difference in log-likelihoods between steps.
+
+
+```{r ch020-mle-comp-sep, fig.cap="Grid of log-likelihoods for the completely separable data. The log-likelihood increases to zero as the scale decreases to zero (slope increases to infinity). For smaller slopes, the MLE for the location is \`0.5\` -- the median of the inner-most datum from each class. At larger slopes, the MLE for the location matters little."}
+f <- function(m, s, y, x) {
+  sum( y * plogis(x, m, s, log.p = TRUE) + 
+         (1 - y) * plogis(x, m, s, lower.tail = FALSE, log.p = TRUE) )
+}
+
+ms <- seq(-1, 0, length.out = 201)
+ss <- 10^seq(1, -5, length.out = 201)
+
+log_lik <- expand_grid(ms = ms, ss = ss)
+log_lik$`Log Likelihood` <- apply(log_lik, 1, function(r) f(r[[1]], r[[2]], y, x))
+
+ggplot(log_lik, aes(ms, ss, fill = `Log Likelihood`)) +
+  geom_tile() +
+  scale_fill_viridis_c() +
+  scale_y_log10() +
+  labs(x = "Location", y = "Scale (inverse slope)") +
+  theme_minimal()
+```
+
+
+When the separable data from above is fit using `R`'s `glm` function, there is a warning about fitted probabilities being $0$ or $1$, indicating that the slope is very steep.
+
+
+```{r ch020-Rubber Blue, echo=TRUE, warning=TRUE, message=FALSE}
+fit <- glm(y ~ x, family = binomial("logit"))
+coefficients(fit)
+```
+
+
+The coefficients of the linear predictor are in slope-intercept form ($23 + 46 x$). Rearranging the coefficients into location-scale form yields:
+
+
+\begin{equation}
+  \theta = \frac{x - (-0.5)}{1/46}
+  (\#eq:rglmmle)
+\end{equation}
+
+
+However, this is not the true maximum likelihood estimate. Table \@ref(tab:ch020-Quality-Surreal-Street) shows that the log-likelihood is still increasing as the scale decreases to zero. There is a very large change between $-2.05\times 10^{-10}$ and $-3.86\times10^{-22}$ on a relative scale, but computers cannot tell the difference on an absolute scale. The precision of most modern computers is around $10^{-15}$, and anything smaller is numerically zero.
+
+
+```{r ch020-Quality-Surreal-Street}
+tibble(
+  Scale = c("1/10", "1/46*", "1/100", "1/1000"),
+  `Log-Likelihood` = c(f(-0.5, 1/10, y, x),
+                       f(-0.5, 1/46, y, x),
+                       f(-0.5, 1/100, y, x),
+                       f(-0.5, 1/1000, y, x))
+) %>%
+  mutate(`Log-Likelihood` = formatC(`Log-Likelihood`, format="e", digits=2)) %>%
+  kable(booktabs = TRUE, 
+        caption = "Log-likelihood estimates for different scale parameters. *Indicates the MLE solution from R.") %>%
+  kable_styling(latex_options = "hold_position")
+```
+
+
+Using a weakly-informative prior for the slope instead of the non-informative uniform distribution will allow for a proper MAP estimate, but care should be taken to consider what prior is appropriate, or why the data is separable in the first place. If an experiment can be improved to avoid the situation, that should be the first action.
 
 
 ## Data visualization and quirks
+
+
+The dependent variable in these TOJ experiments is the subject's perceived response, encoded as a 0 or a 1, and the independent variable is the SOA value. If the response is plotted against the SOA values, then it is difficult to determine the relationship (see the right panel of figure \@ref(fig:ch020-simple-response-soa-plot)). Transparency can be used to better visualize the relationship. The center panel in figure \@ref(fig:ch020-simple-response-soa-plot) shows the same data as the left, except that the transparency is set to $0.05$. Note that there is a higher density of "0" responses towards more negative SOAs, and a higher density of "1" responses for more positive SOAs. The proportion of "positive" responses for a given SOA is computed and plotted against the SOA value (displayed in the right panel of figure \@ref(fig:ch020-simple-response-soa-plot)). The relationship between SOA values and responses is clear -- as the SOA value goes from more negative to more positive, the proportion of positive responses increases from near 0 to near 1.
+
+
+```{r ch020-simple-response-soa-plot, fig.cap="Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency."}
+p1 <- visual %>%
+  filter(trial == "pre") %>%
+  ggplot(aes(soa, response)) +
+  geom_point(size = 2) +
+  theme(axis.title.y = element_blank(),
+        axis.title.x = element_blank()) +
+  theme_minimal()
+
+p2 <- visual %>%
+  filter(trial == "pre") %>%
+  ggplot(aes(soa, response)) +
+  geom_point(size = 2, alpha = 0.05) +
+  theme(axis.title.y = element_blank(),
+        axis.title.x = element_blank()) +
+  theme_minimal()
+
+p3 <- visual_binomial %>%
+  filter(trial == "pre") %>%
+  mutate(p = k / n) %>%
+  ggplot(aes(soa, p)) +
+  geom_point(size = 2, alpha = 0.05) +
+  theme(axis.title.y = element_blank(),
+        axis.title.x = element_blank()) +
+  theme_minimal() +
+  labs(y = "proportion")
+
+(p1 | p2 | p3) + plot_annotation(title = "Three plots, same data",
+                                 subtitle = "Visual Task - Pre adaptation")
+```
+
+
+The right panel in figure \@ref(fig:ch020-simple-response-soa-plot) is the easiest to interpret, and we often present the observed and predicted data using the proportion of responses rather than the raw responses. Proportional data is also bounded on the same interval as the response in contrast to the raw counts.
+
+
+For the audiovisual task, the responses can be aggregated into binomial data -- the number of positive responses for given SOA value -- which is more efficient to work with than the Bernoulli data (see table \@ref(tab:ch020-av-bin-sample)). However the number of times an SOA is presented varies between the pre-adaptation and post-adaptation blocks; 5 and 3 times per SOA respectively.
+
+
+```{r ch020-av-bin-sample}
+set.seed(5)
+audiovisual_binomial %>%
+  select(-rid) %>%
+  filter(trial %in% c("pre", "post1")) %>%
+  group_by(trial) %>%
+  slice_sample(n = 3) %>%
+  ungroup() %>%
+  select(trial, soa, n, k) %>%
+  mutate(proportion = k / n) %>%
+  kable(digits = 2, booktabs = TRUE,
+        caption = "Audiovisual task with aggregated responses.") %>%
+  kable_styling(latex_options = c("hold_position")) %>%
+  collapse_rows(columns = 1, valign = "top")
+```
+
+
+There is one younger subject that did not complete the audiovisual task, and one younger subject that did not complete the duration task. There is also one older subject who's response data for the post-adaptation audiovisual task is unreasonable -- it is extremely unlikely that the data represents genuine responses (see figure \@ref(fig:ch020-av-post1-O-f-CE-plot)).
+
+
+```{r ch020-av-post1-O-f-CE-plot, fig.cap="Post-adaptation response data for O-f-CE"}
+audiovisual_binomial %>%
+  filter(rid == "av-post1-O-f-CE") %>%
+  mutate(p = k / n) %>%
+  ggplot(aes(soa, p)) +
+  geom_point(size = 2, alpha = 0.9) + 
+  labs(title = "Proportion of responses vs. SOA",
+       subtitle = "Subject ID O-f-CE",
+       y = "response proportion") +
+  scale_y_continuous(limits = c(0, 1)) +
+  theme_minimal()
+```
+
+
+Of all the negative SOAs, there were only two "correct" responses (the perceived order matches the actual order). If a subject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject's proportion of correct responses is above 0.5, then they are doing better than random guessing. Figure \@ref(fig:ch020-av-post-neg-trials) shows that subject `O-f-CE` is the only one who's proportion is below 0.5 (and by a considerable amount), and so their post-adaptation block is removed from data set for model fitting.
+
+
+```{r ch020-av-post-neg-trials, fig.asp=1, fig.cap="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment."}
+audiovisual %>%
+  filter(trial == "post1", soa < 0) %>%
+  mutate(is_neg = soa < 0,
+         neg_resp = !as.logical(response),
+         correct = is_neg & neg_resp,
+         sid = fct_reorder(sid, as.integer(age_group))) %>%
+  arrange(sid) %>%
+  group_by(sid) %>%
+  add_count() %>%
+  summarise(k = sum(correct), p = k / n) %>%
+  mutate(less0.5 = p < 0.5) %>%
+  ggplot(aes(p, sid, shape = `less0.5`)) +
+  geom_point(size = 3) +
+  geom_vline(xintercept = 0.5, linetype = "dashed") +
+  labs(title = "Proportion of correct responses for negative SOA values",
+       subtitle = "Audiovisual experiment, post-adaptation block",
+       x = "Proportion of correct responses",
+       y = "Subject ID") +
+  annotate("text", x = 0.49, y = 40, label = "Random guessing", 
+           angle = 90, hjust = 1, vjust = 0) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.25)) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+
+
+<!-- I may want to move some of this to Results
+
+When this method of detecting outliers is repeated for all tasks and blocks, then we end up with 17 records in total (figure \@ref(fig:ch020-naive-prop-outliers)), one of which is the aforementioned subject.
+
+
+```{r ch020-naive-prop-outliers, fig.cap="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs."}
+multitask %>%
+  mutate(is_pos = soa > 0,
+         is_neg = soa < 0,
+         resp_pos = response == 1,
+         resp_neg = response == 0) %>%
+  filter(is_pos | is_neg, trial %in% c("pre", "post1")) %>%
+  mutate(correct = (is_pos & resp_pos) | (is_neg & resp_neg)) %>%
+  group_by(rid, is_pos) %>%
+  add_count() %>%
+  summarise(k = sum(correct), p = k / n) %>%
+  filter(p < 0.5) %>%
+  distinct() %>%
+  ggplot(aes(p, rid)) +
+  geom_point(size = 3) +
+  geom_vline(xintercept = 0.5, linetype = "dashed") +
+  labs(title = "Proportion of correct responses",
+       subtitle = "All tasks and blocks",
+       x = "Proportion of correct responses",
+       y = "Record ID") +
+  annotate("text", x = 0.51, y = 8, label = "Random guessing", 
+           angle = 270, vjust = 0) +
+  scale_x_continuous(limits = c(0, 0.65), breaks = seq(0, 1, 0.25)) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+
+Most of the records that are flagged by this method of outlier detection are from the sensorimotor task, and none are from the visual task. This may be attributed to the perceived difficulty of the task. One consequence of higher temporal sensitivity is that it is easier to determine temporal order. It may also be that determining temporal order is inherently easier for certain multisensory tasks compared to others. Since the sensorimotor task does not have fixed SOA values like the other tasks, it may be perceived as more difficult. Or perhaps the mechanisms that process tactile and visual signals are not as well coupled as those that process audio and visual signals.
+
+-->
+
+
+
+
 
 

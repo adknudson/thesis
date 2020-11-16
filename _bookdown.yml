@@ -7,7 +7,7 @@ view: https://github.com/adknudson/thesis/blob/master/%s
 rmd_files: [
   "index.Rmd",
   "020-psychometrics.Rmd",
-  # "030-methods.Rmd",
+  "030-methods.Rmd",
   # "040-workflow.Rmd",
   # "050-results.Rmd",
   "100-conclusion.Rmd",

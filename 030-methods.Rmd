@@ -1,0 +1,22 @@
+```{r ch030-setup, include=FALSE}
+library(tidyverse)
+library(kableExtra)
+library(rstan)
+library(patchwork)
+library(bayesplot)
+library(rethinking)
+library(loo)
+```
+
+
+# Background {#methods}
+
+## Bayesian single-level GLM
+
+## Bayesian multilevel GLM
+
+## A modern principled bayesian modeling workflow
+
+## Model checking
+
+## Estimating predictive performance
