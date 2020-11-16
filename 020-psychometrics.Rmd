@@ -5,46 +5,56 @@ library(patchwork)
 library(kableExtra)
 ```
 
-# Motivating Data {#data}
+
+# Motivating data {#data}
+
+
+This paper focuses on a type of psychometric experiment called a temporal order judgment (TOJ) experiment. If there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept (perceive them as happening simultaneously). Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events.
 
 
 It was Charles Darwin who in his book _On the Origin of Species_ developed the idea that living organisms adapt in order to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Galton's works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that he was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
 
 
-E.H. Weber built upon Herbart's work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber's Law -- the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus [@britannica2014editors].
+E.H. Weber built upon Herbart's work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber's Law (Equation \@ref(eq:webers-law)), which states that the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus [@britannica2014editors].
 
 
-$$\frac{\Delta I}{I} = k$$
+\begin{equation}
+  \frac{\Delta I}{I} = k
+  (\#eq:webers-law)
+\end{equation}
 
 
-To put this law into practice, consider holding a 1 kg weight ($I = 1$), and further suppose that we can just detect the difference between a 1 kg weight and a 1.2 kg weight ($\Delta I = 0.2$). Then the constant just noticeable ratio is
+To demonstrate this law, consider holding a 1 kg weight ($I = 1$), and further suppose that the difference between a 1 kg weight and a 1.2 kg weight ($\Delta I = 0.2$) can just be detected. Then the constant just noticeable ratio is:
 
 
 $$k = \frac{0.2}{1} = 0.2$$
 
 
-Now if we pick up a 10 kg weight, we should be able to determine how much more mass is required to just detect a difference:
+Now consider picking up a 10 kg weight. The mass required to just detect a difference can be calculated as:
 
 
 $$\frac{\Delta I}{10} = 0.2 \Rightarrow \Delta I = 2$$
 
 
-The difference between a 10 kg and a 12 kg weight should be just barely perceptible. Notice that the difference in the first set of weights is 0.2 and in the second set it is 2. The perception of the difference in stimulus intensities is not absolute, but relative. G.T. Fechner devised the law (Weber-Fechner Law) that the strength of a sensation grows as the logarithm of the stimulus intensity.
+The difference between a 10 kg and a 12 kg weight is expected to be just barely perceptible. Note that the difference in the first set of weights is 0.2, and in the second set it is 2. The perception of the difference in stimulus intensities is not absolute, but relative. G.T. Fechner devised the law (Weber-Fechner Law, Equation \@ref(eq:weber-fechner-law)) that the strength of a sensation grows as the logarithm of the stimulus intensity.
 
 
-$$S = K \ln I$$
+\begin{equation}
+  S = K \ln I
+  (\#eq:weber-fechner-law)
+\end{equation}
 
 
-An example to this law is to consider two light sources, one that is 100 lumens ($S_1 = K \ln 100$) and another that is 200 lumens ($S_2 = K \ln 200$). The intensity of the second light is not perceived as twice as bright, but only about 1.15 times as bright according to the Weber-Fechner law:
+Consider two light sources: one that is 100 lumens ($S_1 = K \ln 100$) and another that is 200 lumens ($S_2 = K \ln 200$). The intensity of the second light is not perceived as twice as bright, but only about 1.15 times as bright according to \@ref(eq:weber-fechner-law):
 
 
 $$\theta = S_2 / S_1 \approx 1.15$$
 
 
-Notice that the value $K$ cancels out when calculating the relative intensity, but knowing $K$ can lead to important psychological insights; insights about differences between persons or groups of people. What biological and contextual factors affect how people perceive different stimuli? How do we measure their perception in a meaningful way? As one might expect, we can collect data from psychometric experiments, fit a model to the data from a family of functions called psychometric functions, and inspect key operating characteristics of those functions.
+Notice that the value $K$ cancels out when calculating the relative intensity, but knowing $K$ can lead to important psychological insights about differences between persons or groups of people. What biological and contextual factors affect how people perceive different stimuli? How do we measure their perception in a meaningful way? We can collect data from psychometric experiments, fit a model to the data from a family of functions called psychometric functions, and inspect key operating characteristics of those functions.
 
 
-## Psychometric Experiments {#psycho-experiments}
+## Psychometric experiments {#psycho-experiments}
 
 
 Psychometric experiments are devised in a way to examine psychophysical processes, or the response between the world around us and our inward perceptions. A psychometric function relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task [@wichmann2001a]. Psychometric functions were studied as early as the late 1800's, and Edwin Boring published a chart of the psychometric function in The American Journal of Psychology in 1917 [@boring1917chart].
@@ -55,16 +65,16 @@ knitr::include_graphics("figures/chart_of_pf.png")
 ```
 
 
-Figure \@ref(fig:ch020-chart-of-pf) displays the key aspects of the psychometric function. The most crucial part is the sigmoid function, the S-like non-decreasing curve which in this case is represented by the Normal CDF, $\Phi(\gamma)$. The horizontal axis represents the stimulus intensity -- the separation of two points in centimeters. The vertical axis represents the probability that a subject has the impression of two points. With only experimental data, the response proportion becomes an approximation for the probability.
+Figure \@ref(fig:ch020-chart-of-pf) displays the key aspects of the psychometric function. The most crucial part is the sigmoid function, the S-like non-decreasing curve which in this case is represented by the Normal CDF, $\Phi(\gamma)$. The horizontal axis represents the stimulus intensity: the separation of two points in centimeters. The vertical axis represents the probability that a subject has the impression of two points. With only experimental data, the response proportion becomes an approximation for the probability.
 
 
-This paper focuses on a type of psychometric experiment called a temporal order judgment (TOJ) experiment. If there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept (perceive them as happening simultaneously). Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events. The temporal asynchrony between stimuli is called the stimulus onset asynchrony (SOA), and the range of SOAs for which sensory signals are integrated into a global percept is called the temporal binding window. When the SOA grows large enough, the brain segregates the two signals and the temporal order can be determined.
+The temporal asynchrony between stimuli is called the stimulus onset asynchrony (SOA), and the range of SOAs for which sensory signals are integrated into a global percept is called the temporal binding window. When the SOA grows large enough, the brain segregates the two signals and the temporal order can be determined.
 
 
 Our experiences in life as we age shape the mechanisms of processing multisensory signals, and some multisensory signals are integrated much more readily than others. Perceptual synchrony has been previously studied through the point of subjective simultaneity (PSS) -- the temporal delay between two signals at which an observer is unsure about their temporal order [@stone2001now]. The temporal binding window is the time span over which sensory signals arising from different modalities appear integrated into a global percept. 
 
 
-A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In TOJ tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the just noticeable difference (JND) -- the smallest lapse in time so that a temporal order can just be determined. 
+A deficit in temporal sensitivity may lead to a widening of the temporal binding window and reduce the ability to segregate unrelated sensory signals. In TOJ tasks, the ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity, and is studied through the measurement of the just noticeable difference (JND) -- the smallest lapse in time so that a temporal order can just be determined.
 
 
 Figure \@ref(fig:ch020-plot-ref-pf) highlights the features through which we study psychometric functions. The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing (i.e.  when the response probability is 50%). The JND is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 84% level -- one standard deviation away from the mean -- and the PSS, though the upper level often depends on domain expertise.
@@ -99,7 +109,7 @@ ggplot(tibble(x = c(-4, 4), y = c(0, 1)), aes(x, y)) +
   annotate("label", x = -2, y = 0.25, label = "F(x)", vjust = 0, hjust = 1) +
   scale_y_continuous(breaks = c(0, 0.5, 0.84, 1.0)) +
   theme(axis.ticks.x = element_blank(), axis.text.x = element_blank()) +
-  labs(x = "Stimulus Intensity", y = "Probability",
+  labs(x = "Stimulus Intensity", y = "Response Probability",
        title = "Components of the Psychometric Function, F") +
   theme_minimal()
 ```
@@ -108,13 +118,13 @@ ggplot(tibble(x = c(-4, 4), y = c(0, 1)), aes(x, y)) +
 Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing [@fujisaki2004recalibration]. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer [@vroomen2004recalibration]. This repetition of presenting the adapter stimulus is called temporal recalibration.
 
 
-## Temporal Order Judgment Task {#toj-task}
+## Temporal order judgment tasks {#toj-task}
 
 
-The data set used in this paper comes from experiments done by A.N. Scurry and Dr. F. Jiang in the Department of Psychology at the University of Nevada. Reduced temporal sensitivity in the aging population manifests in an impaired ability to perceive synchronous events as simultaneous, and similarly more difficulty in segregating asynchronous sensory signals that belong to different sources. The consequences of a widening of the temporal binding window is considered in @scurry2019aging, as well as a complete detailing of the experimental setup and recording process. A shortened summary of the methods is provided below.
+The data set used in this paper comes from small-scale preliminary experiments done by A.N. Scurry and Dr. Jiang in the Department of Psychology at the University of Nevada. Reduced temporal sensitivity in the aging population manifests in an impaired ability to perceive synchronous events as simultaneous, and similarly more difficulty in segregating asynchronous sensory signals that belong to different sources. The consequences of a widening of the temporal binding window is considered in @scurry2019aging, as well as a complete detailing of the experimental setup and recording process. Here we present a shortened summary of the experimental methods.
 
 
-There are four different tasks in the experiment: audio-visual, visual-visual, visual-motor, and duration, and each task is respectively referred to as audiovisual, visual, sensorimotor, and duration. The participants consist of 15 young adults (age 20-27), 15 middle age adults (age 39-50), and 15 older adults (age 65-75), all recruited from the University of Nevada, Reno. Additionally all subjects are right handed and were reported to have normal or corrected to normal hearing and vision.
+There are four different tasks in the experiment: audio-visual, visual-visual, visual-motor, and duration, and each task is respectively referred to as audiovisual, visual, sensorimotor, and duration. The participants consist of 15 young adults (age 20-27), 15 middle age adults (age 39-50), and 15 older adults (age 65-75), all recruited from the University of Nevada, Reno. Additionally all subjects are right handed and are reported to have normal or corrected to normal hearing and vision.
 
 
 ```{r ch020-multitask-data}
@@ -159,13 +169,13 @@ tibble(
 ```
 
 
-After the first block of each task was completed, the participants went through an adaptation period where they were presented with the respective stimuli from each task repeatedly at fixed temporal delays, then they repeated the task. To ensure that the adaptation affect persisted, the subject were presented with the adapter stimulus at regular intervals throughout the second block. The blocks are designated as `pre` and `post1`, `post2`, etc. in the data set. In this paper we only focus on the `pre` and `post1` blocks.
+After the first block of each task was completed, the participants went through an adaptation period where they were presented with the respective stimuli from each task repeatedly at fixed temporal delays, then the TOJ task was repeated. To ensure that the adaptation affect persisted, the subject was presented with the adapter stimulus at regular intervals throughout the second block. The blocks are designated as `pre` and `post1`, `post2`, etc. in the data set. In this paper we only focus on the `pre` and `post1` blocks.
 
 
-## Data Visualizations and Quirks
+## Data visualization and quirks
 
 
-The dependent variable in these experiments is the perceived response which is encoded as a 0 or a 1, and the independent variable is the SOA value. If the response is plotted against the SOA values, then it is difficult to determine any relationship (see figure \@ref(fig:ch020-simple-response-soa-plot)). Transparency can be used to better visualize the relationships between SOA values and responses. The center plot in figure \@ref(fig:ch020-simple-response-soa-plot) uses the same data as the left plot, except that the transparency is set to 0.05. Note that there is a higher density of "0" responses towards more negative SOAs, and a higher density of "1" responses for more positive SOAs. The proportion of "positive" responses for a given SOA may be computed and plotted against the SOA value. This is displayed in the right panel. Now the relationship between SOA values and responses is clear -- as the SOA value goes from more negative to more positive, the proportion of positive responses increases from near 0 to near 1.
+The dependent variable in these TOJ experiments is the subject's perceived response, encoded as a 0 or a 1, and the independent variable is the SOA value. If the response is plotted against the SOA values, then it is difficult to determine the relationship (see the right panel of figure \@ref(fig:ch020-simple-response-soa-plot)). Transparency can be used to better visualize the relationship. The center panel in figure \@ref(fig:ch020-simple-response-soa-plot) shows the same data as the left, except that the transparency is set to $0.05$. Note that there is a higher density of "0" responses towards more negative SOAs, and a higher density of "1" responses for more positive SOAs. The proportion of "positive" responses for a given SOA is computed and plotted against the SOA value (displayed in the right panel of figure \@ref(fig:ch020-simple-response-soa-plot)). The relationship between SOA values and responses is clear -- as the SOA value goes from more negative to more positive, the proportion of positive responses increases from near 0 to near 1.
 
 
 ```{r ch020-simple-response-soa-plot, fig.cap="Left: Simple plot of response vs. soa value. Center: A plot of response vs. soa with transparency. Right: A plot of proportions vs. soa with transparency."}
@@ -200,10 +210,10 @@ p3 <- visual_binomial %>%
 ```
 
 
-Subjectively the right plot in figure \@ref(fig:ch020-simple-response-soa-plot) is the easiest to interpret. Because of this, we will often present the observed and predicted data using the proportion of responses rather than the actual response. Proportional data also has the advantage of being bounded on the same interval as the response in contrast to the raw counts.
+The right panel in figure \@ref(fig:ch020-simple-response-soa-plot) is the easiest to interpret, and we often present the observed and predicted data using the proportion of responses rather than the raw responses. Proportional data is also bounded on the same interval as the response in contrast to the raw counts.
 
 
-For the audiovisual task, the responses can be aggregated into binomial data -- the number of positive responses for given SOA value -- which is sometimes more efficient to work with than the Bernoulli data (see table \@ref(tab:ch020-av-bin-sample)). However the number of times an SOA is presented varies between the pre-adaptation and post-adaptation blocks; 5 and 3 times per SOA respectively. 
+For the audiovisual task, the responses can be aggregated into binomial data -- the number of positive responses for given SOA value -- which is more efficient to work with than the Bernoulli data (see table \@ref(tab:ch020-av-bin-sample)). However the number of times an SOA is presented varies between the pre-adaptation and post-adaptation blocks; 5 and 3 times per SOA respectively.
 
 
 ```{r ch020-av-bin-sample}
@@ -216,13 +226,14 @@ audiovisual_binomial %>%
   ungroup() %>%
   select(trial, soa, n, k) %>%
   mutate(proportion = k / n) %>%
-  kable(digits = 2, caption = "Audiovisual task with aggregated responses.", booktabs = TRUE) %>%
+  kable(digits = 2, booktabs = TRUE,
+        caption = "Audiovisual task with aggregated responses.") %>%
   kable_styling(latex_options = c("hold_position")) %>%
   collapse_rows(columns = 1, valign = "top")
 ```
 
 
-Other quirks about the data pertain to the subjects. There is one younger subject that did not complete the audiovisual task, and one younger subject that did not complete the duration task. Additionally there is one older subject who's response data for the post-adaptation audiovisual task is unreasonable -- it is extremely unlikely that the data represents genuine responses (see figure \@ref(fig:ch020-av-post1-O-f-CE-plot)).
+There is one younger subject that did not complete the audiovisual task, and one younger subject that did not complete the duration task. There is also one older subject who's response data for the post-adaptation audiovisual task is unreasonable -- it is extremely unlikely that the data represents genuine responses (see figure \@ref(fig:ch020-av-post1-O-f-CE-plot)).
 
 
 ```{r ch020-av-post1-O-f-CE-plot, fig.cap="Post-adaptation response data for O-f-CE"}
@@ -239,7 +250,7 @@ audiovisual_binomial %>%
 ```
 
 
-It is unreasonable because, of all the negative SOAs, there were only two "correct" responses (the perceived order matches the actual order). If a subject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject's proportion of correct responses is above 0.5, then they are doing better than random guessing. Figure \@ref(fig:ch020-av-post-neg-trials) shows that subject O-f-CE is the only one who's proportion is below 0.5 (and by a considerable amount).
+Of all the negative SOAs, there were only two "correct" responses (the perceived order matches the actual order). If a subject is randomly guessing the temporal order, then a naive estimate for the proportion of correct responses is 0.5. If a subject's proportion of correct responses is above 0.5, then they are doing better than random guessing. Figure \@ref(fig:ch020-av-post-neg-trials) shows that subject `O-f-CE` is the only one who's proportion is below 0.5 (and by a considerable amount), and so their post-adaptation block is removed from data set for model fitting.
 
 
 ```{r ch020-av-post-neg-trials, fig.asp=1, fig.cap="Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment."}
@@ -261,13 +272,16 @@ audiovisual %>%
        subtitle = "Audiovisual experiment, post-adaptation block",
        x = "Proportion of correct responses",
        y = "Subject ID") +
-  theme(legend.position = "none") +
   annotate("text", x = 0.49, y = 40, label = "Random guessing", 
            angle = 90, hjust = 1, vjust = 0) +
   scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.25)) +
-  theme_minimal()
+  theme_minimal() +
+  theme(legend.position = "none")
 ```
 
+
+
+<!-- I may want to move some of this to Results
 
 When this method of detecting outliers is repeated for all tasks and blocks, then we end up with 17 records in total (figure \@ref(fig:ch020-naive-prop-outliers)), one of which is the aforementioned subject.
 
@@ -292,12 +306,20 @@ multitask %>%
        subtitle = "All tasks and blocks",
        x = "Proportion of correct responses",
        y = "Record ID") +
-  theme(legend.position = "none") +
   annotate("text", x = 0.51, y = 8, label = "Random guessing", 
            angle = 270, vjust = 0) +
   scale_x_continuous(limits = c(0, 0.65), breaks = seq(0, 1, 0.25)) +
-  theme_minimal()
+  theme_minimal() +
+  theme(legend.position = "none")
 ```
 
 
 Most of the records that are flagged by this method of outlier detection are from the sensorimotor task, and none are from the visual task. This may be attributed to the perceived difficulty of the task. One consequence of higher temporal sensitivity is that it is easier to determine temporal order. It may also be that determining temporal order is inherently easier for certain multisensory tasks compared to others. Since the sensorimotor task does not have fixed SOA values like the other tasks, it may be perceived as more difficult. Or perhaps the mechanisms that process tactile and visual signals are not as well coupled as those that process audio and visual signals.
+
+-->
+
+
+
+
+
+

@@ -9,165 +9,178 @@ library(loo)
 ```
 
 
-# Methods {#methods}
-
-## Model Development
+# Background {#methods}
 
 
-A principled workflow is a method of employing domain expertise and statistical knowledge to iteratively build a statistical model that satisfies the constraints and goals set forth by the researcher. There are many great resources out there for following along with an analysis of some data or problem, and there is an abundance of tips, tricks, techniques, and testimonies to good modeling practices. The problem is that many of these prescriptions are given without context for when they are appropriate to be taken. According to @betancourt2020, this leaves "practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics." The concept of a principled workflow is that for any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather great consideration must be given to domain expertise and the questions that one is trying to answer with the statistical model.
+
+## Fitting the psychometric function using GLMs {#glms}
 
 
-Since everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in how consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by:
+Psychometric functions are commonly fit using generalized linear models which allows for the linear model to be related to the response variable via a link function, which for psychometric functions comes from the family of S-shaped curves called a sigmoid.
 
 
-1. Domain Expertise Consistency
-    - Is our model consistent with our domain expertise?
-2. Computational Faithfulness
-    - Will our computational tools be sufficient to accurately fit our posteriors?
-3. Inferential Adequacy
-    - Will our inferences provide enough information to answer our questions?
-4. Model Adequacy
-    - Is our model rich enough to capture the relevant structure of the true data generating process?
+Commonly GLMs are fit using maximum likelihood estimation (MLE). The outcome of a single experiment can be represented as the result of a Bernoulli trial. The psychometric function, $F(x; \theta)$, determines the probability that the outcome is 1:
 
 
-Like any good Bayesian, much work is done before seeing the data or building a model. This may include talking with experts to gain domain knowledge or to elicit priors. Domain experts know something about a particular measure, perhaps the mean or variability of the data from years of research, and different experts may provide different estimates of a measure. The benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the posterior distribution. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints.
+\begin{align*}
+Y &\sim \textrm{Bernoulli}(\pi) \\
+\pi &= P(Y=1 \vert x; \theta) = F(x; \theta)
+\end{align*}
 
 
-In this section we describe a principled workflow proposed by @betancourt2020 and broadly adopted by many members of the Bayesian community. In its simplest form, the workflow consists of prior predictive checks, fitting a model, posterior predictive checks, and repeat. The comprehensive list steps are in table \@ref(tab:ch030-workflow-steps).
+If $P(Y=1 | x; \theta) = F(x;\theta)$, then $P(Y = 0 | x; \theta) = 1 - F(x;\theta)$, and hence the probability of an outcome is:
 
 
-```{r ch030-workflow-steps}
-bind_rows(
-  data.frame(Part = "Pre-Model, Pre-Data",
-             Step = c("conceptual analysis", 
-                      "define observational space",
-                      "construct summary statistics")),
-  data.frame(Part = "Post-Model, Pre-Data",
-             Step = c("develop model",
-                      "construct summary functions",
-                      "simulate Bayesian ensemble",
-                      "prior checks",
-                      "configure algorithm",
-                      "fit simulated ensemble",
-                      "algorithmic calibration",
-                      "inferential calibration")),
-  data.frame(Part = "Post-Model, Post-Data",
-             Step = c("fit observed data",
-                      "diagnose posterior fit",
-                      "posterior retrodictive checks",
-                      "celebrate"))
+\begin{equation}
+  P(Y=y | x; \theta) = F(x;\theta)^y(1-F(x;\theta))^{1-y}
+  (\#eq:bernproby)
+\end{equation}
+
+
+The likelihood $\mathcal{L}$ of observing a set of independent and identically distributed data given the parameterization $\theta$ is determined by taking the product of the probabilities for each datum:
+
+
+\begin{equation}
+  \begin{split}
+    \mathcal{L} &= \prod_{i}^{N} P(y_i | x_i; \theta) \\
+    &= \prod_{i}^{N}F(x_i;\theta)^{y_i}(1-F(x_i;\theta))^{1-y_i}
+  \end{split}
+  (\#eq:bernlik)
+\end{equation}
+
+
+For some $\theta$, $\mathcal{L}$ achieves a maximum value, so maximum likelihood estimation determines the parameters that maximizes the likelihood of the observed data. Equation \@ref(eq:bernlik) is commonly expressed in terms of its logarithm as a function of $\theta$:
+
+
+\begin{equation}
+  \ln \mathcal{L}(\theta | y, x) = \sum_{i}^{N} y_i \ln\left(F(x_i;\theta)\right) + (1-y_i) \ln\left(1 - F(x_i;\theta))\right)
+  (\#eq:bernloglik)
+\end{equation}
+
+
+The classical approach is to differentiate \@ref(eq:bernloglik) with respect to $\theta$, set the equation equal to $0$, and solve for $\theta$:
+
+
+\begin{equation}
+  \frac{d}{d\theta} \ln \mathcal{L}(\theta) = 0
+  (\#eq:ddthetaloglik)
+\end{equation}
+
+
+However, no closed form expression exists for the solution to \@ref(eq:ddthetaloglik), and so numerical root finding methods such as gradient descent are used to iteratively find the maximum likelihood solution. The likelihood function, $\mathcal{L}(\theta | y)$, also has a connection to Bayes' Theorem:
+
+
+\begin{equation}
+  \mathcal{L}(\theta | y) = \frac{P(y | \theta) P(\theta)}{P(y)}
+  (\#eq:bayeslik)
+\end{equation}
+
+
+In \@ref(eq:bayeslik), $P(y | \theta)$ is the likelihood of the data given $\theta$, $P(\theta)$ is the prior distribution for the parameter $\theta$, and $P(y)$ is the probability of the data averaged over the parameter space. When the prior distribution is uniform over the parameter space, then the Bayesian _maximum a posteriori_ (MAP) estimate coincides with the maximum likelihood estimate.
+
+
+There are common situations where MLE fails such as complete separation in the data. This is when the positive class can be separated from the negative class by a set of linear predictors (shown in figure \@ref(fig:ch030-comp-sep)).
+
+
+```{r ch030-comp-sep, fig.cap="Example of complete separation in the data. All of the \`0\`-responses can be separated from the \`1\`-responses by some value of \`x\` between \`-1\` and \`0\`."}
+y <- c(0, 0, 1, 1, 1)
+x <- c(-2, -1, 0, 1, 2)
+sep_data <- data.frame(y=y, x=x)
+ggplot(sep_data, aes(x, y)) +
+  geom_point(size = 3) +
+  theme_minimal()
+```
+
+
+For a slope-intercept model, the MLE for the slope is infinity, and the location is undefined. Figure \@ref(fig:ch030-mle-comp-sep) displays a grid of log-likelihoods for a range of scale (inverse slope) and location parameters. The log-likelihood increases to zero as the scale decreases to zero (slope increases to infinity). Numerical root finding methods will converge after a finite number of iterations -- usually by a stopping condition such as the difference in log-likelihoods between steps.
+
+
+```{r ch030-mle-comp-sep, fig.cap="Grid of log-likelihoods for the completely separable data. The log-likelihood increases to zero as the scale decreases to zero (slope increases to infinity). For smaller slopes, the MLE for the location is \`0.5\` -- the median of the inner-most datum from each class. At larger slopes, the MLE for the location matters little."}
+f <- function(m, s, y, x) {
+  sum( y * plogis(x, m, s, log.p = TRUE) + 
+         (1 - y) * plogis(x, m, s, lower.tail = FALSE, log.p = TRUE) )
+}
+
+ms <- seq(-1, 0, length.out = 201)
+ss <- 10^seq(1, -5, length.out = 201)
+
+log_lik <- expand_grid(ms = ms, ss = ss)
+log_lik$`Log Likelihood` <- apply(log_lik, 1, function(r) f(r[[1]], r[[2]], y, x))
+
+ggplot(log_lik, aes(ms, ss, fill = `Log Likelihood`)) +
+  geom_tile() +
+  scale_fill_viridis_c() +
+  scale_y_log10() +
+  labs(x = "Location", y = "Scale (inverse slope)") +
+  theme_minimal()
+```
+
+
+When the separable data from above is fit using `R`'s `glm` function, there is a warning about fitted probabilities being $0$ or $1$, indicating that the slope is very steep.
+
+
+```{r ch030-Rubber Blue, echo=TRUE, warning=TRUE, message=FALSE}
+fit <- glm(y ~ x, family = binomial("logit"))
+coefficients(fit)
+```
+
+
+The coefficients of the linear predictor are in slope-intercept form ($23 + 46 x$). Rearranging the coefficients into location-scale form yields:
+
+
+\begin{equation}
+  \theta = \frac{x - (-0.5)}{1/46}
+  (\#eq:rglmmle)
+\end{equation}
+
+
+However, this is not the true maximum likelihood estimate. Table \@ref(tab:ch030-Quality-Surreal-Street) shows that the log-likelihood is still increasing as the scale decreases to zero. The change between $-2.05\times 10^{-10}$ and $-3.86\times10^{-22}$ is very large on a relative scale, but computers cannot tell the difference on an absolute scale. The precision of most modern computers is around $10^{-15}$, and anything smaller is treated as numerically zero.
+
+
+```{r ch030-Quality-Surreal-Street}
+tibble(
+  Scale = c("1/10", "1/46*", "1/100", "1/1000"),
+  `Log-Likelihood` = c(f(-0.5, 1/10, y, x),
+                       f(-0.5, 1/46, y, x),
+                       f(-0.5, 1/100, y, x),
+                       f(-0.5, 1/1000, y, x))
 ) %>%
-  kable(digits = 2, 
-        caption = "Principled workflow", booktabs = TRUE) %>%
-  kable_styling(latex_options = c("hold_position")) %>%
-  collapse_rows(columns = 1, valign = "top")
+  mutate(`Log-Likelihood` = formatC(`Log-Likelihood`, format="e", digits=2)) %>%
+  kable(booktabs = TRUE, 
+        caption = "Log-likelihood estimates for different scale parameters. *Indicates the MLE solution from R.") %>%
+  kable_styling(latex_options = "hold_position")
 ```
 
 
-These steps are not meant to be followed in a strictly linear fashion. If a conceptual misunderstanding is discovered at any step in the process, then it is recommended to go back to an earlier step and start over. The workflow is a process of model expansion, and multiple iterations are required to get to a final model (or collection of models). Similarly if the model fails prior predictive checks, then one may need to return to the model development step. A full diagram of the workflow is displayed in figure \@ref(fig:ch030-workflow-diagram). 
+Using a weakly-informative prior for the slope instead of the non-informative uniform distribution will allow for a proper MAP estimate, but care should be taken to consider what prior is appropriate, or why the data is separable in the first place. If an experiment can be improved to avoid the situation, that should be the first action.
 
 
-**Pre-Model, Pre-Data** 
-
-The modeling process begins by modeling the experiment according to the description of how it occurred and how the data were collected. This first part consists of conceptual analysis, defining the observational space, and constructing summary statistics that can help identify issues in the model specification.
+<!-- This is a good opportunity to segue into multilevel models -->
 
 
-_Conceptual Analysis_
-
-Write down the inferential goals and consider how the variables of interest interact with the environment and how those interactions work to generate observations.
+## Bayesian multilevel GLM
 
 
-_Define Observational Space_
-
-What are the possible values that the observed data can take on? The observational space can help inform the statistical model such as in count data.
+- Use Gelmen and Hill
 
 
-_Construct Summary Statistics_
-
-What measurements and estimates can be used to help ensure that the inferential goals are met? Prior predictive checks and posterior retrodictive checks are founded on summary statistics that answer the questions of domain expertise consistency and model adequacy.
-
-
-**Post-Model, Pre-Data**
-
-_Develop Model_
-
-Build an observational model that is consistent with the conceptual analysis and observational space, and then specify the complementary prior model.
+- Pooling
+  - none
+  - partial
+  - complete
+  
+  
 
 
-_Construct Summary Functions_
 
-Use the developed model to construct explicit summary functions that can be used in prior predictive checks and posterior retrodictive checks. 
-
-
-_Simulate Bayesian Ensemble_
-
-Since the model is a data generating model, it can be used to simulate observations from the prior predictive distribution without yet having seen any data.
+## Hamiltonian Monte Carlo and NUTS
 
 
-_Prior Checks_
 
-Check that the prior predictive distribution is consistent with domain expertise using the summary functions developed in the previous step.
-
-
-_Configure Algorithm_
-
-Having simulated data, the next step is to fit the data generating model to the generated data. There are many different MCMC samplers with their own configurable parameters, so here is where those settings are tweaked.
+## Methods for model checking {#model-checking}
 
 
-_Fit Simulated Ensemble_
-
-Fit the simulated data to the model using the algorithm configured in the previous step.
-
-
-_Algorithmic Calibration_
-
-How well did the algorithm do in fitting the simulated data? This step helps to answer the question regarding computational faithfulness. A model may be well specified, but if the algorithm used is unreliable then the posterior distribution is also unreliable, and this can lead to poor inferences. Methods for checking models is discussed in (#model-checking).
-
-
-_Inferential Calibration_
-
-Are there any pathological behaviors in the model such as overfitting or non-identifiability? This step helps to answer the question of inferential adequacy.
-
-
-**Post-Model, Post-Data**
-
-_Fit Observed Data_
-
-After performing the prior predictive checks and being satisfied with the model, the next step is to fit the model to the observed data.
-
-
-_Diagnose Posterior Fit_
-
-Did the model fit well? Can a poorly performing algorithm be fixed by tweaking the algorithmic configuration, or is there a problem with the model itself where it is not rich enough to capture the structure of the observed data? Utilize the diagnostic tools available for the algorithm to check the computational faithfulness.
-
-
-_Posterior Retrodictive Checks_
-
-Do the posterior retrodictions match the observed data well, or are there still apparent discrepancies between what is expected and what is predicted by the model? It is important that any changes to the model going forward are motivated by domain expertise so as to mitigate the risk of overfitting.
-
-
-_Celebrate_
-
-After going through the tedious process of iteratively developing a model, it is okay to celebrate before moving on to answer the research questions.
-
-
-```{r ch030-workflow-diagram, fig.cap="Diagram is copywrited material of Michael Betancourt and used under the CC BY-NC 4.0 license. Image taken from https://betanalpha.github.io/", out.width="100%"}
-knitr::include_graphics("figures/workflow-diagram.png")
-```
-
-
-## Model Fitting {#model-fitting}
-
-
-We will be using the `Stan` PPL for model fitting throughout this paper. `Stan` allows for MCMC sampling of Bayesian models using a variant of Hamiltonian Monte Carlo call the No-U-Turn sampler (NUTS). NUTS is a much more complex algorithm that can be compared to a physics simulation. A massless "particle" is imparted with a random direction and some amount of kinetic energy in a probability field, and is stopped randomly. The stopping point is the new proposal sample. The No U-Turn part means that when the algorithm detects that the particle is turning around, it will stop so as not to return to the starting position. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that let us know when the sampler is having trouble efficiently exploring the posterior.
-
-
-The NUTS algorithm samples in two phases: a warm-up phase and a sampling phase. During the warm-up phase, the sampler is automatically tuning three internal parameters that can significantly affect the sampling efficiency. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle [@stanref]. The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called _leapfrog steps_ (see @leimkuhler2004simulating for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.
-
-
-## Model Checking {#model-checking}
-
-Below is the 8 Schools data [@gelman2013bayesian] which is a classical example for introducing Stan and testing the operating characteristics of a model. We use it in this section to illustrate the essential MCMC model checking tools.
+Below is the 8 Schools data [@gelman2013bayesian] which is a standard textbook example for introducing multilevel modeling. Here we use it to illustrate essential MCMC model checking tools.
 
 
 ```{r ch030-Digital Knife, echo=TRUE}
@@ -272,9 +285,7 @@ p_schools <- as.array(m_schools)
 ```
 
 
-**Trace Plots**
-
-Trace plots are the first line of defense against misbehaved samplers. They are visual aids that let the practitioner asses the qualitative health of the chains, looking for properties such as autocorrelation, heteroskedacity, non-stationarity, and convergence. Healthy chains are well-mixed and stationary. It's often better to run more chains during the model building process so that issues with mixing and convergence can be diagnosed sooner. Even one unhealthy chain can be indicative of a poorly specified model. The addition of more chains also contributes to the estimation of the split $\hat{R}$ statistic, which is discussed next. Figure \@ref(fig:ch030-Brave-Moose) shows what a set of healthy chains looks like.
+**Trace Plots.** Trace plots have been used since the conception of MCMC to assess chain sampling efficiency and quality. They are visual aids that let the practitioner asses the qualitative health of the chains, looking for properties such as autocorrelation, heteroskedacity, non-stationarity, and convergence. Healthy chains are well-mixed and stationary. It's often better to run more chains during the model building process so that issues with mixing and convergence can be diagnosed sooner. One unhealthy chain can be indicative of a poorly specified model. The addition of more chains also contributes to the estimation of the split $\hat{R}$ statistic (discussed below). Figure \@ref(fig:ch030-Brave-Moose) shows what a set of healthy chains looks like -- the chains are nearly indistinguishable, fluctuate around the same mean, and do not show any long periods of being in the same location.
 
 
 ```{r ch030-Brave-Moose, fig.cap="An example of healthy chains."}
@@ -282,23 +293,13 @@ mcmc_trace(p_schools, pars = c("mu", "tau"))
 ```
 
 
-There is a similar diagnostic plot called the rank histogram plot (or _trank_ plot for trace rank plot). @vehtari2020rank details the motivation for trank plots, but in short if the chains are all exploring the posterior efficiently, then the histograms will be similar and uniform. Figure \@ref(fig:ch030-Dog-Reborn) is from the same model as above but for the rank histogram.
+As the number of parameters in a model grows, it becomes exceedingly tedious to check the trace plots of all parameters, and so numerical summaries are helpful to flag potential issues within the model.
 
 
-```{r ch030-Dog-Reborn, fig.cap="A trank plot of healthy chains."}
-mcmc_rank_overlay(p_schools, pars = c("mu", "tau"), n_bins = 50)
-```
+**R-hat Statistic.** The most common summary statistic for chain health is the potential scale reduction factor [@gelman1992inference] that measures the ratio of between chain variance and within chain variance. When the two have converged, the ratio is one. We've shared examples of healthy chains which would also have healthy $\hat{R}$ values, but it's valuable to also share an example of a bad model. Below is the 8 Schools example [@gelman2013bayesian] which is a classical example for introducing Stan and testing the operating characteristics of a model.
 
 
-As the number of parameters in a model grows, it becomes exceedingly tedious to check the trace and trank plots of all parameters, and so numerical summaries are required to flag potential issues within the model.
-
-
-**R-hat**
-
-The most common summary statistic for chain health is the potential scale reduction factor [@gelman1992inference] that measures the ratio of between chain variance and within chain variance. When the two have converged, the ratio is one. I've already shared examples of healthy chains which would also have healthy $\hat{R}$ values, but it's valuable to also share an example of a bad model. Below is the 8 Schools example [@gelman2013bayesian] which is a classical example for introducing Stan and testing the operating characteristics of a model. 
-
-
-The initial starting parameters for this model are intentionally set to vary between $-10$ and $10$ (in contrast to the default range of $(-2, 2)$) and with only a few samples drawn in order to artificially drive up the split $\hat{R}$ statistic. The model is provided as supplementary code in the [appendix](#code).
+The initial starting parameters for this model are intentionally set to vary between $-10$ and $10$ -- in contrast to the default range of $(-2, 2)$ -- and with only a few samples drawn in order to artificially drive up the split $\hat{R}$ statistic. The model is provided as supplementary code in the [appendix](#code).
 
 
 ```{r ch030-Eager Galaxy, echo=TRUE}
@@ -307,7 +308,7 @@ fit_cp <- sampling(schools_cp, data = schools_dat, refresh = 0,
 ```
 
 
-Stan warns about many different issues with this model, but the R-hat is the one of interest. The largest is $1.71$ which is incredibly large.
+`Stan` warns about many different issues with this model, but the R-hat is the one of interest. The largest is $1.71$ which is incredibly large. Gelmen suggests using a threshold of $1.10$ to flag unhealthy chains.
 
 
 ```{r ch030-Rocky-Test}
@@ -316,7 +317,7 @@ mcmc_trace(p_cp, pars = c("mu", "tau"))
 ```
 
 
-These chains do not look good at all. The $\hat{R}$ values are listed in table \@ref(tab:ch030-Ninth-Finger).
+These chains do not look good at all -- they have not converged to a stationary distribution. . The $\hat{R}$ values are listed in table \@ref(tab:ch030-Ninth-Finger).
 
 
 ```{r ch030-Ninth-Finger}
@@ -329,7 +330,7 @@ rhat(fit_cp) %>% t %>% t %>%
 ```
 
 
-To calculate the (non split) $\hat{R}$, first calculate the between-chain variance, and then the average chain variance. For $M$ independent Markov chains, $\theta_m$, with $N$ samples each, the between-chain variance is
+To calculate the (non split) $\hat{R}$, first calculate the between-chain variance, and then the average chain variance. For $M$ independent Markov chains, $\{\theta_1, \ldots \theta_M\}$, with $N$ samples each, the between-chain variance is:
 
 
 \setstretch{1.0}
@@ -354,7 +355,7 @@ $$
 $$
 
 
-The within-chain variance, $W$, is the variance averaged over all the chains.
+The within-chain variance, $W$, is the variance averaged over all the chains:
 
 
 $$
@@ -370,7 +371,7 @@ s_{m}^2 = \frac{1}{N-1}\sum_{n=1}^{N}\left(\theta_{m}^{(n)} - \bar{\theta}_m\rig
 $$
 
 
-The variance estimator is a weighted mixture of the within-chain and cross-chain variation
+The weighted mixture of the within-chain and cross-chain variation is:
 
 
 $$
@@ -378,7 +379,7 @@ $$
 $$
 
 
-and finally
+and finally the $\hat{R}$ statistic is:
 
 
 $$
@@ -432,12 +433,10 @@ var_hat <- W * (N - 1) / N + B / N
 ```
 
 
-We've successfully replicated the calculation of the split $\hat{R}$. @vehtari2020rank propose an improved rank-normalized $\hat{R}$ for assessing the convergence of MCMC chains, and also suggest using a threshold of $1.01$ rather than the $1.10$ threshold originally suggested by Gelmen for the split $\hat{R}$.
+We've successfully replicated the calculation of the split $\hat{R}$. @vehtari2020rank propose an improved rank-normalized $\hat{R}$ for assessing the convergence of MCMC chains, and also suggest using a threshold of $1.01$.
 
 
-**Effective Sample Size**
-
-Samples from Markov Chains are typically autocorrelated, which can increase uncertainty of posterior estimates. The solution is generally to reparameterize the model to avoid steep log-posterior densities, and the benefit of reparameterization is conveyed by the ratio of effective sample size to actual sample size in figure \@ref(fig:ch030-Timely-Nitrogen). When the HMC algorithm is exploring difficult geometry, it can get stuck in regions of high densities, which means that there is more correlation between successive samples. 
+**Effective Sample Size.** Samples from Markov Chains are typically autocorrelated, which can increase uncertainty of posterior estimates. The solution is generally to reparameterize the model to avoid steep log-posterior densities, and the benefit of reparameterization is conveyed by the ratio of effective sample size to actual sample size in figure \@ref(fig:ch030-Timely-Nitrogen). When the HMC algorithm is exploring difficult geometry, it can get stuck in regions of high densities, which means that there is more correlation between successive samples.
 
 
 ```{r ch030-Third Tuna}
@@ -459,6 +458,26 @@ p_cp / p_ncp
 ```
 
 
+\begin{equation*}
+  \begin{split}
+    \sigma &\sim \mathcal{U}(0, \infty) \\
+    \mu &\sim \mathcal{N}(0, 10) \\
+    \tau &\sim \mathrm{HalfCauchy}(0, 10) \\
+    \theta &\sim \mathcal{N}(\mu, \tau) \\
+    y &\sim \mathcal{N}(\theta, \sigma)
+  \end{split}
+\qquad
+  \begin{split}
+    \sigma &\sim \mathcal{U}(0, \infty) \\
+    \mu &\sim \mathcal{N}(0, 10) \\
+    \tau &\sim \mathrm{HalfCauchy}(0, 10) \\
+    \eta &\sim \mathcal{N}(0, 1) \\
+    \theta &= \mu + \tau \cdot \eta \\
+    y &\sim \mathcal{N}(\theta, \sigma)
+  \end{split}
+\end{equation*}
+
+
 As the strength of autocorrelation generally decreases at larger lags, a simple prescription to decrease autocorrelation between samples and increase the effective sample size is to use thinning. Thinning means saving every $k^{th}$ sample and throwing the rest away. If one desired to have 2000 posterior draws, it could be done in two of many possible ways
 
 
@@ -469,9 +488,7 @@ As the strength of autocorrelation generally decreases at larger lags, a simple 
 Both will produce 2000 samples, but the method using thinning will have less autocorrelation and a higher effective number of samples. Though it should be noted that generating 10,000 draws and saving all of them will have a higher number of effective samples than the second method with thinning, so thinning should only be favored to save memory.
 
 
-**Divergent Transitions**
-
-Unlike the previous tools for algorithmic faithfulness which can be used for any MCMC sampler, information about divergent transitions is intrinsic to Hamiltonian Monte Carlo. Recall that the HMC and NUTS algorithm can be imagined as a physics simulation of a particle in a potential energy field, and a random momentum is imparted on the particle. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle [@stanref]. The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called leapfrog steps (see @leimkuhler2004simulating for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.
+**Divergent Transitions.** Unlike the previous tools for algorithmic faithfulness which can be used for any MCMC sampler, information about divergent transitions is intrinsic to Hamiltonian Monte Carlo. Recall that the HMC and NUTS algorithm can be imagined as a physics simulation of a particle in a potential energy field, and a random momentum is imparted on the particle. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle [@stanref]. The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called leapfrog steps (see @leimkuhler2004simulating for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.
 
 
 A few divergent transitions is not indicative of a poorly performing model, and often divergent transitions can be mitigated by reducing the step size and increasing the adapt delta parameter. On the other hand, a bad model may never be improved just by tweaking some parameters. This is the folk theorem of statistical computing - if there is a problem with the sampling, blame the model, not the algorithm.
@@ -490,7 +507,7 @@ mcmc_pairs(post_cp, np = n_cp, pars = c("mu", "tau"))
 From figure \@ref(fig:ch030-Hot-Locomotive) we can see that most of the divergent transitions occur when the variance term $\tau$ is close to zero. This is common for multilevel models, and illustrates why non-centered parameterization is so important. We discuss centered and non-centered parameterization in the next chapter.
 
 
-## Predictive Performance
+## Estimating predictive performance
 
 
 All models are wrong, but some are useful. This quote is from George Box, and it is a popular quote that statisticians like to throw around. All models are wrong because it is nearly impossible to account for the minutiae of every process that contributes to an observed phenomenon, and often trying to results in poorer performing models. Also it is never truly possible to prove that a model is correct. At best the scientific method can falsify certain hypotheses, but it cannot ever determine if a model is universally correct. That does not matter. What does matter is if the model is useful and can make accurate predictions.
@@ -501,10 +518,11 @@ Why is predictive performance so important? Consider five points of data (figure
 
 ```{r ch030-Moving-Moose, fig.cap="Five points from a polynomial model."}
 set.seed(11)
+i <- 2
 x0 <- 0:5
 y0 <- -0.5*(x0 - 2)^2 + 2 + rnorm(length(x0), 0, 1)
-x <- head(x0, 5)
-y <- head(y0, 5)
+x <- x0[-i]
+y <- y0[-i]
 p <- ggplot(data.frame(x=x, y=y), aes(x, y)) + 
   geom_point(size = 4) +
   theme_minimal()
@@ -551,12 +569,12 @@ If a $6^{th}$ point were to be added -- a new observation -- which of the models
 
 ```{r ch030-Cold-Fish, fig.cap="The fitted polynomial models with a new observation."}
 p2 + 
-  geom_point(data = data.frame(x = tail(x0, 1), y = tail(y0, 1)),
+  geom_point(data = data.frame(x = x0[i], y = y0[i]),
              shape = 17, size = 4)
 ```
 
 
-Figure \@ref(fig:ch030-Strawberry-Swallow) shows the 80% and 95% prediction intervals for a new observation given $x = 5$ as well as the true outcome as a dashed line at $y = `r round(tail(y0, 1), 3)`$. The linear model has the smallest prediction interval (PI), but completely misses the target. The remaining three models all include the observed value in their 95% PIs, but the quadratic model has the smallest PI of the three. The actual data generating polynomial is
+Figure \@ref(fig:ch030-Strawberry-Swallow) shows the 80% and 95% prediction intervals for a new observation given $x = `r x0[i]`$ as well as the true outcome as a dashed line at $y = `r round(y0[i], 3)`$. The linear model has the smallest prediction interval (PI), but completely misses the target. The remaining three models all include the observed value in their 95% PIs, but the quadratic model has the smallest PI of the three. The actual data generating polynomial is
 
 
 \begin{align*}
@@ -608,8 +626,8 @@ m4 <- xfun::cache_rds({
 
 
 ```{r ch030-Strawberry-Swallow, fig.cap="95\\% Prediction intervals for the four polynomial models, as well as the true value (dashed line)."}
-new_y <- tail(y0, 1)
-new_x <- tail(x0, 1)
+new_y <- y0[i]
+new_x <- x0[i]
 new_dat <- data.frame(x  = new_x,
                       x2 = new_x^2,
                       x3 = new_x^3,
@@ -633,25 +651,22 @@ bind_rows(
                size = 2, inherit.aes = FALSE) +
   geom_hline(yintercept = new_y, linetype = "dashed") +
   labs(y = "Prediction Interval", x = "Model",
-       title = "Predicting a new Observation when x = 5",
+       title = paste("Predicting a new Observation when x =", new_x),
        subtitle = "80% and 95% Prediction Intervals") +
   theme_minimal()
 ```
 
 
-This is just a toy example, and real-world real-data models are often more complex, but they do present the same headaches when it comes to model/feature selection and goodness of fit checks. Clearly the quartic model has the best fit to the data, but it is too variable and doesn't capture the regular features of the data, so it does poorly for the out-of-sample prediction. The linear model suffers as well by being less biased and too inflexible to capture the structure of the data. The quadratic and cubic are in the middle of the road, but the quadratic does well and makes fewer assumptions about the data. In other words, the quadratic model is just complex enough to predict well while making fewer assumptions. Information criteria is a way of weighing the prediction quality of a model against its complexity, and is arguably a better system for model selection/comparison than other goodness of fit statistics such as $R^2$ or p-values.
+The best fit to the observed data is the quartic model, but it is too variable and doesn't capture the regular features of the data, so it does poorly for the out-of-sample prediction. The linear model suffers as well by being less biased and too inflexible to capture the structure of the data. The quadratic and cubic are in the middle, but the quadratic does well and makes fewer assumptions about the data. The quadratic model is just complex enough to predict well while making fewer assumptions. Information criteria is a way of weighing the prediction quality of a model against its complexity, and is arguably a better system for model selection/comparison than other goodness-of-fit statistics such as $R^2$ or p-values.
 
 
 We don't always have the observed data to compare predictions against (nor the data generating model). Some techniques to compensate for this limitation include cross validation, where the data is split into training data and testing data. The model is fit to the training data, and then predictions are made with the testing data and compared to the observed values. This can often give a good estimate for out-of-sample prediction error. Cross validation can be extended into k-fold cross validation. The idea is to _fold_ the data into $k$ disjoint partitions, and predict partition $i$ using the rest of the data to train on. The prediction error of the $k$-folds can then be averaged over to get an estimate for out-of-sample prediction error.
 
 
-Taking $k$-fold CV to the limit by letting $k$ equal the number of observations results in something called leave one out cross validation (LOOCV), where for each observation in the data, the model is fit to the remaining data and predicted for the left out observation. The downside of $k$-fold cross validation is that it requires fitting the model $k$ times, which can be computationally expensive for complex Bayesian models. Thankfully there is a way to approximate LOOCV without having to refit the model many times.
+Taking $k$-fold CV to the limit by letting $k$ equal the number of observations results in leave-one-out cross validation (LOOCV), where for each observation in the data, the model is fit to the remaining data and predicted for the left out observation. $k$-fold cross validation requires fitting the model $k$ times, which can be computationally expensive for complex Bayesian models. Thankfully there is a way to approximate LOOCV without having to refit the model many times.
 
 
-**Importance Sampling**
-
-
-LOOCV and many other evaluation tools such as the widely applicable information criterion (WAIC) rest on the log-pointwise-predictive-density (lppd), which is a loose measure of deviance from some "true" probability distribution. Typically we don't have the analytic form of the predictive posterior density, so instead we use $S$ MCMC draws to approximate the lppd [@vehtari2017practical]:
+**Estimating cross validation error via Pareto-Smoothed-Importance Sampling**. LOOCV and many other evaluation tools such as the widely applicable information criterion (WAIC) rest on the log-pointwise-predictive-density (lppd), which measures deviance from some "true" probability distribution. Typically we don't have the analytic form of the predictive posterior density, so instead we use $S$ MCMC draws to approximate the lppd [@vehtari2017practical]:
 
 
 \begin{equation}
@@ -660,7 +675,7 @@ LOOCV and many other evaluation tools such as the widely applicable information 
 \end{equation}
 
 
-To estimate LOOCV, the relative "importance" of each observation must be computed. Certain observations have more influence on the posterior distribution, and so have more impact on the posterior if they are removed. The intuition behind measuring importance is that more influential observations are relatively less likely than less important observations that are relatively expected. Then by omitting a sample, the relative importance weight can be measured by the lppd. This omitted calculation is known as the out-of-sample lppd. For each omitted $y_i$,
+To estimate LOOCV, the relative "importance" of each observation must be computed. Certain observations have more influence on the posterior distribution, and so have more impact on the posterior if they are removed. By omitting a sample, the relative importance weight can be measured by the lppd. This omitted calculation is known as the out-of-sample lppd. For each omitted $y_i$,
 
 
 $$
@@ -698,15 +713,16 @@ where $\mu$ is the location, $\sigma$ is the scale, and $k$ is the shape. Then t
 There is an `R` package called `loo` that can compute the expected log-pointwise-posterior-density (ELPD) using PSIS-LOO, as well as the estimated number of effective parameters and LOO information criterion [@R-loo]. For the part of the researcher, the log-likelihood of the observations must be computed. This can be calculated in the _generated quantities_ block of a `Stan` program, and it is standard practice to name the log-likelihood as `log_lik` in the model. An example of calculating the log-likelihood for the eight schools data in `Stan` is:
 
 
+\setstretch{1.0}
 ```
 generated quantities {
   vector[J] log_lik;
-
   for (j in 1:J) {
     log_lik[j] = normal_lpdf(y[j] | theta[j], sigma[j]);
   }
 }
 ```
+\setstretch{2.0}
 
 
 Models can be compared simply using `loo::loo_compare`. It estimates the ELPD and its standard error, then calculates the relative differences between all the models. The model with the highest ELPD is predicted to have the best out-of-sample predictions. The comparison of four polynomial models from the earlier example is shown below.
@@ -741,6 +757,137 @@ comp %>%
 ```
 
 
-This comparison is unreliable since there are only five data points to estimate the predictive performance. This assertion is backed by the difference in ELPD and the standard error of the differences -- the standard error is as large or larger than the difference. The column labeled `p_loo` is the effective number of parameters in the model. Notice how the effective number of parameters nearly matches their respective models.
+This comparison is unreliable since there are only five data points to estimate the predictive performance. This assertion is backed by the difference in ELPD and the standard error of the differences -- the standard error is as large or larger than the difference.
 
 
+## A modern principled bayesian modeling workflow
+
+
+A principled workflow is a method of employing domain expertise and statistical knowledge to iteratively build a statistical model that satisfies the constraints and goals set forth by the researcher. Many other workflow and model checking techniques are given without context for when they are appropriate, and according to @betancourt2020, this leaves "practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics." For any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather, consideration must be given to domain expertise and the questions that one is trying to answer with the statistical model.
+
+
+Because everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in how consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by, summarized in table \@ref(tab:ch030-Confidential-Proton).
+
+
+```{r ch030-Confidential-Proton}
+data.frame(
+  Evaluation = c(
+    "1. Domain Expertise Consistency",
+    "2. Computational Faithfulness",
+    "3. Inferential Adequacy",
+    "4. Model Adequacy"
+  ),
+  Question = c(
+    "Is our model consistent with our domain expertise?",
+    "Will our computational tools be sufficient to accurately fit our posteriors?",
+    "Will our inferences provide enough information to answer our questions?",
+    "Is our model rich enough to capture the relevant structure of the true data generating process?"
+  )
+) %>%
+  kable(booktabs=TRUE, caption = "Questions for model evaluation.") %>%
+  kable_styling(latex_options = c("hold_position", "striped")) %>%
+  column_spec(1, width = "1.75in") %>%
+  column_spec(2, width = "3.25in")
+```
+
+
+Much work is done before seeing the data or building a model. This includes talking with experts to gain domain knowledge or to elicit priors. A benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the posterior distribution. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints.
+
+
+In this section we describe a simulation-based, principled workflow proposed by @betancourt2020 and broadly adopted by many members of the Bayesian community. The workflow broadly consists of specifying the likelihood and priors, performing prior predictive checks, fitting a model, and performing posterior predictive checks. The steps of the workflow are divided into three phases: 1) pre-model, pre-data, 2) post-model, pre-data, and 3) post-model, post-data. Tables \@ref(tab:ch030-Reborn-Space), \@ref(tab:ch030-Freaky-Sledgehammer), and \@ref(tab:ch030-Bleeding-Liquid-Dagger) list the steps of each phase.
+
+<!-- Table \@ref(tab:ch030-workflow-steps) lists the detailed steps broken up into three phases.
+
+```{r ch030-workflow-steps}
+bind_rows(
+  data.frame(Phase = "Pre-Model, Pre-Data",
+             Step = c("conceptual analysis", 
+                      "define observational space",
+                      "construct summary statistics")),
+  data.frame(Phase = "Post-Model, Pre-Data",
+             Step = c("develop model",
+                      "construct summary functions",
+                      "simulate Bayesian ensemble",
+                      "prior checks",
+                      "configure algorithm",
+                      "fit simulated ensemble",
+                      "algorithmic calibration",
+                      "inferential calibration")),
+  data.frame(Phase = "Post-Model, Post-Data",
+             Step = c("fit observed data",
+                      "diagnose posterior fit",
+                      "posterior retrodictive checks",
+                      "celebrate"))
+) %>%
+  kable(digits = 2, 
+        caption = "Principled workflow", booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position")) %>%
+  collapse_rows(columns = 1, valign = "top")
+```
+-->
+
+
+```{r ch030-Reborn-Space}
+data.frame(Step = c("Conceptual Analysis", 
+                    "Define Observational Space",
+                    "Construct Summary Statistics"),
+           Description = c("Write down the inferential goals and consider how the variables of interest interact with the environment and how those interactions work to generate observations.",
+                           "What are the possible values that the observed data can take on? The observational space can help inform the statistical model such as in count data.",
+                           "What measurements and estimates can be used to help ensure that the inferential goals are met? Prior predictive checks and posterior retrodictive checks are founded on summary statistics that answer the questions of domain expertise consistency and model adequacy.")) %>%
+  kable(booktabs=TRUE, caption="Pre-Model, Pre-Data steps.") %>%
+  kable_styling(latex_options = c("hold_position", "striped")) %>%
+  column_spec(1, width = "1.75in") %>%
+  column_spec(2, width = "3.25in")
+```
+
+
+```{r ch030-Freaky-Sledgehammer}
+data.frame(Step = c("Develop Model",
+                    "Construct Summary Functions",
+                    "Simulate Bayesian Ensemble",
+                    "Prior Checks",
+                    "Configure Algorithm",
+                    "Fit Simulated Ensemble",
+                    "Algorithmic Calibration",
+                    "Inferential Calibration"),
+           Description = c(
+             "Build an observational model that is consistent with the conceptual analysis and observational space, and then specify the complementary prior model.",
+             "Use the developed model to construct explicit summary functions that can be used in prior predictive checks and posterior retrodictive checks.",
+             "Since the model is a data generating model, it can be used to simulate observations from the prior predictive distribution without yet having seen any data.",
+             "Check that the prior predictive distribution is consistent with domain expertise using the summary functions developed in the previous step.",
+             "Having simulated data, the next step is to fit the data generating model to the generated data. There are many different MCMC samplers with their own configurable parameters, so here is where those settings are tweaked.",
+             "Fit the simulated data to the model using the algorithm configured in the previous step.",
+             "How well did the algorithm do in fitting the simulated data? This step helps to answer the question regarding computational faithfulness. A model may be well specified, but if the algorithm used is unreliable then the posterior distribution is also unreliable, and this can lead to poor inferences. Methods for checking models is discussed in (#model-checking).",
+             "Are there any pathological behaviors in the model such as overfitting or non-identifiability? This step helps to answer the question of inferential adequacy."
+             )) %>%
+  kable(booktabs=TRUE, caption="Post-Model, Pre-Data steps.") %>%
+  kable_styling(latex_options = c("hold_position", "striped")) %>%
+  column_spec(1, width = "1.75in") %>%
+  column_spec(2, width = "3.25in")
+```
+
+
+```{r ch030-Bleeding-Liquid-Dagger}
+data.frame(Step = c("Fit Observed Data",
+                    "Diagnose Posterior Fit",
+                    "Posterior Retrodictive Checks",
+                    "Celebrate"),
+           Description = c(
+             "After performing the prior predictive checks and being satisfied with the model, the next step is to fit the model to the observed data.",
+             "Did the model fit well? Can a poorly performing algorithm be fixed by tweaking the algorithmic configuration, or is there a problem with the model itself where it is not rich enough to capture the structure of the observed data? Utilize the diagnostic tools available for the algorithm to check the computational faithfulness.",
+             "Do the posterior retrodictions match the observed data well, or are there still apparent discrepancies between what is expected and what is predicted by the model? It is important that any changes to the model going forward are motivated by domain expertise so as to mitigate the risk of overfitting.",
+             "After going through the tedious process of iteratively developing a model, it is okay to celebrate before moving on to answer the research questions."
+           )) %>%
+  kable(booktabs=TRUE, caption="Post-Model, Post-Data steps.") %>%
+  kable_styling(latex_options = c("hold_position", "striped")) %>%
+  column_spec(1, width = "1.75in") %>%
+  column_spec(2, width = "3.25in")
+```
+
+
+These steps are not meant to be followed in a strictly linear fashion. If a conceptual misunderstanding is discovered at any step in the process, then it is recommended to go back to an earlier step and start over. The workflow is a process of model expansion, and multiple iterations are required to get to a final model (or collection of models). Similarly if the model fails prior predictive checks, then one may need to return to the model development step. A full diagram of the workflow is displayed in figure \@ref(fig:ch030-workflow-diagram).
+
+
+```{r ch030-workflow-diagram, fig.cap="Diagram is copywrited material of Michael Betancourt and used under the CC BY-NC 4.0 license. Image created with Lucid app.", out.width="100%"}
+knitr::include_graphics("figures/workflow-diagram.png")
+```

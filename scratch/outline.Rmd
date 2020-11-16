@@ -10,36 +10,40 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 - Introduction
-  - Current methods
-  - Proposal of new methods
+  - Conventional (classical) methods
+  - Bayesian statistics
+  - MCMC enables modern Bayesian models
   - Organization
-- Data Background
-  - Psychometric Experiments
-  - Temporal Order Judgment Data
-  - Data Visualizations and Quirks
 - Methods Background
-  - Model Development (example data)
-  - Model Fitting
-  - Model Checking
-  - LOO
+  - Fitting PFs using GLMs
+  - Bayesian multilevel modeling
+  - Hamiltonian Monte Carlo and NUTS
+  - Model checking
+  - Predictive performance
+  - Modeling workflow
+- Data Background
+  - Psychometric experiments
+  - Temporal order judgment data
+  - Data visualizations and quirks
 - Workflow
+  - Modeling psychometric quantities
   - Iteration 1 (base model)
   - Iteration 2 (add age/block)
   - Iteration 3 (add age/block interaction)
   - Iteration 4 (add lapse rate)
   - Iteration 5 (add subject level)
 - Results
-  - Perceptual Synchrony
-  - Temporal Sensitivity
-  - Lapse Rates
-- Discussion
+  - Perceptual synchrony
+  - Temporal sensitivity
+  - Lapse rates
+  - Subject level predictions
+- Discussion/Conclusion
   - TOJ Experimental Design
-  - More theoretical consequences of the results
   - Model comparison vs. selection
-  - Developing a model
-  - Data cleaning and reproducibility
-- Conclusion
   - Rehash of results
   - Point out my direct contributions
   - Future work
   - Final word
+- Appendix
+  - Developing a model
+  - Data cleaning and reproducibility
