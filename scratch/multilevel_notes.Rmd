@@ -1,0 +1,10 @@
+---
+title: "multilevel stuff"
+output: html_document
+---
+
+
+Multilevel modeling provides a way to quantify and apportion the variation within the data to each level in the model. 
+
+For an in-depth introduction to multilevel modeling, see @gelman2006data.
+

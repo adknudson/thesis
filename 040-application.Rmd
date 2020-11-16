@@ -58,13 +58,13 @@ stan_summary <- function(object, ...) {
 <!-- insert 1st paragraph transitioning to ch. 4 . suggested start-->
 
 
-Now we apply the workflow to our data set, seeking to build a model that satisfies the four criteria in [chapter 3](#methods). During model refinement, we'll pick up on the _regular_ features while assessing the "statistical significance" of covariates through predictive comparison. In our final model, we'll model well-known data quality issues (from participant _lapses_ in judgment) and show this improves model prediction.
+Now we apply the workflow to our data set, seeking to build a model that satisfies the four criteria in [chapter 2](#methods). During model refinement, we'll pick up on the _regular_ features while assessing the "statistical significance" of covariates through predictive comparison. In our final model, we'll model well-known data quality issues (from participant _lapses_ in judgment) and show this improves model prediction.
 
 
 <!-- connect this to the background -->
 
 
-As we iterate through our model development workflow, we have a preference for multilevel models.(for the reasons discussed in [chapter 3](#methods)). Hierarchical models are a specific kind of multilevel model where one or more groups are nested within a larger one. In the case of the psychometric data, there are three age groups, and within each age group are individual subjects. Multilevel modeling provides a way to quantify and apportion the variation within the data to each level in the model. For an in-depth introduction to multilevel modeling, see @gelman2006data.
+As we iterate through our model development workflow, we have a preference for multilevel models.(for the reasons discussed in [chapter 2](#methods)). Hierarchical models are a specific kind of multilevel model where one or more groups are nested within a larger one. In the case of the psychometric data, there are three age groups, and within each age group are individual subjects.
 
 
 ## Modeling psychometric quantities {#psych-quant}
@@ -206,7 +206,7 @@ $$pss = \alpha$$
 This is a fortunate consequence of using \@ref(eq:linearform2) because now the JND only depends on $\beta$ and the PSS only depends on $\alpha$. Additionally $\alpha$ can be interpreted as the PSS of the estimated psychometric function. Also thrown in is the ability to set a prior for $\alpha$ that is symmetric around $0$ such as a Gaussian distribution.
 
 
-This also highlights the benefit of using a modeling language like `Stan` over others. For fitting GLMs in `R`, there are a handful of functions that utilize MLE like `stats::glm` and others that use Bayesian methods like `rstanarm::stan_glm` and `arm::bayesglm` [@R-rstanarm; @R-arm]. Each of these functions requires the linear predictor to be in the form of \@ref(eq:linearform1). The `stan_glm` function uses Stan in the back-end to fit a model, but is limited to priors from the Student-t family of distributions. By writing the model directly in `Stan`, the linear model can be parameterized in any way and with any prior distribution, and so allows for much more expressive modeling.
+This also highlights the benefit of using a modeling language like `Stan` over others. For fitting GLMs in `R`, one can use `stats::glm` which utilizes MLE, or others such as `rstanarm::stan_glm` and `arm::bayesglm` that use Bayesian methods [@R-rstanarm; @R-arm]. Each of these functions requires the linear predictor to be in the form of \@ref(eq:linearform1). The `stan_glm` function uses Stan in the back-end to fit a model, but is limited to priors from the Student-t family of distributions. By writing the model directly in `Stan`, the linear model can be parameterized in any way and with any prior distribution, and so allows for much more expressive modeling.
 
 
 ## Iteration 1: base model {#iter1}
@@ -217,13 +217,14 @@ This also highlights the benefit of using a modeling language like `Stan` over o
 
 _Conceptual Analysis_
 
-In section \@ref(toj-task) we discussed the experimental setup and data collection. To reiterate, subjects are presented with two stimuli separated by some temporal delay, and they are asked to respond as to their perception of the temporal order. There are 45 subjects with 15 each in the young, middle, and older age groups. As the SOA becomes larger in the positive direction, subjects are expected to give more "positive" responses, and as the SOA becomes larger in the negative direction, more "negative" responses are expected. By the way the experiment and responses are constructed, there is no expectation to see a reversal of this trend unless there was an issue with the subject's understanding of the directions given to them or an error in the recording device.
+In section \@ref(toj-task) we discussed the experimental setup and data collection. Subjects are presented with two stimuli separated by some temporal delay, and they are asked to respond as to their perception of the temporal order. There are 45 subjects with 15 each in the young, middle, and older age groups. As the SOA becomes larger in the positive direction, subjects are expected to give more "positive" responses, and as the SOA becomes larger in the negative direction, more "negative" responses are expected. By the way the experiment and responses are constructed, there is no expectation to see a reversal of this trend unless there was an issue with the subject's understanding of the directions given to them or an error in the recording process.
 
 
-After the first experimental block the subjects go through a temporal recalibration period, and repeat the experiment again. The interest is in seeing if the recalibration has an effect on temporal sensitivity and perceptual synchrony, and if the effect is different for each age group.
+After the first experimental block the subjects go through a temporal recalibration period, and repeat the experiment. The interest is in seeing if the recalibration has an effect on temporal sensitivity and perceptual synchrony, and if the effect is different for each age group.
 
 
 _Define Observational Space_
+
 
 The response that subjects give during a TOJ task is recorded as a zero or a one, and their relative performance is determined by the SOA value. Let $y$ represent the binary outcome of a trial and let $x$ be the SOA value.
 
@@ -234,47 +235,43 @@ x_i &\in \mathbb{R}
 \end{align*}
 
 
-If the SOA values are fixed like in the audiovisual task, then the responses can be aggregated into binomial counts, $k$.
+If the SOA values are fixed as in the audiovisual task, then the responses can be aggregated into Binomial counts, $k$.
 
 
 $$k_i, n_i \in \mathbb{Z}_0^+, k_i \le n_i$$
 
 
-In the above expression, $\mathbb{Z}_0^+$ represents the set of non-negative integers. Notice that the number of trials $n$ has an index variable $i$. This is because the number of trials per SOA is not fixed between blocks. In the pre-adaptation block, there are five trials per SOA compared to three in the post-adaptation block. So if observation 32 is recorded during a "pre" block, $n_{32} = 5$, and if observation 1156 is during a "post" block, $n_{1156} = 3$. Of course this is assuming that each subject completed all trials in the block, but the flexibility of the indexing can manage even if they didn't.
+In the above expression, $\mathbb{Z}_0^+$ represents the set of non-negative integers. Notice that the number of trials $n$ has an index variable $i$. This is because the number of trials per SOA is not fixed between blocks. In the pre-adaptation block, there are five trials per SOA compared to three in the post-adaptation block. So if observation $32$ is recorded during a "pre" block, $n_{32} = 5$, and if observation $1156$ is during a "post" block, $n_{1156} = 3$.
 
 
-Then there are also three categorical variables: age group, subject ID, and trial (block). The first two are treated as factor variables (also known as index variable or categorical variable). Rather than using one-hot encoding or dummy variables, the age levels are left as categories and a coefficient is fit for each level. Among the benefits of this approach is the ease of interpretation and ease of working with the data programmatically. This is especially true at the subject level. If dummy variables were used for all 45 subjects, there would be 44 different dummy variables to work with times the number of coefficients that make estimates at the subject level. The number of parameters in the model grows rapidly as the model complexity grows.
+Then there are three categorical variables: age group, subject ID, and trial (block). The first two are treated as factor variables (also known as index variable or categorical variable). Rather than using one-hot encoding or dummy variables, the age levels are left as categories, and a coefficient is fit for each level. If dummy variables were used for all 45 subjects, there would be 44 dummy variables to work with times the number of coefficients that make estimates at the subject level. The number of parameters in the model grows rapidly as the model complexity grows.
 
 
-Age groups and individual subjects can be indexed in the same way that number of trials is indexed. $S_i$ refers to the subject in record $i$, and similarly $G_i$ refers to the age group of that subject. Observation 63 is for record ID `r FangPsychometric::audiovisual_binomial$rid[63]`, so then $S_{63}$ is `r FangPsychometric::audiovisual_binomial$sid[63]` and $G_{63}$ is `r FangPsychometric::audiovisual_binomial$age_group[63]`. Under the hood of `R`, these factor levels are represented as integers (e.g. middle age group level is stored internally as the number 2).
+Age groups and individual subjects can be indexed in the same way that the number of trials is indexed. $S_i$ refers to the subject in record $i$, and similarly $G_i$ refers to the age group of that subject. Observation $63$ is for record ID `r FangPsychometric::audiovisual_binomial$rid[63]`, so then $S_{63}$ is `r FangPsychometric::audiovisual_binomial$sid[63]` and $G_{63}$ is `r FangPsychometric::audiovisual_binomial$age_group[63]`. Under the hood of `R`, these factor levels are represented as integers (e.g. middle age group level is stored internally as the number 2).
 
 
+\setstretch{1.0}
 ```{r ch041-Olive Longitude, echo=TRUE}
 (x <- factor(c("a", "a", "b", "c")))
 storage.mode(x)
 ```
+\setstretch{2.0}
 
 
 This data storage representation can later be exploited for the `Stan` model.
 
 
-The pre- and post-adaptation categories are treated as a binary indicator referred to as $trt$ (short for treatment) since there are only two levels in the category. In this setup, a value of 1 indicates a post-adaptation block. This encoding is chosen over the reverse because the pre-adaptation block is like the baseline performance, and it is more appropriate to interpret the post-adaptation block as turning on some effect. Using a binary indicator in a regression setting may not be the best practice as we discuss in section \@ref(iter2).
+The pre- and post-adaptation categories are treated as a binary indicator referred to as $trt$ (short for treatment) since there are only two levels in the category. In this setup, a value of $1$ indicates a post-adaptation block. This encoding is chosen over the reverse because the pre-adaptation block is like the baseline performance, and it is more appropriate to interpret the post-adaptation block as turning on some effect. Using a binary indicator in a regression setting may not be the best practice as we discuss in section \@ref(iter2).
 
-
-<!-- revise the following section by cutting half the words and combining paragraphs. -->
 
 _Construct Summary Statistics_
 
-In order to effectively challenge the validity of the model, a set of summary statistics are constructed that help answer the questions of domain expertise consistency and model adequacy. We are studying the affects of age and temporal recalibration through the PSS and JND (see section \@ref(psycho-experiments)), so it is natural to define summary statistics around these quantities to verify model consistency. Additionally the PSS and JND can be computed regardless of the model parameterization or chosen psychometric function.
+A set of summary statistics are constructed that help answer the questions of domain expertise consistency and model adequacy. We are studying the affects of age and temporal recalibration through the PSS and JND (see section \@ref(psycho-experiments)), so it is natural to define summary statistics around these quantities to verify model consistency. 
+
+It is impossible that a properly conducted block would result in a JND less than 0 (the psychometric function is always non-decreasing), so that can be a lower limit for its threshold. It is also unlikely that the just noticeable difference would be more than a second. Some studies show that we cannot perceive time differences below 30 ms, and others show that an input lag as small as 100ms can impair a person's typing ability. A time delay of 100ms is enough to notice, and so a just noticeable difference should be much less than one second -- much closer to 100ms. We will continue to use one second as an extreme estimate indicator, but will incorporate this knowledge when it comes to selecting priors.
 
 
-By the experimental setup and recording process, it is impossible that a properly conducted block would result in a JND less than 0 (i.e. the psychometric function is always non-decreasing), so that can be a lower limit for its threshold. On the other end it is unlikely that it will be beyond the limits of the SOA values, but even more concretely it seems unlikely (though not impossible) that the just noticeable difference would be more than a second.
-
-
-The lower bound on the JND can be further refined if we draw information from other sources. Some studies show that we cannot perceive time differences below 30 ms, and others show that an input lag as small as 100ms can impair a person's typing ability. Then according to these studies, a time delay of 100ms is enough to notice, and so a just noticeable difference should be much less than one second -- much closer to 100ms. We will continue to use one second as an extreme estimate indicator, but will incorporate this knowledge when it comes to selecting priors.
-
-
-As for the point of subjective simultaneity, it can be either positive or negative, with the belief that larger values are more rare. Some studies suggest that for audio-visual temporal order judgment tasks, the separation between stimuli need to be as little as 20ms for subjects to be able to determine which modality came first [@vatakis2007influence]. Other studies suggest that our brains can detect temporal differences as small as 30ms. If these values are to be believed then we should be skeptical of PSS estimates larger than say 150ms in absolute value, just to be safe.
+The point of subjective simultaneity can be either positive or negative, with the belief that larger values are less likely. Some studies suggest that for audio-visual temporal order judgment tasks, the separation between stimuli need to be as little as 20ms for subjects to be able to determine which modality came first [@vatakis2007influence]. Other studies suggest that our brains can detect temporal differences as small as 30ms. If these values are to be believed then we should be skeptical of PSS estimates larger than say 150ms in absolute value, just to be safe.
 
 
 A histogram of computed PSS and JND values will suffice for summary statistics. We can estimate the proportion of values that fall outside of our limits defined above, and use them as indications of problems with the model fitting or conceptual understanding.
@@ -286,32 +283,38 @@ A histogram of computed PSS and JND values will suffice for summary statistics. 
 _Develop Model_
 
 
-For the first iteration of this model, we begin with the simplest model that captures the structure of the data without including information about age group, treatment, or subject. Here is a simple model that draws information from the conceptual analysis. 
+We begin with the simplest model that captures the structure of the data without including information about age group, treatment, or subject. Here is a simple model that draws information from the conceptual analysis:
 
 
+\setstretch{1.0}
 \begin{align*}
   k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
   \mathrm{logit}(p_i) &= \beta ( x_i - \alpha )
 \end{align*}
+\setstretch{2.0}
 
 
-Since we are using the linear model from \@ref(eq:linearform2), setting the priors for $\alpha$ and $\beta$ is straightforward. The PSS can be positive or negative without any expected bias towards either, so a symmetric distribution such as the Gaussian is a fine choice for $\alpha$ without having any other knowledge about the distribution of PSS values. We determined earlier that a PSS value more than 150ms in absolute value is unlikely, so we can define a Gaussian prior such that $P(|pss| > 0.150) \approx 0.01$. Since the prior does not need to be exact, the following mean and variance suffice:
+Recall that we are using the linear model from \@ref(eq:linearform2). The PSS can be positive or negative without any expected bias towards either, so a symmetric distribution such as the Gaussian is a reasonable choice for $\alpha$. We determined earlier that a PSS value more than 150ms in absolute value is unlikely, so we can define a Gaussian prior such that $P(|pss| > 0.150) \approx 0.01$. Since the prior does not need to be exact, the following mean and variance suffice:
 
 
+\setstretch{1.0}
 $$
 pss \sim \mathcal{N}(0, 0.06^2) \Longleftrightarrow \alpha \sim \mathcal{N}(0, 0.06^2)
 $$
+\setstretch{2.0}
 
 
-For the just noticeable difference, we continue to use the log-normal distribution because it is constrained to positive values and has the reciprocal property. The JND is expected to be close to 100ms and unlikely to exceed 1 second. This implies a prior such that the mean is around 100ms and the bulk of the distribution is below 1 second. I.e. $E[X] \approx 0.100$ and $P(X < 1) \approx 0.99$. This requires solving a system of nonlinear equations in two variables
+For the just noticeable difference, we continue to use the log-normal distribution because it is constrained to positive values and has the reciprocal property. The JND is expected to be close to 100ms and unlikely to exceed $1$ second. This implies a prior such that the mean is around 100ms and the bulk of the distribution is below 1 second. I.e. $E[X] \approx 0.100$ and $P(X < 1) \approx 0.99$. This requires solving a system of nonlinear equations in two variables:
 
 
+\setstretch{1.0}
 $$
 \begin{cases}
-E[X] = 0.100 = \exp\left(\mu + \sigma^2 / 2\right) \\
-P(X < 1) = 0.99 = 0.5 + 0.5 \cdot \mathrm{erf}\left[\frac{\ln (1) - \mu}{\sqrt{2} \cdot \sigma}\right]
+0.100 &= \exp\left(\mu + \sigma^2 / 2\right) \\
+0.99 &= 0.5 + 0.5 \cdot \mathrm{erf}\left[\frac{\ln (1) - \mu}{\sqrt{2} \cdot \sigma}\right]
 \end{cases}
 $$
+\setstretch{2.0}
 
 
 This nonlinear system can be solved using `Stan`'s algebraic solver (code provided in the [appendix](#code)).
@@ -339,6 +342,7 @@ transformed parameters {
 ```
 
 
+\setstretch{1.0}
 ```{r ch041-Dreaded Creek, echo=TRUE}
 fit <- sampling(prior_jnd, 
                 iter=1, warmup=0, chains=1, refresh=0,
@@ -346,6 +350,7 @@ fit <- sampling(prior_jnd,
 sol <- extract(fit)
 sol$y
 ```
+\setstretch{2.0}
 
 
 The solver has determined that $\mathrm{Lognormal}(`r round(sol$y[1], 1)`, `r round(sol$y[2], 1)`^2)$ is the appropriate prior. However, simulating some values from this distribution produces a lot of extremely small values ($<10^{-5}$) and a few extremely large values ($\approx 10^2$). This is because the expected value of a log-normal random variable depends on both the mean and standard deviation. If the median is used in place for the mean, then a more acceptable prior may be determined.
@@ -373,7 +378,7 @@ transformed parameters {
 ```
 
 
-
+\setstretch{1.0}
 ```{r ch041-Aimless Skunk, echo=TRUE}
 fit <- sampling(prior_jnd_using_median, 
                 iter=1, warmup=0, chains=1, refresh=0,
@@ -381,6 +386,7 @@ fit <- sampling(prior_jnd_using_median,
 sol <- extract(fit)
 sol$y
 ```
+\setstretch{2.0}
 
 
 Sampling from a log-normal distribution with these parameters and plotting the histogram shows no inconsistency with the domain expertise.
@@ -397,9 +403,10 @@ ggplot(data.frame(x), aes(x = x, y = ..density..)) +
 ```
 
 
-So now with a prior for the JND, the prior for $\beta$ can be determined.
+With a prior for the JND, the prior for $\beta$ can be determined:
 
 
+\setstretch{1.0}
 $$
 jnd \sim \mathrm{Lognormal}(`r round(sol$y[1], 1)`, `r round(sol$y[2], 2)`^2) \Longleftrightarrow \frac{1}{jnd} \sim \mathrm{Lognormal}(`r round(-1*sol$y[1], 1)`, `r round(sol$y[2], 2)`^2)
 $$
@@ -413,7 +420,7 @@ $$
 $$
 
 
-The priors do not need to be too exact. Rounding the parameters for $\beta$, the simple model is
+The priors do not need to be too exact. Rounding the parameters for $\beta$, the simple model is:
 
 
 \begin{align*}
@@ -424,7 +431,7 @@ The priors do not need to be too exact. Rounding the parameters for $\beta$, the
 \end{align*}
 
 
-and in Stan, the model code is
+and in `Stan`, the model code is:
 
 
 ```{stan ch041-Maroon Vulture, output.var="m041_stan", echo=TRUE}
@@ -455,6 +462,7 @@ generated quantities {
   }
 }
 ```
+\setstretch{2.0}
 
 
 Notice that the model block is nearly identical to the mathematical model specified above.
@@ -462,7 +470,8 @@ Notice that the model block is nearly identical to the mathematical model specif
 
 _Construct Summary Functions_
 
-That was a lot of work to define the priors for just two parameters. Going forward, not as much work will need to be done to expand the model. The next step is to construct any relevant summary functions. Since the distribution of posterior PSS and JND values are needed for the summary statistics, it will be nice to have a function that can take in the posterior samples for $\alpha$ and $\beta$ and return the PSS and JND values. We define $Q$ as a more general function that takes in the two parameters and a target probability, $\pi$, and returns the distribution of SOA values at $\pi$.
+
+The next step is to construct any relevant summary functions. Since the distribution of posterior PSS and JND values are needed for the summary statistics, it will be convenient to have a function that can take in the posterior samples for $\alpha$ and $\beta$ and return the PSS and JND values. We define $Q$ as a more general function that takes in the two parameters and a target probability, $\pi$, and returns the distribution of SOA values at $\pi$.
 
 
 \begin{equation}
@@ -482,17 +491,21 @@ Q <- function(p, a, b) qlogis(p) / b + a
 With $Q$, the PSS and JND can be calculated as
 
 
+\setstretch{1.0}
 \begin{align}
   pss &= Q(0.5) \\
   jnd &= Q(0.84) - Q(0.5)
 \end{align}
+\setstretch{2.0}
 
 
 _Simulate Bayesian Ensemble_
 
-During this step, we simulate the Bayesian model and later feed the prior values into the summary functions in order to verify that there are no other inconsistencies with domain knowledge. Since the model is fairly simple, we simulate directly in `R`.
+
+During this step, we simulate the Bayesian model and later feed the prior values into the summary functions in order to verify that there are no inconsistencies with domain knowledge. Since the model is fairly simple, we simulate directly in `R`.
 
 
+\setstretch{1.0}
 ```{r ch041-Random Serpent, echo=TRUE}
 set.seed(124)
 n <- 10000
@@ -507,11 +520,13 @@ idx <- sample(1:n, n_obs, replace = TRUE)
 probs <- logistic(b[idx] * (dat$x - a[idx]))
 sim_k <- rbinom(n_obs, dat$n, probs)
 ```
+\setstretch{2.0}
 
 
 _Prior Checks_
 
-This step pertains to ensuring that prior estimates are consistent with domain expertise. We already did that in the model construction step by sampling values for the just noticeable difference. The first prior chosen was not producing JND estimates that were consistent with domain knowledge, so we adjusted accordingly. That check would normally be done during this step, and we would have had to return to the model development step at the violation of domain expertise consistency.
+
+This step pertains to ensuring that prior estimates are consistent with domain expertise. We already did that in the model construction step by sampling values for the just noticeable difference. The first prior chosen was not producing JND estimates that were consistent with domain knowledge, so we adjusted accordingly.
 
 
 Figure \@ref(fig:ch041-prior-pf-plot) shows the distribution of prior psychometric functions derived from the simulated ensemble. There are a few very steep and very shallow curves, but the majority fall within a range that appears likely.
@@ -571,29 +586,36 @@ We are satisfied with the prior coverage of the PSS and JND values, and there ar
 
 _Configure Algorithm_
 
-There are a few parameters that can be set for `Stan`. On the user side, the main parameters are the number of iterations, the number of warm-up iterations, the target acceptance rate, and the number of chains to run. By default, `Stan` will use half the number of iterations for warm-up and the other half for actual sampling. The full details of `Stan`'s HMC algorithm is described in the Stan reference manual. For now we use the default algorithm parameters in `Stan`, and will tweak them later if and when issues arise.
+
+There are a few parameters that can be set for `Stan`. On the user side, the main parameters are the number of iterations, the number of warm-up iterations, the target acceptance rate, and the number of chains to run. By default, `Stan` will use half the number of iterations for warm-up and the other half for actual sampling. For now we use the default algorithm parameters in `Stan`, and will tweak them later if and when issues arise.
 
 
 _Fit Simulated Ensemble_
 
+
 We now fit the model to the simulated data.
 
 
+\setstretch{1.0}
 ```{r ch041-Minimum Artificial, echo=TRUE}
 sim_dat <- with(av_dat, list(N = N, x = x, n = n, k = sim_k)) 
 m041 <- rstan::sampling(m041_stan, data = sim_dat, 
                         chains = 4, cores = 4, refresh = 0)
 ```
+\setstretch{2.0}
 
 
 _Algorithmic Calibration_
 
-One benefit of using HMC over other samplers like Gibbs sampling is that HMC offers diagnostic tools for the health of chains and the ability to check for _divergent transitions_ (discussed in \@ref(model-checking)). To check the basic diagnostics of the model, we run the following code.
+
+To check the basic diagnostics of the model, we run the following code.
 
 
+\setstretch{1.0}
 ```{r ch041-Persistent Hook, message=TRUE, echo=TRUE}
 check_hmc_diagnostics(m041)
 ```
+\setstretch{2.0}
 
 
 There is no undesirable behavior from this model, so next we check the summary statistics of the estimated parameters.
@@ -613,9 +635,11 @@ Both the $\hat{R}$ and $N_{\mathrm{eff}}$ look fine for both $\alpha$ and $\beta
 
 **Post-Model, Post-Data**
 
+
 _Fit Observed Data_
 
-All of the work up until now has been done without peaking at the observed data. Satisfied with the model so far, we go ahead and run the data through.
+
+All of the work up until now has been done without peaking at the observed data. We go ahead and run the data through the model.
 
 
 ```{r ch041-Green Trombone}
@@ -629,20 +653,25 @@ if (file.exists("models/m041.rds")) {
 ```
 
 
+\setstretch{1.0}
 ```{r ch041-Homeless-Tea, echo=TRUE, eval=FALSE}
 m041 <- sampling(m041_stan, data = obs_dat, 
                  chains = 4, cores = 4, refresh = 200)
 ```
+\setstretch{2.0}
 
 
 _Diagnose Posterior Fit_
 
+
 Here we repeat the diagnostic checks that were used after fitting the simulated data. 
 
 
+\setstretch{1.0}
 ```{r ch041-Risky Winter, message=TRUE, echo=TRUE}
 check_hmc_diagnostics(m041)
 ```
+\setstretch{2.0}
 
 
 ```{r ch041-Maroon-Oyster}
@@ -691,18 +720,21 @@ pa + pb
 ```
 
 
-The posterior distributions for $\alpha$ and $\beta$ are well within the range determined by domain knowledge, and highly concentrated due to both the large amount of data and the fact that this is a completely pooled model -- all subject data is used to estimate the parameters. As expected, the prior for the JND could have been tighter with more weight below half a second compared to the one second limit used, but this is not prior information, so it is not prudent to change the prior in this manner after having seen the posterior. As a rule of thumb, priors should only be updated as motivated by domain expertise and not by posterior distributions.
+The posterior distributions for $\alpha$ and $\beta$ are well within the range determined by domain knowledge, and highly concentrated due to both the large amount of data and the fact that this is a completely pooled model -- all subject data is used to estimate the parameters. As expected, the prior for the JND could have been tighter with more weight below half a second compared to the one second limit used, but this is not prior information, so it is not prudent to change the prior in this manner after having seen the posterior. As a rule of thumb, priors should only be updated as motivated by domain expertise and not by the posterior distribution.
 
 
 _Posterior Retrodictive Checks_
 
-It is time to run the posterior samples through the summary functions and then perform _retrodictive_ checks. A retrodiction is using the posterior model to predict and compare to the observed data. This is simply done by drawing samples from the posterior and feeding in the observational data. This may be repeated to gain a retrodictive distribution.
+
+It is time to run the posterior samples through the summary functions and then perform _retrodictive_ checks. A retrodiction is using the posterior model to predict and compare to the observed data. This is simply done by drawing samples from the posterior and feeding in the observational data. This may be repeated to gain posterior predictive samples.
 
 
+\setstretch{1.0}
 ```{r ch041-Donut Maximum, echo=TRUE}
 posterior_pss <- Q(0.5, p041$alpha, p041$beta)
 posterior_jnd <- Q(0.84, p041$alpha, p041$beta) - posterior_pss
 ```
+\setstretch{2.0}
 
 
 ```{r ch041-posterior-pss-jnd-plot, fig.cap="Posterior distribution of the PSS and JND."}
@@ -729,10 +761,11 @@ p_jnd <- ggplot(data.frame(x = 1000*posterior_jnd),
 p_pss + p_jnd
 ```
 
-Neither of the posterior estimates for the PSS or JND exceed the extreme cutoffs set in the earlier steps, so we can be confident that the model is consistent with domain expertise. Let's also take a second to appreciate how simple it is to visualize and summarize the distribution of values for these measures. Using classical techniques like MLE might require using bootstrap methods to estimate the distribution of parameter values, or one might approximate the parameter distributions using the mean and standard error of the mean to simulate new values. Since we have the entire posterior distribution we can calculate the distribution of transformed parameters by working directly with the posterior samples and be sure that the intervals are credible.
+
+Neither of the posterior estimates for the PSS or JND exceed the extreme cutoffs set in the earlier steps, so we can be confident that the model is consistent with domain expertise. Note how simple it is to visualize and summarize the distribution of values for these measures. Using classical techniques like MLE might require using bootstrap methods to estimate the distribution of parameter values, or one might approximate the parameter distributions using the mean and standard error of the mean to simulate new values.
 
 
-Next is to actually do the posterior retrodictions. We do this in two steps to better show how the distribution of posterior psychometric functions relates to the observed data, and then compare the observed data to the retrodictions. Figure \@ref(fig:ch041-posterior-pf-plot) shows the result of the first step.
+Next is to create the posterior predictive samples. We do this in two steps to better show how the distribution of posterior psychometric functions relates to the observed data, and then compare the observed data to the retrodictions. Figure \@ref(fig:ch041-posterior-pf-plot) shows the result of the first step.
 
 
 ```{r ch041-posterior-pf-plot, fig.cap="Posterior distribution of psychometric functions using pooled observations."}
@@ -760,9 +793,10 @@ p +
 ```
 
 
-Next we sample parameter values from the posterior distribution and use them to simulate a new data set. In the next iteration we show how to get `Stan` to automatically produce retrodictions for the model fitting step. The results of the posterior retrodictions are shown in figure \@ref(fig:ch041-obs-vs-retro-plot).
+Next we sample parameter values from the posterior distribution and use them to simulate a new data set. In the next iteration we show how to get `Stan` to automatically produce posterior predictive samples from the model fitting step. The results of the posterior preictions are shown in figure \@ref(fig:ch041-obs-vs-retro-plot).
 
 
+\setstretch{1.0}
 ```{r ch041-Intensive Trendy, echo=TRUE}
 alpha <- sample(p041$alpha, n_obs, replace = TRUE)
 beta  <- sample(p041$beta, n_obs, replace = TRUE)
@@ -770,6 +804,7 @@ logodds <- beta * (av_dat$x - alpha)
 probs <- logistic(logodds)
 sim_k <- rbinom(n_obs, av_dat$n, probs)
 ```
+\setstretch{2.0}
 
 
 ```{r ch041-obs-vs-retro-plot, fig.cap="Observed data compared to the posterior retrodictions. The data is post-stratified by block for easier visualization."}
@@ -788,61 +823,67 @@ bind_rows(tibble(x = av_dat$x, n = av_dat$n, k = sim_k, p = k/n,
 ```
 
 
-Let's be clear exactly what the first iteration of this model tells us. It is the average distribution of underlying psychometric functions across all subjects and blocks. It cannot tell us what the differences are between pre- and post-adaptation blocks are, or even what the variation between subjects is. As such, it is only useful in determining if the average value for the PSS is different from 0 or if the average JND is different from some other predetermined level. This model is still useful given the right question, but this model cannot answer questions about group-level effects.
+Let's be clear what the first iteration of this model describes. It is the average distribution of underlying psychometric functions across all subjects and blocks. It cannot tell us what the differences between pre- and post-adaptation blocks are, or what the variation between subjects is. It is useful in determining if the average value for the PSS is different from 0 or if the average JND is different from some other predetermined level. This model is still useful given the right question, but it cannot answer questions about group-level effects.
 
 
-Figure \@ref(fig:ch041-obs-vs-retro-plot) shows that the model captures the broad structure of the observed data, but is perhaps a bit under-dispersed in the tail ends of the SOA values. Besides this one issue, we am satisfied with the first iteration of this model and are ready to proceed to the next iteration.
+Figure \@ref(fig:ch041-obs-vs-retro-plot) shows that the model captures the broad structure of the observed data, but is perhaps a bit under-dispersed in the tail ends of the SOA values. Besides this one issue, we are satisfied with the first iteration of this model and are ready to proceed to the next iteration.
 
 
 ## Iteration 2: adding age and block {#iter2}
 
 
-In this iteration we will be adding in the treatment and age groups into the model. There are no changes with the conceptual understanding of the experiment, and nothing to change with the observational space. As such we will be skipping the first three steps and go straight to the model development step. As we build the model, the number of changes from one iteration to the next should go to zero as the model _expands_ to become only as complex as necessary to answer the research questions.
+In this iteration we add the treatment and age groups into the model. There are no changes with the conceptual understanding of the experiment, and nothing to change with the observational space. As such we skip the first three steps and go to the model development step. As we build the model, the number of changes from one iteration to the next should go to zero as the model _expands_ to become only as complex as necessary to answer the research questions.
 
 
 **Post-Model, Pre-Data**
 
+
 _Develop Model_
+
 
 To start, let's add in the treatment indicator and put off consideration of adding in the age group levels. In classical statistics, it is added as an indicator variable -- a zero or one -- for both the slope and intercept (varying slopes, varying intercepts model). Let $trt$ be $0$ if it is the pre-adaptation block and $1$ if the observation comes from the post-adaptation block.
 
 
-$$
-\theta = \alpha + \alpha_{trt} \times trt + \beta \times x + \beta_{trt}\times trt \times x
-$$
+\setstretch{1.0}
+$$\theta = \alpha + \alpha_{trt} \times trt + \beta \times x + \beta_{trt}\times trt \times x$$
+\setstretch{2.0}
 
 
 Now when an observation comes from the pre-adaptation block ($trt=0$) the linear predictor is given by
 
 
-$$
-\theta_{pre} = \alpha + \beta \times x
-$$
+\setstretch{1.0}
+$$\theta_{pre} = \alpha + \beta \times x$$
+\setstretch{2.0}
 
 
 and when an observation comes from the post-adaptation block ($trt=1$) the linear predictor is
 
 
-$$
-\theta_{post} = (\alpha + \alpha_{trt}) + (\beta + \beta_{trt}) \times x
-$$
+\setstretch{1.0}
+$$\theta_{post} = (\alpha + \alpha_{trt}) + (\beta + \beta_{trt}) \times x$$
+\setstretch{2.0}
 
 
 This may seem like a natural way to introduce an indicator variable, but it comes with serious implications. This model implies that there is more uncertainty about the post-adaptation block compared to the baseline block, and this is not necessarily true. 
 
 
+\setstretch{1.0}
 \begin{align*}
 \mathrm{Var}(\theta_{post}) &= \mathrm{Var}((\alpha + \alpha_{trt}) + (\beta + \beta_{trt}) \times x) \\
 &= \mathrm{Var}(\alpha) + \mathrm{Var}(\alpha_{trt}) + x^2 \mathrm{Var}(\beta) + x^2\mathrm{Var}(\beta_{trt})
 \end{align*}
+\setstretch{2.0}
 
 
-On the other hand, the variance of $\theta_{pre}$ is
+On the other hand, the variance of $\theta_{pre}$ is:
 
 
+\setstretch{1.0}
 $$
 \mathrm{Var}(\theta_{pre}) = \mathrm{Var}(\alpha) + x^2 \mathrm{Var}(\beta) \le \mathrm{Var}(\theta_{post})
 $$
+\setstretch{2.0}
 
 
 Furthermore, the intercept, $\alpha$, is no longer the average response probability at $x=0$ for the entire data set, but is instead exclusively the average for the pre-adaptation block. This may not matter in certain analyses, but one nice property of multilevel models is the separation of population level estimates and group level estimates (fixed vs. mixed effects).
@@ -851,20 +892,24 @@ Furthermore, the intercept, $\alpha$, is no longer the average response probabil
 Instead the treatment variable is introduced into the linear model as a factor variable. This essentially means that each level in the treatment gets its own parameter estimate, and this also makes it easier to set priors when there are many levels in a group (such as for the subject level). The linear model, using equation \@ref(eq:linearform2), with the treatment is written as
 
 
+\setstretch{1.0}
 \begin{equation}
   \theta = (\beta + \beta_{trt[i]}) \left[x_i - (\alpha + \alpha_{trt[i]})\right]
   (\#eq:linearmodel2)
 \end{equation}
+\setstretch{2.0}
 
 
 As predictors and groups are added in, equation \@ref(eq:linearmodel2) will start to be more difficult to read. What we can do is break up the slope and intercept parameters and write the linear model as
 
 
+\setstretch{1.0}
 \begin{align*}
 \mu_\alpha &= \alpha + \alpha_{trt[i]} \\
 \mu_\beta &= \beta + \beta_{trt[i]} \\
 \theta &= \mu_\beta (x - \mu_\alpha)
 \end{align*}
+\setstretch{2.0}
 
 
 In this way the combined parameters can be considered separately from the linear parameterization. Which leads us to consider the priors for $\alpha_{trt}$ and $\beta_{trt}$. The way that we can turn a normal model with categorical predictors into a multilevel model is by allowing the priors to borrow information from other groups. This is accomplished by putting priors on priors. It is easier to write down the model first before explaining how it works.
