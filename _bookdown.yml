@@ -8,8 +8,8 @@ rmd_files: [
   "index.Rmd",
   "020-psychometrics.Rmd",
   "030-methods.Rmd",
-  # "040-workflow.Rmd",
-  # "050-results.Rmd",
+  "040-application.Rmd",
+  "050-results.Rmd",
   "100-conclusion.Rmd",
   "200-appendix.Rmd",
   "300-references.Rmd"

@@ -198,7 +198,7 @@ If $P(Y=1 | x; \theta) = F(x;\theta)$, then $P(Y = 0 | x; \theta) = 1 - F(x;\the
 
 The likelihood $\mathcal{L}$ of observing a set of independent and identically distributed data given the parameterization $\theta$ is determined by taking the product of the probabilities for each datum:
 
-$$
+
 \begin{equation}
   \begin{split}
     \mathcal{L} &= \prod_{i}^{N} P(y_i | x_i; \theta) \\
@@ -206,7 +206,7 @@ $$
   \end{split}
   (\#eq:bernlik)
 \end{equation}
-$$
+
 
 For some $\theta$, $\mathcal{L}$ achieves a maximum value, so maximum likelihood estimation determines the parameters that maximizes the likelihood of the observed data. Equation \@ref(eq:bernlik) is commonly expressed in terms of its logarithm as a function of $\theta$:
 
@@ -293,7 +293,7 @@ The coefficients of the linear predictor are in slope-intercept form ($23 + 46 x
 \end{equation}
 
 
-However, this is not the true maximum likelihood estimate. Table \@ref(tab:ch020-Quality-Surreal-Street) shows that the log-likelihood is still increasing as the scale decreases to zero. There is a very large change between $-2.05\times 10^{-10}$ and $-3.86\times10^{-22}$ on a relative scale, but computers cannot tell the difference on an absolute scale. The precision of most modern computers is around $10^{-15}$, and anything smaller is numerically zero.
+However, this is not the true maximum likelihood estimate. Table \@ref(tab:ch020-Quality-Surreal-Street) shows that the log-likelihood is still increasing as the scale decreases to zero. The change between $-2.05\times 10^{-10}$ and $-3.86\times10^{-22}$ is very large on a relative scale, but computers cannot tell the difference on an absolute scale. The precision of most modern computers is around $10^{-15}$, and anything smaller is treated as numerically zero.
 
 
 ```{r ch020-Quality-Surreal-Street}
@@ -312,6 +312,9 @@ tibble(
 
 
 Using a weakly-informative prior for the slope instead of the non-informative uniform distribution will allow for a proper MAP estimate, but care should be taken to consider what prior is appropriate, or why the data is separable in the first place. If an experiment can be improved to avoid the situation, that should be the first action.
+
+
+<!-- This is a good opportunity to segue into multilevel models -->
 
 
 ## Data visualization and quirks
