@@ -209,7 +209,7 @@ This is a fortunate consequence of using \@ref(eq:linearform2) because now the J
 This also highlights the benefit of using a modeling language like `Stan` over others. For fitting GLMs in `R`, there are a handful of functions that utilize MLE like `stats::glm` and others that use Bayesian methods like `rstanarm::stan_glm` and `arm::bayesglm` [@R-rstanarm; @R-arm]. Each of these functions requires the linear predictor to be in the form of \@ref(eq:linearform1). The `stan_glm` function uses Stan in the back-end to fit a model, but is limited to priors from the Student-t family of distributions. By writing the model directly in `Stan`, the linear model can be parameterized in any way and with any prior distribution, and so allows for much more expressive modeling.
 
 
-## Iteration 1 {#iter1}
+## Iteration 1: base model {#iter1}
 
 
 **Pre-Model, Pre-Data**
@@ -794,7 +794,7 @@ Let's be clear exactly what the first iteration of this model tells us. It is th
 Figure \@ref(fig:ch041-obs-vs-retro-plot) shows that the model captures the broad structure of the observed data, but is perhaps a bit under-dispersed in the tail ends of the SOA values. Besides this one issue, we am satisfied with the first iteration of this model and are ready to proceed to the next iteration.
 
 
-## Iteration 2 {#iter2}
+## Iteration 2: adding age and block {#iter2}
 
 
 In this iteration we will be adding in the treatment and age groups into the model. There are no changes with the conceptual understanding of the experiment, and nothing to change with the observational space. As such we will be skipping the first three steps and go straight to the model development step. As we build the model, the number of changes from one iteration to the next should go to zero as the model _expands_ to become only as complex as necessary to answer the research questions.
@@ -1378,7 +1378,7 @@ posterior_retrodictions %>%
 The posterior retrodictions  in figure \@ref(fig:ch042-obs-vs-retro-plot) show no disagreement between the model and the observed data. We could almost say that this model is complete, but this model has one more problem: it measures the average difference in blocks, and the average difference in age groups, but does not consider any interaction between the two. Implicitly it assumes that temporal recalibration affects all age groups the same which may not be true, so in the next iteration we will need to address that.
 
 
-## Iteration 3 {#iter3}
+## Iteration 3: adding age-block interaction {#iter3}
 
 
 Since there is no change in the pre-model analysis, we will again jump straight to the model development step, after which we will jump right to the posterior retrodictive checks. The changes to the model going forward are minor, and subsequent steps are mostly repetitions of the ones taken in the first two iterations.
@@ -1739,7 +1739,7 @@ posterior_retrodictions %>%
 Why is the model having difficulty expressing the data? As it turns out, there is one more concept pertaining to psychometric experiments that has been left out until now, and that is a lapse in judgment. Not a lapse in judgment on our part, but the actual act of having a lapse while performing an experiment.
 
 
-## Iteration 4 {#iter4}
+## Iteration 4: adding a lapse rate {#iter4}
 
 
 **Pre-Model, Pre-Data**
@@ -2082,7 +2082,7 @@ comp_vis %>%
 The model with the lapse rates proves to be better than the model without lapse rates as measured by PSIS-LOO. Surprisingly the effective number of parameters _shrinks_ after including the lapse rates. We can now perform one last iteration of the model by including the subject level estimates. Even though we're only interested in making inferences at the group level, including the subject level might improve predictive performance.
 
 
-## Iteration 5 {#iter5}
+## Iteration 5: adding subject  {#iter5}
 
 The only change in this iteration is the addition of the subject level parameters for the slope and intercept. 
 
