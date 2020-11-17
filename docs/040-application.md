@@ -1225,13 +1225,13 @@ We get a message saying that the fitted probabilities are numerically 0 or 1. In
 \toprule
 Subject & Coefficient & Estimate & Std. Error & z value & Pr(>|z|)\\
 \midrule
-Y-m-CB & Slope & 0.6254 & 12.7380 & 0.0491 & 0.9608\\
-M-f-DB & Slope & 0.1434 & 0.0442 & 3.2471 & 0.0012\\
-M-f-CC & Slope & 0.1434 & 0.0442 & 3.2471 & 0.0012\\
-O-f-MW & Intercept & -3.6313 & 1.2170 & -2.9837 & 0.0028\\
-M-f-CC & Intercept & -2.4925 & 1.0175 & -2.4497 & 0.0143\\
+Y-m-CB & Slope & 0.6665 & 25.193 & 0.0265 & 0.9789\\
+M-m-BT & Slope & 0.6707 & 24.921 & 0.0269 & 0.9785\\
+M-f-DB & Slope & 0.6707 & 24.919 & 0.0269 & 0.9785\\
+O-f-MW & Intercept & -3.2427 & 1.235 & -2.6261 & 0.0086\\
+Y-f-CJ & Intercept & -2.1336 & 1.024 & -2.0829 & 0.0373\\
 \addlinespace
-M-f-DB & Intercept & -1.0928 & 0.6389 & -1.7105 & 0.0872\\
+M-f-CC & Intercept & -2.1336 & 1.024 & -2.0829 & 0.0373\\
 \bottomrule
 \end{tabular}
 \end{table}

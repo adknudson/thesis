@@ -148,6 +148,20 @@
 %==============================================================================17
 %==============================================================================18
 % Place here anything extra that you would like in the preamble
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 %==============================================================================19
 \ifluatex
   \usepackage{selnolig}  % disable illegal ligatures
@@ -864,10 +878,10 @@ Models can be compared simply using \texttt{loo::loo\_compare}. It estimates the
 \toprule
 Model & elpd\_diff & se\_diff & p\_loo & looic\\
 \midrule
-Cubic & 0.000 & 0.000 & 2.617 & 18.57\\
-Quartic & -0.374 & 0.475 & 3.710 & 19.32\\
-Quadratic & -2.657 & 1.799 & 3.860 & 23.89\\
-Linear & -2.855 & 1.693 & 2.631 & 24.28\\
+Cubic & 0.0000 & 0.0000 & 2.832 & 18.67\\
+Quartic & -0.2284 & 0.7248 & 3.603 & 19.12\\
+Quadratic & -2.1277 & 1.4328 & 3.200 & 22.92\\
+Linear & -3.0593 & 1.7171 & 2.747 & 24.79\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -2196,13 +2210,13 @@ We get a message saying that the fitted probabilities are numerically 0 or 1. In
 \toprule
 Subject & Coefficient & Estimate & Std. Error & z value & Pr(>|z|)\\
 \midrule
-Y-m-CB & Slope & 0.6254 & 12.7380 & 0.0491 & 0.9608\\
-M-f-DB & Slope & 0.1434 & 0.0442 & 3.2471 & 0.0012\\
-M-f-CC & Slope & 0.1434 & 0.0442 & 3.2471 & 0.0012\\
-O-f-MW & Intercept & -3.6313 & 1.2170 & -2.9837 & 0.0028\\
-M-f-CC & Intercept & -2.4925 & 1.0175 & -2.4497 & 0.0143\\
+Y-m-CB & Slope & 0.6665 & 25.193 & 0.0265 & 0.9789\\
+M-m-BT & Slope & 0.6707 & 24.921 & 0.0269 & 0.9785\\
+M-f-DB & Slope & 0.6707 & 24.919 & 0.0269 & 0.9785\\
+O-f-MW & Intercept & -3.2427 & 1.235 & -2.6261 & 0.0086\\
+Y-f-CJ & Intercept & -2.1336 & 1.024 & -2.0829 & 0.0373\\
 \addlinespace
-M-f-DB & Intercept & -1.0928 & 0.6389 & -1.7105 & 0.0872\\
+M-f-CC & Intercept & -2.1336 & 1.024 & -2.0829 & 0.0373\\
 \bottomrule
 \end{tabular}
 \end{table}
