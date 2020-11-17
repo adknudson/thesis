@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>4 Methodological Contributions via the Workflow | A Bayesian Multilevel Model for the Psychometric Function using R and Stan</title>
-  <meta name="description" content="4 Methodological Contributions via the Workflow | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
+  <title>4 Bayesian Multilevel Modeling of the Psychometric Function | A Bayesian Multilevel Model for the Psychometric Function using R and Stan</title>
+  <meta name="description" content="4 Bayesian Multilevel Modeling of the Psychometric Function | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="4 Methodological Contributions via the Workflow | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
+  <meta property="og:title" content="4 Bayesian Multilevel Modeling of the Psychometric Function | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="adkudson/thesis" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="4 Methodological Contributions via the Workflow | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
+  <meta name="twitter:title" content="4 Bayesian Multilevel Modeling of the Psychometric Function | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   
   
   
@@ -153,7 +153,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2" data-path="data.html"><a href="data.html#toj-task"><i class="fa fa-check"></i><b>3.2</b> Temporal order judgment tasks</a></li>
 <li class="chapter" data-level="3.3" data-path="data.html"><a href="data.html#data-visualization-and-quirks"><i class="fa fa-check"></i><b>3.3</b> Data visualization and quirks</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="application.html"><a href="application.html"><i class="fa fa-check"></i><b>4</b> Methodological Contributions via the Workflow</a><ul>
+<li class="chapter" data-level="4" data-path="application.html"><a href="application.html"><i class="fa fa-check"></i><b>4</b> Bayesian Multilevel Modeling of the Psychometric Function</a><ul>
 <li class="chapter" data-level="4.1" data-path="application.html"><a href="application.html#psych-quant"><i class="fa fa-check"></i><b>4.1</b> Modeling psychometric quantities</a></li>
 <li class="chapter" data-level="4.2" data-path="application.html"><a href="application.html#iter1"><i class="fa fa-check"></i><b>4.2</b> Iteration 1: base model</a></li>
 <li class="chapter" data-level="4.3" data-path="application.html"><a href="application.html#iter2"><i class="fa fa-check"></i><b>4.3</b> Iteration 2: adding age and block</a></li>
@@ -165,6 +165,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#on-perceptual-synchrony"><i class="fa fa-check"></i><b>5.1</b> On Perceptual Synchrony</a></li>
 <li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>5.2</b> On Temporal Sensitivity</a></li>
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>5.3</b> Lapse Rate across Age Groups</a></li>
+<li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#subject-specific-inferences"><i class="fa fa-check"></i><b>5.4</b> Subject specific inferences</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="discussion-and-conclusion.html"><a href="discussion-and-conclusion.html"><i class="fa fa-check"></i><b>6</b> Discussion and Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
@@ -190,7 +191,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="application" class="section level1">
-<h1><span class="header-section-number">4</span> Methodological Contributions via the Workflow</h1>
+<h1><span class="header-section-number">4</span> Bayesian Multilevel Modeling of the Psychometric Function</h1>
 <p>Now we apply the workflow to our data set, seeking to build a model that satisfies the four criteria in <a href="methods.html#methods">chapter 2</a>. During model refinement, we’ll pick up on the regular features while assessing the statistical significance of covariates through predictive comparison. In our final model, we’ll model well-known data quality issues (from participant lapses in judgment) and show that this improves model prediction.</p>
 <p>As we iterate through our model development workflow, we have a preference for multilevel models (for the reasons discussed in <a href="methods.html#methods">chapter 2</a>). Hierarchical models are a specific kind of multilevel model where one or more groups are nested within a larger one. In the case of the psychometric data, there are three age groups, and within each age group are individual subjects.</p>
 <div id="psych-quant" class="section level2">

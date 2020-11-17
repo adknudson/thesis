@@ -148,20 +148,6 @@
 %==============================================================================17
 %==============================================================================18
 % Place here anything extra that you would like in the preamble
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
 %==============================================================================19
 \ifluatex
   \usepackage{selnolig}  % disable illegal ligatures
@@ -1161,7 +1147,7 @@ Of all the negative SOAs, there were only two ``correct'' responses (the perceiv
 \end{figure}
 
 \hypertarget{application}{%
-\chapter{Methodological Contributions via the Workflow}\label{application}}
+\chapter{Bayesian Multilevel Modeling of the Psychometric Function}\label{application}}
 
 Now we apply the workflow to our data set, seeking to build a model that satisfies the four criteria in \protect\hyperlink{methods}{chapter 2}. During model refinement, we'll pick up on the regular features while assessing the statistical significance of covariates through predictive comparison. In our final model, we'll model well-known data quality issues (from participant lapses in judgment) and show that this improves model prediction.
 
@@ -2726,6 +2712,31 @@ sensorimotor & Older Adult & 0.29\\
 One way to remove the uncertainty of the lapse rate could be to have some trials with very large SOA values. The reasoning is that if the difficulty of a task (given an SOA value) is lowered, than an incorrect response is more likely to be due to a true lapse in judgment as opposed to a genuinely incorrect response. \citet{wichmann2001b} recommends at least one sample at \(\pi \ge 0.95\) is necessary for reliable bootstrap confidence intervals, so the same reasoning can be applied when using Bayesian credible intervals. For a task such as visual TOJ, the \(90\%\) level may occur at an SOA of \(\approx 40\)ms while for the audiovisual TOJ it may be \(\approx 220\)ms, so the sampling scheme for psychometric experiments must be tuned to the task.
 
 \citet{wichmann2001a} experimentally determined that the lapse rate for trained observers is between \(0\%\) and \(5\%\), and the data in this paper loosely agree with that conclusion. Any excess in lapse rate may be attributed to the perceived task difficulty and a sub-optimal sampling scheme. Since the visual TOJ task is relatively the easiest, the estimated lapse rates are more believable as true lapse rates, and fall closely within the \((0, 0.05)\) range.
+
+\hypertarget{subject-specific-inferences}{%
+\section{Subject specific inferences}\label{subject-specific-inferences}}
+
+The multilevel model described by \eqref{eq:iter5-model} provides subject-specific estimation as well as the age group level estimations presented above. If desired, we can make comparisons between subjects or use the subject level estimates to highlight the variation within age groups. Figure \ref{fig:ch050-Green-Metaphor} shows the comparison of two middle aged subjects from the visual TOJ task. They both show heightened temporal sensitivity through an increased slope.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{figures/ch050-Green-Metaphor} 
+
+}
+
+\caption{Comparison of subject-specific distribution of psychometric functions from the Visual TOJ task.}\label{fig:ch050-Green-Metaphor}
+\end{figure}
+
+The subject-level model can make predictions for new individuals or for individuals that did not complete a block. Recall that the post-adaptation block for subject \texttt{O-f-CE} was removed from the audiovisual data set (see figure \ref{fig:ch020-av-post1-O-f-CE-plot}). We can still predict their post-adaptation performance because we have information from their pre-adaptation responses and the age-block level estimates as demonstrated in figure \ref{fig:ch050-Solid-Autumn}.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{figures/ch050-Solid-Autumn} 
+
+}
+
+\caption{Block estimates for subject `O-f-CE`. Even though their post-adaptation block was not in the data set, we can make predtictions thanks to the multilevel model with subject-level predictors.}\label{fig:ch050-Solid-Autumn}
+\end{figure}
 
 \hypertarget{discussion-and-conclusion}{%
 \chapter{Discussion and Conclusion}\label{discussion-and-conclusion}}

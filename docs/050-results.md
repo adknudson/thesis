@@ -307,19 +307,35 @@ One way to remove the uncertainty of the lapse rate could be to have some trials
 @wichmann2001a experimentally determined that the lapse rate for trained observers is between $0\%$ and $5\%$, and the data in this paper loosely agree with that conclusion. Any excess in lapse rate may be attributed to the perceived task difficulty and a sub-optimal sampling scheme. Since the visual TOJ task is relatively the easiest, the estimated lapse rates are more believable as true lapse rates, and fall closely within the $(0, 0.05)$ range.
 
 
-<!--
-
 ## Subject specific inferences
 
 
 
 
 
-The multilevel model \@ref(eq:iter5-model) provides subject-specific estimation as well as the age group level estimations presented above. 
+The multilevel model described by \@ref(eq:iter5-model) provides subject-specific estimation as well as the age group level estimations presented above. If desired, we can make comparisons between subjects or use the subject level estimates to highlight the variation within age groups. Figure \@ref(fig:ch050-Green-Metaphor) shows the comparison of two middle aged subjects from the visual TOJ task. They both show heightened temporal sensitivity through an increased slope.
 
 
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{figures/ch050-Green-Metaphor} 
+
+}
+
+\caption{Comparison of subject-specific distribution of psychometric functions from the Visual TOJ task.}(\#fig:ch050-Green-Metaphor)
+\end{figure}
 
 
-\begin{center}\includegraphics[width=0.85\linewidth]{figures/ch050-Green-Metaphor} \end{center}
+The subject-level model can make predictions for new individuals or for individuals that did not complete a block. Recall that the post-adaptation block for subject `O-f-CE` was removed from the audiovisual data set (see figure \@ref(fig:ch020-av-post1-O-f-CE-plot)). We can still predict their post-adaptation performance because we have information from their pre-adaptation responses and the age-block level estimates as demonstrated in figure \@ref(fig:ch050-Solid-Autumn).
 
--->
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{figures/ch050-Solid-Autumn} 
+
+}
+
+\caption{Block estimates for subject `O-f-CE`. Even though their post-adaptation block was not in the data set, we can make predtictions thanks to the multilevel model with subject-level predictors.}(\#fig:ch050-Solid-Autumn)
+\end{figure}
+
+

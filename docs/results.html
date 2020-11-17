@@ -153,7 +153,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2" data-path="data.html"><a href="data.html#toj-task"><i class="fa fa-check"></i><b>3.2</b> Temporal order judgment tasks</a></li>
 <li class="chapter" data-level="3.3" data-path="data.html"><a href="data.html#data-visualization-and-quirks"><i class="fa fa-check"></i><b>3.3</b> Data visualization and quirks</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="application.html"><a href="application.html"><i class="fa fa-check"></i><b>4</b> Methodological Contributions via the Workflow</a><ul>
+<li class="chapter" data-level="4" data-path="application.html"><a href="application.html"><i class="fa fa-check"></i><b>4</b> Bayesian Multilevel Modeling of the Psychometric Function</a><ul>
 <li class="chapter" data-level="4.1" data-path="application.html"><a href="application.html#psych-quant"><i class="fa fa-check"></i><b>4.1</b> Modeling psychometric quantities</a></li>
 <li class="chapter" data-level="4.2" data-path="application.html"><a href="application.html#iter1"><i class="fa fa-check"></i><b>4.2</b> Iteration 1: base model</a></li>
 <li class="chapter" data-level="4.3" data-path="application.html"><a href="application.html#iter2"><i class="fa fa-check"></i><b>4.3</b> Iteration 2: adding age and block</a></li>
@@ -165,6 +165,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#on-perceptual-synchrony"><i class="fa fa-check"></i><b>5.1</b> On Perceptual Synchrony</a></li>
 <li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>5.2</b> On Temporal Sensitivity</a></li>
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>5.3</b> Lapse Rate across Age Groups</a></li>
+<li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#subject-specific-inferences"><i class="fa fa-check"></i><b>5.4</b> Subject specific inferences</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="discussion-and-conclusion.html"><a href="discussion-and-conclusion.html"><i class="fa fa-check"></i><b>6</b> Discussion and Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
@@ -485,21 +486,23 @@ Older Adult
 </table>
 <p>One way to remove the uncertainty of the lapse rate could be to have some trials with very large SOA values. The reasoning is that if the difficulty of a task (given an SOA value) is lowered, than an incorrect response is more likely to be due to a true lapse in judgment as opposed to a genuinely incorrect response. <span class="citation">Wichmann and Hill (<a href="#ref-wichmann2001b" role="doc-biblioref">2001</a><a href="#ref-wichmann2001b" role="doc-biblioref">b</a>)</span> recommends at least one sample at <span class="math inline">\(\pi \ge 0.95\)</span> is necessary for reliable bootstrap confidence intervals, so the same reasoning can be applied when using Bayesian credible intervals. For a task such as visual TOJ, the <span class="math inline">\(90\%\)</span> level may occur at an SOA of <span class="math inline">\(\approx 40\)</span>ms while for the audiovisual TOJ it may be <span class="math inline">\(\approx 220\)</span>ms, so the sampling scheme for psychometric experiments must be tuned to the task.</p>
 <p><span class="citation">Wichmann and Hill (<a href="#ref-wichmann2001a" role="doc-biblioref">2001</a><a href="#ref-wichmann2001a" role="doc-biblioref">a</a>)</span> experimentally determined that the lapse rate for trained observers is between <span class="math inline">\(0\%\)</span> and <span class="math inline">\(5\%\)</span>, and the data in this paper loosely agree with that conclusion. Any excess in lapse rate may be attributed to the perceived task difficulty and a sub-optimal sampling scheme. Since the visual TOJ task is relatively the easiest, the estimated lapse rates are more believable as true lapse rates, and fall closely within the <span class="math inline">\((0, 0.05)\)</span> range.</p>
-<!--
-
-## Subject specific inferences
-
-
-
-
-
-The multilevel model \@ref(eq:iter5-model) provides subject-specific estimation as well as the age group level estimations presented above. 
-
-
-
-<img src="figures/ch050-Green-Metaphor.png" width="85%" style="display: block; margin: auto;" />
-
--->
+</div>
+<div id="subject-specific-inferences" class="section level2">
+<h2><span class="header-section-number">5.4</span> Subject specific inferences</h2>
+<p>The multilevel model described by <a href="application.html#eq:iter5-model">(4.17)</a> provides subject-specific estimation as well as the age group level estimations presented above. If desired, we can make comparisons between subjects or use the subject level estimates to highlight the variation within age groups. Figure <a href="results.html#fig:ch050-Green-Metaphor">5.15</a> shows the comparison of two middle aged subjects from the visual TOJ task. They both show heightened temporal sensitivity through an increased slope.</p>
+<div class="figure" style="text-align: center"><span id="fig:ch050-Green-Metaphor"></span>
+<img src="figures/ch050-Green-Metaphor.png" alt="Comparison of subject-specific distribution of psychometric functions from the Visual TOJ task." width="85%" />
+<p class="caption">
+Figure 5.15: Comparison of subject-specific distribution of psychometric functions from the Visual TOJ task.
+</p>
+</div>
+<p>The subject-level model can make predictions for new individuals or for individuals that did not complete a block. Recall that the post-adaptation block for subject <code>O-f-CE</code> was removed from the audiovisual data set (see figure <a href="data.html#fig:ch020-av-post1-O-f-CE-plot">3.4</a>). We can still predict their post-adaptation performance because we have information from their pre-adaptation responses and the age-block level estimates as demonstrated in figure <a href="results.html#fig:ch050-Solid-Autumn">5.16</a>.</p>
+<div class="figure" style="text-align: center"><span id="fig:ch050-Solid-Autumn"></span>
+<img src="figures/ch050-Solid-Autumn.png" alt="Block estimates for subject `O-f-CE`. Even though their post-adaptation block was not in the data set, we can make predtictions thanks to the multilevel model with subject-level predictors." width="85%" />
+<p class="caption">
+Figure 5.16: Block estimates for subject <code>O-f-CE</code>. Even though their post-adaptation block was not in the data set, we can make predtictions thanks to the multilevel model with subject-level predictors.
+</p>
+</div>
 
 </div>
 </div>

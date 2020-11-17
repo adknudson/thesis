@@ -1,7 +1,7 @@
 
 
 
-# Methodological Contributions via the Workflow {#application}
+# Bayesian Multilevel Modeling of the Psychometric Function {#application}
 
 
 Now we apply the workflow to our data set, seeking to build a model that satisfies the four criteria in [chapter 2](#methods). During model refinement, we'll pick up on the regular features while assessing the statistical significance of covariates through predictive comparison. In our final model, we'll model well-known data quality issues (from participant lapses in judgment) and show that this improves model prediction.

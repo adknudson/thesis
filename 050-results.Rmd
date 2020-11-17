@@ -476,8 +476,6 @@ One way to remove the uncertainty of the lapse rate could be to have some trials
 @wichmann2001a experimentally determined that the lapse rate for trained observers is between $0\%$ and $5\%$, and the data in this paper loosely agree with that conclusion. Any excess in lapse rate may be attributed to the perceived task difficulty and a sub-optimal sampling scheme. Since the visual TOJ task is relatively the easiest, the estimated lapse rates are more believable as true lapse rates, and fall closely within the $(0, 0.05)$ range.
 
 
-<!--
-
 ## Subject specific inferences
 
 
@@ -514,20 +512,12 @@ post_table_2 <- function(post, sid) {
 fn2 <- function(x, a, b, l) {
     l + (1-2*l) * logistic(exp(b)*(x - a))
 }
-```
 
-
-The multilevel model \@ref(eq:iter5-model) provides subject-specific estimation as well as the age group level estimations presented above. 
-
-
-
-```{r ch050-Green-Metaphor}
-i <- 15
-vis_sub <- post_table_2(p044s_vis, i)
-vis_smpl <- vis_sub %>% group_by(Block) %>% sample_n(200) %>% ungroup()
-
-if (!file.exists("figures/ch043-Iron-Intensive.png")) {
-  p <- data.frame(x = c(-0.2, 0.2), y = c(0, 1)) %>% 
+plot_vis_sub <- function(n, i) {
+  vis_sub <- post_table_2(p044s_vis, i)
+  vis_smpl <- vis_sub %>% group_by(Block) %>% sample_n(n) %>% ungroup()
+  
+  p <- data.frame(x = c(-0.3, 0.3), y = c(0, 1)) %>% 
     ggplot(aes(x, y)) +
     theme(axis.title.y = element_blank()) +
     labs(x = "SOA (seconds)",
@@ -546,10 +536,81 @@ if (!file.exists("figures/ch043-Iron-Intensive.png")) {
                     alpha = 0.2, 
                     aes(color = "Post"))
   }
-  p <- p +
+  p +
     scale_color_manual(values = two_colors, breaks = c("Pre", "Post")) +
     theme_bw() + 
     theme(legend.title = element_blank())
+}
+
+p044s_av <- readRDS("models/p044s_av.rds")
+age_sid2 <- audiovisual_binomial %>%
+  filter(trial %in% c("pre", "post1"),
+         rid != "av-post1-O-f-CE") %>%
+  select(age_group, sid) %>%
+  distinct()
+
+combine_samples_3 <- function(post, block, sid) {
+  age_group = as.integer(age_sid2$age_group[sid])
+  with(post, data.frame(
+    block = block,
+    subject = levels(age_sid2$sid)[sid],
+    alpha = a + aGT[,age_group,block] + aS[,sid],
+    beta  = b + bGT[,age_group,block] + bS[,sid],
+    lambda = lG[,age_group]
+  ))
+}
+
+post_table_3 <- function(post, sid) {
+  map(c(1, 2), ~ combine_samples_3(post, .x, sid)) %>%
+    do.call(what = bind_rows) %>%
+    mutate(block = factor(block,
+                          levels = 1:2,
+                          labels = c("Pre", "Post"))) %>%
+    rename(Block = block) %>%
+    mutate(gamma = 2 * lambda,
+           PSS = Q(0.5, alpha, beta, lambda),
+           JND = Q(0.84, alpha, beta, lambda) - PSS)
+}
+
+plot_av_sub <- function(n, i) {
+  av_sub <- post_table_3(p044s_av, i)
+  av_smpl <- av_sub %>% group_by(Block) %>% sample_n(n) %>% ungroup()
+  
+  p <- data.frame(x = c(-0.5, 0.5), y = c(0, 1)) %>% 
+    ggplot(aes(x, y)) +
+    theme(axis.title.y = element_blank()) +
+    labs(x = "SOA (seconds)",
+         title = paste("Subject", age_sid2$sid[i]))
+  
+  for (j in 1:(nrow(av_smpl)/2)) {
+    p <- p +
+      geom_function(fun = fn2, args = list(a = av_smpl$alpha[j], 
+                                           b = av_smpl$beta[j],
+                                           l = av_smpl$lambda[j]),
+                    alpha = 0.2, 
+                    aes(color = "Pre")) +
+      geom_function(fun = fn2, args = list(a = av_smpl$alpha[j*2], 
+                                           b = av_smpl$beta[j*2],
+                                           l = av_smpl$lambda[j*2]),
+                    alpha = 0.2, 
+                    aes(color = "Post"))
+  }
+  p +
+    scale_color_manual(values = two_colors, breaks = c("Pre", "Post")) +
+    theme_bw() + 
+    theme(legend.title = element_blank())
+}
+```
+
+
+The multilevel model described by \@ref(eq:iter5-model) provides subject-specific estimation as well as the age group level estimations presented above. If desired, we can make comparisons between subjects or use the subject level estimates to highlight the variation within age groups. Figure \@ref(fig:ch050-Green-Metaphor) shows the comparison of two middle aged subjects from the visual TOJ task. They both show heightened temporal sensitivity through an increased slope.
+
+
+```{r ch050-Green-Metaphor, fig.cap="Comparison of subject-specific distribution of psychometric functions from the Visual TOJ task."}
+if (!file.exists("figures/ch050-Green-Metaphor.png")) {
+  p1 <- plot_vis_sub(100, 15)
+  p2 <- plot_vis_sub(100, 4)
+  p <- p1 / p2
   ggsave(
     filename = "ch050-Green-Metaphor.png", 
     plot = p, 
@@ -560,4 +621,21 @@ if (!file.exists("figures/ch043-Iron-Intensive.png")) {
 knitr::include_graphics("figures/ch050-Green-Metaphor.png")
 ```
 
--->
+
+The subject-level model can make predictions for new individuals or for individuals that did not complete a block. Recall that the post-adaptation block for subject `O-f-CE` was removed from the audiovisual data set (see figure \@ref(fig:ch020-av-post1-O-f-CE-plot)). We can still predict their post-adaptation performance because we have information from their pre-adaptation responses and the age-block level estimates as demonstrated in figure \@ref(fig:ch050-Solid-Autumn).
+
+
+```{r ch050-Solid-Autumn, fig.cap="Block estimates for subject \`O-f-CE\`. Even though their post-adaptation block was not in the data set, we can make predtictions thanks to the multilevel model with subject-level predictors."}
+if (!file.exists("figures/ch050-Solid-Autumn.png")) {
+  p <- plot_av_sub(150, 44)
+  ggsave(
+    filename = "ch050-Solid-Autumn.png", 
+    plot = p, 
+    device = "png",
+    path = "figures/",
+    dpi = "print")
+}
+knitr::include_graphics("figures/ch050-Solid-Autumn.png")
+```
+
+
