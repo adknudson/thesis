@@ -1694,7 +1694,9 @@ The posterior retrodictions for this model are going to be similar to the last i
 \setstretch{1.0}
 ```{r ch043-Neutron Bleeding, echo=TRUE, message=TRUE, message=TRUE}
 vis_mle <- glm(cbind(k, n-k) ~ 0 + sid + sid:soa,
-               data = visual_binomial, family = binomial("logit"))
+               data = visual_binomial, 
+               family = binomial("logit"),
+               subset = trial %in% c("pre", "post1"))
 ```
 \setstretch{2.0}
 

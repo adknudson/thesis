@@ -476,4 +476,88 @@ One way to remove the uncertainty of the lapse rate could be to have some trials
 @wichmann2001a experimentally determined that the lapse rate for trained observers is between $0\%$ and $5\%$, and the data in this paper loosely agree with that conclusion. Any excess in lapse rate may be attributed to the perceived task difficulty and a sub-optimal sampling scheme. Since the visual TOJ task is relatively the easiest, the estimated lapse rates are more believable as true lapse rates, and fall closely within the $(0, 0.05)$ range.
 
 
+<!--
+
 ## Subject specific inferences
+
+
+```{r ch050-Shiny Creek}
+p044s_vis <- readRDS("models/p044s_vis.rds")
+age_sid <- visual_binomial %>%
+  filter(trial %in% c("pre", "post1")) %>%
+  select(age_group, sid) %>%
+  distinct()
+
+combine_samples_2 <- function(post, block, sid) {
+  age_group = as.integer(age_sid$age_group[sid])
+  with(post, data.frame(
+    block = block,
+    subject = levels(age_sid$sid)[sid],
+    alpha = a + aGT[,age_group,block] + aS[,sid],
+    beta  = b + bGT[,age_group,block] + bS[,sid],
+    lambda = lG[,age_group]
+  ))
+}
+
+post_table_2 <- function(post, sid) {
+  map(c(1, 2), ~ combine_samples_2(post, .x, sid)) %>%
+    do.call(what = bind_rows) %>%
+    mutate(block = factor(block,
+                          levels = 1:2,
+                          labels = c("Pre", "Post"))) %>%
+    rename(Block = block) %>%
+    mutate(gamma = 2 * lambda,
+           PSS = Q(0.5, alpha, beta, lambda),
+           JND = Q(0.84, alpha, beta, lambda) - PSS)
+}
+
+fn2 <- function(x, a, b, l) {
+    l + (1-2*l) * logistic(exp(b)*(x - a))
+}
+```
+
+
+The multilevel model \@ref(eq:iter5-model) provides subject-specific estimation as well as the age group level estimations presented above. 
+
+
+
+```{r ch050-Green-Metaphor}
+i <- 15
+vis_sub <- post_table_2(p044s_vis, i)
+vis_smpl <- vis_sub %>% group_by(Block) %>% sample_n(200) %>% ungroup()
+
+if (!file.exists("figures/ch043-Iron-Intensive.png")) {
+  p <- data.frame(x = c(-0.2, 0.2), y = c(0, 1)) %>% 
+    ggplot(aes(x, y)) +
+    theme(axis.title.y = element_blank()) +
+    labs(x = "SOA (seconds)",
+         title = paste("Subject", age_sid$sid[i]))
+  
+  for (j in 1:(nrow(vis_smpl)/2)) {
+    p <- p +
+      geom_function(fun = fn2, args = list(a = vis_smpl$alpha[j], 
+                                           b = vis_smpl$beta[j],
+                                           l = vis_smpl$lambda[j]),
+                    alpha = 0.2, 
+                    aes(color = "Pre")) +
+      geom_function(fun = fn2, args = list(a = vis_smpl$alpha[j*2], 
+                                           b = vis_smpl$beta[j*2],
+                                           l = vis_smpl$lambda[j*2]),
+                    alpha = 0.2, 
+                    aes(color = "Post"))
+  }
+  p <- p +
+    scale_color_manual(values = two_colors, breaks = c("Pre", "Post")) +
+    theme_bw() + 
+    theme(legend.title = element_blank())
+  ggsave(
+    filename = "ch050-Green-Metaphor.png", 
+    plot = p, 
+    device = "png",
+    path = "figures/",
+    dpi = "print")
+}
+knitr::include_graphics("figures/ch050-Green-Metaphor.png")
+```
+
+-->

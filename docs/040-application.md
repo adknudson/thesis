@@ -1207,7 +1207,9 @@ The posterior retrodictions for this model are going to be similar to the last i
 
 ```r
 vis_mle <- glm(cbind(k, n-k) ~ 0 + sid + sid:soa,
-               data = visual_binomial, family = binomial("logit"))
+               data = visual_binomial, 
+               family = binomial("logit"),
+               subset = trial %in% c("pre", "post1"))
 ```
 \setstretch{2.0}
 

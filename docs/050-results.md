@@ -307,4 +307,19 @@ One way to remove the uncertainty of the lapse rate could be to have some trials
 @wichmann2001a experimentally determined that the lapse rate for trained observers is between $0\%$ and $5\%$, and the data in this paper loosely agree with that conclusion. Any excess in lapse rate may be attributed to the perceived task difficulty and a sub-optimal sampling scheme. Since the visual TOJ task is relatively the easiest, the estimated lapse rates are more believable as true lapse rates, and fall closely within the $(0, 0.05)$ range.
 
 
+<!--
+
 ## Subject specific inferences
+
+
+
+
+
+The multilevel model \@ref(eq:iter5-model) provides subject-specific estimation as well as the age group level estimations presented above. 
+
+
+
+
+\begin{center}\includegraphics[width=0.85\linewidth]{figures/ch050-Green-Metaphor} \end{center}
+
+-->
