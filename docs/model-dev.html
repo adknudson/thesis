@@ -167,7 +167,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>5.3</b> Lapse Rate across Age Groups</a></li>
 <li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#subject-specific-inferences"><i class="fa fa-check"></i><b>5.4</b> Subject specific inferences</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="discussion-and-conclusion.html"><a href="discussion-and-conclusion.html"><i class="fa fa-check"></i><b>6</b> Discussion and Conclusion</a></li>
+<li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Discussion and Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="code.html"><a href="code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
 <li class="chapter" data-level="B" data-path="model-dev.html"><a href="model-dev.html"><i class="fa fa-check"></i><b>B</b> Developing a Model</a></li>
@@ -195,6 +195,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Our final modeling strategy is an evolution from other attempts. The development proceeded through multiple iterations described in <a href="application.html#application">chapter 4</a>, but doesn’t tell the full story. We learn more from others when they share what didn’t work along with the final path that did work. There is knowledge to be gained in failed experiments, because then there is one more way to not do something, just like a failing outcome reduces the variance of the Beta distribution.</p>
 <p>In the first attempt at modeling, we used a classical GLM to get a baseline understanding of the data, but the fact that some estimates for certain subjects failed due to complete separation reinforced the our adoption of non-classical techniques. Our first Bayesian model was derived from <span class="citation">Lee and Wagenmakers (<a href="#ref-lee2014bayesian" role="doc-biblioref">2014</a>)</span> which used nested loops to iterate over subjects and SOA values. The data were required to be stored in a complicated way that made it difficult to comprehend and extend.</p>
 <p>We moved on to using <code>arm::bayesglm</code> to remove convergence issues, but we were met with other limitations such as linear parameterization and lack of hierarchical modeling. The book Statistical Rethinking <span class="citation">(McElreath <a href="#ref-mcelreath2020statistical" role="doc-biblioref">2020</a>)</span> offers a great first introduction to Bayesian multilevel modeling. McElreath’s <code>rethinking</code> package accompanies the book, and offers a compact yet expressive syntax for models that get translated into a Stan model. A model with age group and block can be written using <code>rethinking::ulam</code> as</p>
+
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="model-dev.html#cb31-1"></a>rethinking<span class="op">::</span><span class="kw">ulam</span>(<span class="kw">alist</span>(</span>
 <span id="cb31-2"><a href="model-dev.html#cb31-2"></a>  k <span class="op">~</span><span class="st"> </span><span class="kw">binomial_logit</span>(n, p),</span>
 <span id="cb31-3"><a href="model-dev.html#cb31-3"></a>  <span class="dt">p =</span> <span class="kw">exp</span>(b <span class="op">+</span><span class="st"> </span>bG[G] <span class="op">+</span><span class="st"> </span>bT[trt]) <span class="op">*</span><span class="st"> </span>(x <span class="op">-</span><span class="st"> </span>(a <span class="op">+</span><span class="st"> </span>aG[G] <span class="op">+</span><span class="st"> </span>aT[trt])),</span>
@@ -206,6 +207,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb31-9"><a href="model-dev.html#cb31-9"></a>  bT[trt] <span class="op">~</span><span class="st"> </span><span class="kw">normal</span>(<span class="dv">0</span>, sd_bT),</span>
 <span id="cb31-10"><a href="model-dev.html#cb31-10"></a>  <span class="kw">c</span>(sd_aG, sd_aT, sd_bG, sd_bT) <span class="op">~</span><span class="st"> </span><span class="kw">half_cauchy</span>(<span class="dv">0</span>, <span class="dv">5</span>)</span>
 <span id="cb31-11"><a href="model-dev.html#cb31-11"></a>), <span class="dt">data =</span> df, <span class="dt">chains =</span> <span class="dv">4</span>, <span class="dt">cores =</span> <span class="dv">4</span>, <span class="dt">log_lik =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+
 <p>While learning about multilevel models, we tried writing a package that generates a <code>Stan</code> program based on <code>R</code> formula syntax. At the time the concepts of no-pooling, complete pooling, and partial pooling were vaguely understood, and the package was plagued by the same lack of flexibility that <code>rstanarm</code> and <code>brms</code> have. Then it was discovered that <code>brms</code> and <code>rstanarm</code> already did what we were trying to do, but programming experience was invaluable.</p>
 <p>We also tried using <code>lme4</code>, <code>rstanarm</code>, and <code>brms</code>, and learned more about the concepts of fixed and random effects. We noticed that parameterization can have a significant affect on the efficiency of a model and the inferential power of the estimated parameters. When fitting a classical model, there is little difference in estimating <code>a + bx</code> vs. <code>d(x - c)</code> since the latter can just be expanded as <code>-cd + dx</code> which is essentially the same as the first parameterization, but there is a practical difference in the interpretation of the parameters. The second parameterization implies that there is a dependence among the parameters that can be factored out. In the context of psychometric functions, there is a stronger connection between PSS and <code>c</code> and the JND and <code>d</code>. This parameterization made it easier to specify priors and also increased the model efficiency. Of the modeling tools mentioned, only <code>rethinking</code> and <code>Stan</code> allow for arbitrary parameterization.</p>
 <p>We finally arrived at a model that worked well, but learned that using a binary indicator variable for the treatment comes with the assumption of higher uncertainty for one of the conditions. The linear model that we arrived at is displayed in equation <a href="model-dev.html#eq:badlinearmodel">(B.1)</a>.</p>
@@ -214,6 +216,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   \tag{B.1}
 \end{equation}\]</span></p>
 <p>Using an indicator variable in this fashion also introduced an interaction effect into the model that we almost did not account for after switching to using a factor variable. Interaction effects between factors is handled by creating a new factor that is essentially the cross-product of other factor variables. E.g. for factor variables <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span></p>
+
 <p><span class="math display">\[
 x = \begin{bmatrix}
 a \\
@@ -228,8 +231,9 @@ ai &amp; aj \\
 bi &amp; bj \\
 ci &amp; cj
 \end{bmatrix}
-\]</span></p>
-<p>The final round of reparameterization came in the form of adopting non-centered parameterization for more efficient models. To us, <span class="math inline">\(Z \sim N(0, 1^2);\quad X = 3 + 2Z\)</span> is the same as <span class="math inline">\(X \sim N(3, 2^2)\)</span>, but to a computer the process of sampling from <span class="math inline">\(X\)</span> can be more difficult than sampling from <span class="math inline">\(Z\)</span> (discussed in <a href="methods.html#methods">chapter 3</a>).</p>
+\]</span>
+</p>
+<p>The final round of reparameterization came in the form of adopting non-centered parameterization for more efficient models. To us, <span class="math inline">\(Z \sim N(0, 1^2);\quad X = 3 + 2Z\)</span> is the same as <span class="math inline">\(X \sim N(3, 2^2)\)</span>, but to a computer the process of sampling from <span class="math inline">\(X\)</span> can be more difficult than sampling from <span class="math inline">\(Z\)</span> (discussed in <a href="methods.html#methods">chapter 2</a>).</p>
 </div>
 <h3>References</h3>
 <div id="refs" class="references">

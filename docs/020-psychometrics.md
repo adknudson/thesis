@@ -7,10 +7,10 @@
 This paper focuses on a type of psychometric experiment called a temporal order judgment (TOJ) experiment. If there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept (perceive them as happening simultaneously). Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events.
 
 
-It was Charles Darwin who in his book _On the Origin of Species_ developed the idea that living organisms adapt in order to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Galton's works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that he was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
+It was Charles Darwin who in his book "On the Origin of Species" developed the idea that living organisms adapt in order to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Galton's works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that he was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
 
 
-E.H. Weber built upon Herbart's work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber's Law (Equation \@ref(eq:webers-law)), which states that the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus [@britannica2014editors].
+E.H. Weber built upon Herbart's work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber's Law (Equation \@ref(eq:webers-law)), which states that the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus [ekman1959weber].
 
 
 \begin{equation}
@@ -221,30 +221,3 @@ Of all the negative SOAs, there were only two "correct" responses (the perceived
 
 \caption{Proportion of correct responses for negative SOA values during the post-adaptation audiovisual experiment.}(\#fig:ch020-av-post-neg-trials)
 \end{figure}
-
-
-
-<!-- I may want to move some of this to Results
-
-When this method of detecting outliers is repeated for all tasks and blocks, then we end up with 17 records in total (figure \@ref(fig:ch020-naive-prop-outliers)), one of which is the aforementioned subject.
-
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.85\linewidth]{020-psychometrics_files/figure-latex/ch020-naive-prop-outliers-1} 
-
-}
-
-\caption{Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs.}(\#fig:ch020-naive-prop-outliers)
-\end{figure}
-
-
-Most of the records that are flagged by this method of outlier detection are from the sensorimotor task, and none are from the visual task. This may be attributed to the perceived difficulty of the task. One consequence of higher temporal sensitivity is that it is easier to determine temporal order. It may also be that determining temporal order is inherently easier for certain multisensory tasks compared to others. Since the sensorimotor task does not have fixed SOA values like the other tasks, it may be perceived as more difficult. Or perhaps the mechanisms that process tactile and visual signals are not as well coupled as those that process audio and visual signals.
-
--->
-
-
-
-
-
-

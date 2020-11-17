@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="discussion-and-conclusion.html"/>
+<link rel="prev" href="conclusion.html"/>
 <link rel="next" href="model-dev.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -167,7 +167,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>5.3</b> Lapse Rate across Age Groups</a></li>
 <li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#subject-specific-inferences"><i class="fa fa-check"></i><b>5.4</b> Subject specific inferences</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="discussion-and-conclusion.html"><a href="discussion-and-conclusion.html"><i class="fa fa-check"></i><b>6</b> Discussion and Conclusion</a></li>
+<li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Discussion and Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="code.html"><a href="code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
 <li class="chapter" data-level="B" data-path="model-dev.html"><a href="model-dev.html"><i class="fa fa-check"></i><b>B</b> Developing a Model</a></li>
@@ -193,6 +193,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="code" class="section level1">
 <h1><span class="header-section-number">A</span> Supplementary Code</h1>
 <p><strong>Eight Schools Model</strong></p>
+
 <pre><code>data {
   int&lt;lower=0&gt; J;         // number of schools 
   real y[J];              // estimated treatment effects
@@ -217,7 +218,10 @@ generated quantities {
     log_lik[j] = normal_lpdf(y[j] | theta[j], sigma[j]);
   }
 }</code></pre>
+
+
 <p><strong>Model with Lapse and Subject-level Parameters</strong></p>
+
 <pre><code>data {
   int N;        // Number of observations
   int N_G;      // Number of age groups
@@ -311,7 +315,10 @@ generated quantities {
     k_pred[i]  = binomial_rng(n[i], p);
   }
 }</code></pre>
+
+
 <p><strong>Stan Algebraic Solver</strong></p>
+
 <pre><code>functions {
   vector system(vector y, vector theta, real[] x_r, int[] x_i) {
     vector[2] z;
@@ -330,13 +337,14 @@ transformed parameters {
   vector[2] y;
   y = algebra_solver(system, y_guess, theta, x_r, x_i);
 }</code></pre>
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="discussion-and-conclusion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conclusion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="model-dev.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

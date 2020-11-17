@@ -167,7 +167,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>5.3</b> Lapse Rate across Age Groups</a></li>
 <li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#subject-specific-inferences"><i class="fa fa-check"></i><b>5.4</b> Subject specific inferences</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="discussion-and-conclusion.html"><a href="discussion-and-conclusion.html"><i class="fa fa-check"></i><b>6</b> Discussion and Conclusion</a></li>
+<li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Discussion and Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="code.html"><a href="code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
 <li class="chapter" data-level="B" data-path="model-dev.html"><a href="model-dev.html"><i class="fa fa-check"></i><b>B</b> Developing a Model</a></li>
@@ -196,10 +196,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">2.1</span> Fitting the psychometric function using GLMs</h2>
 <p>Psychometric functions are commonly fit using generalized linear models which allows for the linear model to be related to the response variable via a link function, which for psychometric functions comes from the family of S-shaped curves called a sigmoid.</p>
 <p>Commonly GLMs are fit using maximum likelihood estimation (MLE). The outcome of a single experiment can be represented as the result of a Bernoulli trial. The psychometric function, <span class="math inline">\(F(x; \theta)\)</span>, determines the probability that the outcome is 1:</p>
+
 <p><span class="math display">\[\begin{align*}
 Y &amp;\sim \textrm{Bernoulli}(\pi) \\
 \pi &amp;= P(Y=1 \vert x; \theta) = F(x; \theta)
-\end{align*}\]</span></p>
+\end{align*}\]</span>
+</p>
 <p>If <span class="math inline">\(P(Y=1 | x; \theta) = F(x;\theta)\)</span>, then <span class="math inline">\(P(Y = 0 | x; \theta) = 1 - F(x;\theta)\)</span>, and hence the probability of an outcome is:</p>
 <p><span class="math display" id="eq:bernproby">\[\begin{equation}
   P(Y=y | x; \theta) = F(x;\theta)^y(1-F(x;\theta))^{1-y}
@@ -244,11 +246,13 @@ Figure 2.2: Grid of log-likelihoods for the completely separable data. The log-l
 </p>
 </div>
 <p>When the separable data from above is fit using <code>R</code>’s <code>glm</code> function, there is a warning about fitted probabilities being <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>, indicating that the slope is very steep.</p>
+
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="methods.html#cb1-1"></a>fit &lt;-<span class="st"> </span><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="st">&quot;logit&quot;</span>))</span>
 <span id="cb1-2"><a href="methods.html#cb1-2"></a><span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></span>
 <span id="cb1-3"><a href="methods.html#cb1-3"></a><span class="kw">coefficients</span>(fit)</span>
 <span id="cb1-4"><a href="methods.html#cb1-4"></a><span class="co">#&gt; (Intercept)           x </span></span>
 <span id="cb1-5"><a href="methods.html#cb1-5"></a><span class="co">#&gt;       22.89       45.97</span></span></code></pre></div>
+
 <p>The coefficients of the linear predictor are in slope-intercept form (<span class="math inline">\(23 + 46 x\)</span>). Rearranging the coefficients into location-scale form yields:</p>
 <p><span class="math display" id="eq:rglmmle">\[\begin{equation}
   \theta = \frac{x - (-0.5)}{1/46}
@@ -405,8 +409,10 @@ Figure 2.3: An example of healthy chains.
 <p>As the number of parameters in a model grows, it becomes exceedingly tedious to check the trace plots of all parameters, and so numerical summaries are helpful to flag potential issues within the model.</p>
 <p><strong>R-hat Statistic.</strong> The most common summary statistic for chain health is the potential scale reduction factor <span class="citation">(Gelman, Rubin, and others <a href="#ref-gelman1992inference" role="doc-biblioref">1992</a>)</span> that measures the ratio of between chain variance and within chain variance. When the two have converged, the ratio is one. We’ve shared examples of healthy chains which would also have healthy <span class="math inline">\(\hat{R}\)</span> values, but it’s valuable to also share an example of a bad model. Below is the 8 Schools example <span class="citation">(Gelman et al. <a href="#ref-gelman2013bayesian" role="doc-biblioref">2013</a>)</span> which is a classical example for introducing Stan and testing the operating characteristics of a model.</p>
 <p>The initial starting parameters for this model are intentionally set to vary between <span class="math inline">\(-10\)</span> and <span class="math inline">\(10\)</span> – in contrast to the default range of <span class="math inline">\((-2, 2)\)</span> – and with only a few samples drawn in order to artificially drive up the split <span class="math inline">\(\hat{R}\)</span> statistic. The model is provided as supplementary code in the <a href="code.html#code">appendix</a>.</p>
+
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="methods.html#cb3-1"></a>fit_cp &lt;-<span class="st"> </span><span class="kw">sampling</span>(schools_cp, <span class="dt">data =</span> schools_dat, <span class="dt">refresh =</span> <span class="dv">0</span>,</span>
 <span id="cb3-2"><a href="methods.html#cb3-2"></a>                   <span class="dt">iter =</span> <span class="dv">40</span>, <span class="dt">init_r =</span> <span class="dv">10</span>, <span class="dt">seed =</span> <span class="dv">671254821</span>)</span></code></pre></div>
+
 <p><code>Stan</code> warns about many different issues with this model, but the R-hat is the one of interest. The largest is <span class="math inline">\(1.71\)</span> which is incredibly large. Gelmen suggests using a threshold of <span class="math inline">\(1.10\)</span> to flag unhealthy chains.</p>
 <p><img src="030-methods_files/figure-html/ch030-Rocky-Test-1.png" width="85%" style="display: block; margin: auto;" /></p>
 <p>These chains do not look good at all – they have not converged to a stationary distribution. . The <span class="math inline">\(\hat{R}\)</span> values are listed in table <a href="methods.html#tab:ch030-Ninth-Finger">2.2</a>.</p>
@@ -463,8 +469,10 @@ W = \frac{1}{M}\sum_{m=1}^{M} s_{m}^2
 <p>where</p>
 <p><span class="math display">\[
 s_{m}^2 = \frac{1}{N-1}\sum_{n=1}^{N}\left(\theta_{m}^{(n)} - \bar{\theta}_m\right)^2
-\]</span></p>
+\]</span>
+</p>
 <p>The weighted mixture of the within-chain and cross-chain variation is:</p>
+
 <p><span class="math display">\[
 \hat{var} = \frac{N-1}{N} W + \frac{1}{N} B
 \]</span></p>
@@ -491,6 +499,7 @@ s_{m}^2 = \frac{1}{N-1}\sum_{n=1}^{N}\left(\theta_{m}^{(n)} - \bar{\theta}_m\rig
 <span id="cb4-16"><a href="methods.html#cb4-16"></a><span class="co">#&gt; [1] 1.409</span></span></code></pre></div>
 
 <p>The <span class="math inline">\(\hat{R}\)</span> statistic is smaller than the split <span class="math inline">\(\hat{R}\)</span> value provided by <code>Stan</code>. This is a consequence of steadily increasing or decreasing chains. The split value does what it sounds like, and splits the samples from the chains in half – effectively doubling the number of chains and halving the number of samples per chain. In this way, the measure is more robust in detecting unhealthy chains. This also highlights the utility in using both visual and statistical tools to evaluate models. Here is the calculation of the split <span class="math inline">\(\hat{R}\)</span>:</p>
+
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="methods.html#cb5-1"></a>param &lt;-<span class="st"> &quot;mu&quot;</span></span>
 <span id="cb5-2"><a href="methods.html#cb5-2"></a>theta_tmp &lt;-<span class="st"> </span>p_cp[,,param]</span>
 <span id="cb5-3"><a href="methods.html#cb5-3"></a>theta &lt;-<span class="st"> </span><span class="kw">cbind</span>(theta_tmp[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,], theta_tmp[<span class="dv">11</span><span class="op">:</span><span class="dv">20</span>,])</span>
@@ -508,8 +517,10 @@ s_{m}^2 = \frac{1}{N-1}\sum_{n=1}^{N}\left(\theta_{m}^{(n)} - \bar{\theta}_m\rig
 <span id="cb5-15"><a href="methods.html#cb5-15"></a></span>
 <span id="cb5-16"><a href="methods.html#cb5-16"></a>(mu_Rhat &lt;-<span class="st"> </span><span class="kw">sqrt</span>(var_hat <span class="op">/</span><span class="st"> </span>W))</span>
 <span id="cb5-17"><a href="methods.html#cb5-17"></a><span class="co">#&gt; [1] 1.709</span></span></code></pre></div>
+
 <p>We’ve successfully replicated the calculation of the split <span class="math inline">\(\hat{R}\)</span>. <span class="citation">Vehtari, Gelman, et al. (<a href="#ref-vehtari2020rank" role="doc-biblioref">2020</a>)</span> propose an improved rank-normalized <span class="math inline">\(\hat{R}\)</span> for assessing the convergence of MCMC chains, and also suggest using a threshold of <span class="math inline">\(1.01\)</span>.</p>
 <p><strong>Effective Sample Size.</strong> Samples from Markov Chains are typically autocorrelated, which can increase uncertainty of posterior estimates. The solution is generally to reparameterize the model to avoid steep log-posterior densities. When the HMC algorithm is exploring difficult geometry, it can get stuck in regions of high densities, which means that there is more correlation between successive samples. Equation <a href="methods.html#eq:schools-ncp">(2.13)</a> shows the centered (left) and non-centered (right) parameterization of the 8-Schools model, and the benefit of reparameterization is conveyed by the ratio of effective sample size to actual sample size in figure <a href="methods.html#fig:ch030-Timely-Nitrogen">2.4</a>.</p>
+
 <p><span class="math display" id="eq:schools-ncp">\[\begin{equation}
   \begin{split}
     \sigma &amp;\sim \mathcal{U}(0, \infty) \\
@@ -528,7 +539,8 @@ s_{m}^2 = \frac{1}{N-1}\sum_{n=1}^{N}\left(\theta_{m}^{(n)} - \bar{\theta}_m\rig
     y &amp;\sim \mathcal{N}(\theta, \sigma)
   \end{split}
 \tag{2.13}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
+</p>
 <div class="figure" style="text-align: center"><span id="fig:ch030-Timely-Nitrogen"></span>
 <img src="030-methods_files/figure-html/ch030-Timely-Nitrogen-1.png" alt="Ratio of N\_eff to actual sample size. Low ratios imply high autocorrelation which can be alleviated by reparameterizing the model or by thinning." width="85%" />
 <p class="caption">
@@ -569,7 +581,7 @@ Figure 2.6: Five points from a polynomial model.
 Figure 2.7: Data points with various polynomial regression lines.
 </p>
 </div>
-<p>If a <span class="math inline">\(6^{th}\)</span> point were to be added – a new observation – which of the models would be expected to predict best? Can it be estimated which model will predict best before testing with new data? One guess is that the quadratic or cubic model will do well because because the linear model is potentially <em>underfit</em> to the data and the quartic is <em>overfit</em> to the data. Figure <a href="methods.html#fig:ch030-Cold-Fish">2.8</a> shows the new data point from the polynomial model. Now the linear and cubic models are trending in the wrong direction. The quadratic and quartic models are both trending down, so perhaps they may be the correct form for the model.</p>
+<p>If a <span class="math inline">\(6^{th}\)</span> point were to be added – a new observation – which of the models would be expected to predict best? Can it be estimated which model will predict best before testing with new data? One guess is that the quadratic or cubic model will do well because because the linear model is potentially underfit to the data and the quartic is overfit to the data. Figure <a href="methods.html#fig:ch030-Cold-Fish">2.8</a> shows the new data point from the polynomial model. Now the linear and cubic models are trending in the wrong direction. The quadratic and quartic models are both trending down, so perhaps they may be the correct form for the model.</p>
 <div class="figure" style="text-align: center"><span id="fig:ch030-Cold-Fish"></span>
 <img src="030-methods_files/figure-html/ch030-Cold-Fish-1.png" alt="The fitted polynomial models with a new observation." width="85%" />
 <p class="caption">
@@ -577,10 +589,12 @@ Figure 2.8: The fitted polynomial models with a new observation.
 </p>
 </div>
 <p>Figure <a href="methods.html#fig:ch030-Strawberry-Swallow">2.9</a> shows the 80% and 95% prediction intervals for a new observation given <span class="math inline">\(x = 1\)</span> as well as the true outcome as a dashed line at <span class="math inline">\(y = 1.527\)</span>. The linear model has the smallest prediction interval (PI), but completely misses the target. The remaining three models all include the observed value in their 95% PIs, but the quadratic model has the smallest PI of the three. The actual data generating polynomial is</p>
+
 <p><span class="math display">\[\begin{align*}
 y &amp;\sim \mathcal{N}(\mu, 1^2) \\
 \mu &amp;= -0.5(x - 2)^2 + 2
-\end{align*}\]</span></p>
+\end{align*}\]</span>
+</p>
 <div class="figure" style="text-align: center"><span id="fig:ch030-Strawberry-Swallow"></span>
 <img src="030-methods_files/figure-html/ch030-Strawberry-Swallow-1.png" alt="95\% Prediction intervals for the four polynomial models, as well as the true value (dashed line)." width="85%" />
 <p class="caption">
@@ -624,6 +638,9 @@ p(r; \mu, \sigma, k) = \frac{1}{\sigma} \left(1 + \frac{k (r - \mu)}{\sigma}\rig
 <p>Models can be compared simply using <code>loo::loo_compare</code>. It estimates the ELPD and its standard error, then calculates the relative differences between all the models. The model with the highest ELPD is predicted to have the best out-of-sample predictions. The comparison of four polynomial models from the earlier example is shown below.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="methods.html#cb7-1"></a>comp &lt;-<span class="st"> </span><span class="kw">loo_compare</span>(linear, quadratic, cubic, quartic)</span></code></pre></div>
 <table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:ch030-Galaxy Itchy)LOO comparison of Polynomial equations.
+</caption>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -779,80 +796,6 @@ Is our model rich enough to capture the relevant structure of the true data gene
 </ol>
 <p>Much work is done before seeing the data or building a model. This includes talking with experts to gain domain knowledge or to elicit priors. A benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the posterior distribution. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints.</p>
 <p>In this section we describe a simulation-based, principled workflow proposed by <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span> and broadly adopted by many members of the Bayesian community. The workflow broadly consists of specifying the likelihood and priors, performing prior predictive checks, fitting a model, and performing posterior predictive checks. The steps of the workflow are divided into three phases: 1) pre-model, pre-data, 2) post-model, pre-data, and 3) post-model, post-data. Tables <a href="methods.html#tab:ch030-Reborn-Space">2.4</a>, <a href="methods.html#tab:ch030-Freaky-Sledgehammer">2.5</a>, and <a href="methods.html#tab:ch030-Bleeding-Liquid-Dagger">2.6</a> list the steps of each phase.</p>
-<!-- Table \@ref(tab:ch030-workflow-steps) lists the detailed steps broken up into three phases.
-
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:ch030-workflow-steps)Principled workflow</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Phase </th>
-   <th style="text-align:left;"> Step </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="3"> Pre-Model, Pre-Data </td>
-   <td style="text-align:left;"> conceptual analysis </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> define observational space </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> construct summary statistics </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="8"> Post-Model, Pre-Data </td>
-   <td style="text-align:left;"> develop model </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> construct summary functions </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> simulate Bayesian ensemble </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> prior checks </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> configure algorithm </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> fit simulated ensemble </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> algorithmic calibration </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> inferential calibration </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> Post-Model, Post-Data </td>
-   <td style="text-align:left;"> fit observed data </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> diagnose posterior fit </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> posterior retrodictive checks </td>
-  </tr>
-  <tr>
-   
-   <td style="text-align:left;"> celebrate </td>
-  </tr>
-</tbody>
-</table>
--->
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:ch030-Reborn-Space">Table 2.4: </span>Pre-Model, Pre-Data steps.
@@ -962,7 +905,7 @@ Fit the simulated data to the model using the algorithm configured in the previo
 Algorithmic Calibration
 </td>
 <td style="text-align:left;width: 3.25in; ">
-How well did the algorithm do in fitting the simulated data? This step helps to answer the question regarding computational faithfulness. A model may be well specified, but if the algorithm used is unreliable then the posterior distribution is also unreliable, and this can lead to poor inferences. Methods for checking models is discussed in (#model-checking).
+How well did the algorithm do in fitting the simulated data? This step helps to answer the question regarding computational faithfulness. A model may be well specified, but if the algorithm used is unreliable then the posterior distribution is also unreliable, and this can lead to poor inferences.
 </td>
 </tr>
 <tr>

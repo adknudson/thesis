@@ -274,12 +274,12 @@ A common neuroscience topic is to detect the temporal order of two stimuli, and 
 
 Regression techniques commonly rely on maximum likelihood estimation (MLE) of parameters, and there are numerous resources on the subject of linear regression and MLE \citep{johnson2002applied, larsen2005introduction, sheather2009modern, navidi2015statistics}. Most introductory courses on statistics and regression describe frequentist-centered methods and estimation such as MLE, data transformations, hypothesis testing, residual analysis/goodness-of-fit tests, and model variable selection through coefficient testing. While these methods are well studied and broadly applied (largely due to software availability and domain traditions), the injudicious use of classical hypothesis testing and associated p-values has lead to sub-optimal model selection/comparison -- such as omission of truly influential variables or the inclusion of confounding variables. Variable selection through step-wise algorithms or penalized maximum likelihood estimation \citep{hoerl1970ridge, tibshirani1996regression} may be appropriate in an exploratory data analysis, but fail to produce quality predictions or determine the most statistically important associations with an outcome variable.
 
-Bayesian statistics (or \emph{inverse probability} as it was once called) has a long history, with origins prior to now ``classical'' statistical methods of R.A. Fisher and Karl Pearson developed during the 1930s \citep{fisher1934statistical}. These researchers thought Bayesian statistics was founded on a logical error and should be ``wholly rejected''. Later, the foundational work of Dennis Lindley \citep{lindley2000philosophy} refuted these ideas. However, the widespread acceptance of classical methods was already underway as Fisher developed a robust theory of MLE, made possible through normal approximations, that dominates statistical inference to this day. This was in part due to philosophical reasons, but also due to a limited class of Bayesian models that could actually be conducted in a real data analysis.
+Bayesian statistics (or inverse probability as it was once called) has a long history, with origins prior to now ``classical'' statistical methods of R.A. Fisher and Karl Pearson developed during the 1930s \citep{fisher1934statistical}. These researchers thought Bayesian statistics was founded on a logical error and should be ``wholly rejected''. Later, the foundational work of Dennis Lindley \citep{lindley2000philosophy} refuted these ideas. However, the widespread acceptance of classical methods was already underway as Fisher developed a robust theory of MLE, made possible through normal approximations, that dominates statistical inference to this day. This was in part due to philosophical reasons, but also due to a limited class of Bayesian models that could actually be conducted in a real data analysis.
 
 \hypertarget{bayesian-statistics}{%
 \section{Bayesian statistics}\label{bayesian-statistics}}
 
-In contrast to frequentist methods that use the fanciful idea of an infinite sampling process, Bayes' Theorem (Equation \eqref{eq:bayesthm}) offers a philosophically coherent procedure to learn from data. It is a simple restatement of conditional probability with deep and powerful consequences. From a Bayesian standpoint, we model all quantities as having a (joint) probability distribution, since we are \emph{uncertain of their values}. The goal is to update our current state of information (the \emph{prior}) with the incoming data (given its \emph{likelihood}) to receive an entire probability distribution reflecting our new beliefs (the \emph{posterior}), with all modeling assumptions made explicit.
+In contrast to frequentist methods that use the fanciful idea of an infinite sampling process, Bayes' Theorem (Equation \eqref{eq:bayesthm}) offers a philosophically coherent procedure to learn from data. It is a simple restatement of conditional probability with deep and powerful consequences. From a Bayesian standpoint, we model all quantities as having a (joint) probability distribution, since we are uncertain of their values. The goal is to update our current state of information (the prior) with the incoming data (given its likelihood) to receive an entire probability distribution reflecting our new beliefs (the posterior), with all modeling assumptions made explicit.
 
 \begin{equation}
   P(\theta | data) = \frac{P(data | \theta) P(\theta)}{\int_\Omega P(data | \theta) P(\theta) d\theta}
@@ -288,7 +288,7 @@ In contrast to frequentist methods that use the fanciful idea of an infinite sam
 
 Prior knowledge must be stated explicitly in a given model and the entire posterior distribution is available to summarize, visualize, and draw inferences from. The prior \(\pi(\theta)\) is some distribution over the parameter space and the likelihood \(\pi(data | \theta)\) is the probability of an outcome in the sample space given a value in the parameter space.
 
-Since the posterior is probability distribution, the sum or integral over the parameter space must evaluate to one. Because of this constraint, the denominator in \eqref{eq:bayesthm} acts as a scale factor to ensure that the posterior is valid. Computing this integral for multiple parameters was the major roadblock to the practical application of Bayesian statistics, but as we describe below, using computers to execute cleverly designed algorithms, the denominator need not be evaluated. Further, since it evaluates to a constant, it is generally omitted. And so Bayes' Theorem can be informally restated as \emph{the posterior is proportional to the prior times the likelihood}:
+Since the posterior is probability distribution, the sum or integral over the parameter space must evaluate to one. Because of this constraint, the denominator in \eqref{eq:bayesthm} acts as a scale factor to ensure that the posterior is valid. Computing this integral for multiple parameters was the major roadblock to the practical application of Bayesian statistics, but as we describe below, using computers to execute cleverly designed algorithms, the denominator need not be evaluated. Further, since it evaluates to a constant, it is generally omitted. And so Bayes' Theorem can be informally restated as ``the posterior is proportional to the prior times the likelihood'':
 
 \[\pi(\theta \vert data) \propto \pi(\theta) \times \pi(data \vert \theta)\].
 
@@ -318,10 +318,13 @@ Psychometric functions are commonly fit using generalized linear models which al
 
 Commonly GLMs are fit using maximum likelihood estimation (MLE). The outcome of a single experiment can be represented as the result of a Bernoulli trial. The psychometric function, \(F(x; \theta)\), determines the probability that the outcome is 1:
 
+\setstretch{1.0}
+
 \begin{align*}
 Y &\sim \textrm{Bernoulli}(\pi) \\
 \pi &= P(Y=1 \vert x; \theta) = F(x; \theta)
 \end{align*}
+\setstretch{2.0}
 
 If \(P(Y=1 | x; \theta) = F(x;\theta)\), then \(P(Y = 0 | x; \theta) = 1 - F(x;\theta)\), and hence the probability of an outcome is:
 
@@ -387,6 +390,8 @@ For a slope-intercept model, the MLE for the slope is infinity, and the location
 
 When the separable data from above is fit using \texttt{R}'s \texttt{glm} function, there is a warning about fitted probabilities being \(0\) or \(1\), indicating that the slope is very steep.
 
+\setstretch{1.0}
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{fit <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{x, }\DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\StringTok{"logit"}\NormalTok{))}
@@ -396,6 +401,8 @@ When the separable data from above is fit using \texttt{R}'s \texttt{glm} functi
 \CommentTok{#>       22.89       45.97}
 \end{Highlighting}
 \end{Shaded}
+
+\setstretch{2.0}
 
 The coefficients of the linear predictor are in slope-intercept form (\(23 + 46 x\)). Rearranging the coefficients into location-scale form yields:
 
@@ -560,12 +567,16 @@ As the number of parameters in a model grows, it becomes exceedingly tedious to 
 
 The initial starting parameters for this model are intentionally set to vary between \(-10\) and \(10\) -- in contrast to the default range of \((-2, 2)\) -- and with only a few samples drawn in order to artificially drive up the split \(\hat{R}\) statistic. The model is provided as supplementary code in the \protect\hyperlink{code}{appendix}.
 
+\setstretch{1.0}
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{fit_cp <-}\StringTok{ }\KeywordTok{sampling}\NormalTok{(schools_cp, }\DataTypeTok{data =}\NormalTok{ schools_dat, }\DataTypeTok{refresh =} \DecValTok{0}\NormalTok{,}
                    \DataTypeTok{iter =} \DecValTok{40}\NormalTok{, }\DataTypeTok{init_r =} \DecValTok{10}\NormalTok{, }\DataTypeTok{seed =} \DecValTok{671254821}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
+\setstretch{2.0}
 
 \texttt{Stan} warns about many different issues with this model, but the R-hat is the one of interest. The largest is \(1.71\) which is incredibly large. Gelmen suggests using a threshold of \(1.10\) to flag unhealthy chains.
 
@@ -618,8 +629,11 @@ where
 \[
 s_{m}^2 = \frac{1}{N-1}\sum_{n=1}^{N}\left(\theta_{m}^{(n)} - \bar{\theta}_m\right)^2
 \]
+\setstretch{2.0}
 
 The weighted mixture of the within-chain and cross-chain variation is:
+
+\setstretch{1.0}
 
 \[
 \hat{var} = \frac{N-1}{N} W + \frac{1}{N} B
@@ -658,6 +672,8 @@ Here is the calculation in \texttt{R}:
 
 The \(\hat{R}\) statistic is smaller than the split \(\hat{R}\) value provided by \texttt{Stan}. This is a consequence of steadily increasing or decreasing chains. The split value does what it sounds like, and splits the samples from the chains in half -- effectively doubling the number of chains and halving the number of samples per chain. In this way, the measure is more robust in detecting unhealthy chains. This also highlights the utility in using both visual and statistical tools to evaluate models. Here is the calculation of the split \(\hat{R}\):
 
+\setstretch{1.0}
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{param <-}\StringTok{ "mu"}
@@ -680,9 +696,13 @@ The \(\hat{R}\) statistic is smaller than the split \(\hat{R}\) value provided b
 \end{Highlighting}
 \end{Shaded}
 
+\setstretch{2.0}
+
 We've successfully replicated the calculation of the split \(\hat{R}\). \citet{vehtari2020rank} propose an improved rank-normalized \(\hat{R}\) for assessing the convergence of MCMC chains, and also suggest using a threshold of \(1.01\).
 
 \textbf{Effective Sample Size.} Samples from Markov Chains are typically autocorrelated, which can increase uncertainty of posterior estimates. The solution is generally to reparameterize the model to avoid steep log-posterior densities. When the HMC algorithm is exploring difficult geometry, it can get stuck in regions of high densities, which means that there is more correlation between successive samples. Equation \eqref{eq:schools-ncp} shows the centered (left) and non-centered (right) parameterization of the 8-Schools model, and the benefit of reparameterization is conveyed by the ratio of effective sample size to actual sample size in figure \ref{fig:ch030-Timely-Nitrogen}.
+
+\setstretch{1.0}
 
 \begin{equation}
   \begin{split}
@@ -703,6 +723,7 @@ We've successfully replicated the calculation of the split \(\hat{R}\). \citet{v
   \end{split}
 \label{eq:schools-ncp}
 \end{equation}
+\setstretch{2.0}
 
 \begin{figure}
 
@@ -769,7 +790,7 @@ One thing to try is fit a handful of linear models, check the parameter's p-valu
 \caption{Data points with various polynomial regression lines.}\label{fig:ch030-Olive-Screwdriver}
 \end{figure}
 
-If a \(6^{th}\) point were to be added -- a new observation -- which of the models would be expected to predict best? Can it be estimated which model will predict best before testing with new data? One guess is that the quadratic or cubic model will do well because because the linear model is potentially \emph{underfit} to the data and the quartic is \emph{overfit} to the data. Figure \ref{fig:ch030-Cold-Fish} shows the new data point from the polynomial model. Now the linear and cubic models are trending in the wrong direction. The quadratic and quartic models are both trending down, so perhaps they may be the correct form for the model.
+If a \(6^{th}\) point were to be added -- a new observation -- which of the models would be expected to predict best? Can it be estimated which model will predict best before testing with new data? One guess is that the quadratic or cubic model will do well because because the linear model is potentially underfit to the data and the quartic is overfit to the data. Figure \ref{fig:ch030-Cold-Fish} shows the new data point from the polynomial model. Now the linear and cubic models are trending in the wrong direction. The quadratic and quartic models are both trending down, so perhaps they may be the correct form for the model.
 
 \begin{figure}
 
@@ -782,10 +803,13 @@ If a \(6^{th}\) point were to be added -- a new observation -- which of the mode
 
 Figure \ref{fig:ch030-Strawberry-Swallow} shows the 80\% and 95\% prediction intervals for a new observation given \(x = 1\) as well as the true outcome as a dashed line at \(y = 1.527\). The linear model has the smallest prediction interval (PI), but completely misses the target. The remaining three models all include the observed value in their 95\% PIs, but the quadratic model has the smallest PI of the three. The actual data generating polynomial is
 
+\setstretch{1.0}
+
 \begin{align*}
 y &\sim \mathcal{N}(\mu, 1^2) \\
 \mu &= -0.5(x - 2)^2 + 2
 \end{align*}
+\setstretch{2.0}
 
 \begin{figure}
 
@@ -859,8 +883,10 @@ Models can be compared simply using \texttt{loo::loo\_compare}. It estimates the
 \end{Shaded}
 
 \begin{table}[!h]
+
+\caption{(\#tab:ch030-Galaxy Itchy)LOO comparison of Polynomial equations.}
 \centering
-\begin{tabular}{lrrrr}
+\begin{tabular}[t]{lrrrr}
 \toprule
 Model & elpd\_diff & se\_diff & p\_loo & looic\\
 \midrule
@@ -931,7 +957,7 @@ Prior Checks & Check that the prior predictive distribution is consistent with d
 \cellcolor{gray!6}{Configure Algorithm} & \cellcolor{gray!6}{Having simulated data, the next step is to fit the data generating model to the generated data. There are many different MCMC samplers with their own configurable parameters, so here is where those settings are tweaked.}\\
 \addlinespace
 Fit Simulated Ensemble & Fit the simulated data to the model using the algorithm configured in the previous step.\\
-\cellcolor{gray!6}{Algorithmic Calibration} & \cellcolor{gray!6}{How well did the algorithm do in fitting the simulated data? This step helps to answer the question regarding computational faithfulness. A model may be well specified, but if the algorithm used is unreliable then the posterior distribution is also unreliable, and this can lead to poor inferences. Methods for checking models is discussed in (\#model-checking).}\\
+\cellcolor{gray!6}{Algorithmic Calibration} & \cellcolor{gray!6}{How well did the algorithm do in fitting the simulated data? This step helps to answer the question regarding computational faithfulness. A model may be well specified, but if the algorithm used is unreliable then the posterior distribution is also unreliable, and this can lead to poor inferences.}\\
 Inferential Calibration & Are there any pathological behaviors in the model such as overfitting or non-identifiability? This step helps to answer the question of inferential adequacy.\\
 \bottomrule
 \end{tabular}
@@ -969,9 +995,9 @@ These steps are not meant to be followed in a strictly linear fashion. If a conc
 
 This paper focuses on a type of psychometric experiment called a temporal order judgment (TOJ) experiment. If there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept (perceive them as happening simultaneously). Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events.
 
-It was Charles Darwin who in his book \emph{On the Origin of Species} developed the idea that living organisms adapt in order to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Galton's works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that he was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
+It was Charles Darwin who in his book ``On the Origin of Species'' developed the idea that living organisms adapt in order to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Galton's works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that he was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
 
-E.H. Weber built upon Herbart's work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber's Law (Equation \eqref{eq:webers-law}), which states that the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus \citep{britannica2014editors}.
+E.H. Weber built upon Herbart's work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber's Law (Equation \eqref{eq:webers-law}), which states that the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus {[}ekman1959weber{]}.
 
 \begin{equation}
   \frac{\Delta I}{I} = k
@@ -1167,9 +1193,9 @@ Before formally conducting the workflow, we motivate our choice of using the log
 \caption{Assortment of psychometric functions.}\label{fig:ch040-pf-assortment}
 \end{figure}
 
-The Weibull psychometric function is more common when it comes to 2-alternative forced choice (2-AFC) psychometric experiments where the independent variable is a stimulus intensity (non-negative) and the goal is signal detection. The data in this paper includes both positive and negative SOA values, so the Weibull is not a natural choice. Our first choice is the logistic function as it is the canonical choice for Binomial count data. The data in this study are exchangeable, meaning that the label of a positive response can be swapped with the label of a negative response and the inferences would remain the same. Since there is no natural ordering, it makes more sense for the psychometric function to be symmetric, e.g.~the logistic function and Gaussian CDF. We use symmetric loosely to mean that the probability density function (PDF) has zero skewness. In practice, there is little difference in inferences between the \emph{logit} and \emph{probit} links, but computationally the logit link is more efficient.
+The Weibull psychometric function is more common when it comes to 2-alternative forced choice (2-AFC) psychometric experiments where the independent variable is a stimulus intensity (non-negative) and the goal is signal detection. The data in this paper includes both positive and negative SOA values, so the Weibull is not a natural choice. Our first choice is the logistic function as it is the canonical choice for Binomial count data. The data in this study are exchangeable, meaning that the label of a positive response can be swapped with the label of a negative response and the inferences would remain the same. Since there is no natural ordering, it makes more sense for the psychometric function to be symmetric, e.g.~the logistic function and Gaussian CDF. We use symmetric loosely to mean that the probability density function (PDF) has zero skewness. In practice, there is little difference in inferences between the logit and probit links, but computationally the logit link is more efficient.
 
-It is appropriate to provide additional background to GLMs and their role in working with psychometric functions. A GLM allows the linear model to be related to the outcome variable via a \emph{link} function. An example of this is the logit link -- the inverse of the logistic function. The logistic function, \(F\), takes \(x \in \mathbb{R}\) and constrains the output to be in \((0, 1)\).
+It is appropriate to provide additional background to GLMs and their role in working with psychometric functions. A GLM allows the linear model to be related to the outcome variable via a link function. An example of this is the logit link -- the inverse of the logistic function. The logistic function, \(F\), takes \(x \in \mathbb{R}\) and constrains the output to be in \((0, 1)\).
 
 \begin{equation}
   F(\theta) = \frac{1}{1 + \exp\left(-\theta\right)}
@@ -1185,6 +1211,8 @@ Since \(F\) is a strictly increasing and continuous function, it has an inverse,
 
 By taking \((F^{-1} \circ F)(\theta)\) we can arrive at a relationship that is linear in \(\theta\).
 
+\setstretch{1.0}
+
 \begin{align*}
   \pi = F(\theta) \Longleftrightarrow F^{-1}(\pi) &= F^{-1}(F(\theta)) \\
   & = \ln\left(\frac{F(\theta)}{1 - F(\theta)}\right) \\
@@ -1194,6 +1222,7 @@ By taking \((F^{-1} \circ F)(\theta)\) we can arrive at a relationship that is l
   &= - \ln(\exp(-\theta)) \\
   &= \theta
 \end{align*}
+\setstretch{2.0}
 
 The motivation for this background is to show that a model for the psychometric function can be specified using a linear predictor, \(\theta\). Given a simple slope-intercept model, the linear predictor would typically be written as:
 
@@ -1227,11 +1256,11 @@ Similarly, the JND is defined as the difference between the SOA value at the 84\
   \label{eq:jnd1}
 \end{equation}
 
-From the conceptual analysis, it is easy to define priors for the PSS and JND, but then how does one set the priors for \(\alpha\) and \(\beta\)? Let's say the prior for the just noticeable difference is \(jnd \sim \pi_j\). Then the prior for \(\beta\) would be
+From the conceptual analysis, it is easy to define priors for the PSS and JND, but then how does one set the priors for \(\alpha\) and \(\beta\)? Let's say the prior for the just noticeable difference is \(jnd \sim \pi_j\). Then the prior for \(\beta\) would be:
 
 \[\beta \sim \frac{\mathrm{logit}(0.84)}{\pi_j}\]
 
-The log-normal distribution has a nice property where its multiplicative inverse is still a log-normal distribution. If we let \(\pi_j = \mathrm{Lognormal}(\mu, \sigma^2)\), then \(\beta\) would be distributed as
+The log-normal distribution has a nice property where its multiplicative inverse is still a log-normal distribution. If we let \(\pi_j = \mathrm{Lognormal}(\mu, \sigma^2)\), then \(\beta\) would be distributed as:
 
 \[
 \beta \sim \mathrm{Lognormal}(-\mu + \ln(\mathrm{logit}(0.84)), \sigma^2)
@@ -1275,10 +1304,13 @@ After the first experimental block the subjects go through a temporal recalibrat
 
 The response that subjects give during a TOJ task is recorded as a zero or a one, and their relative performance is determined by the SOA value. Let \(y\) represent the binary outcome of a trial and let \(x\) be the SOA value.
 
+\setstretch{1.0}
+
 \begin{align*}
 y_i &\in \lbrace 0, 1\rbrace \\
 x_i &\in \mathbb{R}
 \end{align*}
+\setstretch{2.0}
 
 If the SOA values are fixed as in the audiovisual task, then the responses can be aggregated into Binomial counts, \(k\).
 
@@ -1334,12 +1366,9 @@ We begin with the simplest model that captures the structure of the data without
 
 Recall that we are using the linear model from \eqref{eq:linearform2}. The PSS can be positive or negative without any expected bias towards either, so a symmetric distribution such as the Gaussian is a reasonable choice for \(\alpha\). We determined earlier that a PSS value more than 150ms in absolute value is unlikely, so we can define a Gaussian prior such that \(P(|pss| > 0.150) \approx 0.01\). Since the prior does not need to be exact, the following mean and variance suffice:
 
-\setstretch{1.0}
-
 \[
 pss \sim \mathcal{N}(0, 0.06^2) \Longleftrightarrow \alpha \sim \mathcal{N}(0, 0.06^2)
 \]
-\setstretch{2.0}
 
 For the just noticeable difference, we continue to use the log-normal distribution because it is constrained to positive values and has the reciprocal property. The JND is expected to be close to 100ms and unlikely to exceed \(1\) second. This implies a prior such that the mean is around 100ms and the bulk of the distribution is below 1 second. I.e. \(E[X] \approx 0.100\) and \(P(X < 1) \approx 0.99\). This requires solving a system of nonlinear equations in two variables:
 
@@ -1672,7 +1701,7 @@ The posterior distributions for \(\alpha\) and \(\beta\) are well within the ran
 
 \emph{Posterior Retrodictive Checks}
 
-It is time to run the posterior samples through the summary functions and then perform \emph{retrodictive} checks. A retrodiction is using the posterior model to predict and compare to the observed data. This is simply done by drawing samples from the posterior and feeding in the observational data. This may be repeated to gain posterior predictive samples.
+It is time to run the posterior samples through the summary functions and then perform retrodictive checks. A retrodiction is using the posterior model to predict and compare to the observed data. This is simply done by drawing samples from the posterior and feeding in the observational data. This may be repeated to gain posterior predictive samples.
 
 \setstretch{1.0}
 
@@ -1707,7 +1736,7 @@ Next is to create the posterior predictive samples. We do this in two steps to b
 \caption{Posterior distribution of psychometric functions using pooled observations.}\label{fig:ch041-posterior-pf-plot}
 \end{figure}
 
-Next we sample parameter values from the posterior distribution and use them to simulate a new data set. In the next iteration we show how to get \texttt{Stan} to automatically produce posterior predictive samples from the model fitting step. The results of the posterior preictions are shown in figure \ref{fig:ch041-obs-vs-retro-plot}.
+Next we sample parameter values from the posterior distribution and use them to simulate a new data set. In the next iteration we show how to get \texttt{Stan} to automatically produce posterior predictive samples from the model fitting step. The results of the posterior predictions are shown in figure \ref{fig:ch041-obs-vs-retro-plot}.
 
 \setstretch{1.0}
 
@@ -1739,7 +1768,7 @@ Figure \ref{fig:ch041-obs-vs-retro-plot} shows that the model captures the broad
 \hypertarget{iter2}{%
 \section{Iteration 2: adding age and block}\label{iter2}}
 
-In this iteration we add the treatment and age groups into the model. There are no changes with the conceptual understanding of the experiment, and nothing to change with the observational space. As such we skip the first three steps and go to the model development step. As we build the model, the number of changes from one iteration to the next should go to zero as the model \emph{expands} to become only as complex as necessary to answer the research questions.
+In this iteration we add the treatment and age groups into the model. There are no changes with the conceptual understanding of the experiment, and nothing to change with the observational space. As such we skip the first three steps and go to the model development step. As we build the model, the number of changes from one iteration to the next should go to zero as the model expands to become only as complex as necessary to answer the research questions.
 
 \textbf{Post-Model, Pre-Data}
 
@@ -2666,7 +2695,7 @@ We used the audiovisual data in the first few iterations of building a model and
 
 Why did the visual data behave this way when the audiovisual data had no issue? That gets deep into the theory of how our brains integrate signals arising from different modalities. Detecting the temporal order of two visual stimuli may be an easier mental task than that of heterogeneous signals. Then consider the audiovisual task versus the duration or sensorimotor task. Visual-speech synthesis is a much more common task throughout the day than visual-tactile (sensorimotor), and so perhaps we are better adjusted to such a task as audiovisual. The latent measure of relative performance or task difficulty might be picked up through the lapse rate.
 
-To test this idea, the TOJ experiment could be repeated, but also ask the subject afterwards how they would rate the difficulty of each task. For now, a post-hoc test can be done by comparing the mean and spread of the lapse rates to a \emph{pseuedo difficulty} measure as defined by the proportion of the incorrect responses. A response is correct when the sign of the SOA value is concordant with the response, e.g.~a positive SOA and the subject gives the ``positive'' response or a negative SOA and the subject gives the ``negative'' response. Looking at figure \ref{fig:ch050-Magenta-Finger}, we would subjectively rate the tasks from easiest to hardest based on ocular analysis as
+To test this idea, the TOJ experiment could be repeated, but also ask the subject afterwards how they would rate the difficulty of each task. For now, a post-hoc test can be done by comparing the mean and spread of the lapse rates to a pseudo-difficulty measure as defined by the proportion of the incorrect responses. A response is correct when the sign of the SOA value is concordant with the response, e.g.~a positive SOA and the subject gives the ``positive'' response or a negative SOA and the subject gives the ``negative'' response. Looking at figure \ref{fig:ch050-Magenta-Finger}, we would subjectively rate the tasks from easiest to hardest based on ocular analysis as
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -2738,10 +2767,14 @@ The subject-level model can make predictions for new individuals or for individu
 \caption{Block estimates for subject `O-f-CE`. Even though their post-adaptation block was not in the data set, we can make predtictions thanks to the multilevel model with subject-level predictors.}\label{fig:ch050-Solid-Autumn}
 \end{figure}
 
-\hypertarget{discussion-and-conclusion}{%
-\chapter{Discussion and Conclusion}\label{discussion-and-conclusion}}
+\hypertarget{conclusion}{%
+\chapter{Discussion and Conclusion}\label{conclusion}}
 
-The results from the previous chapter provide insight into how future experiments can be designed to offer better inferences. In the visual TOJ task, the granularity in the SOA values near the PSS could be increased to get more reliable estimates of the slope and to avoid complete separation. Including a lapse rate helps, but can be unreliable if the range of SOA values is too narrow. For more difficult tasks like the sensorimotor TOJ task, larger SOA values are necessary so that the lapse rate can be accurately measured. Finally for multilevel modeling and partial pooling to have a significant benefit, five or more groups is recommended. The study could be expanded to have five or six age groups (20-30, 30-40, etc.). More age groups would also allow for finer tracking of trends in the distribution of PSS and JND values and the affect of temporal recalibration on them.
+The results from the previous chapter provide insight into how future experiments can be designed to offer better inferences. In the visual TOJ task, the granularity in the SOA values near the PSS could be increased to get more reliable estimates of the slope and to avoid complete separation. Including a lapse rate helps, but can be unreliable if the range of SOA values is too narrow. For more difficult tasks like the sensorimotor TOJ task, larger SOA values are necessary so that the lapse rate can be accurately measured.
+
+Since the lapse rate for trained observers is estimated to be no more than \(0.05\), an experiment would need about \(20\) trials at a larger SOA in order to pick up on a single lapse. In this data, we have multiple subjects within an age group, so the repetition is spread out. As a consequence, it is possible to estimate an age group level lapse rate, but more difficult to estimate subject specific lapses.
+
+For multilevel modeling and partial pooling to have a significant benefit, five or more groups is recommended. The study could be expanded to have five or six age groups (20-30, 30-40, etc.). More age groups would also allow for finer tracking of trends in the distribution of PSS and JND values and the affect of temporal recalibration on them.
 
 In the future we would like to explore a causal inference model for the psychometric function. The results drawn from the statistical model are simply associations between the predictor variables, and of course correlations do not imply causation. How do we move from association to cause-and-effect? Drawing the model as a directed acyclic graph and testing the implications of the model is a start. With a proper model, total effects of a certain variable on the outcome can be determined.
 
@@ -2757,6 +2790,8 @@ We have produced a novel statistical model for temporal order judgment data by f
 \chapter{Supplementary Code}\label{code}}
 
 \textbf{Eight Schools Model}
+
+\setstretch{1.0}
 
 \begin{verbatim}
 data {
@@ -2785,7 +2820,13 @@ generated quantities {
 }
 \end{verbatim}
 
+\setstretch{2.0}
+
+\clearpage
+
 \textbf{Model with Lapse and Subject-level Parameters}
+
+\setstretch{1.0}
 
 \begin{verbatim}
 data {
@@ -2883,7 +2924,13 @@ generated quantities {
 }
 \end{verbatim}
 
+\setstretch{2.0}
+
+\clearpage
+
 \textbf{Stan Algebraic Solver}
+
+\setstretch{1.0}
 
 \begin{verbatim}
 functions {
@@ -2906,6 +2953,8 @@ transformed parameters {
 }
 \end{verbatim}
 
+\setstretch{2.0}
+
 \hypertarget{model-dev}{%
 \chapter{Developing a Model}\label{model-dev}}
 
@@ -2914,6 +2963,8 @@ Our final modeling strategy is an evolution from other attempts. The development
 In the first attempt at modeling, we used a classical GLM to get a baseline understanding of the data, but the fact that some estimates for certain subjects failed due to complete separation reinforced the our adoption of non-classical techniques. Our first Bayesian model was derived from \citet{lee2014bayesian} which used nested loops to iterate over subjects and SOA values. The data were required to be stored in a complicated way that made it difficult to comprehend and extend.
 
 We moved on to using \texttt{arm::bayesglm} to remove convergence issues, but we were met with other limitations such as linear parameterization and lack of hierarchical modeling. The book Statistical Rethinking \citep{mcelreath2020statistical} offers a great first introduction to Bayesian multilevel modeling. McElreath's \texttt{rethinking} package accompanies the book, and offers a compact yet expressive syntax for models that get translated into a Stan model. A model with age group and block can be written using \texttt{rethinking::ulam} as
+
+\setstretch{1.0}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2931,6 +2982,8 @@ We moved on to using \texttt{arm::bayesglm} to remove convergence issues, but we
 \end{Highlighting}
 \end{Shaded}
 
+\setstretch{2.0}
+
 While learning about multilevel models, we tried writing a package that generates a \texttt{Stan} program based on \texttt{R} formula syntax. At the time the concepts of no-pooling, complete pooling, and partial pooling were vaguely understood, and the package was plagued by the same lack of flexibility that \texttt{rstanarm} and \texttt{brms} have. Then it was discovered that \texttt{brms} and \texttt{rstanarm} already did what we were trying to do, but programming experience was invaluable.
 
 We also tried using \texttt{lme4}, \texttt{rstanarm}, and \texttt{brms}, and learned more about the concepts of fixed and random effects. We noticed that parameterization can have a significant affect on the efficiency of a model and the inferential power of the estimated parameters. When fitting a classical model, there is little difference in estimating \texttt{a\ +\ bx} vs.~\texttt{d(x\ -\ c)} since the latter can just be expanded as \texttt{-cd\ +\ dx} which is essentially the same as the first parameterization, but there is a practical difference in the interpretation of the parameters. The second parameterization implies that there is a dependence among the parameters that can be factored out. In the context of psychometric functions, there is a stronger connection between PSS and \texttt{c} and the JND and \texttt{d}. This parameterization made it easier to specify priors and also increased the model efficiency. Of the modeling tools mentioned, only \texttt{rethinking} and \texttt{Stan} allow for arbitrary parameterization.
@@ -2943,6 +2996,8 @@ We finally arrived at a model that worked well, but learned that using a binary 
 \end{equation}
 
 Using an indicator variable in this fashion also introduced an interaction effect into the model that we almost did not account for after switching to using a factor variable. Interaction effects between factors is handled by creating a new factor that is essentially the cross-product of other factor variables. E.g. for factor variables \(x\) and \(y\)
+
+\setstretch{1.0}
 
 \[
 x = \begin{bmatrix}
@@ -2959,8 +3014,9 @@ bi & bj \\
 ci & cj
 \end{bmatrix}
 \]
+\setstretch{2.0}
 
-The final round of reparameterization came in the form of adopting non-centered parameterization for more efficient models. To us, \(Z \sim N(0, 1^2);\quad X = 3 + 2Z\) is the same as \(X \sim N(3, 2^2)\), but to a computer the process of sampling from \(X\) can be more difficult than sampling from \(Z\) (discussed in \protect\hyperlink{methods}{chapter 3}).
+The final round of reparameterization came in the form of adopting non-centered parameterization for more efficient models. To us, \(Z \sim N(0, 1^2);\quad X = 3 + 2Z\) is the same as \(X \sim N(3, 2^2)\), but to a computer the process of sampling from \(X\) can be more difficult than sampling from \(Z\) (discussed in \protect\hyperlink{methods}{chapter 2}).
 
 \hypertarget{reproduce}{%
 \chapter{Reproducible Results}\label{reproduce}}
@@ -2968,6 +3024,8 @@ The final round of reparameterization came in the form of adopting non-centered 
 Data doesn't always come in a nice tidy format, and we had to turn the raw experimental data into a clean data set that is ready for modeling. Sometimes the process is quick and straight forward, but other times, like with this psychometric data, it takes more effort and clever techniques. There is academic value in describing the steps taken to reduce the headache later.
 
 To begin, there is a strong push in recent years for reproducible data science. Scientific methods and results should be able to be replicated by other researchers, and part of that includes being able to replicate the process that takes the raw data and produces the tidy data that is ready for analysis. Tidy data is described by \citet{wickham2014tidy} and can be summed up by three principles
+
+\setstretch{1.0}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -2978,17 +3036,32 @@ To begin, there is a strong push in recent years for reproducible data science. 
   Each observation forms a row
 \item
   Each type of observational unit forms a table
+  \setstretch{2.0}
 \end{enumerate}
 
 One problem is having data in a spread sheet, modifying it, and then having no way of recovering the original data. Spread sheets are a convenient way to organize, transform, and lightly analyze data, but problems can quickly arise unless there is a good backup/snapshot system in place. Mutability in computer science is the property of a data structure where its contents can be modified in place. Immutability means that the object cannot be modified without first making a copy. Data is immutable, or at least that is the mindset that researchers must adopt in order to have truly reproducible workflows. The raw data that is collected or produced by a measurement device should never be modified without first being copied, even if for trivial reasons such as correcting a spelling mistake. If a change is made to the raw data, it should be carefully documented and reversible.
 
 To begin the data cleaning journey, we introduce the directory system that we had been given to work with. Each task is separated into its own folder, and within each folder is a subdirectory of age groups.
 
-\begin{center}\includegraphics[width=0.3\linewidth]{figures/data_dir} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=0.3\linewidth]{figures/data_dir} 
+
+}
+
+\caption{Top-level data directory structure.}\label{fig:ch230-Lama-Everyday}
+\end{figure}
 
 Within each age group subdirectory are the subdirectories for each subject named by their initials which then contain the experimental data in Matlab files.
 
-\begin{center}\includegraphics[width=0.35\linewidth]{figures/data_subdir} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=0.35\linewidth]{figures/data_subdir} 
+
+}
+
+\caption{Subdirectory structure.}\label{fig:ch230-Third-Needless-Antique}
+\end{figure}
 
 The data appears manageable, and there is information contained in the directory structure such as task, age group, and initials, and file name contains information about the experimental block. There is also an excel file that we were later given that contains more subject information like age and sex, though that information is not used in the model. The columns of the Matlab file depend on the task, but generally they contain an SOA value and a response, but no column or row name information -- that was provided by the researcher who collected the data.
 
@@ -3001,6 +3074,8 @@ We then created a table of metadata -- information extracted from the directory 
 The \texttt{\^{}(\textbackslash{}\textbackslash{}w+)/} matches any word characters at the start and before the next slash. Since the directory is structured as \texttt{Task/AgeGroup/Subject/file.mat}, the regular expression should match three words between slashes. The file name generally follows the pattern of \texttt{Initials\_\_block\#\_\_MAT.mat}, so \texttt{{[}A-Z{]}\{2,3\}\_*{[}A-Z{]}*} should match the initials, and \texttt{(adapt{[}0-9{]}\textbar{}baseline{[}0-9{]}*)} should match the block (baseline or adapt). This method works for \(536\) of the \(580\) individual records. For the ones it failed, it was generally do to misspellings or irregular capitalizing of ``baseline'' and ``adapt''.
 
 Since there is only a handful of irregular block names, they can be dealt with by a separate regular expression that properly extracts the block information. Other challenges in cleaning the data include the handling of subjects with the same initials. This becomes a problem when filtering by a subject's initials is not guaranteed to return a unique subject. Furthermore there are two middle age subjects with the same initials of ``JM'', so one was also identified with their sex ``JM\_F''. The solution is to create a unique identifier (labeled as SID) that is a combination of age group, sex, and initials. For an experiment identifier (labeled as RID), the task and block were prepended to the SID. Each of these IDs uniquely identify the subjects and their experimental records making it easier to filter and search.
+
+\setstretch{1.0}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3017,6 +3092,8 @@ Since there is only a handful of irregular block names, they can be dealt with b
 \CommentTok{#> $ sex       <fct> F, F, F, F, F, F, F, F, F, M, M, M, M...}
 \end{Highlighting}
 \end{Shaded}
+
+\setstretch{2.0}
 
 Then with the table of clean metadata, the task is simply to loop through each row, read the Matlab file given by \texttt{path}, add the unique ID as a column, and then join the experimental data with the metadata to create a data set that is ready for model fitting and data exploration. The full code used to generate the clean data is not yet available online, but can be shared with the committee.
 

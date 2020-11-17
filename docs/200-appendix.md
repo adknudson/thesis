@@ -7,6 +7,7 @@
 **Eight Schools Model**
 
 
+\setstretch{1.0}
 ```
 data {
   int<lower=0> J;         // number of schools 
@@ -33,11 +34,14 @@ generated quantities {
   }
 }
 ```
+\setstretch{2.0}
 
 
+\clearpage
 **Model with Lapse and Subject-level Parameters**
 
 
+\setstretch{1.0}
 
 ```
 data {
@@ -134,11 +138,14 @@ generated quantities {
   }
 }
 ```
+\setstretch{2.0}
 
 
+\clearpage
 **Stan Algebraic Solver**
 
 
+\setstretch{1.0}
 ```
 functions {
   vector system(vector y, vector theta, real[] x_r, int[] x_i) {
@@ -159,6 +166,7 @@ transformed parameters {
   y = algebra_solver(system, y_guess, theta, x_r, x_i);
 }
 ```
+\setstretch{2.0}
 
 
 # Developing a Model {#model-dev}
@@ -173,6 +181,7 @@ In the first attempt at modeling, we used a classical GLM to get a baseline unde
 We moved on to using `arm::bayesglm` to remove convergence issues, but we were met with other limitations such as linear parameterization and lack of hierarchical modeling. The book Statistical Rethinking [@mcelreath2020statistical] offers a great first introduction to Bayesian multilevel modeling. McElreath's `rethinking` package accompanies the book, and offers a compact yet expressive syntax for models that get translated into a Stan model. A model with age group and block can be written using `rethinking::ulam` as
 
 
+\setstretch{1.0}
 
 ```r
 rethinking::ulam(alist(
@@ -187,6 +196,7 @@ rethinking::ulam(alist(
   c(sd_aG, sd_aT, sd_bG, sd_bT) ~ half_cauchy(0, 5)
 ), data = df, chains = 4, cores = 4, log_lik = TRUE)
 ```
+\setstretch{2.0}
 
 
 While learning about multilevel models, we tried writing a package that generates a `Stan` program based on `R` formula syntax. At the time the concepts of no-pooling, complete pooling, and partial pooling were vaguely understood, and the package was plagued by the same lack of flexibility that `rstanarm` and `brms` have. Then it was discovered that `brms` and `rstanarm` already did what we were trying to do, but programming experience was invaluable.
@@ -207,6 +217,7 @@ We finally arrived at a model that worked well, but learned that using a binary 
 Using an indicator variable in this fashion also introduced an interaction effect into the model that we almost did not account for after switching to using a factor variable. Interaction effects between factors is handled by creating a new factor that is essentially the cross-product of other factor variables. E.g. for factor variables $x$ and $y$
 
 
+\setstretch{1.0}
 $$
 x = \begin{bmatrix}
 a \\
@@ -222,9 +233,10 @@ bi & bj \\
 ci & cj
 \end{bmatrix}
 $$
+\setstretch{2.0}
 
 
-The final round of reparameterization came in the form of adopting non-centered parameterization for more efficient models. To us, $Z \sim N(0, 1^2);\quad X = 3 + 2Z$ is the same as $X \sim N(3, 2^2)$, but to a computer the process of sampling from $X$ can be more difficult than sampling from $Z$ (discussed in [chapter 3](#methods)).
+The final round of reparameterization came in the form of adopting non-centered parameterization for more efficient models. To us, $Z \sim N(0, 1^2);\quad X = 3 + 2Z$ is the same as $X \sim N(3, 2^2)$, but to a computer the process of sampling from $X$ can be more difficult than sampling from $Z$ (discussed in [chapter 2](#methods)).
 
 
 # Reproducible Results {#reproduce}
@@ -239,9 +251,11 @@ Data doesn't always come in a nice tidy format, and we had to turn the raw exper
 To begin, there is a strong push in recent years for reproducible data science. Scientific methods and results should be able to be replicated by other researchers, and part of that includes being able to replicate the process that takes the raw data and produces the tidy data that is ready for analysis. Tidy data is described by @wickham2014tidy and can be summed up by three principles
 
 
+\setstretch{1.0}
 1. Each variable forms a column
 2. Each observation forms a row
 3. Each type of observational unit forms a table
+\setstretch{2.0}
 
 
 One problem is having data in a spread sheet, modifying it, and then having no way of recovering the original data. Spread sheets are a convenient way to organize, transform, and lightly analyze data, but problems can quickly arise unless there is a good backup/snapshot system in place. Mutability in computer science is the property of a data structure where its contents can be modified in place. Immutability means that the object cannot be modified without first making a copy.  Data is immutable, or at least that is the mindset that researchers must adopt in order to have truly reproducible workflows. The raw data that is collected or produced by a measurement device should never be modified without first being copied, even if for trivial reasons such as correcting a spelling mistake. If a change is made to the raw data, it should be carefully documented and reversible.
@@ -250,15 +264,27 @@ One problem is having data in a spread sheet, modifying it, and then having no w
 To begin the data cleaning journey, we introduce the directory system that we had been given to work with. Each task is separated into its own folder, and within each folder is a subdirectory of age groups.
 
 
+\begin{figure}
 
-\begin{center}\includegraphics[width=0.3\linewidth]{figures/data_dir} \end{center}
+{\centering \includegraphics[width=0.3\linewidth]{figures/data_dir} 
+
+}
+
+\caption{Top-level data directory structure.}(\#fig:ch230-Lama-Everyday)
+\end{figure}
 
 
 Within each age group subdirectory are the subdirectories for each subject named by their initials which then contain the experimental data in Matlab files.
 
 
+\begin{figure}
 
-\begin{center}\includegraphics[width=0.35\linewidth]{figures/data_subdir} \end{center}
+{\centering \includegraphics[width=0.35\linewidth]{figures/data_subdir} 
+
+}
+
+\caption{Subdirectory structure.}(\#fig:ch230-Third-Needless-Antique)
+\end{figure}
 
 
 The data appears manageable, and there is information contained in the directory structure such as task, age group, and initials, and file name contains information about the experimental block. There is also an excel file that we were later given that contains more subject information like age and sex, though that information is not used in the model. The columns of the Matlab file depend on the task, but generally they contain an SOA value and a response, but no column or row name information -- that was provided by the researcher who collected the data. 
@@ -278,6 +304,7 @@ The `^(\\w+)/` matches any word characters at the start and before the next slas
 Since there is only a handful of irregular block names, they can be dealt with by a separate regular expression that properly extracts the block information. Other challenges in cleaning the data include the handling of subjects with the same initials. This becomes a problem when filtering by a subject's initials is not guaranteed to return a unique subject. Furthermore there are two middle age subjects with the same initials of "JM", so one was also identified with their sex "JM_F". The solution is to create a unique identifier (labeled as SID) that is a combination of age group, sex, and initials. For an experiment identifier (labeled as RID), the task and block were prepended to the SID. Each of these IDs uniquely identify the subjects and their experimental records making it easier to filter and search.
 
 
+\setstretch{1.0}
 
 ```r
 glimpse(features, width = 60)
@@ -292,6 +319,7 @@ glimpse(features, width = 60)
 #> $ age       <dbl> 39, 44, 41, 48, 49, 43, 47, 49, 49, 4...
 #> $ sex       <fct> F, F, F, F, F, F, F, F, F, M, M, M, M...
 ```
+\setstretch{2.0}
 
 
 Then with the table of clean metadata, the task is simply to loop through each row, read the Matlab file given by `path`, add the unique ID as a column, and then join the experimental data with the metadata to create a data set that is ready for model fitting and data exploration. The full code used to generate the clean data is not yet available online, but can be shared with the committee.

@@ -14,10 +14,12 @@ Psychometric functions are commonly fit using generalized linear models which al
 Commonly GLMs are fit using maximum likelihood estimation (MLE). The outcome of a single experiment can be represented as the result of a Bernoulli trial. The psychometric function, $F(x; \theta)$, determines the probability that the outcome is 1:
 
 
+\setstretch{1.0}
 \begin{align*}
 Y &\sim \textrm{Bernoulli}(\pi) \\
 \pi &= P(Y=1 \vert x; \theta) = F(x; \theta)
 \end{align*}
+\setstretch{2.0}
 
 
 If $P(Y=1 | x; \theta) = F(x;\theta)$, then $P(Y = 0 | x; \theta) = 1 - F(x;\theta)$, and hence the probability of an outcome is:
@@ -100,6 +102,7 @@ For a slope-intercept model, the MLE for the slope is infinity, and the location
 When the separable data from above is fit using `R`'s `glm` function, there is a warning about fitted probabilities being $0$ or $1$, indicating that the slope is very steep.
 
 
+\setstretch{1.0}
 
 ```r
 fit <- glm(y ~ x, family = binomial("logit"))
@@ -108,6 +111,7 @@ coefficients(fit)
 #> (Intercept)           x 
 #>       22.89       45.97
 ```
+\setstretch{2.0}
 
 
 The coefficients of the linear predictor are in slope-intercept form ($23 + 46 x$). Rearranging the coefficients into location-scale form yields:
@@ -311,11 +315,13 @@ As the number of parameters in a model grows, it becomes exceedingly tedious to 
 The initial starting parameters for this model are intentionally set to vary between $-10$ and $10$ -- in contrast to the default range of $(-2, 2)$ -- and with only a few samples drawn in order to artificially drive up the split $\hat{R}$ statistic. The model is provided as supplementary code in the [appendix](#code).
 
 
+\setstretch{1.0}
 
 ```r
 fit_cp <- sampling(schools_cp, data = schools_dat, refresh = 0,
                    iter = 40, init_r = 10, seed = 671254821)
 ```
+\setstretch{2.0}
 
 
 `Stan` warns about many different issues with this model, but the R-hat is the one of interest. The largest is $1.71$ which is incredibly large. Gelmen suggests using a threshold of $1.10$ to flag unhealthy chains.
@@ -382,11 +388,13 @@ where
 $$
 s_{m}^2 = \frac{1}{N-1}\sum_{n=1}^{N}\left(\theta_{m}^{(n)} - \bar{\theta}_m\right)^2
 $$
+\setstretch{2.0}
 
 
 The weighted mixture of the within-chain and cross-chain variation is:
 
 
+\setstretch{1.0}
 $$
 \hat{var} = \frac{N-1}{N} W + \frac{1}{N} B
 $$
@@ -428,6 +436,7 @@ var_hat <- W * (N - 1) / N + B / N
 The $\hat{R}$ statistic is smaller than the split $\hat{R}$ value provided by `Stan`. This is a consequence of steadily increasing or decreasing chains. The split value does what it sounds like, and splits the samples from the chains in half -- effectively doubling the number of chains and halving the number of samples per chain. In this way, the measure is more robust in detecting unhealthy chains. This also highlights the utility in using both visual and statistical tools to evaluate models. Here is the calculation of the split $\hat{R}$:
 
 
+\setstretch{1.0}
 
 ```r
 param <- "mu"
@@ -448,6 +457,7 @@ var_hat <- W * (N - 1) / N + B / N
 (mu_Rhat <- sqrt(var_hat / W))
 #> [1] 1.709
 ```
+\setstretch{2.0}
 
 
 We've successfully replicated the calculation of the split $\hat{R}$. @vehtari2020rank propose an improved rank-normalized $\hat{R}$ for assessing the convergence of MCMC chains, and also suggest using a threshold of $1.01$.
@@ -456,6 +466,7 @@ We've successfully replicated the calculation of the split $\hat{R}$. @vehtari20
 **Effective Sample Size.** Samples from Markov Chains are typically autocorrelated, which can increase uncertainty of posterior estimates. The solution is generally to reparameterize the model to avoid steep log-posterior densities. When the HMC algorithm is exploring difficult geometry, it can get stuck in regions of high densities, which means that there is more correlation between successive samples. Equation \@ref(eq:schools-ncp) shows the centered (left) and non-centered (right) parameterization of the 8-Schools model, and the benefit of reparameterization is conveyed by the ratio of effective sample size to actual sample size in figure \@ref(fig:ch030-Timely-Nitrogen).
 
 
+\setstretch{1.0}
 \begin{equation}
   \begin{split}
     \sigma &\sim \mathcal{U}(0, \infty) \\
@@ -475,6 +486,7 @@ We've successfully replicated the calculation of the split $\hat{R}$. @vehtari20
   \end{split}
 (\#eq:schools-ncp)
 \end{equation}
+\setstretch{2.0}
 
 
 
@@ -553,7 +565,7 @@ One thing to try is fit a handful of linear models, check the parameter's p-valu
 \end{figure}
 
 
-If a $6^{th}$ point were to be added -- a new observation -- which of the models would be expected to predict best? Can it be estimated which model will predict best before testing with new data? One guess is that the quadratic or cubic model will do well because because the linear model is potentially _underfit_ to the data and the quartic is _overfit_ to the data. Figure \@ref(fig:ch030-Cold-Fish) shows the new data point from the polynomial model. Now the linear and cubic models are trending in the wrong direction. The quadratic and quartic models are both trending down, so perhaps they may be the correct form for the model.
+If a $6^{th}$ point were to be added -- a new observation -- which of the models would be expected to predict best? Can it be estimated which model will predict best before testing with new data? One guess is that the quadratic or cubic model will do well because because the linear model is potentially underfit to the data and the quartic is overfit to the data. Figure \@ref(fig:ch030-Cold-Fish) shows the new data point from the polynomial model. Now the linear and cubic models are trending in the wrong direction. The quadratic and quartic models are both trending down, so perhaps they may be the correct form for the model.
 
 
 \begin{figure}
@@ -569,10 +581,12 @@ If a $6^{th}$ point were to be added -- a new observation -- which of the models
 Figure \@ref(fig:ch030-Strawberry-Swallow) shows the 80% and 95% prediction intervals for a new observation given $x = 1$ as well as the true outcome as a dashed line at $y = 1.527$. The linear model has the smallest prediction interval (PI), but completely misses the target. The remaining three models all include the observed value in their 95% PIs, but the quadratic model has the smallest PI of the three. The actual data generating polynomial is
 
 
+\setstretch{1.0}
 \begin{align*}
 y &\sim \mathcal{N}(\mu, 1^2) \\
 \mu &= -0.5(x - 2)^2 + 2
 \end{align*}
+\setstretch{2.0}
 
 
 
@@ -670,8 +684,10 @@ comp <- loo_compare(linear, quadratic, cubic, quartic)
 
 
 \begin{table}[!h]
+
+\caption{(\#tab:ch030-Galaxy Itchy)LOO comparison of Polynomial equations.}
 \centering
-\begin{tabular}{lrrrr}
+\begin{tabular}[t]{lrrrr}
 \toprule
 Model & elpd\_diff & se\_diff & p\_loo & looic\\
 \midrule
@@ -718,50 +734,6 @@ Much work is done before seeing the data or building a model. This includes talk
 
 In this section we describe a simulation-based, principled workflow proposed by @betancourt2020 and broadly adopted by many members of the Bayesian community. The workflow broadly consists of specifying the likelihood and priors, performing prior predictive checks, fitting a model, and performing posterior predictive checks. The steps of the workflow are divided into three phases: 1) pre-model, pre-data, 2) post-model, pre-data, and 3) post-model, post-data. Tables \@ref(tab:ch030-Reborn-Space), \@ref(tab:ch030-Freaky-Sledgehammer), and \@ref(tab:ch030-Bleeding-Liquid-Dagger) list the steps of each phase.
 
-<!-- Table \@ref(tab:ch030-workflow-steps) lists the detailed steps broken up into three phases.
-
-\begin{table}[!h]
-
-\caption{(\#tab:ch030-workflow-steps)Principled workflow}
-\centering
-\begin{tabular}[t]{ll}
-\toprule
-Phase & Step\\
-\midrule
- & conceptual analysis\\
-\cmidrule{2-2}
- & define observational space\\
-\cmidrule{2-2}
-\multirow[t]{-3}{*}{\raggedright\arraybackslash Pre-Model, Pre-Data} & construct summary statistics\\
-\cmidrule{1-2}
- & develop model\\
-\cmidrule{2-2}
- & construct summary functions\\
-\cmidrule{2-2}
- & simulate Bayesian ensemble\\
-\cmidrule{2-2}
- & prior checks\\
-\cmidrule{2-2}
- & configure algorithm\\
-\cmidrule{2-2}
- & fit simulated ensemble\\
-\cmidrule{2-2}
- & algorithmic calibration\\
-\cmidrule{2-2}
-\multirow[t]{-8}{*}{\raggedright\arraybackslash Post-Model, Pre-Data} & inferential calibration\\
-\cmidrule{1-2}
- & fit observed data\\
-\cmidrule{2-2}
- & diagnose posterior fit\\
-\cmidrule{2-2}
- & posterior retrodictive checks\\
-\cmidrule{2-2}
-\multirow[t]{-4}{*}{\raggedright\arraybackslash Post-Model, Post-Data} & celebrate\\
-\bottomrule
-\end{tabular}
-\end{table}
--->
-
 
 \begin{table}[!h]
 
@@ -794,7 +766,7 @@ Prior Checks & Check that the prior predictive distribution is consistent with d
 \cellcolor{gray!6}{Configure Algorithm} & \cellcolor{gray!6}{Having simulated data, the next step is to fit the data generating model to the generated data. There are many different MCMC samplers with their own configurable parameters, so here is where those settings are tweaked.}\\
 \addlinespace
 Fit Simulated Ensemble & Fit the simulated data to the model using the algorithm configured in the previous step.\\
-\cellcolor{gray!6}{Algorithmic Calibration} & \cellcolor{gray!6}{How well did the algorithm do in fitting the simulated data? This step helps to answer the question regarding computational faithfulness. A model may be well specified, but if the algorithm used is unreliable then the posterior distribution is also unreliable, and this can lead to poor inferences. Methods for checking models is discussed in (\#model-checking).}\\
+\cellcolor{gray!6}{Algorithmic Calibration} & \cellcolor{gray!6}{How well did the algorithm do in fitting the simulated data? This step helps to answer the question regarding computational faithfulness. A model may be well specified, but if the algorithm used is unreliable then the posterior distribution is also unreliable, and this can lead to poor inferences.}\\
 Inferential Calibration & Are there any pathological behaviors in the model such as overfitting or non-identifiability? This step helps to answer the question of inferential adequacy.\\
 \bottomrule
 \end{tabular}

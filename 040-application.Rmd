@@ -82,10 +82,10 @@ ggplot(data.frame(x = c(-6, 6), y = c(0, 1)), aes(x, y)) +
 ```
 
 
-The Weibull psychometric function is more common when it comes to 2-alternative forced choice (2-AFC) psychometric experiments where the independent variable is a stimulus intensity (non-negative) and the goal is signal detection. The data in this paper includes both positive and negative SOA values, so the Weibull is not a natural choice. Our first choice is the logistic function as it is the canonical choice for Binomial count data. The data in this study are exchangeable, meaning that the label of a positive response can be swapped with the label of a negative response and the inferences would remain the same. Since there is no natural ordering, it makes more sense for the psychometric function to be symmetric, e.g. the logistic function and Gaussian CDF. We use symmetric loosely to mean that the probability density function (PDF) has zero skewness. In practice, there is little difference in inferences between the _logit_ and _probit_ links, but computationally the logit link is more efficient.
+The Weibull psychometric function is more common when it comes to 2-alternative forced choice (2-AFC) psychometric experiments where the independent variable is a stimulus intensity (non-negative) and the goal is signal detection. The data in this paper includes both positive and negative SOA values, so the Weibull is not a natural choice. Our first choice is the logistic function as it is the canonical choice for Binomial count data. The data in this study are exchangeable, meaning that the label of a positive response can be swapped with the label of a negative response and the inferences would remain the same. Since there is no natural ordering, it makes more sense for the psychometric function to be symmetric, e.g. the logistic function and Gaussian CDF. We use symmetric loosely to mean that the probability density function (PDF) has zero skewness. In practice, there is little difference in inferences between the logit and probit links, but computationally the logit link is more efficient.
 
 
-It is appropriate to provide additional background to GLMs and their role in working with psychometric functions. A GLM allows the linear model to be related to the outcome variable via a _link_ function. An example of this is the logit link -- the inverse of the logistic function. The logistic function, $F$, takes $x \in \mathbb{R}$ and constrains the output to be in $(0, 1)$.
+It is appropriate to provide additional background to GLMs and their role in working with psychometric functions. A GLM allows the linear model to be related to the outcome variable via a link function. An example of this is the logit link -- the inverse of the logistic function. The logistic function, $F$, takes $x \in \mathbb{R}$ and constrains the output to be in $(0, 1)$.
 
 
 \begin{equation}
@@ -106,6 +106,7 @@ Since $F$ is a strictly increasing and continuous function, it has an inverse, a
 By taking $(F^{-1} \circ F)(\theta)$ we can arrive at a relationship that is linear in $\theta$.
 
 
+\setstretch{1.0}
 \begin{align*}
   \pi = F(\theta) \Longleftrightarrow F^{-1}(\pi) &= F^{-1}(F(\theta)) \\
   & = \ln\left(\frac{F(\theta)}{1 - F(\theta)}\right) \\
@@ -115,6 +116,7 @@ By taking $(F^{-1} \circ F)(\theta)$ we can arrive at a relationship that is lin
   &= - \ln(\exp(-\theta)) \\
   &= \theta
 \end{align*}
+\setstretch{2.0}
 
 
 The motivation for this background is to show that a model for the psychometric function can be specified using a linear predictor, $\theta$. Given a simple slope-intercept model, the linear predictor would typically be written as:
@@ -159,13 +161,13 @@ Similarly, the JND is defined as the difference between the SOA value at the 84%
 \end{equation}
 
 
-From the conceptual analysis, it is easy to define priors for the PSS and JND, but then how does one set the priors for $\alpha$ and $\beta$? Let's say the prior for the just noticeable difference is $jnd \sim \pi_j$. Then the prior for $\beta$ would be
+From the conceptual analysis, it is easy to define priors for the PSS and JND, but then how does one set the priors for $\alpha$ and $\beta$? Let's say the prior for the just noticeable difference is $jnd \sim \pi_j$. Then the prior for $\beta$ would be:
 
 
 $$\beta \sim \frac{\mathrm{logit}(0.84)}{\pi_j}$$
 
 
-The log-normal distribution has a nice property where its multiplicative inverse is still a log-normal distribution. If we let $\pi_j = \mathrm{Lognormal}(\mu, \sigma^2)$, then $\beta$ would be distributed as
+The log-normal distribution has a nice property where its multiplicative inverse is still a log-normal distribution. If we let $\pi_j = \mathrm{Lognormal}(\mu, \sigma^2)$, then $\beta$ would be distributed as:
 
 
 $$
@@ -214,6 +216,7 @@ With the consideration for the choice of sigmoid function and linear parameteriz
 
 _Conceptual Analysis_
 
+
 In section \@ref(toj-task) we discussed the experimental setup and data collection. Subjects are presented with two stimuli separated by some temporal delay, and they are asked to respond as to their perception of the temporal order. There are 45 subjects with 15 each in the young, middle, and older age groups. As the SOA becomes larger in the positive direction, subjects are expected to give more "positive" responses, and as the SOA becomes larger in the negative direction, more "negative" responses are expected. By the way the experiment and responses are constructed, there is no expectation to see a reversal of this trend unless there was an issue with the subject's understanding of the directions given to them or an error in the recording process.
 
 
@@ -226,10 +229,12 @@ _Define Observational Space_
 The response that subjects give during a TOJ task is recorded as a zero or a one, and their relative performance is determined by the SOA value. Let $y$ represent the binary outcome of a trial and let $x$ be the SOA value.
 
 
+\setstretch{1.0}
 \begin{align*}
 y_i &\in \lbrace 0, 1\rbrace \\
 x_i &\in \mathbb{R}
 \end{align*}
+\setstretch{2.0}
 
 
 If the SOA values are fixed as in the audiovisual task, then the responses can be aggregated into Binomial counts, $k$.
@@ -263,7 +268,9 @@ The pre- and post-adaptation categories are treated as a binary indicator referr
 
 _Construct Summary Statistics_
 
+
 A set of summary statistics are constructed that help answer the questions of domain expertise consistency and model adequacy. We are studying the affects of age and temporal recalibration through the PSS and JND (see section \@ref(psycho-experiments)), so it is natural to define summary statistics around these quantities to verify model consistency. 
+
 
 It is impossible that a properly conducted block would result in a JND less than 0 (the psychometric function is always non-decreasing), so that can be a lower limit for its threshold. It is also unlikely that the just noticeable difference would be more than a second. Some studies show that we cannot perceive time differences below 30 ms, and others show that an input lag as small as 100ms can impair a person's typing ability. A time delay of 100ms is enough to notice, and so a just noticeable difference should be much less than one second -- much closer to 100ms. We will continue to use one second as an extreme estimate indicator, but will incorporate this knowledge when it comes to selecting priors.
 
@@ -294,11 +301,9 @@ We begin with the simplest model that captures the structure of the data without
 Recall that we are using the linear model from \@ref(eq:linearform2). The PSS can be positive or negative without any expected bias towards either, so a symmetric distribution such as the Gaussian is a reasonable choice for $\alpha$. We determined earlier that a PSS value more than 150ms in absolute value is unlikely, so we can define a Gaussian prior such that $P(|pss| > 0.150) \approx 0.01$. Since the prior does not need to be exact, the following mean and variance suffice:
 
 
-\setstretch{1.0}
 $$
 pss \sim \mathcal{N}(0, 0.06^2) \Longleftrightarrow \alpha \sim \mathcal{N}(0, 0.06^2)
 $$
-\setstretch{2.0}
 
 
 For the just noticeable difference, we continue to use the log-normal distribution because it is constrained to positive values and has the reciprocal property. The JND is expected to be close to 100ms and unlikely to exceed $1$ second. This implies a prior such that the mean is around 100ms and the bulk of the distribution is below 1 second. I.e. $E[X] \approx 0.100$ and $P(X < 1) \approx 0.99$. This requires solving a system of nonlinear equations in two variables:
@@ -723,7 +728,7 @@ The posterior distributions for $\alpha$ and $\beta$ are well within the range d
 _Posterior Retrodictive Checks_
 
 
-It is time to run the posterior samples through the summary functions and then perform _retrodictive_ checks. A retrodiction is using the posterior model to predict and compare to the observed data. This is simply done by drawing samples from the posterior and feeding in the observational data. This may be repeated to gain posterior predictive samples.
+It is time to run the posterior samples through the summary functions and then perform retrodictive checks. A retrodiction is using the posterior model to predict and compare to the observed data. This is simply done by drawing samples from the posterior and feeding in the observational data. This may be repeated to gain posterior predictive samples.
 
 
 \setstretch{1.0}
@@ -790,7 +795,7 @@ p +
 ```
 
 
-Next we sample parameter values from the posterior distribution and use them to simulate a new data set. In the next iteration we show how to get `Stan` to automatically produce posterior predictive samples from the model fitting step. The results of the posterior preictions are shown in figure \@ref(fig:ch041-obs-vs-retro-plot).
+Next we sample parameter values from the posterior distribution and use them to simulate a new data set. In the next iteration we show how to get `Stan` to automatically produce posterior predictive samples from the model fitting step. The results of the posterior predictions are shown in figure \@ref(fig:ch041-obs-vs-retro-plot).
 
 
 \setstretch{1.0}
@@ -829,7 +834,7 @@ Figure \@ref(fig:ch041-obs-vs-retro-plot) shows that the model captures the broa
 ## Iteration 2: adding age and block {#iter2}
 
 
-In this iteration we add the treatment and age groups into the model. There are no changes with the conceptual understanding of the experiment, and nothing to change with the observational space. As such we skip the first three steps and go to the model development step. As we build the model, the number of changes from one iteration to the next should go to zero as the model _expands_ to become only as complex as necessary to answer the research questions.
+In this iteration we add the treatment and age groups into the model. There are no changes with the conceptual understanding of the experiment, and nothing to change with the observational space. As such we skip the first three steps and go to the model development step. As we build the model, the number of changes from one iteration to the next should go to zero as the model expands to become only as complex as necessary to answer the research questions.
 
 
 **Post-Model, Pre-Data**
@@ -2283,6 +2288,7 @@ mcmc_neff(n044s_vis) +
 
 
 _Posterior Predictive Comparison_
+
 
 ```{r ch045-Morning Intense}
 l044s <- loo(m044s_vis)

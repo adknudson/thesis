@@ -12,10 +12,10 @@ library(kableExtra)
 This paper focuses on a type of psychometric experiment called a temporal order judgment (TOJ) experiment. If there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept (perceive them as happening simultaneously). Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events.
 
 
-It was Charles Darwin who in his book _On the Origin of Species_ developed the idea that living organisms adapt in order to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Galton's works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that he was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
+It was Charles Darwin who in his book "On the Origin of Species" developed the idea that living organisms adapt in order to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Galton's works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that he was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
 
 
-E.H. Weber built upon Herbart's work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber's Law (Equation \@ref(eq:webers-law)), which states that the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus [@britannica2014editors].
+E.H. Weber built upon Herbart's work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber's Law (Equation \@ref(eq:webers-law)), which states that the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus [ekman1959weber].
 
 
 \begin{equation}
@@ -278,48 +278,3 @@ audiovisual %>%
   theme_minimal() +
   theme(legend.position = "none")
 ```
-
-
-
-<!-- I may want to move some of this to Results
-
-When this method of detecting outliers is repeated for all tasks and blocks, then we end up with 17 records in total (figure \@ref(fig:ch020-naive-prop-outliers)), one of which is the aforementioned subject.
-
-
-```{r ch020-naive-prop-outliers, fig.cap="Proportion of correct responses across all tasks and blocks Proportions are calculated individually for positive and negative SOAs."}
-multitask %>%
-  mutate(is_pos = soa > 0,
-         is_neg = soa < 0,
-         resp_pos = response == 1,
-         resp_neg = response == 0) %>%
-  filter(is_pos | is_neg, trial %in% c("pre", "post1")) %>%
-  mutate(correct = (is_pos & resp_pos) | (is_neg & resp_neg)) %>%
-  group_by(rid, is_pos) %>%
-  add_count() %>%
-  summarise(k = sum(correct), p = k / n) %>%
-  filter(p < 0.5) %>%
-  distinct() %>%
-  ggplot(aes(p, rid)) +
-  geom_point(size = 3) +
-  geom_vline(xintercept = 0.5, linetype = "dashed") +
-  labs(title = "Proportion of correct responses",
-       subtitle = "All tasks and blocks",
-       x = "Proportion of correct responses",
-       y = "Record ID") +
-  annotate("text", x = 0.51, y = 8, label = "Random guessing", 
-           angle = 270, vjust = 0) +
-  scale_x_continuous(limits = c(0, 0.65), breaks = seq(0, 1, 0.25)) +
-  theme_minimal() +
-  theme(legend.position = "none")
-```
-
-
-Most of the records that are flagged by this method of outlier detection are from the sensorimotor task, and none are from the visual task. This may be attributed to the perceived difficulty of the task. One consequence of higher temporal sensitivity is that it is easier to determine temporal order. It may also be that determining temporal order is inherently easier for certain multisensory tasks compared to others. Since the sensorimotor task does not have fixed SOA values like the other tasks, it may be perceived as more difficult. Or perhaps the mechanisms that process tactile and visual signals are not as well coupled as those that process audio and visual signals.
-
--->
-
-
-
-
-
-
