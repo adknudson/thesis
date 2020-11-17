@@ -3,8 +3,32 @@ title: "multilevel stuff"
 output: html_document
 ---
 
+# Multilevel modeling
 
 Multilevel modeling provides a way to quantify and apportion the variation within the data to each level in the model. 
 
 For an in-depth introduction to multilevel modeling, see @gelman2006data.
 
+The better solution is to use a hierarchical model. With a hierarchical model, individual estimates are shrunk towards the group mean, and so inferences about individuals may be made along with inferences about the group that contains them. We are interested only in the group level inferences right now.
+
+
+# Non-centered parameterization
+
+Because HMC is a physics simulation, complicated geometry or posteriors with steep slopes can be difficult to traverse if the step size is too course. The solution is to explore a simpler geometry, and then transform the sample into the target distribution. Reparameterization is especially important for hierarchical models. The Cauchy distribution used for the variance term can be reparameterized by first drawing from a uniform distribution on $(-\pi/2, \pi/2)$. For a half Cauchy distribution, just sample from $\mathcal{U}(0, \pi/2)$.
+
+
+\begin{align*}
+X &\sim \mathcal{U}(-\pi/2, \pi/2) \\
+Y &= \mu + \tau \cdot \tan(X) \Longrightarrow Y \sim \mathrm{Cauchy(\mu, \tau)}
+\end{align*}
+
+
+The Gaussian distributions can be reparameterized in a similar way. If $Z$ is a standard normal random variable, then $\mu + \sigma Z \sim \mathcal{N}(\mu, \sigma^2)$. For `Stan`, sampling from a standard normal or uniform distribution is very easy, and so the non-centered parameterization can alleviate divergent transitions.
+
+An example is in the parameterization of $\tau_{G}$. The other variance terms are parameterized in the same fashion.
+
+
+\begin{align*}
+U_\tau &\sim \mathcal{U}(0, \pi/2) \\
+\tau_{G} &= 2 \cdot \tan(U_1) \Longrightarrow \tau_G \sim \mathrm{HalfCauchy}(0, 2)
+\end{align*}

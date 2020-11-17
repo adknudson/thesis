@@ -55,23 +55,17 @@ stan_summary <- function(object, ...) {
 # Methodological Contributions via the Workflow {#application}
 
 
-<!-- insert 1st paragraph transitioning to ch. 4 . suggested start-->
+Now we apply the workflow to our data set, seeking to build a model that satisfies the four criteria in [chapter 2](#methods). During model refinement, we'll pick up on the regular features while assessing the statistical significance of covariates through predictive comparison. In our final model, we'll model well-known data quality issues (from participant lapses in judgment) and show that this improves model prediction.
 
 
-Now we apply the workflow to our data set, seeking to build a model that satisfies the four criteria in [chapter 2](#methods). During model refinement, we'll pick up on the _regular_ features while assessing the "statistical significance" of covariates through predictive comparison. In our final model, we'll model well-known data quality issues (from participant _lapses_ in judgment) and show this improves model prediction.
-
-
-<!-- connect this to the background -->
-
-
-As we iterate through our model development workflow, we have a preference for multilevel models.(for the reasons discussed in [chapter 2](#methods)). Hierarchical models are a specific kind of multilevel model where one or more groups are nested within a larger one. In the case of the psychometric data, there are three age groups, and within each age group are individual subjects.
+As we iterate through our model development workflow, we have a preference for multilevel models (for the reasons discussed in [chapter 2](#methods)). Hierarchical models are a specific kind of multilevel model where one or more groups are nested within a larger one. In the case of the psychometric data, there are three age groups, and within each age group are individual subjects.
 
 
 ## Modeling psychometric quantities {#psych-quant}
 
-<!--
-It is now time to define priors for the model, while still not having looked at the data. The priors should be motivated by domain expertise and *prior knowledge*, not the data. There are also many choices when it comes to selecting a psychometric (sigmoid) function. Common choices are logistic, Gaussian, and Weibull.
--->
+
+Before formally conducting the workflow, we motivate our choice of using the logistic function to model the psychometric function as well as our choice for the parameterization of the linear predictor. Three common sigmoid functions are displayed in figure \@ref(fig:ch040-pf-assortment).
+
 
 ```{r ch040-pf-assortment, fig.cap="Assortment of psychometric functions."}
 ggplot(data.frame(x = c(-6, 6), y = c(0, 1)), aes(x, y)) +
@@ -207,6 +201,9 @@ This is a fortunate consequence of using \@ref(eq:linearform2) because now the J
 
 
 This also highlights the benefit of using a modeling language like `Stan` over others. For fitting GLMs in `R`, one can use `stats::glm` which utilizes MLE, or others such as `rstanarm::stan_glm` and `arm::bayesglm` that use Bayesian methods [@R-rstanarm; @R-arm]. Each of these functions requires the linear predictor to be in the form of \@ref(eq:linearform1). The `stan_glm` function uses Stan in the back-end to fit a model, but is limited to priors from the Student-t family of distributions. By writing the model directly in `Stan`, the linear model can be parameterized in any way and with any prior distribution, and so allows for much more expressive modeling.
+
+
+With the consideration for the choice of sigmoid function and linear parameterization complete, we begin to develop a multilevel model for the psychometric function.
 
 
 ## Iteration 1: base model {#iter1}
@@ -492,10 +489,10 @@ With $Q$, the PSS and JND can be calculated as
 
 
 \setstretch{1.0}
-\begin{align}
+\begin{align*}
   pss &= Q(0.5) \\
   jnd &= Q(0.84) - Q(0.5)
-\end{align}
+\end{align*}
 \setstretch{2.0}
 
 
@@ -886,10 +883,10 @@ $$
 \setstretch{2.0}
 
 
-Furthermore, the intercept, $\alpha$, is no longer the average response probability at $x=0$ for the entire data set, but is instead exclusively the average for the pre-adaptation block. This may not matter in certain analyses, but one nice property of multilevel models is the separation of population level estimates and group level estimates (fixed vs. mixed effects).
+Furthermore, the intercept, $\alpha$, is no longer the average response probability at $x=0$ for the entire data set, but is instead exclusively the average for the pre-adaptation block. This may not matter in certain analyses, but one nice property of multilevel models is the separation of population level estimates (fixed effects) and group level estimates (mixed effects).
 
 
-Instead the treatment variable is introduced into the linear model as a factor variable. This essentially means that each level in the treatment gets its own parameter estimate, and this also makes it easier to set priors when there are many levels in a group (such as for the subject level). The linear model, using equation \@ref(eq:linearform2), with the treatment is written as
+Instead the treatment variable is introduced into the linear model as a factor variable. This means that each level in the treatment gets its own parameter, and this makes it easier to set priors when there are many levels in a group (such as for the subject level). The linear model, using equation \@ref(eq:linearform2), with the treatment is written as:
 
 
 \setstretch{1.0}
@@ -900,7 +897,7 @@ Instead the treatment variable is introduced into the linear model as a factor v
 \setstretch{2.0}
 
 
-As predictors and groups are added in, equation \@ref(eq:linearmodel2) will start to be more difficult to read. What we can do is break up the slope and intercept parameters and write the linear model as
+As more predictors and groups are added in, equation \@ref(eq:linearmodel2) becomes more difficult to read. What we do is break up the slope and intercept parameters and write the linear model as:
 
 
 \setstretch{1.0}
@@ -912,64 +909,106 @@ As predictors and groups are added in, equation \@ref(eq:linearmodel2) will star
 \setstretch{2.0}
 
 
-In this way the combined parameters can be considered separately from the linear parameterization. Which leads us to consider the priors for $\alpha_{trt}$ and $\beta_{trt}$. The way that we can turn a normal model with categorical predictors into a multilevel model is by allowing the priors to borrow information from other groups. This is accomplished by putting priors on priors. It is easier to write down the model first before explaining how it works.
+In this way the combined parameters can be considered separately from the linear parameterization. Now we consider the priors for $\alpha_{trt}$. Equation \@ref(eq:alpha-three-forms) shows three ways of adding in the block variable for $\alpha$. The left equation is a standard single-level predictor, the center equation is the centered parameterization for a multilevel predictor, and the right equation is the non-centered parameterization for a multilevel predictor.
 
 
-\begin{align*}
-k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
-\mu_\alpha &= \alpha + \alpha_{trt[i]} \\
-\mu_\beta &= \beta + \beta_{trt[i]} \\
-\mathrm{logit}(p_i) &= \mu_\beta (x_i - \mu_\alpha) \\
-\alpha &\sim \mathcal{N}(0, 0.06^2) \\
-\alpha_{trt} &\sim \mathcal{N}(0, \sigma_{trt}^2) \\
-\sigma_{trt} &\sim \textrm{to be defined}
-\end{align*}
+\setstretch{1.0}
+\begin{equation}
+  \begin{split}
+    \mu_\alpha &= \alpha_{trt[i]} \\
+    \alpha_{trt} &\sim \mathcal{N}(0, 0.06^2)
+  \end{split}
+\qquad
+  \begin{split}
+    \mu_\alpha &= \alpha_{trt[i]} \\
+    \alpha &\sim \mathcal{N}(0, 0.06^2) \\
+    \alpha_{trt} &\sim \mathcal{N}(\alpha, \sigma_{trt}^2) \\
+    \sigma_{trt} &\sim \pi_{\sigma}
+  \end{split}
+\qquad
+  \begin{split}
+    \mu_\alpha &= \alpha + \alpha_{trt[i]} \\
+    \alpha &\sim \mathcal{N}(0, 0.06^2) \\
+    \alpha_{trt} &\sim \mathcal{N}(0, \sigma_{trt}^2) \\
+    \sigma_{trt} &\sim \pi_{\sigma}
+  \end{split}
+(\#eq:alpha-three-forms)
+\end{equation}
+\setstretch{2.0}
 
 
-In the above model, $\alpha$ gets a fixed prior (the same as in the first iteration), and $\alpha_{trt}$ gets a Gaussian prior with an adaptive variance term that is allowed to be learned from the data. This notation is compact, but $\alpha_{trt}$ is actually two parameters - one each for the pre- and post-adaptation blocks, but they both share the same variance term $\sigma_{trt}$. This produces a _regularizing_ effect where both treatment estimates are shrunk towards the mean, $\alpha$.
+In the center and right models of equation \@ref(eq:alpha-three-forms), $\alpha$ gets a fixed prior (the same as in the first iteration), and $\alpha_{trt}$ gets a Gaussian prior with an adaptive variance term that is allowed to be learned from the data. This notation is compact, but $\alpha_{trt}$ is two parameters - one each for the blocks. They both share the same variance term $\sigma_{trt}$.
 
 
-We will discuss selecting a prior for the variance term shortly, but now we want to discuss setting the prior for the slope terms. Instead of modeling $\beta$ with a log-normal prior, we can sample from a normal distribution and take the exponential of it to produce a log-normal distribution. I.e.
+We will discuss selecting a prior for the variance term shortly. Instead of modeling $\beta$ with a log-normal prior, we can sample from a normal distribution and take the exponential of it to produce a log-normal distribution:
 
 
+\setstretch{1.0}
 \begin{align*}
 X &\sim \mathcal{N}(3, 1^2) \\
-Y = \exp\left\lbrace X \right\rbrace &\Longleftrightarrow Y \sim \mathrm{Lognormal(3, 1^2)}
+Y &= \exp\left(X\right) \Longleftrightarrow Y \sim \mathrm{Lognormal(3, 1^2)}
 \end{align*}
+\setstretch{2.0}
 
 
-The motivation behind this transformation is that it is now easier to include new slope variables as an additive affect. If both $\beta$ and $\beta_{trt}$ are specified with Gaussian priors, then the exponential of the sum will be a log-normal distribution. The model now gains
+This is the non-centered parameterization of the log-normal distribution, and the motivation behind this parameterization is that it is now easier to include new slope variables as an additive affect. If both $\beta$ and $\beta_{trt}$ are specified with Gaussian priors, then the exponential of the sum will be a log-normal distribution. The model now becomes:
 
 
-\begin{align*}
+\setstretch{1.0}
+\begin{equation}
+\begin{split}
+k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
 \mathrm{logit}(p_i) &= \exp(\mu_\beta) (x_i - \mu_\alpha) \\
+\mu_\alpha &= \alpha + \alpha_{trt[i]} \\
+\mu_\beta &= \beta + \beta_{trt[i]} \\
+\alpha &\sim \mathcal{N}(0, 0.06^2) \\
+\alpha_{trt} &\sim \mathcal{N}(0, \sigma_{trt}^2) \\
 \beta &\sim \mathcal{N}(3, 1^2) \\
 \beta_{trt} &\sim \mathcal{N}(0, \gamma_{trt}^2) \\
-\gamma_{trt} &\sim \textrm{to be defined}
-\end{align*}
+\sigma_{trt} &\sim \pi_{\sigma} \\
+\gamma_{trt} &\sim \pi_{\gamma}
+\end{split}
+(\#eq:iter2-partial-model)
+\end{equation}
+\setstretch{2.0}
 
 
-Deciding on priors for the variance term requires some careful consideration. In one sense, the variance term is the within-group variance. @gelman2006prior recommends that for multilevel models with groups with less than say 5 levels to use a half Cauchy prior. This weakly informative prior still has a regularizing affect and dissuades larger variance estimates. Even though the treatment group only has two levels, there is still value in specifying an adaptive prior for them, and there is also a lot of data for each treatment so partial pooling won't have an extreme regularizing effect.
+Deciding on priors for the variance term requires some careful consideration. In one sense, the variance term is the within-group variance. @gelman2006prior recommends that for multilevel models with groups with less than say 5 levels to use a half-Cauchy prior. This weakly informative prior still has a regularizing affect and dissuades larger variance estimates. Even though the treatment group only has two levels, there is still value in specifying an adaptive prior for them, and there is enough data for each treatment so that partial pooling won't have as extreme of a regularizing effect.
 
 
+\setstretch{1.0}
 \begin{align*}
 \sigma_{trt} &\sim \mathrm{HalfCauchy}(0, 1) \\
 \gamma_{trt} &\sim \mathrm{HalfCauchy}(0, 1)
 \end{align*}
+\setstretch{2.0}
 
 
-Finally we add in the age group level effects and specify the variance terms.
+We add in the age group level effects to \@ref(eq:iter2-partial-model) and specify their variance terms:
 
 
-\begin{align*}
-\alpha_{G} &\sim \mathcal{N}(0, \tau_{G}^2)\\
+\setstretch{1.0}
+\begin{equation}
+\begin{split}
+k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+\mathrm{logit}(p_i) &= \exp(\mu_\beta) (x_i - \mu_\alpha) \\
+\mu_\alpha &= \alpha + \alpha_{trt[i]} + \alpha_{G[i]} \\
+\mu_\beta &= \beta + \beta_{trt[i]} + \beta_{G[i]} \\
+\alpha &\sim \mathcal{N}(0, 0.06^2) \\
+\alpha_{trt} &\sim \mathcal{N}(0, \sigma_{trt}^2) \\
+\alpha_{G} &\sim \mathcal{N}(0, \tau_{trt}^2) \\
+\beta &\sim \mathcal{N}(3, 1^2) \\
+\beta_{trt} &\sim \mathcal{N}(0, \gamma_{trt}^2) \\
 \beta_{G} &\sim \mathcal{N}(0, \nu_{G}^2) \\
-\tau_{G} &\sim \mathrm{HalfCauchy}(0, 2) \\
-\nu_{G} &\sim \mathrm{HalfCauchy}(0, 2)
-\end{align*}
+\sigma_{trt}, \gamma_{trt} &\sim \mathrm{HalfCauchy}(0, 1) \\
+\tau_{G}, \nu_{G}  &\sim \mathrm{HalfCauchy}(0, 2)
+\end{split}
+(\#eq:iter2-model)
+\end{equation}
+\setstretch{2.0}
 
 
-The corresponding `Stan` model is becoming quite long, so we omit it from here on out. The final `Stan` model code may be found in the [supplementary code](#code) of the appendix.
+The `Stan` code corresponding to model \@ref(eq:iter2-model) is becoming quite long, so we omit it from here on out. The final `Stan` model code may be found in the [supplementary code](#code) section of the appendix.
 
 
 ```{stan ch042-Iron Forgotten, output.var="m042_stan"}
@@ -1050,7 +1089,7 @@ generated quantities {
 
 _Fit Observed Data_
 
-We are choosing to skip the prior checks this time around and use the observed data to configure the algorithm and diagnose the posterior fit.
+We skip the prior checks and use the observed data to configure the algorithm and diagnose the posterior fit.
 
 
 ```{r ch042-Remote Omega}
@@ -1068,20 +1107,25 @@ if (file.exists("models/m042.rds")) {
 ```
 
 
+\setstretch{1.0}
 ```{r ch042-Brutal-Limousine, echo=TRUE, eval=FALSE}
 m042 <- sampling(m042_stan, data = obs_dat, seed = 124,
                  chains = 4, cores = 4, refresh = 100)
 ```
+\setstretch{2.0}
 
 
 _Diagnose Posterior Fit_
 
+
+\setstretch{1.0}
 ```{r ch042-Bitter Snake, echo=TRUE, message=TRUE}
 check_hmc_diagnostics(m042)
 ```
+\setstretch{2.0}
 
 
-As well as the 4 divergent transitions, there was also a message about the effective sample size (ESS) being too low. The recommended prescription for low ESS is to run the chains for more iterations. The posterior summary shows that $N_{\mathrm{eff}}$ is low for the age group level parameters (table \@ref(tab:ch042-Liquid-Strawberry-Eagle)).
+As well as the 4 divergent transitions, there is also a message about the effective sample size (ESS) being too low. The recommended prescription for low ESS is to run the chains for more iterations. The posterior summary shows that $N_{\mathrm{eff}}$ is low for the age group level parameters (table \@ref(tab:ch042-Liquid-Strawberry-Eagle)).
 
 
 ```{r ch042-Liquid-Strawberry-Eagle}
@@ -1096,30 +1140,39 @@ stan_summary(m042, c("a", "aG", "b", "bG")) %>%
 We can return to the algorithm configuration step and increase the number of iterations and warm-up iterations, as well as increase the adapt delta parameter to reduce the number of divergent transitions (which really isn't a problem right now).
 
 
-Another technique we can employ is non-centered parameterization, and now is as good a time as any to introduce it. We have already quietly used non-centered parameterization in this iteration of the model without addressing it -- the transformation of $\beta$ from a Gaussian to a log-normal distribution.
+Another technique we can employ is non-centered parameterization. Model \@ref(eq:iter2-model) uses non-centered parameterization for $\mu_\alpha$ and $\mu_\beta$. Other parameters, especially the variance terms, can also benefit from non-centered parameterization. Model \@ref(eq:iter2-model-nc) shows the results of reparameterizing:
 
 
-Because HMC is a physics simulation, complicated geometry or posteriors with steep slopes can be difficult to traverse if the step size is too course. The solution is to explore a simpler geometry, and then transform the sample into the target distribution. Reparameterization is especially important for hierarchical models. The Cauchy distribution used for the variance term can be reparameterized by first drawing from a uniform distribution on $(-\pi/2, \pi/2)$. For a half Cauchy distribution, just sample from $\mathcal{U}(0, \pi/2)$.
-
-
-\begin{align*}
-X &\sim \mathcal{U}(-\pi/2, \pi/2) \\
-Y &= \mu + \tau \cdot \tan(X) \Longrightarrow Y \sim \mathrm{Cauchy(\mu, \tau)}
-\end{align*}
-
-
-The Gaussian distributions can be reparameterized in a similar way. If $Z$ is a standard normal random variable, then $\mu + \sigma Z \sim \mathcal{N}(\mu, \sigma^2)$. For `Stan`, sampling from a standard normal or uniform distribution is very easy, and so the non-centered parameterization can alleviate divergent transitions. We now return to the model development step and incorporate the new methods.
+\setstretch{1.0}
+\begin{equation}
+\begin{split}
+k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+\mathrm{logit}(p_i) &= \exp(\mu_\beta) (x_i - \mu_\alpha) \\
+\mu_\alpha &= \alpha + \alpha_{trt[i]} + \alpha_{G[i]} \\
+\mu_\beta &= \beta + \beta_{trt[i]} + \beta_{G[i]} \\
+\hat{\alpha}, \hat{\alpha}_{trt}, \hat{\alpha}_{G} &\sim \mathcal{N}(0, 1^2) \\
+\hat{\beta}, \hat{\beta}_{trt}, \hat{\beta}_{G} &\sim \mathcal{N}(0, 1^2) \\
+\hat{\sigma}_{trt}, \hat{\gamma}_{trt}, \hat{\tau}_{G}, \hat{\nu}_{G} &\sim \mathcal{U}(0, \pi/2) \\
+\alpha &= 0.06 \cdot \hat{\alpha} \\
+\alpha_{trt} &= \sigma_{trt} \cdot \hat{\alpha}_{trt} \\
+\alpha_{G} &= \gamma_{G} \cdot \hat{\alpha}_{G} \\
+\sigma_{trt} &= \tan(\hat{\sigma}_{trt}) \\
+\gamma_{G} &= \tan(\hat{\gamma}_{G}) \\
+\beta &= 3 + 1 \cdot \hat{\beta} \\
+\beta_{trt} &= \tau_{trt} \cdot \hat{\beta}_{trt} \\
+\beta_{G} &= \nu_{G} \cdot \hat{\beta}_{G} \\
+\tau_{trt} &= \tan(\hat{\tau}_{trt}) \\
+\nu_{G} &= \tan(\hat{\nu}_{G})
+\end{split}
+(\#eq:iter2-model-nc)
+\end{equation}
+\setstretch{2.0}
 
 
 _Develop Model_
 
-The model changes consist of using the non-centered parameterizations discussed in the previous step. An example is in the parameterization of $\tau_{G}$. The other variance terms are parameterized in the same fashion.
 
-
-\begin{align*}
-U_\tau &\sim \mathcal{U}(0, \pi/2) \\
-\tau_{G} &= 2 \cdot \tan(U_1) \Longrightarrow \tau_G \sim \mathrm{HalfCauchy}(0, 2)
-\end{align*}
+The model changes consist of using the non-centered parameterizations discussed in the previous step.
 
 
 ```{stan ch042-Stormy Mountain, output.var="m042nc_stan"}
@@ -1219,9 +1272,10 @@ generated quantities {
 ```
 
 
-As an aside, a multilevel model can be fit in `R` using `lme4::glmer`, `brms::brm`, or `rstanarm::stan_glmer`, and they all use the same notation to specify the model. The notation is very compact, but easy to unpack. Values not in a grouping term are _fixed_ effects and values in a grouping term (e.g. `(1 + x | G)`) are _mixed_ or _random_ effects depending on which textbook you read.
+As an aside, a multilevel model can be fit in `R` using `lme4::glmer`, `brms::brm`, or `rstanarm::stan_glmer`, and they all use the same notation to specify the model. The notation is very compact, but easy to unpack. Values not in a grouping term are fixed effects and values in a grouping term (e.g. `(1 + x | G)`) are mixed or random effects depending on which textbook you read.
 
 
+\setstretch{1.0}
 ```{r ch042-Sienna Scoreboard, echo=TRUE, eval=FALSE}
 f <- formula(k|n ~ 1 + x + (1 + x | G) + (1 + x | trt))
 
@@ -1229,6 +1283,7 @@ lme4::glmer(f, data = data, family = binomial("logit"))
 rstanarm::stan_glmer(f, data = data, family = binomial("logit"))
 brms::brm(f, data = data, family = binomial("logit"))
 ```
+\setstretch{2.0}
 
 
 The simpler notation and compactness of these methods are very attractive, and for certain analyses they may be more than sufficient. The goal here is to decide early on if these methods satisfy the model adequacy, and to use more flexible modeling tools like `Stan` if necessary.
@@ -1236,7 +1291,8 @@ The simpler notation and compactness of these methods are very attractive, and f
 
 _Fit Observed Data_
 
-Moving on to refitting the data, this time with the non-centered parameterization. Since this model is sampling from intermediate parameters, we can choose to keep only the transformed parameters.
+
+This time we fit the model with the non-centered parameterization. Since this model is sampling from intermediate parameters, we can choose to keep only the transformed parameters.
 
 
 ```{r ch042-Dreaded Intense Tiger}
@@ -1265,19 +1321,24 @@ if (file.exists("models/m042nc.rds")) {
 ```
 
 
+\setstretch{1.0}
 ```{r ch042-Official-Lama, echo=TRUE, eval=FALSE}
 m042nc <- sampling(m042nc_stan, data = obs_dat, seed = 143,
                    iter = 4000, warmup = 2000, pars = keep_pars,
                    control = list(adapt_delta = 0.95), thin = 2,
                    chains = 4, cores = 4, refresh = 100)
 ```
+\setstretch{2.0}
 
 
 _Diagnose Posterior Fit_
 
+
+\setstretch{1.0}
 ```{r ch042-Rocky Hammer, echo=TRUE, message=TRUE}
 check_hmc_diagnostics(m042nc)
 ```
+\setstretch{2.0}
 
 
 There are still a few divergent transitions ($<1\%$), but the effective sample size increased significantly (table \@ref(tab:ch042-Bleeding-Tuna)).
@@ -1321,12 +1382,13 @@ mcmc_trace(m042nc, pars = c("a", "b"))
 ```
 
 
-The chains in figure \@ref(fig:ch042-traceplot-m042nc) look healthy as well as for the other parameters not shown. Since there are no algorithmic issues, we can proceed to the posterior retrodictive checks.
+The chains displayed in figure \@ref(fig:ch042-traceplot-m042nc) are healthy, as well as for the other parameters not shown. Since there are no algorithmic issues, we proceed to the posterior retrodictive checks.
 
 
 _Posterior Retrodictive Checks_
 
-In this iteration of the model, we now have estimates for the age groups and the treatment. The posterior estimates for the PSS and JND are shown in figure \@ref(fig:ch042-posterior-pss-jnd-plot). There are many ways to visualize and compare the distributions across age groups and conditions, and it really depends on what question is being asked. If for example the question is "what is the qualitative difference between pre- and post-adaptation across age groups?", then figure \@ref(fig:ch042-posterior-pss-jnd-plot) could answer that because it juxtaposes the two blocks in the same panel. We will consider alternative ways of arranging the plots in [chapter 5](#results).
+
+We now have estimates for the age groups and the treatment. The posterior estimates for the PSS and JND are shown in figure \@ref(fig:ch042-posterior-pss-jnd-plot). There are many ways to visualize and compare the distributions across age groups and conditions that depend on what question is being asked. If for example the question is "what is the qualitative difference between pre- and post-adaptation across age groups?", then figure \@ref(fig:ch042-posterior-pss-jnd-plot) could answer that because it juxtaposes the two blocks in the same panel. We will consider alternative ways of arranging the plots in [chapter 5](#results).
 
 
 ```{r ch042-Black Pottery}
@@ -1381,10 +1443,7 @@ p_pss / p_jnd
 ```
 
 
-As for the posterior retrodictions, we can do something similar to last time. First note that we had `Stan` perform posterior retrodictions during the fitting step. This was achieved by adding a _generated quantities_ block to the Stan program that takes the posterior samples for the parameters, and then randomly generates a value from a binomial distribution for each observation in the data. In effect, we now have $`r nrow(p042$k_pred)`$ simulated data sets.
-
-
-We only need one to compare to the observed data, so it is selected randomly from the posterior.
+For the posterior retrodictions, we can do something similar to last time. We had `Stan` perform posterior predictive sampling during the fitting step. This was achieved by adding a `generated quantities` block to the code that takes the posterior samples for the parameters, and then randomly generates a value from a binomial distribution for each observation in the data. In effect, we now have $`r nrow(p042$k_pred)`$ simulated data sets. We only need one data set to compare to the observed data, so it is selected randomly from the posterior.
 
 
 ```{r ch042-obs-vs-retro-plot, fig.cap="Observed data compared to the posterior retrodictions."}
@@ -1420,28 +1479,31 @@ posterior_retrodictions %>%
 ```
 
 
-The posterior retrodictions  in figure \@ref(fig:ch042-obs-vs-retro-plot) show no disagreement between the model and the observed data. We could almost say that this model is complete, but this model has one more problem: it measures the average difference in blocks, and the average difference in age groups, but does not consider any interaction between the two. Implicitly it assumes that temporal recalibration affects all age groups the same which may not be true, so in the next iteration we will need to address that.
+The posterior retrodictions in figure \@ref(fig:ch042-obs-vs-retro-plot) show no disagreement between the model and the observed data. This model is almost complete, but has one more problem: it measures the average difference in blocks, and the average difference in age groups, but does not consider any interaction between the two. Implicitly it assumes that temporal recalibration affects all age groups the same which may not be true, so we address this in the next iteration.
 
 
 ## Iteration 3: adding age-block interaction {#iter3}
 
 
-Since there is no change in the pre-model analysis, we will again jump straight to the model development step, after which we will jump right to the posterior retrodictive checks. The changes to the model going forward are minor, and subsequent steps are mostly repetitions of the ones taken in the first two iterations.
+There is no change in the pre-model analysis, so we will jump straight to the model development step, after which we will jump right to the posterior retrodictive checks. The changes to the model going forward are minor, and subsequent steps are mostly repetitions of the ones taken in the first two iterations.
 
 
 **Post-Model, Pre-Data**
 
+
 _Develop Model_
 
-We need to model an interaction between age group and treatment. In a simple model in `R`, interactions between factor variable $A$ and factor variable $B$ can be accomplished by taking the cross-product of all the factor levels. For example, if $A$ has levels $a, b, c$ and $B$ has levels $x, y$, then the interaction variable $C=A:B$ will have levels $ax, ay, bx, by, cx, cy$. The concept is similar in `Stan`: create a new variable that is indexed by the cross of the two other factor variables.
+
+We need to model an interaction between age group and treatment. In a simple model in `R`, interactions between factor variable $A$ and factor variable $B$ can be accomplished by taking the cross-product of all the factor levels. For example, if $A$ has levels $a, b, c$ and $B$ has levels $x, y$, then the interaction variable $C=A\times B$ will have levels $ax, ay, bx, by, cx, cy$. The concept is similar in `Stan`: create a new variable that is indexed by the cross of the two other factor variables.
 
 
-$$
-\beta_{G[i] \times trt[i]} \Longrightarrow bGT[G[i], trt[i]] 
-$$
+\begin{equation}
+\beta_{G[i] \times trt[i]} \Longrightarrow bGT[G[i], trt[i]]
+(\#eq:cross-factor)
+\end{equation}
 
 
-In the above expression, the interaction variable $\beta_{G[i] \times trt[i]}$ is between age group and treatment. The right hand side is the corresponding `Stan` parameter. Notice that it is an array-like object that is indexed by the age group at observation $i$ and the treatment at observation $i$. For example, observation $51$ is for a middle age adult subject during the post-adaptation block, so $bGT[G[51], trt[51]] = bGT[2, 2]$. An interaction term is added for both the slope and intercept in this iteration.
+In expression \@ref(eq:cross-factor), the interaction variable $\beta_{G[i] \times trt[i]}$ is between age group and treatment. The right hand side is the corresponding `Stan` parameter. Notice that it is an array-like object that is indexed by the age group at observation $i$ and the treatment at observation $i$. For example, observation $51$ is for a middle age adult subject during the post-adaptation block, so $bGT[G[51], trt[51]] = bGT[2, 2]$. An interaction term is added for both the slope and intercept in this iteration.
 
 
 ```{stan ch043-Tea Screaming, output.var="m043_stan"}
@@ -1560,25 +1622,20 @@ if (file.exists("models/m043.rds")) {
 
 _Diagnose Posterior Fit_
 
-This model has no divergent transitions or abnormally large $\hat{R}$ values. Furthermore the trace-rank plots show uniformity between chains indicating that the chains are all exploring the same regions.
+
+This model has no divergent transitions and no $\hat{R}$ values greater than $1.1$. Furthermore the trace-rank plots show uniformity between chains indicating that the chains are all exploring the same regions.
 
 
-```{r ch043-Morning-Rich, fig.cap="Trace-rank plots for the intercept interaction parameters."}
+```{r ch043-Tuba-Intensive, fig.cap="Trace plots for the hierarchical variance terms. The chains are healthy and exploring the posterior efficiently."}
 a043 <- as.array(m043)
-mcmc_rank_overlay(a043, regex_pars = "^aGT")
-```
-
-
-```{r ch043-Tuba-Intensive, fig.cap="Trace and trace-rank plots for the hierarchical variance terms. The chains are healthy and exploring the posterior efficiently."}
 sd_trace <- mcmc_trace(a043, regex_pars = "^sd")
-sd_trank <- mcmc_rank_overlay(a043, regex_pars = "^sd")
-sd_trace / sd_trank
 ```
 
 
 _Posterior Retrodictive Checks_
 
-Again we start with the PSS and JND posterior densities. Because the model now allows for the interaction of age group and block, there is no longer a fixed shift in the posterior distribution of the PSS and JND values. Figure \@ref(fig:ch043-posterior-pss-jnd-plot) shows that temporal recalibration had no discernible affect on the PSS estimates for the middle age group.
+
+Because the model now allows for the interaction of age group and block, there is no longer a fixed shift in the posterior distribution of the PSS and JND values. Figure \@ref(fig:ch043-posterior-pss-jnd-plot) shows that temporal recalibration had no discernible affect on the PSS estimates for the middle age group.
 
 
 ```{r ch043-Intense Dog}
@@ -1634,13 +1691,15 @@ p_pss / p_jnd
 The posterior retrodictions for this model are going to be similar to the last iteration. Instead, we want to see how this model performs when it comes to the posterior retrodictions of the visual TOJ data. There is something peculiar about that data that is readily apparent when we try to fit a GLM using classical MLE.
 
 
+\setstretch{1.0}
 ```{r ch043-Neutron Bleeding, echo=TRUE, message=TRUE, message=TRUE}
 vis_mle <- glm(cbind(k, n-k) ~ 0 + sid + sid:soa,
                data = visual_binomial, family = binomial("logit"))
 ```
+\setstretch{2.0}
 
 
-We get a message saying that the fitted probabilities are numerically 0 or 1. What does this mean? First this model estimates a slope and an intercept for each subject individually (no pooling model), so we can look at the estimates for each subject. Table \@ref(tab:ch043-Intensive-Oyster) shows the top 3 coefficients sorted by largest standard error of the estimate for both slope and intercept.
+We get a message saying that the fitted probabilities are numerically 0 or 1. In \@ref(glms) we determined that this indicates a large estimate for the slope. This model estimates a slope and an intercept for each subject individually (no pooling), so we can look at the estimates for each subject. Table \@ref(tab:ch043-Intensive-Oyster) shows the top 3 coefficients sorted by largest standard error of the estimate for both slope and intercept.
 
 
 ```{r ch043-Intensive-Oyster}
@@ -1660,7 +1719,8 @@ vis_mle_summ_df %>%
   kable_styling(latex_options = c("hold_position"))
 ```
 
-The standard error of the slope estimate for subject `Y-m-CB` is incredibly large in comparison to its own estimate and in comparison to the slope with the next largest standard error. To see what's going wrong, let's look at the graph for this subject.
+
+The standard error of the slope estimate for subject `Y-m-CB` is incredibly large in comparison to its own estimate and in comparison to the slope with the next largest standard error. Figure \@ref(fig:ch043-Y-m-CB-vis-response) shows that there is almost perfect separation in the data for this subject, and that is resulting in a larger slope estimate. In consequence, the estimated JND for this subject is just 3ms which is questionably low.
 
 
 ```{r ch043-Y-m-CB-vis-response, fig.cap="There is almost complete separation in the data."}
@@ -1674,10 +1734,7 @@ visual %>%
 ```
 
 
-Figure \@ref(fig:ch043-Y-m-CB-vis-response) shows that there is almost perfect separation in the data for this subject, and that is giving the MLE algorithm trouble. It also has serious consequences on the estimated JND as the estimated JND for this subject is just 3ms which is suspect.
-
-
-Of course one remedy for this is to pool observations together as we have done for the model in this iteration. The data is pooled together at the age group level and variation in the subjects' responses removes the separation. This isn't always ideal, as sometimes we are interested in studying the individuals within the experiment. If we can't get accurate inferences about the individual, then the results are not valid. The better solution is to use a hierarchical model. With a hierarchical model, individual estimates are shrunk towards the group mean, and so inferences about individuals may be made along with inferences about the group that contains them. We are interested only in the group level inferences right now.
+One remedy for this is to pool observations together as we have done for the model in this iteration. The data is pooled together at the age group level and variation in the subjects' responses removes the separation. This isn't always ideal, as sometimes researchers are interested in studying the individuals within the experiment. If accurate inferences about the individual cannot be obtained, then the results are not valid.
 
 
 Figure \@ref(fig:ch043-Iron-Intensive) shows the posterior distribution of psychometric functions for the visual TOJ data. Notice that there is almost no difference between the pre- and post-adaptation blocks.
@@ -1745,7 +1802,7 @@ knitr::include_graphics("figures/ch043-Iron-Intensive.png")
 ```
 
 
-Furthermore, as shown by the posterior retrodictions (figure \@ref(fig:ch043-obs-vs-retro-plot)), the model is not fully capturing the variation in the responses near the outer SOA values -- the posterior retrodictions are tight around SOA values near zero.
+Furthermore, as shown by the posterior retrodictions (figure \@ref(fig:ch043-obs-vs-retro-plot)), the model is not fully capturing the variation in the responses near the outer SOA values -- the posterior predictive samples are tight around SOA values near zero.
 
 
 ```{r ch043-obs-vs-retro-plot, fig.cap="Observed visual TOJ data compared to the posterior retrodictions. The retrodictions are not capturing the variation at the outer SOA values."}
@@ -1781,7 +1838,7 @@ posterior_retrodictions %>%
 ```
 
 
-Why is the model having difficulty expressing the data? As it turns out, there is one more concept pertaining to psychometric experiments that has been left out until now, and that is a lapse in judgment. Not a lapse in judgment on our part, but the actual act of having a lapse while performing an experiment.
+Why is the model having difficulty expressing the data? There is one more concept pertaining to psychometric experiments that has been left out until now, and that is a lapse in judgment. Not a lapse in judgment on our part, but the act of a subject having a lapse in judgment while performing an experiment.
 
 
 ## Iteration 4: adding a lapse rate {#iter4}
@@ -1792,7 +1849,8 @@ Why is the model having difficulty expressing the data? As it turns out, there i
 
 _Conceptual Analysis_
 
-A lapse in judgment can happen for any reason, and is assumed to be random and independent of other lapses. They can come in the form of the subject accidentally blinking during the presentation of a visual stimulus, or unintentionally pressing the wrong button to respond. Whatever the case is, lapses can have a significant affect on estimating the psychometric function.
+
+A lapse in judgment can happen for any reason, and is assumed to be random and independent of other lapses. They can come in the form of the subject accidentally blinking during the presentation of a visual stimulus, or unintentionally pressing the wrong button to respond. Whatever the case is, lapses can have a significant affect on the estimation of the psychometric function.
 
 
 **Post-Model, Pre-Data**
@@ -1800,7 +1858,8 @@ A lapse in judgment can happen for any reason, and is assumed to be random and i
 
 _Develop Model_
 
-Lapses can be modeled as occurring independently at some fixed rate. Fundamentally this means that the underlying performance function, $F$, is bounded by some lower and upper lapse rate. This manifests as a scaling and translation of $F$. For a given lower and upper lapse rate $\lambda$ and $\gamma$, the performance function $\Psi$ is 
+
+Lapses can be modeled as occurring independently at some fixed rate. This means that the underlying psychometric function, $F$, is bounded by some lower and upper lapse rate. This manifests as a scaling and translation of $F$. For a given lower and upper lapse rate $\lambda$ and $\gamma$, the performance function $\Psi$ is 
 
 
 $$
@@ -1840,10 +1899,10 @@ ggplot(tibble(x = c(-4, 6), y = c(0, 1)), aes(x, y)) +
 ```
 
 
-In certain psychometric experiments, $\lambda$ is interpreted as the lower performance bound or the guessing rate. For example, in certain 2-AFC tasks, subjects are asked to respond which of two masses is heavier, and the correctness of their response is recorded. When the masses are the same, the subject can do no better than random guessing. In this task, the lower performance bound is assumed to be 50% as their guess is split between two choices. As the absolute difference in mass grows, the subject's correctness rate increases, though lapses can still happen. In this scenario, $\lambda$ is fixed at $0.5$ and the lapse rate $\gamma$ is a parameter in the model.
+In certain psychometric experiments, $\lambda$ is interpreted as the lower performance bound, or the guessing rate. For example, in certain 2-AFC tasks, subjects are asked to respond which of two masses is heavier, and the correctness of their response is recorded. When the masses are the same, the subject can do no better than random guessing. In this task, the lower performance bound is assumed to be 50% as their guess is split between two choices. As the absolute difference in mass grows, the subject's correctness rate increases, though lapses can still happen. In this scenario, $\lambda$ is fixed at $0.5$ and the lapse rate $\gamma$ is a parameter in the model.
 
 
-The model we are building for this data does not explicitly record correctness, so we do not give $\lambda$ the interpretation of a guessing rate. Since the data are recorded as proportion of positive responses, we instead treat $\lambda$ and $\gamma$ as lapse rates for negative and positive SOAs. But why should the upper and lower lapse rates be treated separately? A lapse in judgment can occur independently of the SOA, so $\lambda$ and $\gamma$ should be the same no matter what. With this assumption in mind, we can throw away $\gamma$ and assume that the lower and upper performance bounds are restricted by the same amount. I.e.
+The model we are building for this data does not explicitly record correctness, so we do not give $\lambda$ the interpretation of a guessing rate. Since the data are recorded as proportion of positive responses, we instead treat $\lambda$ and $\gamma$ as lapse rates for negative and positive SOAs. But why should the upper and lower lapse rates be treated separately? A lapse in judgment can occur independently of the SOA, so $\lambda$ and $\gamma$ should be the same. With this assumption, we can throw away $\gamma$ and assume that the lower and upper performance bounds are restricted by the same amount. I.e.
 
 
 \begin{equation}
@@ -1852,23 +1911,22 @@ The model we are building for this data does not explicitly record correctness, 
 \end{equation}
 
 
-While we are throwing in a lapse rate, we will also ask the question of if different age groups have different lapse rates. To answer this (or rather have the model answer this), we include the new parameter $\lambda_{G[i]}$ into the model so that the lapse rate is estimated for each age group.
+While we are including a lapse rate, we will also ask the question of if different age groups have different lapse rates. To answer this (or rather have the model answer this), we include the new parameter $\lambda_{G[i]}$ into the model so that the lapse rate is estimated for each age group.
 
 
 It's okay to assume that lapses in judgment are rare, and it's also true that the rate (or probability) of a lapse is bounded in the interval $[0, 1]$. Because of this, we put a $\mathrm{Beta(4, 96)}$ prior on $\lambda$ which puts 99% of the weight below $0.1$ and an expected lapse rate of $0.04$.
 
 
-We could also set up the model so that information about the lapse rate is shared between age groups (i.e. multilevel), but we leave that as an exercise for the reader.
-
-
 _Construct Summary Functions_
 
-Since the fundamental structure of the linear model has changed, it is worth updating the summary function that computes the distribution of SOA values for a given response probability. Given equation \@ref(eq:Psi), the summary function $Q$ is
+
+Since the fundamental structure of the linear model has changed, it is important to update the summary function that computes the distribution of SOA values for a given response probability. Given equation \@ref(eq:Psi), the summary function $Q$ is:
 
 
-$$
+\begin{equation}
 Q(\pi; \alpha, \beta, \lambda) = \frac{1}{\exp(\beta)} \cdot \mathrm{logit}\left(\frac{\pi - \lambda}{1-2\lambda}\right) + \alpha
-$$
+(\#eq:Psi-Q)
+\end{equation}
 
 
 ```{stan ch044-Moving Proton, output.var="m044_stan"}
@@ -1954,7 +2012,8 @@ generated quantities {
 
 _Fit Observed Data_
 
-Because it is the visual data that motivated this iteration, we will continue using that data to fit the model and perform posterior retrodictive checks.
+
+Because it is the visual data that motivated this iteration, we continue using that data to fit the model and perform posterior retrodictive checks.
 
 
 ```{r ch044-Arm Remote}
@@ -1998,7 +2057,8 @@ if (file.exists("models/m044vis.rds")) {
 
 _Posterior Retrodictive Checks_
 
-The plot for the distribution of psychometric functions is repeated one more time below (figure \@ref(fig:ch044-Screaming-Proton)). There is now visual separation between the pre- and post-adaptation blocks, with the latter exhibiting a higher slope, which in turn implies a reduced just noticeable difference which is consistent with the audiovisual data in the previous model.
+
+The plot for the distribution of psychometric functions is repeated in figure \@ref(fig:ch044-Screaming-Proton). There is now visual separation between the pre- and post-adaptation blocks, with the latter exhibiting a higher slope, which in turn implies a reduced just noticeable difference which is consistent with the audiovisual data in the previous model.
 
 
 ```{r ch044-Screaming-Proton, fig.cap="There is now a visual distinction between the two blocks unlike in the model without lapse rate. The lapse rate acts as a balance between steep slopes near the PSS and variation near the outer SOA values."}
@@ -2053,7 +2113,7 @@ knitr::include_graphics("figures/ch044-Screaming-Proton.png")
 ```
 
 
-As for the posterior retrodictions, the model is now better capturing the outer SOA variation. This can best be seen in the comparison of the younger adult pre-adaptation block of figure \@ref(fig:ch044-Insane-Metaphor).
+The model is now doing better to capture the variation in the outer SOAs. This can best be seen in the comparison of the younger adult pre-adaptation block of figure \@ref(fig:ch044-Insane-Metaphor).
 
 
 ```{r ch044-Insane-Metaphor, fig.cap="The lapse rate produces posterior retrodictions that are visually more similar to the observed data than in the previous model, suggesting that the model is now just complex enough to capture the relevant details of the data generating process."}
@@ -2089,7 +2149,7 @@ posterior_retrodictions %>%
 ```
 
 
-We can also reintroduce the package `loo` from the previous chapter to evaluate the predicted predictive performance of the model with lapse rate to the model without the lapse rate as a way of justifying its inclusion. Subjectively the lapse rate model is already doing better, but it is necessary to have principled comparisons. Table \@ref(tab:ch044-Straw-Epsilon) shows the comparison.
+We can also reintroduce the package `loo` from the [chapter 2](#methods) to evaluate the predicted predictive performance of the model with lapse rate to the model without the lapse rate as a way of justifying its inclusion. Subjectively the lapse rate model is already doing better, but it is necessary to have quantitative comparisons. Table \@ref(tab:ch044-Straw-Epsilon) shows the comparison.
 
 
 ```{r ch044-Mysterious Alpha}
@@ -2099,15 +2159,17 @@ comp_vis <- loo_compare(l043, l044)
 ```
 
 
-When extracting the PSIS-LOO values, `loo` warns about some Pareto k diagnostic values that are slightly high. Let's take a look at the summary:
+When extracting the PSIS-LOO values, `loo` warns about some Pareto k diagnostic values that are slightly high:
 
 
+\setstretch{1.0}
 ```{r ch044-Nocturnal Purple Moon, echo=TRUE}
 pareto_k_table(l044)
 ```
+\setstretch{2.0}
 
 
-There is one observation in the data set that has a $k$ value between $0.5$ and $0.7$. This means that the estimated Pareto distribution has infinite variance, but practically it is still usable for estimating predictive performance.
+There is one observation in the data set that has a $k$ value between $0.5$ and $0.7$. This means that the estimated Pareto distribution used for smoothing has infinite variance, but practically it is still usable for estimating predictive performance.
 
 
 ```{r ch044-Straw-Epsilon}
@@ -2124,12 +2186,40 @@ comp_vis %>%
 ```
 
 
-The model with the lapse rates proves to be better than the model without lapse rates as measured by PSIS-LOO. Surprisingly the effective number of parameters _shrinks_ after including the lapse rates. We can now perform one last iteration of the model by including the subject level estimates. Even though we're only interested in making inferences at the group level, including the subject level might improve predictive performance.
+The model with the lapse rates has higher estimated predicted performance than the model without lapse rates as measured by the ELPD. We can now perform one last iteration of the model by including the subject level estimates. Even though we're only interested in making inferences at the group level, including the subject level might improve predictive performance.
 
 
-## Iteration 5: adding subject  {#iter5}
+## Iteration 5: adding subjects {#iter5}
 
-The only change in this iteration is the addition of the subject level parameters for the slope and intercept. 
+
+The only change in this iteration is the addition of the subject level parameters for the slope and intercept. The model is:
+
+
+\setstretch{1.0}
+\begin{equation}
+\begin{split}
+k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+p_i &= \lambda_{G[i]} + (1 - 2\lambda_{G[i]})\exp(\mu_\beta) (x_i - \mu_\alpha) \\
+\mu_\alpha &= \alpha + \alpha_{G[i], trt[i]} + \alpha_{S[i]} \\
+\mu_\beta &= \beta + \beta_{G[i], trt[i]} + \beta_{S[i]} \\
+\lambda_{G} &\sim \mathrm{Beta}(4, 96) \\
+\hat{\alpha}, \hat{\alpha}_{G\times trt}, \hat{\alpha}_{S} &\sim \mathcal{N}(0, 1^2) \\
+\hat{\beta}, \hat{\beta}_{G\times trt}, \hat{\beta}_{S} &\sim \mathcal{N}(0, 1^2) \\
+\hat{\sigma}_{G\times trt}, \hat{\gamma}_{G\times trt}, \hat{\tau}_{S}, \hat{\nu}_{S} &\sim \mathcal{U}(0, \pi/2) \\
+\alpha &= 0.06 \cdot \hat{\alpha} \\
+\alpha_{G\times trt} &= \sigma_{G\times trt} \cdot \hat{\alpha}_{trt} \\
+\alpha_{S} &= \tau_{S} \cdot \hat{\alpha}_{S} \\
+\sigma_{G \times trt} &= \tan(\hat{\sigma}_{G \times trt}) \\
+\tau_{S} &= \tan(\hat{\tau}_{S}) \\
+\beta &= 3 + 1 \cdot \hat{\beta} \\
+\beta_{G\times trt} &= \gamma_{G\times trt} \cdot \hat{\beta}_{G\times trt} \\
+\beta_{S} &= \nu_{S} \cdot \hat{\beta}_{S} \\
+\gamma_{G\times trt} &= \tan(\hat{\gamma}_{G\times trt}) \\
+\nu_{S} &= \tan(\hat{\nu}_{S})
+\end{split}
+(\#eq:iter5-model)
+\end{equation}
+\setstretch{2.0}
 
 
 **Post-Model, Post-Data**
@@ -2165,7 +2255,7 @@ if (file.exists("models/m044s_vis.rds")) {
 
 _Diagnose Posterior Fit_
 
-There is only one divergent transition for this model indicating no issues with the algorithm configuration. Checking the trace plot for the multilevel variance terms also indicates no problems with the sampling.
+There is only one divergent transition for this model indicating no issues with the algorithmic configuration. Checking the trace plot for the multilevel variance terms also indicates no problems with the sampling.
 
 
 ```{r ch045-Mysterious-Neptune, fig.cap="The multilevel model with lapse and subject-level terms fits efficiently with no issues."}
@@ -2198,33 +2288,14 @@ comp_vis2 <- loo_compare(l044, l044s)
 ```
 
 
-In lieu of posterior retrodictions (which would) appear similar to those of the last iteration, we simply compare the model with subject-level parameters to the one without. There are a handful of observations in the subject-level model that a Pareto $k$ value of $0.7$ which indicates impractical convergence rates and unreliable Monte Carlo error estimates. For more accurate estimation of predictive performance, $k$-fold CV or LOOCV is recommended.
+In lieu of posterior retrodictions (which would appear similar to those of the last iteration), we compare the model with subject-level parameters to the one without. There are a handful of observations in the subject-level model that have a Pareto $k$ value higher than $0.7$ which indicates impractical convergence rates and unreliable Monte Carlo error estimates. For more accurate estimation of predictive performance, $k$-fold CV or LOOCV is recommended.
 
 
+\setstretch{1.0}
 ```{r ch045-Boiling Hurricane}
 pareto_k_table(l044s)
 ```
-
-
-<!--
-```{r ch045-Hideous-Compass}
-visual_binomial %>%
-  filter(trial %in% c("pre", "post1")) %>%
-  mutate(x = soa / 1000,
-           rid = factor(rid),
-           sid = factor(sid),
-           trial = factor(trial)) %>%
-  slice(hi_k) %>%
-  add_column(k_value = hi_k_values) %>%
-  select(soa, n, k, sid, trial, age_group, k_value) %>%
-  arrange(desc(k_value)) %>%
-  kable(booktabs = TRUE, caption = "High Pareto k diagnostic values for the subject level lapse model.") %>%
-  kable_styling(latex_options = "hold_position")
-```
--->
-
-
-Proceeding on to model comparison, including the subject-level information significantly improves the ELPD, and even though there are over 100 parameters in the model (slope and intercept for each of the 45 subjects), the effective number of parameters is much less. Since this new model is capable of making inferences at both the age group level and the subject level, we use it for drawing inferences in the results chapter.
+\setstretch{2.0}
 
 
 ```{r ch045-Deserted-Fish}
@@ -2241,4 +2312,4 @@ comp_vis2 %>%
 ```
 
 
-One concern comes up when it comes to LOOCV and multilevel models. What does it mean to leave _one_ out? Should one subject be left out? One age group? Just one observation? With more levels in a model, more careful considerations must be taken when it comes to estimating predictive performance.
+Including the subject-level information significantly improves the ELPD, and even though there are over 100 parameters in the model (slope and intercept for each of the 45 subjects), the effective number of parameters is much less. Since this new model is capable of making inferences at both the age group level and the subject level, we use it for drawing inferences in the results chapter.

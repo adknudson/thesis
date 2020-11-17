@@ -7,3 +7,4 @@ The full details of `Stan`'s HMC algorithm is described in the Stan reference ma
 
 One benefit of using HMC over other samplers like Gibbs sampling is that HMC offers diagnostic tools for the health of chains and the ability to check for _divergent transitions_ (discussed in \@ref(model-checking)).
 
+The way that we can turn a normal model with categorical predictors into a multilevel model is by allowing the priors to borrow information from other groups. This is accomplished by putting priors on priors. It is easier to write down the model first before explaining how it works.
