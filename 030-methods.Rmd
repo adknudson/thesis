@@ -155,26 +155,123 @@ tibble(
 Using a weakly-informative prior for the slope instead of the non-informative uniform distribution will allow for a proper MAP estimate, but care should be taken to consider what prior is appropriate, or why the data is separable in the first place. If an experiment can be improved to avoid the situation, that should be the first action.
 
 
-<!-- This is a good opportunity to segue into multilevel models -->
+## Multilevel modeling
 
 
-## Bayesian multilevel GLM
+In classical regression, a simple single-level slope-intercept model can be specified as:
 
 
-- Use Gelmen and Hill
+\begin{equation}
+y_i = \alpha + \beta x_i + \epsilon_i
+(\#eq:single-level-fixed)
+\end{equation}
 
 
-- Pooling
-  - none
-  - partial
-  - complete
-  
-  
+The slope and intercept is fixed for all observations in the data set. If there is a categorical variable with $J$ levels, then a varying-slope varying-intercept (or simply varying effects) model can be specified as:
 
+
+\begin{equation}
+y_i = \alpha_{j[i]} + \beta_{j[i]} x_i + \epsilon_i
+(\#eq:single-level-fixed-varying)
+\end{equation}
+
+
+where $j[i]$ indexes the group for observation $i$. In a multilevel model, the coefficients are modeled by a separate regression:
+
+
+\setstretch{1.0}
+\begin{equation}
+\begin{split}
+y_i &= \alpha_{j[i]} + \beta_{j[i]} x_i \\
+\alpha_j &\sim \mathcal{N}(a_0 + a_1 u_j, \sigma_{\alpha}^2) \\
+\beta_j &\sim \mathcal{N}(b_0 + b_1 u_j, \sigma_{\beta}^2) \\
+\end{split}
+(\#eq:multilevel-varying)
+\end{equation}
+\setstretch{2.0}
+
+
+In \@ref(eq:multilevel-varying), $x$ is a population level predictor, and $u$ is a group level predictor. Equations \@ref(eq:single-level-fixed) and \@ref(eq:single-level-fixed-varying) represent the two extremes of excluding a categorical variable from a model (complete pooling) and fitting a regression coefficient for each level in the categorical variable (no pooling). Multilevel modeling provides a compromise between these two extremes, resulting in partial pooling estimates.
+
+
+For a simple intercept-only model, the partial pooling estimate of the intercept, $\hat{\alpha}_j$ is a weighted average of the mean of the of the observations in the group (no pooling estimate, $\bar{y}_j$) and the mean over all groups (complete pooling estimate, $\bar{y}$):
+
+
+$$
+\hat{\alpha}_j \approx \frac{\frac{n_j}{\sigma_y^2} \bar{y}_j + \frac{1}{\sigma_\alpha^2} \bar{y}}{\frac{n_j}{\sigma_y^2} + \frac{1}{\sigma_\alpha^2}}
+$$
+
+
+where $n_j$ is the number of observations in group level $j$, $\sigma_y^2$ is the within-group variance, and $\sigma_\alpha^2$ is the variance between the group level averages. As the between-group variance goes to infinity (or as $n_j \rightarrow \infty$), the partial pooling estimates approach the no pooling estimates. When there are fewer samples, the partial pooling estimate is closer to the overall average. In this way, partial pooling reflects the relative information contained within each group. For an in-depth introduction to multilevel modeling, see @gelman2006data.
 
 
 ## Hamiltonian Monte Carlo and NUTS
 
+
+We will be using `Stan` for model fitting throughout this paper. `Stan` allows for MCMC sampling of Bayesian models using a variant of Hamiltonian Monte Carlo called the No-U-Turn sampler (NUTS). HMC can be though of as a physics simulation: a massless "particle" is imparted with a random direction and some amount of kinetic energy in a probability field, and is stopped after a number of steps, $L$, called leapfrog steps. The stopping point is the new proposal sample. The NUTS algorithm removes the need for leapfrog steps by stopping automatically when the particle begins to double back and retrace its steps [@hoffman2014no]. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that let us know when the sampler is having trouble efficiently exploring the posterior.
+
+
+The NUTS algorithm samples in two phases: a warm-up phase and a sampling phase. During the warm-up phase, the sampler is automatically tuning three internal parameters that can significantly affect the sampling efficiency. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle [@stanref]. The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called leapfrog steps (see @leimkuhler2004simulating for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.
+
+
+## Non-centered parameterization
+
+
+Because HMC is a physics simulation, complicated geometry or posteriors with steep slopes can be difficult to traverse if the step size is too course. The solution is to explore a simpler geometry, and then transform the sample into the target distribution. Reparameterization is especially important for hierarchical models. For `Stan`, sampling from a standard normal or uniform distribution is very easy, and so the non-centered parameterization can alleviate divergent transitions. Here we present three reparameterizations that we use in the next chapter.
+
+
+**Non-centered Gaussian distribution**
+
+
+\setstretch{1.0}
+\begin{equation}
+  \begin{split}
+    X &\sim \mathcal{N}(\mu, \sigma^2)
+  \end{split}
+\quad \Longrightarrow \quad
+  \begin{split}
+    Z &\sim \mathcal{N}(0, 1^2) \\
+    X &= \mu + \sigma \cdot Z
+  \end{split}
+(\#eq:nc-normal)
+\end{equation}
+\setstretch{2.0}
+
+
+**Non-centered Log-Normal distribution**
+
+
+\setstretch{1.0}
+\begin{equation}
+  \begin{split}
+    X &\sim \mathrm{Lognormal}(\mu, \sigma^2)
+  \end{split}
+\quad \Longrightarrow \quad
+  \begin{split}
+    Z &\sim \mathcal{N}(0, 1^2) \\
+    X &= \exp\left(\mu + \sigma \cdot Z\right)
+  \end{split}
+(\#eq:nc-lognormal)
+\end{equation}
+\setstretch{2.0}
+
+
+**Non-centered Cauchy distribution**
+
+
+\setstretch{1.0}
+\begin{equation}
+  \begin{split}
+    X &\sim \mathrm{Cauchy}(\mu, \tau)
+  \end{split}
+\quad \Longrightarrow \quad
+  \begin{split}
+    U &\sim \mathcal{U}\left(-\frac{\pi}{2}, \frac{\pi}{2}\right) \\
+    X &= \mu + \tau \cdot \tan(U)
+  \end{split}
+(\#eq:nc-cauchy)
+\end{equation}
+\setstretch{2.0}
 
 
 ## Methods for model checking {#model-checking}
@@ -436,7 +533,28 @@ var_hat <- W * (N - 1) / N + B / N
 We've successfully replicated the calculation of the split $\hat{R}$. @vehtari2020rank propose an improved rank-normalized $\hat{R}$ for assessing the convergence of MCMC chains, and also suggest using a threshold of $1.01$.
 
 
-**Effective Sample Size.** Samples from Markov Chains are typically autocorrelated, which can increase uncertainty of posterior estimates. The solution is generally to reparameterize the model to avoid steep log-posterior densities, and the benefit of reparameterization is conveyed by the ratio of effective sample size to actual sample size in figure \@ref(fig:ch030-Timely-Nitrogen). When the HMC algorithm is exploring difficult geometry, it can get stuck in regions of high densities, which means that there is more correlation between successive samples.
+**Effective Sample Size.** Samples from Markov Chains are typically autocorrelated, which can increase uncertainty of posterior estimates. The solution is generally to reparameterize the model to avoid steep log-posterior densities. When the HMC algorithm is exploring difficult geometry, it can get stuck in regions of high densities, which means that there is more correlation between successive samples. Equation \@ref(eq:schools-ncp) shows the centered (left) and non-centered (right) parameterization of the 8-Schools model, and the benefit of reparameterization is conveyed by the ratio of effective sample size to actual sample size in figure \@ref(fig:ch030-Timely-Nitrogen).
+
+
+\begin{equation}
+  \begin{split}
+    \sigma &\sim \mathcal{U}(0, \infty) \\
+    \mu &\sim \mathcal{N}(0, 10) \\
+    \tau &\sim \mathrm{HalfCauchy}(0, 10) \\
+    \theta &\sim \mathcal{N}(\mu, \tau) \\
+    y &\sim \mathcal{N}(\theta, \sigma)
+  \end{split}
+\quad \Longrightarrow \quad
+  \begin{split}
+    \sigma &\sim \mathcal{U}(0, \infty) \\
+    \mu &\sim \mathcal{N}(0, 10) \\
+    \tau &\sim \mathrm{HalfCauchy}(0, 10) \\
+    \eta &\sim \mathcal{N}(0, 1) \\
+    \theta &= \mu + \tau \cdot \eta \\
+    y &\sim \mathcal{N}(\theta, \sigma)
+  \end{split}
+(\#eq:schools-ncp)
+\end{equation}
 
 
 ```{r ch030-Third Tuna}
@@ -456,26 +574,6 @@ p_cp <- mcmc_neff(cp_neff) +
   labs(title = "Centered Parameterization")
 p_cp / p_ncp
 ```
-
-
-\begin{equation*}
-  \begin{split}
-    \sigma &\sim \mathcal{U}(0, \infty) \\
-    \mu &\sim \mathcal{N}(0, 10) \\
-    \tau &\sim \mathrm{HalfCauchy}(0, 10) \\
-    \theta &\sim \mathcal{N}(\mu, \tau) \\
-    y &\sim \mathcal{N}(\theta, \sigma)
-  \end{split}
-\qquad
-  \begin{split}
-    \sigma &\sim \mathcal{U}(0, \infty) \\
-    \mu &\sim \mathcal{N}(0, 10) \\
-    \tau &\sim \mathrm{HalfCauchy}(0, 10) \\
-    \eta &\sim \mathcal{N}(0, 1) \\
-    \theta &= \mu + \tau \cdot \eta \\
-    y &\sim \mathcal{N}(\theta, \sigma)
-  \end{split}
-\end{equation*}
 
 
 As the strength of autocorrelation generally decreases at larger lags, a simple prescription to decrease autocorrelation between samples and increase the effective sample size is to use thinning. Thinning means saving every $k^{th}$ sample and throwing the rest away. If one desired to have 2000 posterior draws, it could be done in two of many possible ways
@@ -660,7 +758,7 @@ bind_rows(
 The best fit to the observed data is the quartic model, but it is too variable and doesn't capture the regular features of the data, so it does poorly for the out-of-sample prediction. The linear model suffers as well by being less biased and too inflexible to capture the structure of the data. The quadratic and cubic are in the middle, but the quadratic does well and makes fewer assumptions about the data. The quadratic model is just complex enough to predict well while making fewer assumptions. Information criteria is a way of weighing the prediction quality of a model against its complexity, and is arguably a better system for model selection/comparison than other goodness-of-fit statistics such as $R^2$ or p-values.
 
 
-We don't always have the observed data to compare predictions against (nor the data generating model). Some techniques to compensate for this limitation include cross validation, where the data is split into training data and testing data. The model is fit to the training data, and then predictions are made with the testing data and compared to the observed values. This can often give a good estimate for out-of-sample prediction error. Cross validation can be extended into k-fold cross validation. The idea is to _fold_ the data into $k$ disjoint partitions, and predict partition $i$ using the rest of the data to train on. The prediction error of the $k$-folds can then be averaged over to get an estimate for out-of-sample prediction error.
+A technique to evaluate predictive performance is cross validation, where the data is split into training data and testing data. The model is fit to the training data, and then predictions are made with the testing data and compared to the observed values. This can often give a good estimate for out-of-sample prediction error. Cross validation can be extended into k-fold cross validation. The idea is to fold the data into $k$ disjoint partitions, and predict partition $i$ using the rest of the data to train on. The prediction error of the $k$-folds can then be averaged over to get an estimate for out-of-sample prediction error.
 
 
 Taking $k$-fold CV to the limit by letting $k$ equal the number of observations results in leave-one-out cross validation (LOOCV), where for each observation in the data, the model is fit to the remaining data and predicted for the left out observation. $k$-fold cross validation requires fitting the model $k$ times, which can be computationally expensive for complex Bayesian models. Thankfully there is a way to approximate LOOCV without having to refit the model many times.
@@ -710,7 +808,7 @@ $$
 where $\mu$ is the location, $\sigma$ is the scale, and $k$ is the shape. Then the estimated distribution is used to smooth the weights. A side-effect of using PSIS is that the estimated value of $k$ can be used as a diagnostic tool for a particular observation. For $k>0.5$, the Pareto distribution will have infinite variance, and a really heavy tail. If the tail is very heavy, then the smoothed weights are harder to trust. In theory and in practice, PSIS works well as long as $k < 0.7$ [@vehtari2015pareto].
 
 
-There is an `R` package called `loo` that can compute the expected log-pointwise-posterior-density (ELPD) using PSIS-LOO, as well as the estimated number of effective parameters and LOO information criterion [@R-loo]. For the part of the researcher, the log-likelihood of the observations must be computed. This can be calculated in the _generated quantities_ block of a `Stan` program, and it is standard practice to name the log-likelihood as `log_lik` in the model. An example of calculating the log-likelihood for the eight schools data in `Stan` is:
+There is an `R` package called `loo` that can compute the expected log-pointwise-posterior-density (ELPD) using PSIS-LOO, as well as the estimated number of effective parameters and LOO information criterion [@R-loo]. For the part of the researcher, the log-likelihood of the observations must be computed. This can be calculated in the `generated quantities` block of a `Stan` program, and it is standard practice to name the log-likelihood as `log_lik` in the model. An example of calculating the log-likelihood for the eight schools data in `Stan` is:
 
 
 \setstretch{1.0}

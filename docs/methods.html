@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3 Methods | A Bayesian Multilevel Model for the Psychometric Function using R and Stan</title>
-  <meta name="description" content="3 Methods | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
+  <title>2 Background | A Bayesian Multilevel Model for the Psychometric Function using R and Stan</title>
+  <meta name="description" content="2 Background | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3 Methods | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
+  <meta property="og:title" content="2 Background | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="adkudson/thesis" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 Methods | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
+  <meta name="twitter:title" content="2 Background | A Bayesian Multilevel Model for the Psychometric Function using R and Stan" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="data.html"/>
-<link rel="next" href="application.html"/>
+<link rel="prev" href="index.html"/>
+<link rel="next" href="data.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -134,34 +134,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#current-methods"><i class="fa fa-check"></i><b>1.1</b> Current Methods</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#new-methods"><i class="fa fa-check"></i><b>1.2</b> New Methods</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i><b>1.3</b> Organization</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#conventional-classical-statistics"><i class="fa fa-check"></i><b>1.1</b> Conventional (classical) statistics</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#bayesian-statistics"><i class="fa fa-check"></i><b>1.2</b> Bayesian statistics</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#markov-chain-monte-carlo-enables-modern-bayesian-models"><i class="fa fa-check"></i><b>1.3</b> Markov Chain Monte Carlo enables modern Bayesian models</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i><b>1.4</b> Organization</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Motivating Data</a><ul>
-<li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#psycho-experiments"><i class="fa fa-check"></i><b>2.1</b> Psychometric Experiments</a></li>
-<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#toj-task"><i class="fa fa-check"></i><b>2.2</b> Temporal Order Judgment Task</a></li>
-<li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#data-visualizations-and-quirks"><i class="fa fa-check"></i><b>2.3</b> Data Visualizations and Quirks</a></li>
+<li class="chapter" data-level="2" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>2</b> Background</a><ul>
+<li class="chapter" data-level="2.1" data-path="methods.html"><a href="methods.html#glms"><i class="fa fa-check"></i><b>2.1</b> Fitting the psychometric function using GLMs</a></li>
+<li class="chapter" data-level="2.2" data-path="methods.html"><a href="methods.html#multilevel-modeling"><i class="fa fa-check"></i><b>2.2</b> Multilevel modeling</a></li>
+<li class="chapter" data-level="2.3" data-path="methods.html"><a href="methods.html#hamiltonian-monte-carlo-and-nuts"><i class="fa fa-check"></i><b>2.3</b> Hamiltonian Monte Carlo and NUTS</a></li>
+<li class="chapter" data-level="2.4" data-path="methods.html"><a href="methods.html#non-centered-parameterization"><i class="fa fa-check"></i><b>2.4</b> Non-centered parameterization</a></li>
+<li class="chapter" data-level="2.5" data-path="methods.html"><a href="methods.html#model-checking"><i class="fa fa-check"></i><b>2.5</b> Methods for model checking</a></li>
+<li class="chapter" data-level="2.6" data-path="methods.html"><a href="methods.html#estimating-predictive-performance"><i class="fa fa-check"></i><b>2.6</b> Estimating predictive performance</a></li>
+<li class="chapter" data-level="2.7" data-path="methods.html"><a href="methods.html#a-modern-principled-bayesian-modeling-workflow"><i class="fa fa-check"></i><b>2.7</b> A modern principled bayesian modeling workflow</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>3</b> Methods</a><ul>
-<li class="chapter" data-level="3.1" data-path="methods.html"><a href="methods.html#model-development"><i class="fa fa-check"></i><b>3.1</b> Model Development</a></li>
-<li class="chapter" data-level="3.2" data-path="methods.html"><a href="methods.html#model-fitting"><i class="fa fa-check"></i><b>3.2</b> Model Fitting</a></li>
-<li class="chapter" data-level="3.3" data-path="methods.html"><a href="methods.html#model-checking"><i class="fa fa-check"></i><b>3.3</b> Model Checking</a></li>
-<li class="chapter" data-level="3.4" data-path="methods.html"><a href="methods.html#predictive-performance"><i class="fa fa-check"></i><b>3.4</b> Predictive Performance</a></li>
+<li class="chapter" data-level="3" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>3</b> Motivating data</a><ul>
+<li class="chapter" data-level="3.1" data-path="data.html"><a href="data.html#psycho-experiments"><i class="fa fa-check"></i><b>3.1</b> Psychometric experiments</a></li>
+<li class="chapter" data-level="3.2" data-path="data.html"><a href="data.html#toj-task"><i class="fa fa-check"></i><b>3.2</b> Temporal order judgment tasks</a></li>
+<li class="chapter" data-level="3.3" data-path="data.html"><a href="data.html#data-visualization-and-quirks"><i class="fa fa-check"></i><b>3.3</b> Data visualization and quirks</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="application.html"><a href="application.html"><i class="fa fa-check"></i><b>4</b> Model Development</a><ul>
-<li class="chapter" data-level="4.1" data-path="application.html"><a href="application.html#iter1"><i class="fa fa-check"></i><b>4.1</b> Iteration 1</a></li>
-<li class="chapter" data-level="4.2" data-path="application.html"><a href="application.html#iter2"><i class="fa fa-check"></i><b>4.2</b> Iteration 2</a></li>
-<li class="chapter" data-level="4.3" data-path="application.html"><a href="application.html#iter3"><i class="fa fa-check"></i><b>4.3</b> Iteration 3</a></li>
-<li class="chapter" data-level="4.4" data-path="application.html"><a href="application.html#iter4"><i class="fa fa-check"></i><b>4.4</b> Iteration 4</a></li>
-<li class="chapter" data-level="4.5" data-path="application.html"><a href="application.html#iter5"><i class="fa fa-check"></i><b>4.5</b> Iteration 5</a></li>
+<li class="chapter" data-level="4" data-path="application.html"><a href="application.html"><i class="fa fa-check"></i><b>4</b> Methodological Contributions via the Workflow</a><ul>
+<li class="chapter" data-level="4.1" data-path="application.html"><a href="application.html#psych-quant"><i class="fa fa-check"></i><b>4.1</b> Modeling psychometric quantities</a></li>
+<li class="chapter" data-level="4.2" data-path="application.html"><a href="application.html#iter1"><i class="fa fa-check"></i><b>4.2</b> Iteration 1: base model</a></li>
+<li class="chapter" data-level="4.3" data-path="application.html"><a href="application.html#iter2"><i class="fa fa-check"></i><b>4.3</b> Iteration 2: adding age and block</a></li>
+<li class="chapter" data-level="4.4" data-path="application.html"><a href="application.html#iter3"><i class="fa fa-check"></i><b>4.4</b> Iteration 3: adding age-block interaction</a></li>
+<li class="chapter" data-level="4.5" data-path="application.html"><a href="application.html#iter4"><i class="fa fa-check"></i><b>4.5</b> Iteration 4: adding a lapse rate</a></li>
+<li class="chapter" data-level="4.6" data-path="application.html"><a href="application.html#iter5"><i class="fa fa-check"></i><b>4.6</b> Iteration 5: adding subjects</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Psychometric Results</a><ul>
 <li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#on-perceptual-synchrony"><i class="fa fa-check"></i><b>5.1</b> On Perceptual Synchrony</a></li>
 <li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#on-temporal-sensitivity"><i class="fa fa-check"></i><b>5.2</b> On Temporal Sensitivity</a></li>
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#lapse-rate-across-age-groups"><i class="fa fa-check"></i><b>5.3</b> Lapse Rate across Age Groups</a></li>
+<li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#subject-specific-inferences"><i class="fa fa-check"></i><b>5.4</b> Subject specific inferences</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Conclusion</a></li>
+<li class="chapter" data-level="6" data-path="discussion-and-conclusion.html"><a href="discussion-and-conclusion.html"><i class="fa fa-check"></i><b>6</b> Discussion and Conclusion</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="code.html"><a href="code.html"><i class="fa fa-check"></i><b>A</b> Supplementary Code</a></li>
 <li class="chapter" data-level="B" data-path="model-dev.html"><a href="model-dev.html"><i class="fa fa-check"></i><b>B</b> Developing a Model</a></li>
@@ -185,214 +191,228 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="methods" class="section level1">
-<h1><span class="header-section-number">3</span> Methods</h1>
-<div id="model-development" class="section level2">
-<h2><span class="header-section-number">3.1</span> Model Development</h2>
-<p>A principled workflow is a method of employing domain expertise and statistical knowledge to iteratively build a statistical model that satisfies the constraints and goals set forth by the researcher. There are many great resources out there for following along with an analysis of some data or problem, and there is an abundance of tips, tricks, techniques, and testimonies to good modeling practices. The problem is that many of these prescriptions are given without context for when they are appropriate to be taken. According to <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span>, this leaves “practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics.” The concept of a principled workflow is that for any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather great consideration must be given to domain expertise and the questions that one is trying to answer with the statistical model.</p>
-<p>Since everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in how consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by:</p>
-<ol style="list-style-type: decimal">
-<li>Domain Expertise Consistency
-<ul>
-<li>Is our model consistent with our domain expertise?</li>
-</ul></li>
-<li>Computational Faithfulness
-<ul>
-<li>Will our computational tools be sufficient to accurately fit our posteriors?</li>
-</ul></li>
-<li>Inferential Adequacy
-<ul>
-<li>Will our inferences provide enough information to answer our questions?</li>
-</ul></li>
-<li>Model Adequacy
-<ul>
-<li>Is our model rich enough to capture the relevant structure of the true data generating process?</li>
-</ul></li>
-</ol>
-<p>Like any good Bayesian, much work is done before seeing the data or building a model. This may include talking with experts to gain domain knowledge or to elicit priors. Domain experts know something about a particular measure, perhaps the mean or variability of the data from years of research, and different experts may provide different estimates of a measure. The benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the posterior distribution. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints.</p>
-<p>In this section we describe a principled workflow proposed by <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span> and broadly adopted by many members of the Bayesian community. In its simplest form, the workflow consists of prior predictive checks, fitting a model, posterior predictive checks, and repeat. The comprehensive list steps are in table <a href="methods.html#tab:ch030-workflow-steps">3.1</a>.</p>
+<h1><span class="header-section-number">2</span> Background</h1>
+<div id="glms" class="section level2">
+<h2><span class="header-section-number">2.1</span> Fitting the psychometric function using GLMs</h2>
+<p>Psychometric functions are commonly fit using generalized linear models which allows for the linear model to be related to the response variable via a link function, which for psychometric functions comes from the family of S-shaped curves called a sigmoid.</p>
+<p>Commonly GLMs are fit using maximum likelihood estimation (MLE). The outcome of a single experiment can be represented as the result of a Bernoulli trial. The psychometric function, <span class="math inline">\(F(x; \theta)\)</span>, determines the probability that the outcome is 1:</p>
+<p><span class="math display">\[\begin{align*}
+Y &amp;\sim \textrm{Bernoulli}(\pi) \\
+\pi &amp;= P(Y=1 \vert x; \theta) = F(x; \theta)
+\end{align*}\]</span></p>
+<p>If <span class="math inline">\(P(Y=1 | x; \theta) = F(x;\theta)\)</span>, then <span class="math inline">\(P(Y = 0 | x; \theta) = 1 - F(x;\theta)\)</span>, and hence the probability of an outcome is:</p>
+<p><span class="math display" id="eq:bernproby">\[\begin{equation}
+  P(Y=y | x; \theta) = F(x;\theta)^y(1-F(x;\theta))^{1-y}
+  \tag{2.1}
+\end{equation}\]</span></p>
+<p>The likelihood <span class="math inline">\(\mathcal{L}\)</span> of observing a set of independent and identically distributed data given the parameterization <span class="math inline">\(\theta\)</span> is determined by taking the product of the probabilities for each datum:</p>
+<p><span class="math display" id="eq:bernlik">\[\begin{equation}
+  \begin{split}
+    \mathcal{L} &amp;= \prod_{i}^{N} P(y_i | x_i; \theta) \\
+    &amp;= \prod_{i}^{N}F(x_i;\theta)^{y_i}(1-F(x_i;\theta))^{1-y_i}
+  \end{split}
+  \tag{2.2}
+\end{equation}\]</span></p>
+<p>For some <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\mathcal{L}\)</span> achieves a maximum value, so maximum likelihood estimation determines the parameters that maximizes the likelihood of the observed data. Equation <a href="methods.html#eq:bernlik">(2.2)</a> is commonly expressed in terms of its logarithm as a function of <span class="math inline">\(\theta\)</span>:</p>
+<p><span class="math display" id="eq:bernloglik">\[\begin{equation}
+  \ln \mathcal{L}(\theta | y, x) = \sum_{i}^{N} y_i \ln\left(F(x_i;\theta)\right) + (1-y_i) \ln\left(1 - F(x_i;\theta))\right)
+  \tag{2.3}
+\end{equation}\]</span></p>
+<p>The classical approach is to differentiate <a href="methods.html#eq:bernloglik">(2.3)</a> with respect to <span class="math inline">\(\theta\)</span>, set the equation equal to <span class="math inline">\(0\)</span>, and solve for <span class="math inline">\(\theta\)</span>:</p>
+<p><span class="math display" id="eq:ddthetaloglik">\[\begin{equation}
+  \frac{d}{d\theta} \ln \mathcal{L}(\theta) = 0
+  \tag{2.4}
+\end{equation}\]</span></p>
+<p>However, no closed form expression exists for the solution to <a href="methods.html#eq:ddthetaloglik">(2.4)</a>, and so numerical root finding methods such as gradient descent are used to iteratively find the maximum likelihood solution. The likelihood function, <span class="math inline">\(\mathcal{L}(\theta | y)\)</span>, also has a connection to Bayes’ Theorem:</p>
+<p><span class="math display" id="eq:bayeslik">\[\begin{equation}
+  \mathcal{L}(\theta | y) = \frac{P(y | \theta) P(\theta)}{P(y)}
+  \tag{2.5}
+\end{equation}\]</span></p>
+<p>In <a href="methods.html#eq:bayeslik">(2.5)</a>, <span class="math inline">\(P(y | \theta)\)</span> is the likelihood of the data given <span class="math inline">\(\theta\)</span>, <span class="math inline">\(P(\theta)\)</span> is the prior distribution for the parameter <span class="math inline">\(\theta\)</span>, and <span class="math inline">\(P(y)\)</span> is the probability of the data averaged over the parameter space. When the prior distribution is uniform over the parameter space, then the Bayesian <em>maximum a posteriori</em> (MAP) estimate coincides with the maximum likelihood estimate.</p>
+<p>There are common situations where MLE fails such as complete separation in the data. This is when the positive class can be separated from the negative class by a set of linear predictors (shown in figure <a href="methods.html#fig:ch030-comp-sep">2.1</a>).</p>
+<div class="figure" style="text-align: center"><span id="fig:ch030-comp-sep"></span>
+<img src="030-methods_files/figure-html/ch030-comp-sep-1.png" alt="Example of complete separation in the data. All of the `0`-responses can be separated from the `1`-responses by some value of `x` between `-1` and `0`." width="85%" />
+<p class="caption">
+Figure 2.1: Example of complete separation in the data. All of the <code>0</code>-responses can be separated from the <code>1</code>-responses by some value of <code>x</code> between <code>-1</code> and <code>0</code>.
+</p>
+</div>
+<p>For a slope-intercept model, the MLE for the slope is infinity, and the location is undefined. Figure <a href="methods.html#fig:ch030-mle-comp-sep">2.2</a> displays a grid of log-likelihoods for a range of scale (inverse slope) and location parameters. The log-likelihood increases to zero as the scale decreases to zero (slope increases to infinity). Numerical root finding methods will converge after a finite number of iterations – usually by a stopping condition such as the difference in log-likelihoods between steps.</p>
+<div class="figure" style="text-align: center"><span id="fig:ch030-mle-comp-sep"></span>
+<img src="030-methods_files/figure-html/ch030-mle-comp-sep-1.png" alt="Grid of log-likelihoods for the completely separable data. The log-likelihood increases to zero as the scale decreases to zero (slope increases to infinity). For smaller slopes, the MLE for the location is `0.5` -- the median of the inner-most datum from each class. At larger slopes, the MLE for the location matters little." width="85%" />
+<p class="caption">
+Figure 2.2: Grid of log-likelihoods for the completely separable data. The log-likelihood increases to zero as the scale decreases to zero (slope increases to infinity). For smaller slopes, the MLE for the location is <code>0.5</code> – the median of the inner-most datum from each class. At larger slopes, the MLE for the location matters little.
+</p>
+</div>
+<p>When the separable data from above is fit using <code>R</code>’s <code>glm</code> function, there is a warning about fitted probabilities being <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>, indicating that the slope is very steep.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="methods.html#cb1-1"></a>fit &lt;-<span class="st"> </span><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="st">&quot;logit&quot;</span>))</span>
+<span id="cb1-2"><a href="methods.html#cb1-2"></a><span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></span>
+<span id="cb1-3"><a href="methods.html#cb1-3"></a><span class="kw">coefficients</span>(fit)</span>
+<span id="cb1-4"><a href="methods.html#cb1-4"></a><span class="co">#&gt; (Intercept)           x </span></span>
+<span id="cb1-5"><a href="methods.html#cb1-5"></a><span class="co">#&gt;       22.89       45.97</span></span></code></pre></div>
+<p>The coefficients of the linear predictor are in slope-intercept form (<span class="math inline">\(23 + 46 x\)</span>). Rearranging the coefficients into location-scale form yields:</p>
+<p><span class="math display" id="eq:rglmmle">\[\begin{equation}
+  \theta = \frac{x - (-0.5)}{1/46}
+  \tag{2.6}
+\end{equation}\]</span></p>
+<p>However, this is not the true maximum likelihood estimate. Table <a href="methods.html#tab:ch030-Quality-Surreal-Street">2.1</a> shows that the log-likelihood is still increasing as the scale decreases to zero. The change between <span class="math inline">\(-2.05\times 10^{-10}\)</span> and <span class="math inline">\(-3.86\times10^{-22}\)</span> is very large on a relative scale, but computers cannot tell the difference on an absolute scale. The precision of most modern computers is around <span class="math inline">\(10^{-15}\)</span>, and anything smaller is treated as numerically zero.</p>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:ch030-workflow-steps">Table 3.1: </span>Principled workflow
+<span id="tab:ch030-Quality-Surreal-Street">Table 2.1: </span>Log-likelihood estimates for different scale parameters. *Indicates the MLE solution from R.
 </caption>
 <thead>
 <tr>
 <th style="text-align:left;">
-Part
+Scale
 </th>
 <th style="text-align:left;">
-Step
+Log-Likelihood
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;vertical-align: top !important;" rowspan="3">
-Pre-Model, Pre-Data
+<td style="text-align:left;">
+1/10
 </td>
 <td style="text-align:left;">
-conceptual analysis
+-1.34e-02
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-define observational space
+1/46*
+</td>
+<td style="text-align:left;">
+-2.05e-10
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-construct summary statistics
-</td>
-</tr>
-<tr>
-<td style="text-align:left;vertical-align: top !important;" rowspan="8">
-Post-Model, Pre-Data
+1/100
 </td>
 <td style="text-align:left;">
-develop model
+-3.86e-22
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-construct summary functions
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-simulate Bayesian ensemble
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-prior checks
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-configure algorithm
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-fit simulated ensemble
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-algorithmic calibration
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-inferential calibration
-</td>
-</tr>
-<tr>
-<td style="text-align:left;vertical-align: top !important;" rowspan="4">
-Post-Model, Post-Data
+1/1000
 </td>
 <td style="text-align:left;">
-fit observed data
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-diagnose posterior fit
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-posterior retrodictive checks
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-celebrate
+-1.42e-217
 </td>
 </tr>
 </tbody>
 </table>
-<p>These steps are not meant to be followed in a strictly linear fashion. If a conceptual misunderstanding is discovered at any step in the process, then it is recommended to go back to an earlier step and start over. The workflow is a process of model expansion, and multiple iterations are required to get to a final model (or collection of models). Similarly if the model fails prior predictive checks, then one may need to return to the model development step. A full diagram of the workflow is displayed in figure <a href="methods.html#fig:ch030-workflow-diagram">3.1</a>.</p>
-<p><strong>Pre-Model, Pre-Data</strong></p>
-<p>The modeling process begins by modeling the experiment according to the description of how it occurred and how the data were collected. This first part consists of conceptual analysis, defining the observational space, and constructing summary statistics that can help identify issues in the model specification.</p>
-<p><em>Conceptual Analysis</em></p>
-<p>Write down the inferential goals and consider how the variables of interest interact with the environment and how those interactions work to generate observations.</p>
-<p><em>Define Observational Space</em></p>
-<p>What are the possible values that the observed data can take on? The observational space can help inform the statistical model such as in count data.</p>
-<p><em>Construct Summary Statistics</em></p>
-<p>What measurements and estimates can be used to help ensure that the inferential goals are met? Prior predictive checks and posterior retrodictive checks are founded on summary statistics that answer the questions of domain expertise consistency and model adequacy.</p>
-<p><strong>Post-Model, Pre-Data</strong></p>
-<p><em>Develop Model</em></p>
-<p>Build an observational model that is consistent with the conceptual analysis and observational space, and then specify the complementary prior model.</p>
-<p><em>Construct Summary Functions</em></p>
-<p>Use the developed model to construct explicit summary functions that can be used in prior predictive checks and posterior retrodictive checks.</p>
-<p><em>Simulate Bayesian Ensemble</em></p>
-<p>Since the model is a data generating model, it can be used to simulate observations from the prior predictive distribution without yet having seen any data.</p>
-<p><em>Prior Checks</em></p>
-<p>Check that the prior predictive distribution is consistent with domain expertise using the summary functions developed in the previous step.</p>
-<p><em>Configure Algorithm</em></p>
-<p>Having simulated data, the next step is to fit the data generating model to the generated data. There are many different MCMC samplers with their own configurable parameters, so here is where those settings are tweaked.</p>
-<p><em>Fit Simulated Ensemble</em></p>
-<p>Fit the simulated data to the model using the algorithm configured in the previous step.</p>
-<p><em>Algorithmic Calibration</em></p>
-<p>How well did the algorithm do in fitting the simulated data? This step helps to answer the question regarding computational faithfulness. A model may be well specified, but if the algorithm used is unreliable then the posterior distribution is also unreliable, and this can lead to poor inferences. Methods for checking models is discussed in (#model-checking).</p>
-<p><em>Inferential Calibration</em></p>
-<p>Are there any pathological behaviors in the model such as overfitting or non-identifiability? This step helps to answer the question of inferential adequacy.</p>
-<p><strong>Post-Model, Post-Data</strong></p>
-<p><em>Fit Observed Data</em></p>
-<p>After performing the prior predictive checks and being satisfied with the model, the next step is to fit the model to the observed data.</p>
-<p><em>Diagnose Posterior Fit</em></p>
-<p>Did the model fit well? Can a poorly performing algorithm be fixed by tweaking the algorithmic configuration, or is there a problem with the model itself where it is not rich enough to capture the structure of the observed data? Utilize the diagnostic tools available for the algorithm to check the computational faithfulness.</p>
-<p><em>Posterior Retrodictive Checks</em></p>
-<p>Do the posterior retrodictions match the observed data well, or are there still apparent discrepancies between what is expected and what is predicted by the model? It is important that any changes to the model going forward are motivated by domain expertise so as to mitigate the risk of overfitting.</p>
-<p><em>Celebrate</em></p>
-<p>After going through the tedious process of iteratively developing a model, it is okay to celebrate before moving on to answer the research questions.</p>
-<div class="figure" style="text-align: center"><span id="fig:ch030-workflow-diagram"></span>
-<img src="figures/workflow-diagram.png" alt="Diagram is copywrited material of Michael Betancourt and used under the CC BY-NC 4.0 license. Image taken from https://betanalpha.github.io/" width="100%" />
-<p class="caption">
-Figure 3.1: Diagram is copywrited material of Michael Betancourt and used under the CC BY-NC 4.0 license. Image taken from <a href="https://betanalpha.github.io/" class="uri">https://betanalpha.github.io/</a>
+<p>Using a weakly-informative prior for the slope instead of the non-informative uniform distribution will allow for a proper MAP estimate, but care should be taken to consider what prior is appropriate, or why the data is separable in the first place. If an experiment can be improved to avoid the situation, that should be the first action.</p>
+</div>
+<div id="multilevel-modeling" class="section level2">
+<h2><span class="header-section-number">2.2</span> Multilevel modeling</h2>
+<p>In classical regression, a simple single-level slope-intercept model can be specified as:</p>
+<p><span class="math display" id="eq:single-level-fixed">\[\begin{equation}
+y_i = \alpha + \beta x_i + \epsilon_i
+\tag{2.7}
+\end{equation}\]</span></p>
+<p>The slope and intercept is fixed for all observations in the data set. If there is a categorical variable with <span class="math inline">\(J\)</span> levels, then a varying-slope varying-intercept (or simply varying effects) model can be specified as:</p>
+<p><span class="math display" id="eq:single-level-fixed-varying">\[\begin{equation}
+y_i = \alpha_{j[i]} + \beta_{j[i]} x_i + \epsilon_i
+\tag{2.8}
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(j[i]\)</span> indexes the group for observation <span class="math inline">\(i\)</span>. In a multilevel model, the coefficients are modeled by a separate regression:</p>
+
+<p><span class="math display" id="eq:multilevel-varying">\[\begin{equation}
+\begin{split}
+y_i &amp;= \alpha_{j[i]} + \beta_{j[i]} x_i \\
+\alpha_j &amp;\sim \mathcal{N}(a_0 + a_1 u_j, \sigma_{\alpha}^2) \\
+\beta_j &amp;\sim \mathcal{N}(b_0 + b_1 u_j, \sigma_{\beta}^2) \\
+\end{split}
+\tag{2.9}
+\end{equation}\]</span>
+</p>
+<p>In <a href="methods.html#eq:multilevel-varying">(2.9)</a>, <span class="math inline">\(x\)</span> is a population level predictor, and <span class="math inline">\(u\)</span> is a group level predictor. Equations <a href="methods.html#eq:single-level-fixed">(2.7)</a> and <a href="methods.html#eq:single-level-fixed-varying">(2.8)</a> represent the two extremes of excluding a categorical variable from a model (complete pooling) and fitting a regression coefficient for each level in the categorical variable (no pooling). Multilevel modeling provides a compromise between these two extremes, resulting in partial pooling estimates.</p>
+<p>For a simple intercept-only model, the partial pooling estimate of the intercept, <span class="math inline">\(\hat{\alpha}_j\)</span> is a weighted average of the mean of the of the observations in the group (no pooling estimate, <span class="math inline">\(\bar{y}_j\)</span>) and the mean over all groups (complete pooling estimate, <span class="math inline">\(\bar{y}\)</span>):</p>
+<p><span class="math display">\[
+\hat{\alpha}_j \approx \frac{\frac{n_j}{\sigma_y^2} \bar{y}_j + \frac{1}{\sigma_\alpha^2} \bar{y}}{\frac{n_j}{\sigma_y^2} + \frac{1}{\sigma_\alpha^2}}
+\]</span></p>
+<p>where <span class="math inline">\(n_j\)</span> is the number of observations in group level <span class="math inline">\(j\)</span>, <span class="math inline">\(\sigma_y^2\)</span> is the within-group variance, and <span class="math inline">\(\sigma_\alpha^2\)</span> is the variance between the group level averages. As the between-group variance goes to infinity (or as <span class="math inline">\(n_j \rightarrow \infty\)</span>), the partial pooling estimates approach the no pooling estimates. When there are fewer samples, the partial pooling estimate is closer to the overall average. In this way, partial pooling reflects the relative information contained within each group. For an in-depth introduction to multilevel modeling, see <span class="citation">Gelman and Hill (<a href="#ref-gelman2006data" role="doc-biblioref">2006</a>)</span>.</p>
+</div>
+<div id="hamiltonian-monte-carlo-and-nuts" class="section level2">
+<h2><span class="header-section-number">2.3</span> Hamiltonian Monte Carlo and NUTS</h2>
+<p>We will be using <code>Stan</code> for model fitting throughout this paper. <code>Stan</code> allows for MCMC sampling of Bayesian models using a variant of Hamiltonian Monte Carlo called the No-U-Turn sampler (NUTS). HMC can be though of as a physics simulation: a massless “particle” is imparted with a random direction and some amount of kinetic energy in a probability field, and is stopped after a number of steps, <span class="math inline">\(L\)</span>, called leapfrog steps. The stopping point is the new proposal sample. The NUTS algorithm removes the need for leapfrog steps by stopping automatically when the particle begins to double back and retrace its steps <span class="citation">(Hoffman and Gelman <a href="#ref-hoffman2014no" role="doc-biblioref">2014</a>)</span>. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that let us know when the sampler is having trouble efficiently exploring the posterior.</p>
+<p>The NUTS algorithm samples in two phases: a warm-up phase and a sampling phase. During the warm-up phase, the sampler is automatically tuning three internal parameters that can significantly affect the sampling efficiency. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle <span class="citation">(Stan Development Team <a href="#ref-stanref" role="doc-biblioref">2020</a>)</span>. The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called leapfrog steps (see <span class="citation">Leimkuhler and Reich (<a href="#ref-leimkuhler2004simulating" role="doc-biblioref">2004</a>)</span> for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.</p>
+</div>
+<div id="non-centered-parameterization" class="section level2">
+<h2><span class="header-section-number">2.4</span> Non-centered parameterization</h2>
+<p>Because HMC is a physics simulation, complicated geometry or posteriors with steep slopes can be difficult to traverse if the step size is too course. The solution is to explore a simpler geometry, and then transform the sample into the target distribution. Reparameterization is especially important for hierarchical models. For <code>Stan</code>, sampling from a standard normal or uniform distribution is very easy, and so the non-centered parameterization can alleviate divergent transitions. Here we present three reparameterizations that we use in the next chapter.</p>
+<p><strong>Non-centered Gaussian distribution</strong></p>
+
+<p><span class="math display" id="eq:nc-normal">\[\begin{equation}
+  \begin{split}
+    X &amp;\sim \mathcal{N}(\mu, \sigma^2)
+  \end{split}
+\quad \Longrightarrow \quad
+  \begin{split}
+    Z &amp;\sim \mathcal{N}(0, 1^2) \\
+    X &amp;= \mu + \sigma \cdot Z
+  \end{split}
+\tag{2.10}
+\end{equation}\]</span>
+</p>
+<p><strong>Non-centered Log-Normal distribution</strong></p>
+
+<p><span class="math display" id="eq:nc-lognormal">\[\begin{equation}
+  \begin{split}
+    X &amp;\sim \mathrm{Lognormal}(\mu, \sigma^2)
+  \end{split}
+\quad \Longrightarrow \quad
+  \begin{split}
+    Z &amp;\sim \mathcal{N}(0, 1^2) \\
+    X &amp;= \exp\left(\mu + \sigma \cdot Z\right)
+  \end{split}
+\tag{2.11}
+\end{equation}\]</span>
+</p>
+<p><strong>Non-centered Cauchy distribution</strong></p>
+
+<p><span class="math display" id="eq:nc-cauchy">\[\begin{equation}
+  \begin{split}
+    X &amp;\sim \mathrm{Cauchy}(\mu, \tau)
+  \end{split}
+\quad \Longrightarrow \quad
+  \begin{split}
+    U &amp;\sim \mathcal{U}\left(-\frac{\pi}{2}, \frac{\pi}{2}\right) \\
+    X &amp;= \mu + \tau \cdot \tan(U)
+  \end{split}
+\tag{2.12}
+\end{equation}\]</span>
 </p>
 </div>
-</div>
-<div id="model-fitting" class="section level2">
-<h2><span class="header-section-number">3.2</span> Model Fitting</h2>
-<p>We will be using the <code>Stan</code> PPL for model fitting throughout this paper. <code>Stan</code> allows for MCMC sampling of Bayesian models using a variant of Hamiltonian Monte Carlo call the No-U-Turn sampler (NUTS). NUTS is a much more complex algorithm that can be compared to a physics simulation. A massless “particle” is imparted with a random direction and some amount of kinetic energy in a probability field, and is stopped randomly. The stopping point is the new proposal sample. The No U-Turn part means that when the algorithm detects that the particle is turning around, it will stop so as not to return to the starting position. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that let us know when the sampler is having trouble efficiently exploring the posterior.</p>
-<p>The NUTS algorithm samples in two phases: a warm-up phase and a sampling phase. During the warm-up phase, the sampler is automatically tuning three internal parameters that can significantly affect the sampling efficiency. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle <span class="citation">(Stan Development Team <a href="#ref-stanref" role="doc-biblioref">2020</a>)</span>. The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called <em>leapfrog steps</em> (see <span class="citation">Leimkuhler and Reich (<a href="#ref-leimkuhler2004simulating" role="doc-biblioref">2004</a>)</span> for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.</p>
-</div>
 <div id="model-checking" class="section level2">
-<h2><span class="header-section-number">3.3</span> Model Checking</h2>
-<p>Below is the 8 Schools data <span class="citation">(Gelman et al. <a href="#ref-gelman2013bayesian" role="doc-biblioref">2013</a>)</span> which is a classical example for introducing Stan and testing the operating characteristics of a model. We use it in this section to illustrate the essential MCMC model checking tools.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="methods.html#cb1-1"></a>schools_dat &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
-<span id="cb1-2"><a href="methods.html#cb1-2"></a>  <span class="dt">J =</span> <span class="dv">8</span>,</span>
-<span id="cb1-3"><a href="methods.html#cb1-3"></a>  <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">28</span>,  <span class="dv">8</span>, <span class="dv">-3</span>,  <span class="dv">7</span>, <span class="dv">-1</span>,  <span class="dv">1</span>, <span class="dv">18</span>, <span class="dv">12</span>),</span>
-<span id="cb1-4"><a href="methods.html#cb1-4"></a>  <span class="dt">sigma =</span> <span class="kw">c</span>(<span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">16</span>, <span class="dv">11</span>,  <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">10</span>, <span class="dv">18</span>)</span>
-<span id="cb1-5"><a href="methods.html#cb1-5"></a>)</span></code></pre></div>
-<p><strong>Trace Plots</strong></p>
-<p>Trace plots are the first line of defense against misbehaved samplers. They are visual aids that let the practitioner asses the qualitative health of the chains, looking for properties such as autocorrelation, heteroskedacity, non-stationarity, and convergence. Healthy chains are well-mixed and stationary. It’s often better to run more chains during the model building process so that issues with mixing and convergence can be diagnosed sooner. Even one unhealthy chain can be indicative of a poorly specified model. The addition of more chains also contributes to the estimation of the split <span class="math inline">\(\hat{R}\)</span> statistic, which is discussed next. Figure <a href="methods.html#fig:ch030-Brave-Moose">3.2</a> shows what a set of healthy chains looks like.</p>
+<h2><span class="header-section-number">2.5</span> Methods for model checking</h2>
+<p>Below is the 8 Schools data <span class="citation">(Gelman et al. <a href="#ref-gelman2013bayesian" role="doc-biblioref">2013</a>)</span> which is a standard textbook example for introducing multilevel modeling. Here we use it to illustrate essential MCMC model checking tools.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="methods.html#cb2-1"></a>schools_dat &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
+<span id="cb2-2"><a href="methods.html#cb2-2"></a>  <span class="dt">J =</span> <span class="dv">8</span>,</span>
+<span id="cb2-3"><a href="methods.html#cb2-3"></a>  <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">28</span>,  <span class="dv">8</span>, <span class="dv">-3</span>,  <span class="dv">7</span>, <span class="dv">-1</span>,  <span class="dv">1</span>, <span class="dv">18</span>, <span class="dv">12</span>),</span>
+<span id="cb2-4"><a href="methods.html#cb2-4"></a>  <span class="dt">sigma =</span> <span class="kw">c</span>(<span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">16</span>, <span class="dv">11</span>,  <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">10</span>, <span class="dv">18</span>)</span>
+<span id="cb2-5"><a href="methods.html#cb2-5"></a>)</span></code></pre></div>
+<p><strong>Trace Plots.</strong> Trace plots have been used since the conception of MCMC to assess chain sampling efficiency and quality. They are visual aids that let the practitioner asses the qualitative health of the chains, looking for properties such as autocorrelation, heteroskedacity, non-stationarity, and convergence. Healthy chains are well-mixed and stationary. It’s often better to run more chains during the model building process so that issues with mixing and convergence can be diagnosed sooner. One unhealthy chain can be indicative of a poorly specified model. The addition of more chains also contributes to the estimation of the split <span class="math inline">\(\hat{R}\)</span> statistic (discussed below). Figure <a href="methods.html#fig:ch030-Brave-Moose">2.3</a> shows what a set of healthy chains looks like – the chains are nearly indistinguishable, fluctuate around the same mean, and do not show any long periods of being in the same location.</p>
 <div class="figure" style="text-align: center"><span id="fig:ch030-Brave-Moose"></span>
 <img src="030-methods_files/figure-html/ch030-Brave-Moose-1.png" alt="An example of healthy chains." width="85%" />
 <p class="caption">
-Figure 3.2: An example of healthy chains.
+Figure 2.3: An example of healthy chains.
 </p>
 </div>
-<p>There is a similar diagnostic plot called the rank histogram plot (or <em>trank</em> plot for trace rank plot). <span class="citation">Vehtari, Gelman, et al. (<a href="#ref-vehtari2020rank" role="doc-biblioref">2020</a>)</span> details the motivation for trank plots, but in short if the chains are all exploring the posterior efficiently, then the histograms will be similar and uniform. Figure <a href="methods.html#fig:ch030-Dog-Reborn">3.3</a> is from the same model as above but for the rank histogram.</p>
-<div class="figure" style="text-align: center"><span id="fig:ch030-Dog-Reborn"></span>
-<img src="030-methods_files/figure-html/ch030-Dog-Reborn-1.png" alt="A trank plot of healthy chains." width="85%" />
-<p class="caption">
-Figure 3.3: A trank plot of healthy chains.
-</p>
-</div>
-<p>As the number of parameters in a model grows, it becomes exceedingly tedious to check the trace and trank plots of all parameters, and so numerical summaries are required to flag potential issues within the model.</p>
-<p><strong>R-hat</strong></p>
-<p>The most common summary statistic for chain health is the potential scale reduction factor <span class="citation">(Gelman, Rubin, and others <a href="#ref-gelman1992inference" role="doc-biblioref">1992</a>)</span> that measures the ratio of between chain variance and within chain variance. When the two have converged, the ratio is one. I’ve already shared examples of healthy chains which would also have healthy <span class="math inline">\(\hat{R}\)</span> values, but it’s valuable to also share an example of a bad model. Below is the 8 Schools example <span class="citation">(Gelman et al. <a href="#ref-gelman2013bayesian" role="doc-biblioref">2013</a>)</span> which is a classical example for introducing Stan and testing the operating characteristics of a model.</p>
-<p>The initial starting parameters for this model are intentionally set to vary between <span class="math inline">\(-10\)</span> and <span class="math inline">\(10\)</span> (in contrast to the default range of <span class="math inline">\((-2, 2)\)</span>) and with only a few samples drawn in order to artificially drive up the split <span class="math inline">\(\hat{R}\)</span> statistic. The model is provided as supplementary code in the <a href="code.html#code">appendix</a>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="methods.html#cb2-1"></a>fit_cp &lt;-<span class="st"> </span><span class="kw">sampling</span>(schools_cp, <span class="dt">data =</span> schools_dat, <span class="dt">refresh =</span> <span class="dv">0</span>,</span>
-<span id="cb2-2"><a href="methods.html#cb2-2"></a>                   <span class="dt">iter =</span> <span class="dv">40</span>, <span class="dt">init_r =</span> <span class="dv">10</span>, <span class="dt">seed =</span> <span class="dv">671254821</span>)</span></code></pre></div>
-<p>Stan warns about many different issues with this model, but the R-hat is the one of interest. The largest is <span class="math inline">\(1.71\)</span> which is incredibly large.</p>
+<p>As the number of parameters in a model grows, it becomes exceedingly tedious to check the trace plots of all parameters, and so numerical summaries are helpful to flag potential issues within the model.</p>
+<p><strong>R-hat Statistic.</strong> The most common summary statistic for chain health is the potential scale reduction factor <span class="citation">(Gelman, Rubin, and others <a href="#ref-gelman1992inference" role="doc-biblioref">1992</a>)</span> that measures the ratio of between chain variance and within chain variance. When the two have converged, the ratio is one. We’ve shared examples of healthy chains which would also have healthy <span class="math inline">\(\hat{R}\)</span> values, but it’s valuable to also share an example of a bad model. Below is the 8 Schools example <span class="citation">(Gelman et al. <a href="#ref-gelman2013bayesian" role="doc-biblioref">2013</a>)</span> which is a classical example for introducing Stan and testing the operating characteristics of a model.</p>
+<p>The initial starting parameters for this model are intentionally set to vary between <span class="math inline">\(-10\)</span> and <span class="math inline">\(10\)</span> – in contrast to the default range of <span class="math inline">\((-2, 2)\)</span> – and with only a few samples drawn in order to artificially drive up the split <span class="math inline">\(\hat{R}\)</span> statistic. The model is provided as supplementary code in the <a href="code.html#code">appendix</a>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="methods.html#cb3-1"></a>fit_cp &lt;-<span class="st"> </span><span class="kw">sampling</span>(schools_cp, <span class="dt">data =</span> schools_dat, <span class="dt">refresh =</span> <span class="dv">0</span>,</span>
+<span id="cb3-2"><a href="methods.html#cb3-2"></a>                   <span class="dt">iter =</span> <span class="dv">40</span>, <span class="dt">init_r =</span> <span class="dv">10</span>, <span class="dt">seed =</span> <span class="dv">671254821</span>)</span></code></pre></div>
+<p><code>Stan</code> warns about many different issues with this model, but the R-hat is the one of interest. The largest is <span class="math inline">\(1.71\)</span> which is incredibly large. Gelmen suggests using a threshold of <span class="math inline">\(1.10\)</span> to flag unhealthy chains.</p>
 <p><img src="030-methods_files/figure-html/ch030-Rocky-Test-1.png" width="85%" style="display: block; margin: auto;" /></p>
-<p>These chains do not look good at all. The <span class="math inline">\(\hat{R}\)</span> values are listed in table <a href="methods.html#tab:ch030-Ninth-Finger">3.2</a>.</p>
+<p>These chains do not look good at all – they have not converged to a stationary distribution. . The <span class="math inline">\(\hat{R}\)</span> values are listed in table <a href="methods.html#tab:ch030-Ninth-Finger">2.2</a>.</p>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:ch030-Ninth-Finger">Table 3.2: </span>Split R-hat values from the 8 Schools example.
+<span id="tab:ch030-Ninth-Finger">Table 2.2: </span>Split R-hat values from the 8 Schools example.
 </caption>
 <thead>
 <tr>
@@ -423,7 +443,7 @@ tau
 </tr>
 </tbody>
 </table>
-<p>To calculate the (non split) <span class="math inline">\(\hat{R}\)</span>, first calculate the between-chain variance, and then the average chain variance. For <span class="math inline">\(M\)</span> independent Markov chains, <span class="math inline">\(\theta_m\)</span>, with <span class="math inline">\(N\)</span> samples each, the between-chain variance is</p>
+<p>To calculate the (non split) <span class="math inline">\(\hat{R}\)</span>, first calculate the between-chain variance, and then the average chain variance. For <span class="math inline">\(M\)</span> independent Markov chains, <span class="math inline">\(\{\theta_1, \ldots \theta_M\}\)</span>, with <span class="math inline">\(N\)</span> samples each, the between-chain variance is:</p>
 
 <p><span class="math display">\[
 B = \frac{N}{M-1}\sum_{m=1}^{M}\left(\bar{\theta}_m - \bar{\theta}\right)^2
@@ -436,7 +456,7 @@ B = \frac{N}{M-1}\sum_{m=1}^{M}\left(\bar{\theta}_m - \bar{\theta}\right)^2
 <p><span class="math display">\[
 \bar{\theta} = \frac{1}{M}\sum_{m=1}^{M}\bar{\theta}_m
 \]</span></p>
-<p>The within-chain variance, <span class="math inline">\(W\)</span>, is the variance averaged over all the chains.</p>
+<p>The within-chain variance, <span class="math inline">\(W\)</span>, is the variance averaged over all the chains:</p>
 <p><span class="math display">\[
 W = \frac{1}{M}\sum_{m=1}^{M} s_{m}^2
 \]</span></p>
@@ -444,57 +464,75 @@ W = \frac{1}{M}\sum_{m=1}^{M} s_{m}^2
 <p><span class="math display">\[
 s_{m}^2 = \frac{1}{N-1}\sum_{n=1}^{N}\left(\theta_{m}^{(n)} - \bar{\theta}_m\right)^2
 \]</span></p>
-<p>The variance estimator is a weighted mixture of the within-chain and cross-chain variation</p>
+<p>The weighted mixture of the within-chain and cross-chain variation is:</p>
 <p><span class="math display">\[
 \hat{var} = \frac{N-1}{N} W + \frac{1}{N} B
 \]</span></p>
-<p>and finally</p>
+<p>and finally the <span class="math inline">\(\hat{R}\)</span> statistic is:</p>
 <p><span class="math display">\[
 \hat{R} = \sqrt{\frac{\hat{var}}{W}}
 \]</span></p>
 <p>Here is the calculation in <code>R</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="methods.html#cb3-1"></a>param &lt;-<span class="st"> &quot;mu&quot;</span></span>
-<span id="cb3-2"><a href="methods.html#cb3-2"></a>theta &lt;-<span class="st"> </span>p_cp[,,param]</span>
-<span id="cb3-3"><a href="methods.html#cb3-3"></a>N     &lt;-<span class="st"> </span><span class="kw">nrow</span>(theta)</span>
-<span id="cb3-4"><a href="methods.html#cb3-4"></a>M     &lt;-<span class="st"> </span><span class="kw">ncol</span>(theta)</span>
-<span id="cb3-5"><a href="methods.html#cb3-5"></a></span>
-<span id="cb3-6"><a href="methods.html#cb3-6"></a>theta_bar_m &lt;-<span class="st"> </span><span class="kw">colMeans</span>(theta)</span>
-<span id="cb3-7"><a href="methods.html#cb3-7"></a>theta_bar   &lt;-<span class="st"> </span><span class="kw">mean</span>(theta_bar_m)</span>
-<span id="cb3-8"><a href="methods.html#cb3-8"></a></span>
-<span id="cb3-9"><a href="methods.html#cb3-9"></a>B &lt;-<span class="st"> </span>N <span class="op">/</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>((theta_bar_m <span class="op">-</span><span class="st"> </span>theta_bar)<span class="op">^</span><span class="dv">2</span>)</span>
-<span id="cb3-10"><a href="methods.html#cb3-10"></a>s_sq_m &lt;-<span class="st"> </span><span class="kw">apply</span>(theta, <span class="dv">2</span>, var)</span>
-<span id="cb3-11"><a href="methods.html#cb3-11"></a></span>
-<span id="cb3-12"><a href="methods.html#cb3-12"></a>W &lt;-<span class="st"> </span><span class="kw">mean</span>(s_sq_m)</span>
-<span id="cb3-13"><a href="methods.html#cb3-13"></a>var_hat &lt;-<span class="st"> </span>W <span class="op">*</span><span class="st"> </span>(N <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">/</span><span class="st"> </span>N <span class="op">+</span><span class="st"> </span>B <span class="op">/</span><span class="st"> </span>N</span>
-<span id="cb3-14"><a href="methods.html#cb3-14"></a></span>
-<span id="cb3-15"><a href="methods.html#cb3-15"></a>(mu_Rhat &lt;-<span class="st"> </span><span class="kw">sqrt</span>(var_hat <span class="op">/</span><span class="st"> </span>W))</span>
-<span id="cb3-16"><a href="methods.html#cb3-16"></a><span class="co">#&gt; [1] 1.409</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="methods.html#cb4-1"></a>param &lt;-<span class="st"> &quot;mu&quot;</span></span>
+<span id="cb4-2"><a href="methods.html#cb4-2"></a>theta &lt;-<span class="st"> </span>p_cp[,,param]</span>
+<span id="cb4-3"><a href="methods.html#cb4-3"></a>N     &lt;-<span class="st"> </span><span class="kw">nrow</span>(theta)</span>
+<span id="cb4-4"><a href="methods.html#cb4-4"></a>M     &lt;-<span class="st"> </span><span class="kw">ncol</span>(theta)</span>
+<span id="cb4-5"><a href="methods.html#cb4-5"></a></span>
+<span id="cb4-6"><a href="methods.html#cb4-6"></a>theta_bar_m &lt;-<span class="st"> </span><span class="kw">colMeans</span>(theta)</span>
+<span id="cb4-7"><a href="methods.html#cb4-7"></a>theta_bar   &lt;-<span class="st"> </span><span class="kw">mean</span>(theta_bar_m)</span>
+<span id="cb4-8"><a href="methods.html#cb4-8"></a></span>
+<span id="cb4-9"><a href="methods.html#cb4-9"></a>B &lt;-<span class="st"> </span>N <span class="op">/</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>((theta_bar_m <span class="op">-</span><span class="st"> </span>theta_bar)<span class="op">^</span><span class="dv">2</span>)</span>
+<span id="cb4-10"><a href="methods.html#cb4-10"></a>s_sq_m &lt;-<span class="st"> </span><span class="kw">apply</span>(theta, <span class="dv">2</span>, var)</span>
+<span id="cb4-11"><a href="methods.html#cb4-11"></a></span>
+<span id="cb4-12"><a href="methods.html#cb4-12"></a>W &lt;-<span class="st"> </span><span class="kw">mean</span>(s_sq_m)</span>
+<span id="cb4-13"><a href="methods.html#cb4-13"></a>var_hat &lt;-<span class="st"> </span>W <span class="op">*</span><span class="st"> </span>(N <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">/</span><span class="st"> </span>N <span class="op">+</span><span class="st"> </span>B <span class="op">/</span><span class="st"> </span>N</span>
+<span id="cb4-14"><a href="methods.html#cb4-14"></a></span>
+<span id="cb4-15"><a href="methods.html#cb4-15"></a>(mu_Rhat &lt;-<span class="st"> </span><span class="kw">sqrt</span>(var_hat <span class="op">/</span><span class="st"> </span>W))</span>
+<span id="cb4-16"><a href="methods.html#cb4-16"></a><span class="co">#&gt; [1] 1.409</span></span></code></pre></div>
 
 <p>The <span class="math inline">\(\hat{R}\)</span> statistic is smaller than the split <span class="math inline">\(\hat{R}\)</span> value provided by <code>Stan</code>. This is a consequence of steadily increasing or decreasing chains. The split value does what it sounds like, and splits the samples from the chains in half – effectively doubling the number of chains and halving the number of samples per chain. In this way, the measure is more robust in detecting unhealthy chains. This also highlights the utility in using both visual and statistical tools to evaluate models. Here is the calculation of the split <span class="math inline">\(\hat{R}\)</span>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="methods.html#cb4-1"></a>param &lt;-<span class="st"> &quot;mu&quot;</span></span>
-<span id="cb4-2"><a href="methods.html#cb4-2"></a>theta_tmp &lt;-<span class="st"> </span>p_cp[,,param]</span>
-<span id="cb4-3"><a href="methods.html#cb4-3"></a>theta &lt;-<span class="st"> </span><span class="kw">cbind</span>(theta_tmp[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,], theta_tmp[<span class="dv">11</span><span class="op">:</span><span class="dv">20</span>,])</span>
-<span id="cb4-4"><a href="methods.html#cb4-4"></a>N     &lt;-<span class="st"> </span><span class="kw">nrow</span>(theta)</span>
-<span id="cb4-5"><a href="methods.html#cb4-5"></a>M     &lt;-<span class="st"> </span><span class="kw">ncol</span>(theta)</span>
-<span id="cb4-6"><a href="methods.html#cb4-6"></a></span>
-<span id="cb4-7"><a href="methods.html#cb4-7"></a>theta_bar_m &lt;-<span class="st"> </span><span class="kw">colMeans</span>(theta)</span>
-<span id="cb4-8"><a href="methods.html#cb4-8"></a>theta_bar   &lt;-<span class="st"> </span><span class="kw">mean</span>(theta_bar_m)</span>
-<span id="cb4-9"><a href="methods.html#cb4-9"></a></span>
-<span id="cb4-10"><a href="methods.html#cb4-10"></a>B &lt;-<span class="st"> </span>N <span class="op">/</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>((theta_bar_m <span class="op">-</span><span class="st"> </span>theta_bar)<span class="op">^</span><span class="dv">2</span>)</span>
-<span id="cb4-11"><a href="methods.html#cb4-11"></a>s_sq_m &lt;-<span class="st"> </span><span class="kw">apply</span>(theta, <span class="dv">2</span>, var)</span>
-<span id="cb4-12"><a href="methods.html#cb4-12"></a></span>
-<span id="cb4-13"><a href="methods.html#cb4-13"></a>W &lt;-<span class="st"> </span><span class="kw">mean</span>(s_sq_m)</span>
-<span id="cb4-14"><a href="methods.html#cb4-14"></a>var_hat &lt;-<span class="st"> </span>W <span class="op">*</span><span class="st"> </span>(N <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">/</span><span class="st"> </span>N <span class="op">+</span><span class="st"> </span>B <span class="op">/</span><span class="st"> </span>N</span>
-<span id="cb4-15"><a href="methods.html#cb4-15"></a></span>
-<span id="cb4-16"><a href="methods.html#cb4-16"></a>(mu_Rhat &lt;-<span class="st"> </span><span class="kw">sqrt</span>(var_hat <span class="op">/</span><span class="st"> </span>W))</span>
-<span id="cb4-17"><a href="methods.html#cb4-17"></a><span class="co">#&gt; [1] 1.709</span></span></code></pre></div>
-<p>We’ve successfully replicated the calculation of the split <span class="math inline">\(\hat{R}\)</span>. <span class="citation">Vehtari, Gelman, et al. (<a href="#ref-vehtari2020rank" role="doc-biblioref">2020</a>)</span> propose an improved rank-normalized <span class="math inline">\(\hat{R}\)</span> for assessing the convergence of MCMC chains, and also suggest using a threshold of <span class="math inline">\(1.01\)</span> rather than the <span class="math inline">\(1.10\)</span> threshold originally suggested by Gelmen for the split <span class="math inline">\(\hat{R}\)</span>.</p>
-<p><strong>Effective Sample Size</strong></p>
-<p>Samples from Markov Chains are typically autocorrelated, which can increase uncertainty of posterior estimates. The solution is generally to reparameterize the model to avoid steep log-posterior densities, and the benefit of reparameterization is conveyed by the ratio of effective sample size to actual sample size in figure <a href="methods.html#fig:ch030-Timely-Nitrogen">3.4</a>. When the HMC algorithm is exploring difficult geometry, it can get stuck in regions of high densities, which means that there is more correlation between successive samples.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="methods.html#cb5-1"></a>param &lt;-<span class="st"> &quot;mu&quot;</span></span>
+<span id="cb5-2"><a href="methods.html#cb5-2"></a>theta_tmp &lt;-<span class="st"> </span>p_cp[,,param]</span>
+<span id="cb5-3"><a href="methods.html#cb5-3"></a>theta &lt;-<span class="st"> </span><span class="kw">cbind</span>(theta_tmp[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,], theta_tmp[<span class="dv">11</span><span class="op">:</span><span class="dv">20</span>,])</span>
+<span id="cb5-4"><a href="methods.html#cb5-4"></a>N     &lt;-<span class="st"> </span><span class="kw">nrow</span>(theta)</span>
+<span id="cb5-5"><a href="methods.html#cb5-5"></a>M     &lt;-<span class="st"> </span><span class="kw">ncol</span>(theta)</span>
+<span id="cb5-6"><a href="methods.html#cb5-6"></a></span>
+<span id="cb5-7"><a href="methods.html#cb5-7"></a>theta_bar_m &lt;-<span class="st"> </span><span class="kw">colMeans</span>(theta)</span>
+<span id="cb5-8"><a href="methods.html#cb5-8"></a>theta_bar   &lt;-<span class="st"> </span><span class="kw">mean</span>(theta_bar_m)</span>
+<span id="cb5-9"><a href="methods.html#cb5-9"></a></span>
+<span id="cb5-10"><a href="methods.html#cb5-10"></a>B &lt;-<span class="st"> </span>N <span class="op">/</span><span class="st"> </span>(M <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>((theta_bar_m <span class="op">-</span><span class="st"> </span>theta_bar)<span class="op">^</span><span class="dv">2</span>)</span>
+<span id="cb5-11"><a href="methods.html#cb5-11"></a>s_sq_m &lt;-<span class="st"> </span><span class="kw">apply</span>(theta, <span class="dv">2</span>, var)</span>
+<span id="cb5-12"><a href="methods.html#cb5-12"></a></span>
+<span id="cb5-13"><a href="methods.html#cb5-13"></a>W &lt;-<span class="st"> </span><span class="kw">mean</span>(s_sq_m)</span>
+<span id="cb5-14"><a href="methods.html#cb5-14"></a>var_hat &lt;-<span class="st"> </span>W <span class="op">*</span><span class="st"> </span>(N <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">/</span><span class="st"> </span>N <span class="op">+</span><span class="st"> </span>B <span class="op">/</span><span class="st"> </span>N</span>
+<span id="cb5-15"><a href="methods.html#cb5-15"></a></span>
+<span id="cb5-16"><a href="methods.html#cb5-16"></a>(mu_Rhat &lt;-<span class="st"> </span><span class="kw">sqrt</span>(var_hat <span class="op">/</span><span class="st"> </span>W))</span>
+<span id="cb5-17"><a href="methods.html#cb5-17"></a><span class="co">#&gt; [1] 1.709</span></span></code></pre></div>
+<p>We’ve successfully replicated the calculation of the split <span class="math inline">\(\hat{R}\)</span>. <span class="citation">Vehtari, Gelman, et al. (<a href="#ref-vehtari2020rank" role="doc-biblioref">2020</a>)</span> propose an improved rank-normalized <span class="math inline">\(\hat{R}\)</span> for assessing the convergence of MCMC chains, and also suggest using a threshold of <span class="math inline">\(1.01\)</span>.</p>
+<p><strong>Effective Sample Size.</strong> Samples from Markov Chains are typically autocorrelated, which can increase uncertainty of posterior estimates. The solution is generally to reparameterize the model to avoid steep log-posterior densities. When the HMC algorithm is exploring difficult geometry, it can get stuck in regions of high densities, which means that there is more correlation between successive samples. Equation <a href="methods.html#eq:schools-ncp">(2.13)</a> shows the centered (left) and non-centered (right) parameterization of the 8-Schools model, and the benefit of reparameterization is conveyed by the ratio of effective sample size to actual sample size in figure <a href="methods.html#fig:ch030-Timely-Nitrogen">2.4</a>.</p>
+<p><span class="math display" id="eq:schools-ncp">\[\begin{equation}
+  \begin{split}
+    \sigma &amp;\sim \mathcal{U}(0, \infty) \\
+    \mu &amp;\sim \mathcal{N}(0, 10) \\
+    \tau &amp;\sim \mathrm{HalfCauchy}(0, 10) \\
+    \theta &amp;\sim \mathcal{N}(\mu, \tau) \\
+    y &amp;\sim \mathcal{N}(\theta, \sigma)
+  \end{split}
+\quad \Longrightarrow \quad
+  \begin{split}
+    \sigma &amp;\sim \mathcal{U}(0, \infty) \\
+    \mu &amp;\sim \mathcal{N}(0, 10) \\
+    \tau &amp;\sim \mathrm{HalfCauchy}(0, 10) \\
+    \eta &amp;\sim \mathcal{N}(0, 1) \\
+    \theta &amp;= \mu + \tau \cdot \eta \\
+    y &amp;\sim \mathcal{N}(\theta, \sigma)
+  \end{split}
+\tag{2.13}
+\end{equation}\]</span></p>
 <div class="figure" style="text-align: center"><span id="fig:ch030-Timely-Nitrogen"></span>
 <img src="030-methods_files/figure-html/ch030-Timely-Nitrogen-1.png" alt="Ratio of N\_eff to actual sample size. Low ratios imply high autocorrelation which can be alleviated by reparameterizing the model or by thinning." width="85%" />
 <p class="caption">
-Figure 3.4: Ratio of N_eff to actual sample size. Low ratios imply high autocorrelation which can be alleviated by reparameterizing the model or by thinning.
+Figure 2.4: Ratio of N_eff to actual sample size. Low ratios imply high autocorrelation which can be alleviated by reparameterizing the model or by thinning.
 </p>
 </div>
 <p>As the strength of autocorrelation generally decreases at larger lags, a simple prescription to decrease autocorrelation between samples and increase the effective sample size is to use thinning. Thinning means saving every <span class="math inline">\(k^{th}\)</span> sample and throwing the rest away. If one desired to have 2000 posterior draws, it could be done in two of many possible ways</p>
@@ -503,43 +541,42 @@ Figure 3.4: Ratio of N_eff to actual sample size. Low ratios imply high autocorr
 <li>Generate 10,000 draws after warmup and save every <span class="math inline">\(5^{th}\)</span> sample.</li>
 </ul>
 <p>Both will produce 2000 samples, but the method using thinning will have less autocorrelation and a higher effective number of samples. Though it should be noted that generating 10,000 draws and saving all of them will have a higher number of effective samples than the second method with thinning, so thinning should only be favored to save memory.</p>
-<p><strong>Divergent Transitions</strong></p>
-<p>Unlike the previous tools for algorithmic faithfulness which can be used for any MCMC sampler, information about divergent transitions is intrinsic to Hamiltonian Monte Carlo. Recall that the HMC and NUTS algorithm can be imagined as a physics simulation of a particle in a potential energy field, and a random momentum is imparted on the particle. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle <span class="citation">(Stan Development Team <a href="#ref-stanref" role="doc-biblioref">2020</a>)</span>. The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called leapfrog steps (see <span class="citation">Leimkuhler and Reich (<a href="#ref-leimkuhler2004simulating" role="doc-biblioref">2004</a>)</span> for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.</p>
+<p><strong>Divergent Transitions.</strong> Unlike the previous tools for algorithmic faithfulness which can be used for any MCMC sampler, information about divergent transitions is intrinsic to Hamiltonian Monte Carlo. Recall that the HMC and NUTS algorithm can be imagined as a physics simulation of a particle in a potential energy field, and a random momentum is imparted on the particle. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle <span class="citation">(Stan Development Team <a href="#ref-stanref" role="doc-biblioref">2020</a>)</span>. The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called leapfrog steps (see <span class="citation">Leimkuhler and Reich (<a href="#ref-leimkuhler2004simulating" role="doc-biblioref">2004</a>)</span> for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.</p>
 <p>A few divergent transitions is not indicative of a poorly performing model, and often divergent transitions can be mitigated by reducing the step size and increasing the adapt delta parameter. On the other hand, a bad model may never be improved just by tweaking some parameters. This is the folk theorem of statistical computing - if there is a problem with the sampling, blame the model, not the algorithm.</p>
 <p>Divergent transitions are never saved in the posterior samples, but they are saved internally to the <code>Stan</code> fit object and can be compared against good samples. Sometimes this can give insight into which parameters and which regions of the posterior the divergent transitions are coming from.</p>
 <div class="figure" style="text-align: center"><span id="fig:ch030-Hot-Locomotive"></span>
 <img src="030-methods_files/figure-html/ch030-Hot-Locomotive-1.png" alt="Divergent transitions highlighted for some parameters from the centered parameterization of the eight schools example." width="85%" />
 <p class="caption">
-Figure 3.5: Divergent transitions highlighted for some parameters from the centered parameterization of the eight schools example.
+Figure 2.5: Divergent transitions highlighted for some parameters from the centered parameterization of the eight schools example.
 </p>
 </div>
-<p>From figure <a href="methods.html#fig:ch030-Hot-Locomotive">3.5</a> we can see that most of the divergent transitions occur when the variance term <span class="math inline">\(\tau\)</span> is close to zero. This is common for multilevel models, and illustrates why non-centered parameterization is so important. We discuss centered and non-centered parameterization in the next chapter.</p>
+<p>From figure <a href="methods.html#fig:ch030-Hot-Locomotive">2.5</a> we can see that most of the divergent transitions occur when the variance term <span class="math inline">\(\tau\)</span> is close to zero. This is common for multilevel models, and illustrates why non-centered parameterization is so important. We discuss centered and non-centered parameterization in the next chapter.</p>
 </div>
-<div id="predictive-performance" class="section level2">
-<h2><span class="header-section-number">3.4</span> Predictive Performance</h2>
+<div id="estimating-predictive-performance" class="section level2">
+<h2><span class="header-section-number">2.6</span> Estimating predictive performance</h2>
 <p>All models are wrong, but some are useful. This quote is from George Box, and it is a popular quote that statisticians like to throw around. All models are wrong because it is nearly impossible to account for the minutiae of every process that contributes to an observed phenomenon, and often trying to results in poorer performing models. Also it is never truly possible to prove that a model is correct. At best the scientific method can falsify certain hypotheses, but it cannot ever determine if a model is universally correct. That does not matter. What does matter is if the model is useful and can make accurate predictions.</p>
-<p>Why is predictive performance so important? Consider five points of data (figure <a href="methods.html#fig:ch030-Moving-Moose">3.6</a>). They have been simulated from some polynomial equation of degree less than five, but with no more information other than that, how can the best polynomial model be selected?</p>
+<p>Why is predictive performance so important? Consider five points of data (figure <a href="methods.html#fig:ch030-Moving-Moose">2.6</a>). They have been simulated from some polynomial equation of degree less than five, but with no more information other than that, how can the best polynomial model be selected?</p>
 <div class="figure" style="text-align: center"><span id="fig:ch030-Moving-Moose"></span>
 <img src="030-methods_files/figure-html/ch030-Moving-Moose-1.png" alt="Five points from a polynomial model." width="85%" />
 <p class="caption">
-Figure 3.6: Five points from a polynomial model.
+Figure 2.6: Five points from a polynomial model.
 </p>
 </div>
-<p>One thing to try is fit a handful of linear models, check the parameter’s p-values, the <span class="math inline">\(R^2\)</span> statistic, and perform other goodness of fit tests, but there is a problem. As the degree of the polynomial fit increases, the <span class="math inline">\(R^2\)</span> statistic will always increase. In fact with five data points, a fourth degree polynomial will fit the data perfectly (figure <a href="methods.html#fig:ch030-Olive-Screwdriver">3.7</a>).</p>
+<p>One thing to try is fit a handful of linear models, check the parameter’s p-values, the <span class="math inline">\(R^2\)</span> statistic, and perform other goodness of fit tests, but there is a problem. As the degree of the polynomial fit increases, the <span class="math inline">\(R^2\)</span> statistic will always increase. In fact with five data points, a fourth degree polynomial will fit the data perfectly (figure <a href="methods.html#fig:ch030-Olive-Screwdriver">2.7</a>).</p>
 <div class="figure" style="text-align: center"><span id="fig:ch030-Olive-Screwdriver"></span>
 <img src="030-methods_files/figure-html/ch030-Olive-Screwdriver-1.png" alt="Data points with various polynomial regression lines." width="85%" />
 <p class="caption">
-Figure 3.7: Data points with various polynomial regression lines.
+Figure 2.7: Data points with various polynomial regression lines.
 </p>
 </div>
-<p>If a <span class="math inline">\(6^{th}\)</span> point were to be added – a new observation – which of the models would be expected to predict best? Can it be estimated which model will predict best before testing with new data? One guess is that the quadratic or cubic model will do well because because the linear model is potentially <em>underfit</em> to the data and the quartic is <em>overfit</em> to the data. Figure <a href="methods.html#fig:ch030-Cold-Fish">3.8</a> shows the new data point from the polynomial model. Now the linear and cubic models are trending in the wrong direction. The quadratic and quartic models are both trending down, so perhaps they may be the correct form for the model.</p>
+<p>If a <span class="math inline">\(6^{th}\)</span> point were to be added – a new observation – which of the models would be expected to predict best? Can it be estimated which model will predict best before testing with new data? One guess is that the quadratic or cubic model will do well because because the linear model is potentially <em>underfit</em> to the data and the quartic is <em>overfit</em> to the data. Figure <a href="methods.html#fig:ch030-Cold-Fish">2.8</a> shows the new data point from the polynomial model. Now the linear and cubic models are trending in the wrong direction. The quadratic and quartic models are both trending down, so perhaps they may be the correct form for the model.</p>
 <div class="figure" style="text-align: center"><span id="fig:ch030-Cold-Fish"></span>
 <img src="030-methods_files/figure-html/ch030-Cold-Fish-1.png" alt="The fitted polynomial models with a new observation." width="85%" />
 <p class="caption">
-Figure 3.8: The fitted polynomial models with a new observation.
+Figure 2.8: The fitted polynomial models with a new observation.
 </p>
 </div>
-<p>Figure <a href="methods.html#fig:ch030-Strawberry-Swallow">3.9</a> shows the 80% and 95% prediction intervals for a new observation given <span class="math inline">\(x = 5\)</span> as well as the true outcome as a dashed line at <span class="math inline">\(y = -3.434\)</span>. The linear model has the smallest prediction interval (PI), but completely misses the target. The remaining three models all include the observed value in their 95% PIs, but the quadratic model has the smallest PI of the three. The actual data generating polynomial is</p>
+<p>Figure <a href="methods.html#fig:ch030-Strawberry-Swallow">2.9</a> shows the 80% and 95% prediction intervals for a new observation given <span class="math inline">\(x = 1\)</span> as well as the true outcome as a dashed line at <span class="math inline">\(y = 1.527\)</span>. The linear model has the smallest prediction interval (PI), but completely misses the target. The remaining three models all include the observed value in their 95% PIs, but the quadratic model has the smallest PI of the three. The actual data generating polynomial is</p>
 <p><span class="math display">\[\begin{align*}
 y &amp;\sim \mathcal{N}(\mu, 1^2) \\
 \mu &amp;= -0.5(x - 2)^2 + 2
@@ -547,19 +584,18 @@ y &amp;\sim \mathcal{N}(\mu, 1^2) \\
 <div class="figure" style="text-align: center"><span id="fig:ch030-Strawberry-Swallow"></span>
 <img src="030-methods_files/figure-html/ch030-Strawberry-Swallow-1.png" alt="95\% Prediction intervals for the four polynomial models, as well as the true value (dashed line)." width="85%" />
 <p class="caption">
-Figure 3.9: 95% Prediction intervals for the four polynomial models, as well as the true value (dashed line).
+Figure 2.9: 95% Prediction intervals for the four polynomial models, as well as the true value (dashed line).
 </p>
 </div>
-<p>This is just a toy example, and real-world real-data models are often more complex, but they do present the same headaches when it comes to model/feature selection and goodness of fit checks. Clearly the quartic model has the best fit to the data, but it is too variable and doesn’t capture the regular features of the data, so it does poorly for the out-of-sample prediction. The linear model suffers as well by being less biased and too inflexible to capture the structure of the data. The quadratic and cubic are in the middle of the road, but the quadratic does well and makes fewer assumptions about the data. In other words, the quadratic model is just complex enough to predict well while making fewer assumptions. Information criteria is a way of weighing the prediction quality of a model against its complexity, and is arguably a better system for model selection/comparison than other goodness of fit statistics such as <span class="math inline">\(R^2\)</span> or p-values.</p>
-<p>We don’t always have the observed data to compare predictions against (nor the data generating model). Some techniques to compensate for this limitation include cross validation, where the data is split into training data and testing data. The model is fit to the training data, and then predictions are made with the testing data and compared to the observed values. This can often give a good estimate for out-of-sample prediction error. Cross validation can be extended into k-fold cross validation. The idea is to <em>fold</em> the data into <span class="math inline">\(k\)</span> disjoint partitions, and predict partition <span class="math inline">\(i\)</span> using the rest of the data to train on. The prediction error of the <span class="math inline">\(k\)</span>-folds can then be averaged over to get an estimate for out-of-sample prediction error.</p>
-<p>Taking <span class="math inline">\(k\)</span>-fold CV to the limit by letting <span class="math inline">\(k\)</span> equal the number of observations results in something called leave one out cross validation (LOOCV), where for each observation in the data, the model is fit to the remaining data and predicted for the left out observation. The downside of <span class="math inline">\(k\)</span>-fold cross validation is that it requires fitting the model <span class="math inline">\(k\)</span> times, which can be computationally expensive for complex Bayesian models. Thankfully there is a way to approximate LOOCV without having to refit the model many times.</p>
-<p><strong>Importance Sampling</strong></p>
-<p>LOOCV and many other evaluation tools such as the widely applicable information criterion (WAIC) rest on the log-pointwise-predictive-density (lppd), which is a loose measure of deviance from some “true” probability distribution. Typically we don’t have the analytic form of the predictive posterior density, so instead we use <span class="math inline">\(S\)</span> MCMC draws to approximate the lppd <span class="citation">(Vehtari, Gelman, and Gabry <a href="#ref-vehtari2017practical" role="doc-biblioref">2017</a>)</span>:</p>
+<p>The best fit to the observed data is the quartic model, but it is too variable and doesn’t capture the regular features of the data, so it does poorly for the out-of-sample prediction. The linear model suffers as well by being less biased and too inflexible to capture the structure of the data. The quadratic and cubic are in the middle, but the quadratic does well and makes fewer assumptions about the data. The quadratic model is just complex enough to predict well while making fewer assumptions. Information criteria is a way of weighing the prediction quality of a model against its complexity, and is arguably a better system for model selection/comparison than other goodness-of-fit statistics such as <span class="math inline">\(R^2\)</span> or p-values.</p>
+<p>A technique to evaluate predictive performance is cross validation, where the data is split into training data and testing data. The model is fit to the training data, and then predictions are made with the testing data and compared to the observed values. This can often give a good estimate for out-of-sample prediction error. Cross validation can be extended into k-fold cross validation. The idea is to fold the data into <span class="math inline">\(k\)</span> disjoint partitions, and predict partition <span class="math inline">\(i\)</span> using the rest of the data to train on. The prediction error of the <span class="math inline">\(k\)</span>-folds can then be averaged over to get an estimate for out-of-sample prediction error.</p>
+<p>Taking <span class="math inline">\(k\)</span>-fold CV to the limit by letting <span class="math inline">\(k\)</span> equal the number of observations results in leave-one-out cross validation (LOOCV), where for each observation in the data, the model is fit to the remaining data and predicted for the left out observation. <span class="math inline">\(k\)</span>-fold cross validation requires fitting the model <span class="math inline">\(k\)</span> times, which can be computationally expensive for complex Bayesian models. Thankfully there is a way to approximate LOOCV without having to refit the model many times.</p>
+<p><strong>Estimating cross validation error via Pareto-Smoothed-Importance Sampling</strong>. LOOCV and many other evaluation tools such as the widely applicable information criterion (WAIC) rest on the log-pointwise-predictive-density (lppd), which measures deviance from some “true” probability distribution. Typically we don’t have the analytic form of the predictive posterior density, so instead we use <span class="math inline">\(S\)</span> MCMC draws to approximate the lppd <span class="citation">(Vehtari, Gelman, and Gabry <a href="#ref-vehtari2017practical" role="doc-biblioref">2017</a>)</span>:</p>
 <p><span class="math display" id="eq:lppd">\[\begin{equation}
 \mathrm{lppd}(y, \Theta) = \sum_i \log \frac{1}{S} \sum_s p(y_i | \Theta_s)
-\tag{3.1}
+\tag{2.14}
 \end{equation}\]</span></p>
-<p>To estimate LOOCV, the relative “importance” of each observation must be computed. Certain observations have more influence on the posterior distribution, and so have more impact on the posterior if they are removed. The intuition behind measuring importance is that more influential observations are relatively less likely than less important observations that are relatively expected. Then by omitting a sample, the relative importance weight can be measured by the lppd. This omitted calculation is known as the out-of-sample lppd. For each omitted <span class="math inline">\(y_i\)</span>,</p>
+<p>To estimate LOOCV, the relative “importance” of each observation must be computed. Certain observations have more influence on the posterior distribution, and so have more impact on the posterior if they are removed. By omitting a sample, the relative importance weight can be measured by the lppd. This omitted calculation is known as the out-of-sample lppd. For each omitted <span class="math inline">\(y_i\)</span>,</p>
 <p><span class="math display">\[
 \mathrm{lppd}_{CV} = \sum_i \frac{1}{S} \sum_s \log p(y_{i} | \theta_{-i,s})
 \]</span></p>
@@ -576,16 +612,17 @@ r(\theta_s) = \frac{1}{p(y_i \vert \theta_s)}
 p(r; \mu, \sigma, k) = \frac{1}{\sigma} \left(1 + \frac{k (r - \mu)}{\sigma}\right)^{-(1/k + 1)}
 \]</span></p>
 <p>where <span class="math inline">\(\mu\)</span> is the location, <span class="math inline">\(\sigma\)</span> is the scale, and <span class="math inline">\(k\)</span> is the shape. Then the estimated distribution is used to smooth the weights. A side-effect of using PSIS is that the estimated value of <span class="math inline">\(k\)</span> can be used as a diagnostic tool for a particular observation. For <span class="math inline">\(k&gt;0.5\)</span>, the Pareto distribution will have infinite variance, and a really heavy tail. If the tail is very heavy, then the smoothed weights are harder to trust. In theory and in practice, PSIS works well as long as <span class="math inline">\(k &lt; 0.7\)</span> <span class="citation">(Vehtari et al. <a href="#ref-vehtari2015pareto" role="doc-biblioref">2015</a>)</span>.</p>
-<p>There is an <code>R</code> package called <code>loo</code> that can compute the expected log-pointwise-posterior-density (ELPD) using PSIS-LOO, as well as the estimated number of effective parameters and LOO information criterion <span class="citation">(Vehtari, Gabry, et al. <a href="#ref-R-loo" role="doc-biblioref">2020</a>)</span>. For the part of the researcher, the log-likelihood of the observations must be computed. This can be calculated in the <em>generated quantities</em> block of a <code>Stan</code> program, and it is standard practice to name the log-likelihood as <code>log_lik</code> in the model. An example of calculating the log-likelihood for the eight schools data in <code>Stan</code> is:</p>
+<p>There is an <code>R</code> package called <code>loo</code> that can compute the expected log-pointwise-posterior-density (ELPD) using PSIS-LOO, as well as the estimated number of effective parameters and LOO information criterion <span class="citation">(Vehtari, Gabry, et al. <a href="#ref-R-loo" role="doc-biblioref">2020</a>)</span>. For the part of the researcher, the log-likelihood of the observations must be computed. This can be calculated in the <code>generated quantities</code> block of a <code>Stan</code> program, and it is standard practice to name the log-likelihood as <code>log_lik</code> in the model. An example of calculating the log-likelihood for the eight schools data in <code>Stan</code> is:</p>
+
 <pre><code>generated quantities {
   vector[J] log_lik;
-
   for (j in 1:J) {
     log_lik[j] = normal_lpdf(y[j] | theta[j], sigma[j]);
   }
 }</code></pre>
+
 <p>Models can be compared simply using <code>loo::loo_compare</code>. It estimates the ELPD and its standard error, then calculates the relative differences between all the models. The model with the highest ELPD is predicted to have the best out-of-sample predictions. The comparison of four polynomial models from the earlier example is shown below.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="methods.html#cb6-1"></a>comp &lt;-<span class="st"> </span><span class="kw">loo_compare</span>(linear, quadratic, cubic, quartic)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="methods.html#cb7-1"></a>comp &lt;-<span class="st"> </span><span class="kw">loo_compare</span>(linear, quadratic, cubic, quartic)</span></code></pre></div>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -612,50 +649,16 @@ looic
 Cubic
 </td>
 <td style="text-align:right;">
-0.0000
+0.000
 </td>
 <td style="text-align:right;">
-0.0000
+0.000
 </td>
 <td style="text-align:right;">
-3.330
+2.617
 </td>
 <td style="text-align:right;">
-16.65
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Linear
-</td>
-<td style="text-align:right;">
--0.1370
-</td>
-<td style="text-align:right;">
-0.9896
-</td>
-<td style="text-align:right;">
-1.985
-</td>
-<td style="text-align:right;">
-16.93
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Quadratic
-</td>
-<td style="text-align:right;">
--0.5571
-</td>
-<td style="text-align:right;">
-0.4810
-</td>
-<td style="text-align:right;">
-2.345
-</td>
-<td style="text-align:right;">
-17.77
+18.57
 </td>
 </tr>
 <tr>
@@ -663,21 +666,371 @@ Quadratic
 Quartic
 </td>
 <td style="text-align:right;">
--1.1553
+-0.374
 </td>
 <td style="text-align:right;">
-1.1673
+0.475
 </td>
 <td style="text-align:right;">
-4.329
+3.710
 </td>
 <td style="text-align:right;">
-18.96
+19.32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Quadratic
+</td>
+<td style="text-align:right;">
+-2.657
+</td>
+<td style="text-align:right;">
+1.799
+</td>
+<td style="text-align:right;">
+3.860
+</td>
+<td style="text-align:right;">
+23.89
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Linear
+</td>
+<td style="text-align:right;">
+-2.855
+</td>
+<td style="text-align:right;">
+1.693
+</td>
+<td style="text-align:right;">
+2.631
+</td>
+<td style="text-align:right;">
+24.28
 </td>
 </tr>
 </tbody>
 </table>
-<p>This comparison is unreliable since there are only five data points to estimate the predictive performance. This assertion is backed by the difference in ELPD and the standard error of the differences – the standard error is as large or larger than the difference. The column labeled <code>p_loo</code> is the effective number of parameters in the model. Notice how the effective number of parameters nearly matches their respective models.</p>
+<p>This comparison is unreliable since there are only five data points to estimate the predictive performance. This assertion is backed by the difference in ELPD and the standard error of the differences – the standard error is as large or larger than the difference.</p>
+</div>
+<div id="a-modern-principled-bayesian-modeling-workflow" class="section level2">
+<h2><span class="header-section-number">2.7</span> A modern principled bayesian modeling workflow</h2>
+<p>A principled workflow is a method of employing domain expertise and statistical knowledge to iteratively build a statistical model that satisfies the constraints and goals set forth by the researcher. Many other workflow and model checking techniques are given without context for when they are appropriate, and according to <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span>, this leaves “practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics.” For any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather, consideration must be given to domain expertise and the questions that one is trying to answer with the statistical model.</p>
+<p>Because everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in how consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by, summarized in table <a href="methods.html#tab:ch030-Confidential-Proton">2.3</a>.</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:ch030-Confidential-Proton">Table 2.3: </span>Questions for model evaluation.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Evaluation
+</th>
+<th style="text-align:left;">
+Question
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+<ol style="list-style-type: decimal">
+<li>Domain Expertise Consistency
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Is our model consistent with our domain expertise?
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+<ol start="2" style="list-style-type: decimal">
+<li>Computational Faithfulness
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Will our computational tools be sufficient to accurately fit our posteriors?
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+<ol start="3" style="list-style-type: decimal">
+<li>Inferential Adequacy
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Will our inferences provide enough information to answer our questions?
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+<ol start="4" style="list-style-type: decimal">
+<li>Model Adequacy
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Is our model rich enough to capture the relevant structure of the true data generating process?
+</td>
+</tr>
+</tbody>
+</table></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+<p>Much work is done before seeing the data or building a model. This includes talking with experts to gain domain knowledge or to elicit priors. A benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the posterior distribution. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints.</p>
+<p>In this section we describe a simulation-based, principled workflow proposed by <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span> and broadly adopted by many members of the Bayesian community. The workflow broadly consists of specifying the likelihood and priors, performing prior predictive checks, fitting a model, and performing posterior predictive checks. The steps of the workflow are divided into three phases: 1) pre-model, pre-data, 2) post-model, pre-data, and 3) post-model, post-data. Tables <a href="methods.html#tab:ch030-Reborn-Space">2.4</a>, <a href="methods.html#tab:ch030-Freaky-Sledgehammer">2.5</a>, and <a href="methods.html#tab:ch030-Bleeding-Liquid-Dagger">2.6</a> list the steps of each phase.</p>
+<!-- Table \@ref(tab:ch030-workflow-steps) lists the detailed steps broken up into three phases.
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>(\#tab:ch030-workflow-steps)Principled workflow</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Phase </th>
+   <th style="text-align:left;"> Step </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="3"> Pre-Model, Pre-Data </td>
+   <td style="text-align:left;"> conceptual analysis </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> define observational space </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> construct summary statistics </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="8"> Post-Model, Pre-Data </td>
+   <td style="text-align:left;"> develop model </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> construct summary functions </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> simulate Bayesian ensemble </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> prior checks </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> configure algorithm </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> fit simulated ensemble </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> algorithmic calibration </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> inferential calibration </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="4"> Post-Model, Post-Data </td>
+   <td style="text-align:left;"> fit observed data </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> diagnose posterior fit </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> posterior retrodictive checks </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;"> celebrate </td>
+  </tr>
+</tbody>
+</table>
+-->
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:ch030-Reborn-Space">Table 2.4: </span>Pre-Model, Pre-Data steps.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Step
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Conceptual Analysis
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Write down the inferential goals and consider how the variables of interest interact with the environment and how those interactions work to generate observations.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Define Observational Space
+</td>
+<td style="text-align:left;width: 3.25in; ">
+What are the possible values that the observed data can take on? The observational space can help inform the statistical model such as in count data.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Construct Summary Statistics
+</td>
+<td style="text-align:left;width: 3.25in; ">
+What measurements and estimates can be used to help ensure that the inferential goals are met? Prior predictive checks and posterior retrodictive checks are founded on summary statistics that answer the questions of domain expertise consistency and model adequacy.
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:ch030-Freaky-Sledgehammer">Table 2.5: </span>Post-Model, Pre-Data steps.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Step
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Develop Model
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Build an observational model that is consistent with the conceptual analysis and observational space, and then specify the complementary prior model.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Construct Summary Functions
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Use the developed model to construct explicit summary functions that can be used in prior predictive checks and posterior retrodictive checks.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Simulate Bayesian Ensemble
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Since the model is a data generating model, it can be used to simulate observations from the prior predictive distribution without yet having seen any data.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Prior Checks
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Check that the prior predictive distribution is consistent with domain expertise using the summary functions developed in the previous step.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Configure Algorithm
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Having simulated data, the next step is to fit the data generating model to the generated data. There are many different MCMC samplers with their own configurable parameters, so here is where those settings are tweaked.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Fit Simulated Ensemble
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Fit the simulated data to the model using the algorithm configured in the previous step.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Algorithmic Calibration
+</td>
+<td style="text-align:left;width: 3.25in; ">
+How well did the algorithm do in fitting the simulated data? This step helps to answer the question regarding computational faithfulness. A model may be well specified, but if the algorithm used is unreliable then the posterior distribution is also unreliable, and this can lead to poor inferences. Methods for checking models is discussed in (#model-checking).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Inferential Calibration
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Are there any pathological behaviors in the model such as overfitting or non-identifiability? This step helps to answer the question of inferential adequacy.
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:ch030-Bleeding-Liquid-Dagger">Table 2.6: </span>Post-Model, Post-Data steps.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Step
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Fit Observed Data
+</td>
+<td style="text-align:left;width: 3.25in; ">
+After performing the prior predictive checks and being satisfied with the model, the next step is to fit the model to the observed data.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Diagnose Posterior Fit
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Did the model fit well? Can a poorly performing algorithm be fixed by tweaking the algorithmic configuration, or is there a problem with the model itself where it is not rich enough to capture the structure of the observed data? Utilize the diagnostic tools available for the algorithm to check the computational faithfulness.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Posterior Retrodictive Checks
+</td>
+<td style="text-align:left;width: 3.25in; ">
+Do the posterior retrodictions match the observed data well, or are there still apparent discrepancies between what is expected and what is predicted by the model? It is important that any changes to the model going forward are motivated by domain expertise so as to mitigate the risk of overfitting.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 1.75in; ">
+Celebrate
+</td>
+<td style="text-align:left;width: 3.25in; ">
+After going through the tedious process of iteratively developing a model, it is okay to celebrate before moving on to answer the research questions.
+</td>
+</tr>
+</tbody>
+</table>
+<p>These steps are not meant to be followed in a strictly linear fashion. If a conceptual misunderstanding is discovered at any step in the process, then it is recommended to go back to an earlier step and start over. The workflow is a process of model expansion, and multiple iterations are required to get to a final model (or collection of models). Similarly if the model fails prior predictive checks, then one may need to return to the model development step. A full diagram of the workflow is displayed in figure <a href="methods.html#fig:ch030-workflow-diagram">2.10</a>.</p>
+<div class="figure" style="text-align: center"><span id="fig:ch030-workflow-diagram"></span>
+<img src="figures/workflow-diagram.png" alt="Diagram is copywrited material of Michael Betancourt and used under the CC BY-NC 4.0 license. Image created with Lucid app." width="100%" />
+<p class="caption">
+Figure 2.10: Diagram is copywrited material of Michael Betancourt and used under the CC BY-NC 4.0 license. Image created with Lucid app.
+</p>
+</div>
 
 </div>
 </div>
@@ -689,8 +1042,14 @@ Quartic
 <div id="ref-gelman2013bayesian">
 <p>Gelman, Andrew, John B Carlin, Hal S Stern, David B Dunson, Aki Vehtari, and Donald B Rubin. 2013. <em>Bayesian Data Analysis</em>. CRC press.</p>
 </div>
+<div id="ref-gelman2006data">
+<p>Gelman, Andrew, and Jennifer Hill. 2006. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. Cambridge university press.</p>
+</div>
 <div id="ref-gelman1992inference">
 <p>Gelman, Andrew, Donald B Rubin, and others. 1992. “Inference from Iterative Simulation Using Multiple Sequences.” <em>Statistical Science</em> 7 (4): 457–72.</p>
+</div>
+<div id="ref-hoffman2014no">
+<p>Hoffman, Matthew D, and Andrew Gelman. 2014. “The No-U-Turn Sampler: Adaptively Setting Path Lengths in Hamiltonian Monte Carlo.” <em>J. Mach. Learn. Res.</em> 15 (1): 1593–1623.</p>
 </div>
 <div id="ref-leimkuhler2004simulating">
 <p>Leimkuhler, Benedict, and Sebastian Reich. 2004. <em>Simulating Hamiltonian Dynamics</em>. Vol. 14. Cambridge university press.</p>
@@ -716,8 +1075,8 @@ Quartic
           </div>
         </div>
       </div>
-<a href="data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="application.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

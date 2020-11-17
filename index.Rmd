@@ -79,7 +79,7 @@ A solution is to use Markov Chain Monte Carlo (MCMC) simulations to draw samples
 Hamiltonian Monte Carlo (HMC) simulation is the current state-of-the-art as a general-purpose Bayesian inference algorithm, motivated by a particle simulation, to sample the posterior. In particular, HMC and its variants sample high-dimensional probability spaces with high efficiency, and also comes with informative diagnostic tools that indicate when the sampler is having trouble efficiently exploring the posterior. `Stan` is a probabilistic programming language (PPL) with an `R` interface that uses Hamiltonian dynamics to conduct Bayesian statistical inference [@R-rstan].
 
 
-In the chapters to come, we produce a novel statistical model for temporal order judgment data by following a principled workflow to fit a series of Bayesian models efficiently using Hamiltonian Monte Carlo in the `R` programming language with `Stan`.
+In the chapters to come, we produce a novel statistical model for temporal order judgment data by following a principled workflow to fit a series of Bayesian models efficiently using Hamiltonian Monte Carlo.
 
 
 ## Organization
