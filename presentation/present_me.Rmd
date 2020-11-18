@@ -1,0 +1,78 @@
+---
+title: "A Bayesian Multilevel Model for the Psychometric Function"
+subtitle: "Using R and Stan"
+author: "Alexander D. Knudson"
+date: "November, 2020"
+output: 
+  ioslides_presentation:
+    widescreen: yes
+    incremental: yes
+    logo: "../figures/unr_logos/University Logo RGB_block_n_blue.png"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Introduction
+
+
+- A common neuroscience topic is to detect the temporal order of two stimuli
+- These studies are often interested in making inferences at the group level and at an individual level
+- 
+
+
+## Classical methods
+
+
+
+## Bayesian statistics
+
+# Methods
+
+## Multilevel models
+
+## Hamiltonian Monte Carlo
+
+## Model Checking
+
+## Predictive performance
+
+# Background to Pyschometrics
+
+## Psychometric experiments
+
+## Temporal order judgment tasks
+
+## Data visualization
+
+# Modeling Workflow
+
+## Modeling psychometric quantities
+
+## Baseline model
+
+## Adding age and block
+
+## Modeling interactions
+
+## Incorporating a lapse rate
+
+## Adding subjects
+
+# Results
+
+## On temporal sensitivity
+
+## On perceptual synchrony
+
+## Lapses
+
+## Subject level predictions
+
+# Discussion
+
+## Improving psychometric experiments
+

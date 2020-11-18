@@ -1,7 +1,6 @@
 ---
 title: "Outline"
 author: "Alex Knudson"
-date: "10/28/2020"
 output: html_document
 ---
 
