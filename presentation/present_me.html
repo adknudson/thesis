@@ -3171,7 +3171,7 @@ slide:not(.current) .plotly.html-widget{
 
 </article></slide><slide class=""><hgroup><h2>Predictive performance</h2></hgroup><article  id="predictive-performance">
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Background to pyschometrics</h2></hgroup><article  id="background-to-pyschometrics">
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Background to Pyschometrics</h2></hgroup><article  id="background-to-pyschometrics">
 
 </article></slide><slide class=""><hgroup><h2>Psychometric experiments</h2></hgroup><article  id="psychometric-experiments">
 
@@ -3183,7 +3183,20 @@ slide:not(.current) .plotly.html-widget{
 
 </article></slide><slide class=""><hgroup><h2>Modeling psychometric quantities</h2></hgroup><article  id="modeling-psychometric-quantities">
 
+</article></slide><slide class=""><hgroup><h2>Conceptual analysis</h2></hgroup><article  id="conceptual-analysis">
+
 </article></slide><slide class=""><hgroup><h2>Baseline model</h2></hgroup><article  id="baseline-model">
+
+<p>\[
+\begin{equation*}
+  \begin{split}
+    k_i &amp;\sim \mathrm{Binomial}(n_i, p_i) \\
+    \mathrm{logit}(p_i) &amp;= \beta \cdot (x_i - \alpha) \\
+    \alpha &amp;\sim \mathcal{N}(0, 0.06^2) \\
+    \beta &amp;\sim \mathrm{Lognormal}(3, 1^2)
+  \end{split}
+\end{equation*}
+\]</p>
 
 </article></slide><slide class=""><hgroup><h2>Adding age and block</h2></hgroup><article  id="adding-age-and-block">
 
@@ -3192,6 +3205,36 @@ slide:not(.current) .plotly.html-widget{
 </article></slide><slide class=""><hgroup><h2>Incorporating a lapse rate</h2></hgroup><article  id="incorporating-a-lapse-rate">
 
 </article></slide><slide class=""><hgroup><h2>Adding subjects</h2></hgroup><article  id="adding-subjects">
+
+</article></slide><slide class=""><hgroup><h2>Final model</h2></hgroup><article  class="smaller" id="final-model">
+
+<p>\[
+\begin{equation*}
+  \begin{split}
+    k_i &amp;\sim \mathrm{Binomial}(n_i, p_i) \\
+    p_i &amp;= \lambda_{G[i]} + (1 - 2\lambda_{G[i]})\exp(\mu_\beta) (x_i - \mu_\alpha) \\
+    \mu_\alpha &amp;= \alpha + \alpha_{G[i], trt[i]} + \alpha_{S[i]} \\
+    \mu_\beta &amp;= \beta + \beta_{G[i], trt[i]} + \beta_{S[i]} \\
+    \lambda_{G} &amp;\sim \mathrm{Beta}(4, 96) \\
+    \hat{\alpha}, \hat{\alpha}_{G\times trt}, \hat{\alpha}_{S} &amp;\sim \mathcal{N}(0, 1^2) \\
+    \hat{\beta}, \hat{\beta}_{G\times trt}, \hat{\beta}_{S} &amp;\sim \mathcal{N}(0, 1^2) \\
+    \hat{\sigma}_{G\times trt}, \hat{\gamma}_{G\times trt}, \hat{\tau}_{S}, \hat{\nu}_{S} &amp;\sim \mathcal{U}(0, \pi/2) \\
+  \end{split}
+\qquad
+  \begin{split}
+    \alpha &amp;= 0.06 \cdot \hat{\alpha} \\
+    \alpha_{G\times trt} &amp;= \sigma_{G\times trt} \cdot \hat{\alpha}_{trt} \\
+    \alpha_{S} &amp;= \tau_{S} \cdot \hat{\alpha}_{S} \\
+    \sigma_{G \times trt} &amp;= \tan(\hat{\sigma}_{G \times trt}) \\
+    \tau_{S} &amp;= \tan(\hat{\tau}_{S}) \\
+    \beta &amp;= 3 + 1 \cdot \hat{\beta} \\
+    \beta_{G\times trt} &amp;= \gamma_{G\times trt} \cdot \hat{\beta}_{G\times trt} \\
+    \beta_{S} &amp;= \nu_{S} \cdot \hat{\beta}_{S} \\
+    \gamma_{G\times trt} &amp;= \tan(\hat{\gamma}_{G\times trt}) \\
+    \nu_{S} &amp;= \tan(\hat{\nu}_{S})
+  \end{split}
+\end{equation*}
+\]</p>
 
 </article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Results</h2></hgroup><article  id="results">
 

@@ -44,6 +44,8 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Psychometric experiments
 
+
+
 ## Temporal order judgment tasks
 
 ## Data visualization
@@ -52,7 +54,22 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Modeling psychometric quantities
 
+
+
+## Conceptual analysis
+
 ## Baseline model
+
+$$
+\begin{equation*}
+  \begin{split}
+    k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+    \mathrm{logit}(p_i) &= \beta \cdot (x_i - \alpha) \\
+    \alpha &\sim \mathcal{N}(0, 0.06^2) \\
+    \beta &\sim \mathrm{Lognormal}(3, 1^2)
+  \end{split}
+\end{equation*}
+$$
 
 ## Adding age and block
 
@@ -61,6 +78,36 @@ knitr::opts_chunk$set(echo = FALSE)
 ## Incorporating a lapse rate
 
 ## Adding subjects
+
+## Final model {.smaller}
+
+$$
+\begin{equation*}
+  \begin{split}
+    k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+    p_i &= \lambda_{G[i]} + (1 - 2\lambda_{G[i]})\exp(\mu_\beta) (x_i - \mu_\alpha) \\
+    \mu_\alpha &= \alpha + \alpha_{G[i], trt[i]} + \alpha_{S[i]} \\
+    \mu_\beta &= \beta + \beta_{G[i], trt[i]} + \beta_{S[i]} \\
+    \lambda_{G} &\sim \mathrm{Beta}(4, 96) \\
+    \hat{\alpha}, \hat{\alpha}_{G\times trt}, \hat{\alpha}_{S} &\sim \mathcal{N}(0, 1^2) \\
+    \hat{\beta}, \hat{\beta}_{G\times trt}, \hat{\beta}_{S} &\sim \mathcal{N}(0, 1^2) \\
+    \hat{\sigma}_{G\times trt}, \hat{\gamma}_{G\times trt}, \hat{\tau}_{S}, \hat{\nu}_{S} &\sim \mathcal{U}(0, \pi/2) \\
+  \end{split}
+\qquad
+  \begin{split}
+    \alpha &= 0.06 \cdot \hat{\alpha} \\
+    \alpha_{G\times trt} &= \sigma_{G\times trt} \cdot \hat{\alpha}_{trt} \\
+    \alpha_{S} &= \tau_{S} \cdot \hat{\alpha}_{S} \\
+    \sigma_{G \times trt} &= \tan(\hat{\sigma}_{G \times trt}) \\
+    \tau_{S} &= \tan(\hat{\tau}_{S}) \\
+    \beta &= 3 + 1 \cdot \hat{\beta} \\
+    \beta_{G\times trt} &= \gamma_{G\times trt} \cdot \hat{\beta}_{G\times trt} \\
+    \beta_{S} &= \nu_{S} \cdot \hat{\beta}_{S} \\
+    \gamma_{G\times trt} &= \tan(\hat{\gamma}_{G\times trt}) \\
+    \nu_{S} &= \tan(\hat{\nu}_{S})
+  \end{split}
+\end{equation*}
+$$
 
 # Results
 
