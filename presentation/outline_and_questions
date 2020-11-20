@@ -51,3 +51,7 @@
   - Give a few ideas how would you use these data and models to move from prediction/association to causal inference.
   - Please expand on your experimental design discussion. How many subjects should be included if there is a follow-up study? What SOAs to pick? What tasks to focus on?
   - How sensitive are your results to choice of psychometric function?
+
+
+- Fang's Questions
+  - Why should I bother with this method over simple glm?

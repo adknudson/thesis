@@ -59,11 +59,6 @@ Q2 <- function(p, a, b, l) {
 - While cleaning the data, I had to learn the details of the experimental setup and the deeper theory
 
 
-<div class="notes">
-Intro to Stat Comp - learned about R, statistical modeling, and simulation
-</div>
-
-
 ## What are psychometrics?
 
 
@@ -73,10 +68,6 @@ Intro to Stat Comp - learned about R, statistical modeling, and simulation
 - When the temporal delay between stimuli grows large enough, the brain segregates the two signals and the temporal order can be determined
 
 
-<div class="notes">
-</div>
-
-
 ## Some more background
 
 
@@ -84,11 +75,6 @@ Intro to Stat Comp - learned about R, statistical modeling, and simulation
 - Perceptual synchrony is the temporal delay between two signals at which an observer is unsure about their temporal order
 - The ability to discriminate the timing of multiple sensory signals is referred to as temporal sensitivity
 - A deficit in temporal sensitivity may lead to a widening of the temporal binding window
-
-
-<div class="notes">
-Really emphasize the temporal binding window, and the two properties describing it
-</div>
 
 
 ## Temporal order judgment tasks {.smaller}
@@ -112,15 +98,13 @@ multitask %>%
 ```
 
 
+_I use "positive" and "negative" to refer to "yes" and "no" responses respectively_
+
+
 <div class="notes">
 A temporal order judgment task is a type of psychometric experiment where participants are asked to determine the temporal order of two stimuli separated by a temporal delay.
 
 There are four different TOJ tasks within this study that explore the relationship between different sensory signals.
-</div>
-
-
-## Legend for recorded data
-
 
 ```{r ground-truth}
 tibble(
@@ -136,37 +120,29 @@ tibble(
 ) %>%
   knitr::kable()
 ```
-
-
-<div class="notes">
 </div>
+
+
 
 
 ## Temporal recalibration
 
 
-- After completing the first block of the experiment, participants go through an adaptation period
-- Participants are repeatedly presented with the task's stimuli at a fixed temporal order and delay
-- Temporal recalibration has the possibility of modifying the temporal binding window
+- Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding
+- To perceive events as simultaneous, our brains adjust for differences in temporal delays of transmission
+- The perception of simultaneity can be modified by repeatedly presenting the stimuli at fixed time separations (called an adapter stimulus) to an observer
+- This repetition of presenting the adapter stimulus is called temporal recalibration
 
 
-<div class="notes">
-</div>
+## Experimental motivation
 
 
-## What kind of questions are you trying to answer?
-
-
-- Does temporal recalibration affect the temporal binding window?
 - Does age have an affect on the temporal binding window?
+- Does temporal recalibration affect the temporal binding window?
 
 - The temporal binding window is described by two measures
-  - **Point of subjective simultaneity** (PSS) which is a proxy for perceptual synchrony
+  - **Point of subjective simultaneity** (PSS) which is a measure of perceptual synchrony
   - **Just noticeable difference** (JND) which is the smallest lapse in time so that a temporal order can just be determined
-
-
-<div class="notes">
-</div>
 
 
 ## The psychometric function {.smaller}
@@ -215,18 +191,6 @@ $$
 \end{align*}
 $$
 
-<div class="notes">
-We can answer these questions through the psychometric function. 
-
-The horizontal axis represents the stimulus onset asynchrony (temporal delay), and the vertical axis is the probability of a "positive" response. 
-
-The point of subjective simultaneity is the temporal delay at which the subject is doing no better than random guessing (the 50% level). 
-
-The just noticeable difference is the extra temporal delay needed to just be able to determine temporal order. 
-
-Historically this is defined as the 84% level (one standard deviation away from the mean in a Gaussian distribution).
-</div>
-
 
 ## Three ways to visualize the observed data {.smaller}
 
@@ -268,10 +232,6 @@ p3 <- visual_binomial %>%
 - Proportion can be derived from aggregated Binomial counts
 
 
-<div class="notes">
-</div>
-
-
 ## Data quirks {.smaller}
 
 
@@ -306,10 +266,6 @@ pl | pr
 
 - (Left) record for `av-post1-O-f-CE` removed from data set
 - (Right) some subjects in the visual task have exceptional performance (approaching perfect separation)
-
-
-<div class="notes">
-</div>
 
 
 # Modeling the Psychometric Function
@@ -349,10 +305,6 @@ broom::tidy(glm_subject_level) %>%
 - Near perfect separation results in unreliably large standard errors
 
 
-<div class="notes">
-</div>
-
-
 ## Mixed effects models {.smaller}
 
 
@@ -384,10 +336,6 @@ coef(glmer_subject_level)$sid %>% as_tibble(rownames = "sid") %>%
 - Not flexible enough to model more complex psychometric features like lapse rates
 
 
-<div class="notes">
-</div>
-
-
 ## Enter Bayesian statistics
 
 
@@ -404,10 +352,6 @@ $$
 - The posterior $\pi(\theta | data)$ is our updated belief of the distribution of the parameter
 
 
-<div class="notes">
-</div>
-
-
 ## Easy in theory, difficult in practice
 
 
@@ -416,14 +360,10 @@ $$
 $$
 
 
-- Often the integral in the denominator is complex or of a high dimension
 - The denominator is a constant scale factor that ensures $\pi(\theta|data)$ is a proper probability distribution
   - We often say that the posterior is proportional to the prior times the likelihood: $\quad \pi(\theta | data) \propto \pi(\theta) \times \pi(data | \theta)$
+- Often the integral in the denominator is complex or of a high dimension
 - A solution is to use **Markov Chain Monte Carlo** (MCMC) simulations to draw samples directly from the posterior distribution
-
-
-<div class="notes">
-</div>
 
 
 ## Hamiltonian Monte Carlo
@@ -441,10 +381,6 @@ $$
 [Click me for a demo](http://chi-feng.github.io/mcmc-demo/app.html?algorithm=HamiltonianMC&target=donut)
 
 
-<div class="notes">
-</div>
-
-
 ## Say hello to Stan
 
 
@@ -455,18 +391,7 @@ $$
 - Provides differentiable probability functions and linear algebra
 
 
-<div class="notes">
-</div>
-
-
-## 
-
-
 # Building a Model for the Psychometric Function | Using a Principled Bayesian Workflow
-
-
-<div class="notes">
-</div>
 
 
 ## What is a Principled Bayesian Workflow?
@@ -516,10 +441,6 @@ $$
 </div>
 
 
-<div class="notes">
-</div>
-
-
 ## Pre-workflow considerations
 
 
@@ -530,10 +451,6 @@ $$
   - Choice of psychometric function
   - Choice of linear parameterization
   - Choice of priors
-
-
-<div class="notes">
-</div>
 
 
 ## Choice of psychometric function
@@ -621,13 +538,6 @@ jnd &= \frac{\mathrm{logit}(0.84)}{\beta}
 $$
 
 
-<div class="notes">
-Linear parameterization doesn't affect inferential results
-
-Choice makes setting priors easier
-</div>
-
-
 ## Selecting priors - Point of subjective simultaneity
 
 
@@ -636,10 +546,6 @@ Choice makes setting priors easier
 - Other studies suggest that our brains can detect temporal differences as small as 30ms
 - We should be skeptical of PSS estimates larger than say 150ms in absolute value
 - $$pss \sim \mathcal{N}(0, 0.06^2) \Longleftrightarrow \alpha \sim \mathcal{N}(0, 0.06^2)$$
-
-
-<div class="notes">
-</div>
 
 
 ## Selecting priors - Just noticeable difference
@@ -654,13 +560,6 @@ Choice makes setting priors easier
   - $$\beta = \frac{\mathrm{logit}(0.84)}{jnd} \Longleftrightarrow \beta \sim \mathrm{Lognormal}(2.8, 1^2)$$
   
 
-<div class="notes">
-The log-normal distribution has a reciprocal property that makes setting a prior for $\beta$ easier
-
-We use the _median_ because the expected value depends on both the mean and the standard deviation which makes selecting a prior difficult
-</div>
-
-
 ## Defining the observational space
 
 
@@ -669,10 +568,6 @@ We use the _median_ because the expected value depends on both the mean and the 
 - If the stimulus onset asynchronies (SOAs) are fixed then we have repeated measurements for each SOA and the responses can be aggregated into Binomial counts
   - $k_i, n_i \in \mathbb{Z}_0^+, k_i \le n_i$
   - $k_i \sim \mathrm{Binomial}(n_i, p_i)$
-
-
-<div class="notes">
-</div>
 
 
 ## Iteration 1 - baseline model
@@ -709,10 +604,6 @@ model {
 </div>
 
 
-<div class="notes">
-</div>
-
-
 ## Prior distribution of psychometric functions
 
 
@@ -733,10 +624,6 @@ for (i in 1:100) {
 
 p + theme_bw()
 ```
-
-
-<div class="notes">
-</div>
 
 
 ## Iteration 2 - adding age and block categories
@@ -773,10 +660,6 @@ $$
 - (Center) Each categorical variable is modeled as having the same mean and standard deviation that is learned from the data (centered multilevel)
 - (Right) Same as center, but using the non-centered parameterization
   - Most convenient when adding multiple categorical variables
-
-
-<div class="notes">
-</div>
 
 
 ## Using the non-centered log-normal parameterization
@@ -871,10 +754,6 @@ G = \begin{bmatrix}
 $$
 
 
-<div class="notes">
-</div>
-
-
 ## Iteration 4 - incorporating a lapse rate {.smaller}
 
 
@@ -928,17 +807,11 @@ $$
 </div>
 
 
-<div class="notes">
-A lapse in judgment can happen for any reason, and is assumed to be random and independent of other lapses
+## Chart of a lapse rate model {.smaller}
 
-Lapses can be modeled as occurring independently at some fixed rate
-</div>
+<div class="columns-2">
 
-
-## Chart of a lapse rate model
-
-
-```{r chart-of-lapse}
+```{r chart-of-lapse, fig.width=4.5}
 fn_lapse <- function(x, a=0, b=1, l=0) 0.5*l + (1 - l) * fn(x, a, b)
 l <- 0.15
 ggplot(tibble(x = c(-4, 6), y = c(0, 1)), aes(x, y)) +
@@ -969,35 +842,33 @@ ggplot(tibble(x = c(-4, 6), y = c(0, 1)), aes(x, y)) +
        title = "Psychometric function with lapse rate")
 ```
 
+$$
+\begin{equation}
+\begin{split}
+k_i &\sim \mathrm{Binomial}(n_i, p_i) \\
+p_i &= \lambda + (1 - 2\lambda)\cdot F\left(\exp(\mu_\beta) (x_i - \mu_\alpha)\right) \\
+\mu_\alpha &= \alpha + \alpha_{G[i] \times trt[i]} \\
+\mu_\beta &= \beta + \beta_{G[i] \times trt[i]} \\
+\end{split}
+\end{equation}
+$$
 
-<div class="notes">
-</div>
+<hr />
 
-
-## Including a lapse rate imporoves predictive performance
-
-
-```{r load-loo, cache=TRUE, echo=TRUE}
-library(loo) # leave one out cross validation
-l043 <- loo(readRDS("../models/m043vis.rds"))
-l044 <- loo(readRDS("../models/m044vis.rds"))
-comp_vis <- loo_compare(l043, l044)
+```
+model {
+  vector[N] p;
+  for (i in 1:N) {
+    real mu_b = b + bGT[G[i], trt[i]];
+    real mu_a = a + aGT[G[i], trt[i]];
+    p[i] = lG[G[i]] + (1 - 2*lG[G[i]]) * 
+            inv_logit(exp(mu_b) * (x[i] - mu_a));
+  }
+  k ~ binomial(n, p);
+}
 ```
 
 
-```{r compare-vis}
-comp_vis %>%
-  as_tibble(rownames = "Model") %>%
-  mutate(Model = factor(Model, 
-                        levels = paste0("model", 1:2),
-                        labels = c("No Lapse", 
-                                   "Lapse"))) %>%
-  select(-c(se_elpd_loo, looic, se_looic)) %>%
-  knitr::kable()
-```
-
-
-<div class="notes">
 </div>
 
 
@@ -1007,10 +878,6 @@ comp_vis %>%
 ```{r lapse-v-no-lapse}
 knitr::include_graphics("../figures/lapse-v-no-lapse.png")
 ```
-
-
-<div class="notes">
-</div>
 
 
 ## Iteration 5 - adding subject-level parameters {.smaller}
@@ -1045,6 +912,101 @@ $$
 $$
 
 
-<div class="notes">
-</div>
+## Model Assessment
 
+- Domain Expertise Consistency
+  - The model does not predict anything that conflicts with domain expertise
+- Computational Faithfulness
+  - Posterior samples are reliable as determined by posterior checks
+    - Trace plots, split $\hat{R}$, $N_{\textrm{eff}}/N$ ratio, divergent transitions
+- Inferential Adequacy
+  - Modeling age and block interactions allows us to answer questions about age and temporal recalibration
+- Model Adequacy
+  - Modeling a lapse rate is more true to the data generating process, and improves predictive performance
+
+
+# Psychometric Inferences
+
+
+```{r results-setup, include=FALSE}
+source("results_script.R")
+
+av  <- post_table(readRDS("../models/p044s_av.rds")) %>% 
+  add_column(Task = "Audiovisual", .before = 1)
+vis <- post_table(readRDS("../models/p044s_vis.rds")) %>% 
+  add_column(Task = "Visual", .before = 1)
+dur <- post_table(readRDS("../models/p044s_dur.rds")) %>% 
+  add_column(Task = "Duration", .before = 1)
+sm  <- post_table(readRDS("../models/p044s_sm.rds")) %>% 
+  add_column(Task = "Sensorimotor", .before = 1)
+
+post <- bind_rows(av, vis, dur, sm) %>%
+  mutate(Task = factor(Task, levels = c("Audiovisual",
+                                        "Visual",
+                                        "Duration",
+                                        "Sensorimotor")))
+```
+
+
+## Perceptual synchrony
+
+
+```{r plot-pss}
+plot_pss(av) +
+  plot_annotation(title = "Point of subject simultaneity",
+                  subtitle = "Audiovisual TOJ")
+```
+
+
+## Temporal sensitivity
+
+
+```{r plot-jnd}
+plot_jnd(av) +
+  plot_annotation(title = "Just noticeable difference",
+                  subtitle = "Audiovisual TOJ")
+```
+
+
+## Lapse rates
+
+
+```{r plot-lapse}
+ggplot(post, aes(gamma, fill = `Age Group`)) +
+  geom_density(alpha = 0.75) +
+  scale_fill_manual(values = three_colors) +
+  facet_grid(Task ~ ., scales = "free_y") +
+  theme_bw() +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  labs(x = "Lapse Rate",
+       title = "Distribution of lapse rates across tasks")
+```
+
+
+
+
+
+## Subject-specific examples
+
+
+```{r sub-spec}
+knitr::include_graphics("../figures/subject-specific.png")
+```
+
+
+## Improving psychometric experiments
+
+
+- The results here are based on small-scale preliminary data
+- There is an inherent difficulty for the different tasks
+  - Visual < Audiovisual < Duration < Sensorimotor
+  - Indicated by temporal sensitivity and lapse rates
+- Lapses should be independent of the task
+  - Distribution of lapse rates across ages and tasks shows this assumption is violated
+  - Better estimation of lapse rates by presenting larger SOAs in the experiment
+- In the visual TOJ task, the granularity in the SOA values near the PSS could be increased to get more reliable estimates of the slope and to avoid complete separation
+
+
+# Thank You! | Questions?
