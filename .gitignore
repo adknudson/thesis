@@ -25,3 +25,6 @@ _bookdown_files
 !docs/*.pdf
 *.rds
 *.Rds
+
+presentation/*_cache
+presentation/*_files
