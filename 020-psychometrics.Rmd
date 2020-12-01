@@ -60,7 +60,7 @@ Notice that the value $K$ cancels out when calculating the relative intensity, b
 Psychometric experiments are devised in a way to examine psychophysical processes, or the response between the world around us and our inward perceptions. A psychometric function relates an observer’s performance to an independent variable, usually some physical quantity of a stimulus in a psychophysical task [@wichmann2001a]. Psychometric functions were studied as early as the late 1800's, and Edwin Boring published a chart of the psychometric function in The American Journal of Psychology in 1917 [@boring1917chart].
 
 
-```{r ch020-chart-of-pf, fig.cap="A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or two, recorded as either 'two points' or 'not two points'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their perception of 'two-ness'. So at what separation is the impression of two points liminal?"}
+```{r ch020-chart-of-pf, fig.cap="A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or two, recorded as either \`two points\` or \`not two points\`. As the separation of aesthesiometer points increases, so too does the subject's confidence in their perception of \`two-ness\`. So at what separation is the impression of two points liminal?"}
 knitr::include_graphics("figures/chart_of_pf.png")
 ```
 

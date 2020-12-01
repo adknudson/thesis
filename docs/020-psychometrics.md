@@ -61,7 +61,7 @@ Psychometric experiments are devised in a way to examine psychophysical processe
 
 }
 
-\caption{A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or two, recorded as either 'two points' or 'not two points'. As the separation of aesthesiometer points increases, so too does the subject's confidence in their perception of 'two-ness'. So at what separation is the impression of two points liminal?}(\#fig:ch020-chart-of-pf)
+\caption{A chart of the psychometric function. The experiment in this paper places two points on a subject's skin separated by some distance, and has them answer their impression of whether there is one point or two, recorded as either `two points` or `not two points`. As the separation of aesthesiometer points increases, so too does the subject's confidence in their perception of `two-ness`. So at what separation is the impression of two points liminal?}(\#fig:ch020-chart-of-pf)
 \end{figure}
 
 

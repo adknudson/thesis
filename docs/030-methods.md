@@ -11,7 +11,7 @@
 Psychometric functions are commonly fit using generalized linear models which allows for the linear model to be related to the response variable via a link function, which for psychometric functions comes from the family of S-shaped curves called a sigmoid.
 
 
-Commonly GLMs are fit using maximum likelihood estimation (MLE). The outcome of a single experiment can be represented as the result of a Bernoulli trial. The psychometric function, $F(x; \theta)$, determines the probability that the outcome is 1:
+Commonly GLMs are fit using maximum likelihood estimation. The outcome of a single experiment can be represented as the result of a Bernoulli trial. The psychometric function, $F(x; \theta)$, determines the probability that the outcome is 1:
 
 
 \setstretch{1.0}
@@ -43,7 +43,7 @@ The likelihood $\mathcal{L}$ of observing a set of independent and identically d
 \end{equation}
 
 
-For some $\theta$, $\mathcal{L}$ achieves a maximum value, so maximum likelihood estimation determines the parameters that maximizes the likelihood of the observed data. Equation \@ref(eq:bernlik) is commonly expressed in terms of its logarithm as a function of $\theta$:
+For some $\theta$, $\mathcal{L}$ achieves a maximum value, so maximum likelihood estimation determines the parameters that maximizes the likelihood of the observed data. Equation \@ref(eq:bernlik) is commonly expressed in terms of its logarithm as a function of $\theta$, where due to monotonicity of the logarithm, is an equivalent optimization problem:
 
 
 \begin{equation}
@@ -202,17 +202,16 @@ where $n_j$ is the number of observations in group level $j$, $\sigma_y^2$ is th
 We will be using `Stan` for model fitting throughout this paper. `Stan` allows for MCMC sampling of Bayesian models using a variant of Hamiltonian Monte Carlo called the No-U-Turn sampler (NUTS). HMC can be though of as a physics simulation: a massless "particle" is imparted with a random direction and some amount of kinetic energy in a probability field, and is stopped after a number of steps, $L$, called leapfrog steps. The stopping point is the new proposal sample. The NUTS algorithm removes the need for leapfrog steps by stopping automatically when the particle begins to double back and retrace its steps [@hoffman2014no]. This sampling scheme has a much higher rate of accepted samples, and also comes with many built-in diagnostic tools that let us know when the sampler is having trouble efficiently exploring the posterior.
 
 
-The NUTS algorithm samples in two phases: a warm-up phase and a sampling phase. During the warm-up phase, the sampler is automatically tuning three internal parameters that can significantly affect the sampling efficiency. The sum of the potential energy and the kinetic energy of the system is called the Hamiltonian, and is conserved along the trajectory of the particle [@stanref]. The path that the particle takes is a discrete approximation to the actual path where the position of the particle is updated in small steps called leapfrog steps (see @leimkuhler2004simulating for a detailed explanation of the leapfrog algorithm). A divergent transition happens when the simulated trajectory is far from the true trajectory as measured by the Hamiltonian.
+The NUTS algorithm samples in two phases: a warm-up phase and a sampling phase. During the warm-up phase, the sampler is automatically tuning three internal parameters that can significantly affect the sampling efficiency.
 
 
 ## Non-centered parameterization
 
 
-Because HMC is a physics simulation, complicated geometry or posteriors with steep slopes can be difficult to traverse if the step size is too course. The solution is to explore a simpler geometry, and then transform the sample into the target distribution. Reparameterization is especially important for hierarchical models. For `Stan`, sampling from a standard normal or uniform distribution is very easy, and so the non-centered parameterization can alleviate divergent transitions. Here we present three reparameterizations that we use in the next chapter.
+Because HMC is a physics simulation, complicated geometry or posteriors with steep slopes can be difficult to traverse if the step size is too course. The solution is to explore a simpler geometry, and then transform the sample into the target distribution. Reparameterization is especially important for hierarchical models. For `Stan`, sampling from a standard normal or uniform distribution is very easy, and so the non-centered parameterization can alleviate divergent transitions. Here we present three reparameterizations that we use in the next chapter. The left-hand side shows the centered parameterization, and the right-hand side shows the non-centered parameterization.
 
 
-**Non-centered Gaussian distribution**
-
+**Gaussian distribution** with mean $\mu$ and standard deviation $\sigma$:
 
 \setstretch{1.0}
 \begin{equation}
@@ -229,7 +228,7 @@ Because HMC is a physics simulation, complicated geometry or posteriors with ste
 \setstretch{2.0}
 
 
-**Non-centered Log-Normal distribution**
+**Log-Normal distribution** with mean-log $\mu$ and standard deviation-log $\sigma$:
 
 
 \setstretch{1.0}
@@ -247,7 +246,7 @@ Because HMC is a physics simulation, complicated geometry or posteriors with ste
 \setstretch{2.0}
 
 
-**Non-centered Cauchy distribution**
+**Cauchy distribution** with location $\mu$ and scale $\tau$:
 
 
 \setstretch{1.0}
@@ -309,7 +308,7 @@ schools_dat <- list(
 As the number of parameters in a model grows, it becomes exceedingly tedious to check the trace plots of all parameters, and so numerical summaries are helpful to flag potential issues within the model.
 
 
-**R-hat Statistic.** The most common summary statistic for chain health is the potential scale reduction factor [@gelman1992inference] that measures the ratio of between chain variance and within chain variance. When the two have converged, the ratio is one. We've shared examples of healthy chains which would also have healthy $\hat{R}$ values, but it's valuable to also share an example of a bad model. Below is the 8 Schools example [@gelman2013bayesian] which is a classical example for introducing Stan and testing the operating characteristics of a model.
+**R-hat Statistic.** The most common summary statistic for chain health is the potential scale reduction factor [@gelman1992inference] that measures the ratio of between chain variance and within chain variance. When the two have converged, the ratio is one. We've shared examples of healthy chains which would also have healthy $\hat{R}$ values, but it's valuable to also share an example of a bad model.
 
 
 The initial starting parameters for this model are intentionally set to vary between $-10$ and $10$ -- in contrast to the default range of $(-2, 2)$ -- and with only a few samples drawn in order to artificially drive up the split $\hat{R}$ statistic. The model is provided as supplementary code in the [appendix](#code).
@@ -331,7 +330,7 @@ fit_cp <- sampling(schools_cp, data = schools_dat, refresh = 0,
 \begin{center}\includegraphics[width=0.85\linewidth]{030-methods_files/figure-latex/ch030-Rocky-Test-1} \end{center}
 
 
-These chains do not look good at all -- they have not converged to a stationary distribution. . The $\hat{R}$ values are listed in table \@ref(tab:ch030-Ninth-Finger).
+These chains do not look good at all -- they have not converged to a stationary distribution. This is by design, however, as only 40 samples were simulated. The $\hat{R}$ values are listed in table \@ref(tab:ch030-Ninth-Finger).
 
 
 \begin{table}[!h]
@@ -537,7 +536,7 @@ From figure \@ref(fig:ch030-Hot-Locomotive) we can see that most of the divergen
 ## Estimating predictive performance
 
 
-All models are wrong, but some are useful. This quote is from George Box, and it is a popular quote that statisticians like to throw around. All models are wrong because it is nearly impossible to account for the minutiae of every process that contributes to an observed phenomenon, and often trying to results in poorer performing models. Also it is never truly possible to prove that a model is correct. At best the scientific method can falsify certain hypotheses, but it cannot ever determine if a model is universally correct. That does not matter. What does matter is if the model is useful and can make accurate predictions.
+All models are wrong, but some are useful. This quote is from George Box [@box1976science], and it is a popular quote that statisticians like to throw around. All models are wrong because it is nearly impossible to account for the minutiae of every process that contributes to an observed phenomenon, and often trying to results in poorer performing models. Also it is never truly possible to prove that a model is correct. At best the scientific method can falsify certain hypotheses, but it cannot ever determine if a model is universally correct. That does not matter. What does matter is if the model is useful and can make accurate predictions.
 
 
 Why is predictive performance so important? Consider five points of data (figure \@ref(fig:ch030-Moving-Moose)). They have been simulated from some polynomial equation of degree less than five, but with no more information other than that, how can the best polynomial model be selected?
@@ -602,20 +601,20 @@ y &\sim \mathcal{N}(\mu, 1^2) \\
 \end{figure}
 
 
-The best fit to the observed data is the quartic model, but it is too variable and doesn't capture the regular features of the data, so it does poorly for the out-of-sample prediction. The linear model suffers as well by being less biased and too inflexible to capture the structure of the data. The quadratic and cubic are in the middle, but the quadratic does well and makes fewer assumptions about the data. The quadratic model is just complex enough to predict well while making fewer assumptions. Information criteria is a way of weighing the prediction quality of a model against its complexity, and is arguably a better system for model selection/comparison than other goodness-of-fit statistics such as $R^2$ or p-values.
+The best fit to the observed data is the quartic model, but it is too variable and doesn't capture the regular features of the data, so it does poorly for the out-of-sample prediction. The linear model suffers as well by being more biased and too inflexible to capture the structure of the data. The quadratic and cubic are in the middle, but the quadratic does well and makes fewer assumptions about the data. The quadratic model is just complex enough to predict well while making fewer assumptions. Information criteria is a way of weighing the prediction quality of a model against its complexity, and is arguably a better system for model selection/comparison than other goodness-of-fit statistics such as $R^2$ or p-values [@burnham2002practical].
 
 
-A technique to evaluate predictive performance is cross validation, where the data is split into training data and testing data. The model is fit to the training data, and then predictions are made with the testing data and compared to the observed values. This can often give a good estimate for out-of-sample prediction error. Cross validation can be extended into k-fold cross validation. The idea is to fold the data into $k$ disjoint partitions, and predict partition $i$ using the rest of the data to train on. The prediction error of the $k$-folds can then be averaged over to get an estimate for out-of-sample prediction error.
+A technique to evaluate predictive performance is cross validation, where the data is split into training data and testing data [@friedman2001elements]. The model is fit to the training data, and then predictions are made with the testing data and compared to the observed values. This can often give a good estimate for out-of-sample prediction error. Cross validation can be extended into k-fold cross validation. The idea is to fold the data into $k$ disjoint partitions, and predict partition $i$ using the rest of the data to train on. The prediction error of the $k$-folds can then be averaged over to get an estimate for out-of-sample prediction error.
 
 
 Taking $k$-fold CV to the limit by letting $k$ equal the number of observations results in leave-one-out cross validation (LOOCV), where for each observation in the data, the model is fit to the remaining data and predicted for the left out observation. $k$-fold cross validation requires fitting the model $k$ times, which can be computationally expensive for complex Bayesian models. Thankfully there is a way to approximate LOOCV without having to refit the model many times.
 
 
-**Estimating cross validation error via Pareto-Smoothed-Importance Sampling**. LOOCV and many other evaluation tools such as the widely applicable information criterion (WAIC) rest on the log-pointwise-predictive-density (lppd), which measures deviance from some "true" probability distribution. Typically we don't have the analytic form of the predictive posterior density, so instead we use $S$ MCMC draws to approximate the lppd [@vehtari2017practical]:
+**Estimating cross validation error via Pareto-Smoothed-Importance Sampling**. LOOCV and many other evaluation tools such as the widely applicable information criterion [@watanabe2013widely] rest on the log-pointwise-predictive-density (lppd), which measures deviance from some "true" probability distribution. Typically we don't have the analytic form of the predictive posterior density, so instead we use $S$ MCMC draws to approximate the lppd [@vehtari2017practical]:
 
 
 \begin{equation}
-\mathrm{lppd}(y, \Theta) = \sum_i \log \frac{1}{S} \sum_s p(y_i | \Theta_s)
+\mathrm{lppd}(y, \Theta) = \sum_{i=1}^N \log \frac{1}{S} \sum_{s=1}^S p(y_i | \Theta_s)
 (\#eq:lppd)
 \end{equation}
 
@@ -624,7 +623,7 @@ To estimate LOOCV, the relative "importance" of each observation must be compute
 
 
 $$
-\mathrm{lppd}_{CV} = \sum_i \frac{1}{S} \sum_s \log p(y_{i} | \theta_{-i,s})
+\mathrm{lppd}_{CV} = \sum_{i=1}^N \frac{1}{S} \sum_{s=1}^S \log p(y_{i} | \theta_{-i,s})
 $$
 
 
@@ -640,7 +639,7 @@ Then the importance sampling estimate of the out-of-sample lppd is calculated as
 
 
 $$
-\mathrm{lppd}_{IS} = \sum_{i}\log \frac{\sum_{s} r(\theta_s) p(y_i \vert \theta_s)}{\sum_{s} r(\theta_s)}
+\mathrm{lppd}_{IS} = \sum_{i=1}^N\log \frac{\sum_{s=1}^S r(\theta_s) p(y_i \vert \theta_s)}{\sum_{s=1}^S r(\theta_s)}
 $$
 
 
@@ -652,7 +651,7 @@ p(r; \mu, \sigma, k) = \frac{1}{\sigma} \left(1 + \frac{k (r - \mu)}{\sigma}\rig
 $$
 
 
-where $\mu$ is the location, $\sigma$ is the scale, and $k$ is the shape. Then the estimated distribution is used to smooth the weights. A side-effect of using PSIS is that the estimated value of $k$ can be used as a diagnostic tool for a particular observation. For $k>0.5$, the Pareto distribution will have infinite variance, and a really heavy tail. If the tail is very heavy, then the smoothed weights are harder to trust. In theory and in practice, PSIS works well as long as $k < 0.7$ [@vehtari2015pareto].
+where $\mu$ is the location, $\sigma$ is the scale, and $k$ is the shape. Then the estimated distribution is used to smooth the weights. A side-effect of using PSIS is that the estimated value of $k$ can be used as a diagnostic tool for a particular observation. For $k>0.5$, the Pareto distribution will have infinite variance, and a really heavy tail. If the tail is very heavy, then the smoothed weights are harder to trust. In theory and in practice, however, PSIS works well as long as $k < 0.7$ [@vehtari2015pareto].
 
 
 There is an `R` package called `loo` that can compute the expected log-pointwise-posterior-density (ELPD) using PSIS-LOO, as well as the estimated number of effective parameters and LOO information criterion [@R-loo]. For the part of the researcher, the log-likelihood of the observations must be computed. This can be calculated in the `generated quantities` block of a `Stan` program, and it is standard practice to name the log-likelihood as `log_lik` in the model. An example of calculating the log-likelihood for the eight schools data in `Stan` is:
@@ -700,7 +699,7 @@ Linear & -3.0593 & 1.7171 & 2.747 & 24.79\\
 \end{table}
 
 
-This comparison is unreliable since there are only five data points to estimate the predictive performance. This assertion is backed by the difference in ELPD and the standard error of the differences -- the standard error is as large or larger than the difference.
+This comparison is unreliable since there are only five data points to estimate the predictive performance. This assertion is backed by the difference in ELPD and the standard error of the differences -- the standard error of the difference is at the same order of magnitude for the difference in each case.
 
 
 ## A modern principled bayesian modeling workflow
