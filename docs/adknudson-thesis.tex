@@ -148,6 +148,20 @@
 %==============================================================================17
 %==============================================================================18
 % Place here anything extra that you would like in the preamble
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 %==============================================================================19
 \ifluatex
   \usepackage{selnolig}  % disable illegal ligatures
@@ -884,7 +898,7 @@ Models can be compared simply using \texttt{loo::loo\_compare}. It estimates the
 
 \begin{table}[!h]
 
-\caption{(\#tab:ch030-Galaxy Itchy)LOO comparison of Polynomial equations.}
+\caption{\label{tab:ch030-Galaxy-Itchy}LOO comparison of Polynomial equations.}
 \centering
 \begin{tabular}[t]{lrrrr}
 \toprule
@@ -997,7 +1011,7 @@ This paper focuses on a type of psychometric experiment called a temporal order 
 
 It was Charles Darwin who in his book ``On the Origin of Species'' developed the idea that living organisms adapt in order to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Galton's works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that he was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
 
-E.H. Weber built upon Herbart's work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber's Law (Equation \eqref{eq:webers-law}), which states that the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus {[}ekman1959weber{]}.
+E.H. Weber built upon Herbart's work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber's Law (Equation \eqref{eq:webers-law}), which states that the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus \citep{ekman1959weber}.
 
 \begin{equation}
   \frac{\Delta I}{I} = k
@@ -1058,8 +1072,6 @@ Figure \ref{fig:ch020-plot-ref-pf} highlights the features through which we stud
 \caption{The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise.}\label{fig:ch020-plot-ref-pf}
 \end{figure}
 
-Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing \citep{fujisaki2004recalibration}. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer \citep{vroomen2004recalibration}. This repetition of presenting the adapter stimulus is called temporal recalibration.
-
 \hypertarget{toj-task}{%
 \section{Temporal order judgment tasks}\label{toj-task}}
 
@@ -1107,7 +1119,9 @@ Duration & Perceived bottom as longer & Bottom lasted longer than top\\
 \end{tabular}
 \end{table}
 
-After the first block of each task was completed, the participants went through an adaptation period where they were presented with the respective stimuli from each task repeatedly at fixed temporal delays, then the TOJ task was repeated. To ensure that the adaptation affect persisted, the subject was presented with the adapter stimulus at regular intervals throughout the second block. The blocks are designated as \texttt{pre} and \texttt{post1}, \texttt{post2}, etc. in the data set. In this paper we only focus on the \texttt{pre} and \texttt{post1} blocks.
+Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing \citep{fujisaki2004recalibration}. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer \citep{vroomen2004recalibration}. This repetition of presenting the adapter stimulus is called temporal recalibration.
+
+After the first block of each task was completed, the participants went through an adaptation period where they were presented with the respective stimuli from each task repeatedly at fixed temporal delays, then the TOJ task was repeated. To ensure that the adaptation affect persisted, the subject was presented with the adapter stimulus at regular intervals throughout the second block. The blocks are designated as \texttt{pre} and \texttt{post1}, \texttt{post2}, etc. in the data set. In this paper we only focus on the baseline block (\texttt{pre}) and the post-adaptation block (\texttt{post1}).
 
 \hypertarget{data-visualization-and-quirks}{%
 \section{Data visualization and quirks}\label{data-visualization-and-quirks}}
@@ -2738,10 +2752,6 @@ sensorimotor & Older Adult & 0.29\\
 \end{tabular}
 \end{table}
 
-One way to remove the uncertainty of the lapse rate could be to have some trials with very large SOA values. The reasoning is that if the difficulty of a task (given an SOA value) is lowered, than an incorrect response is more likely to be due to a true lapse in judgment as opposed to a genuinely incorrect response. \citet{wichmann2001b} recommends at least one sample at \(\pi \ge 0.95\) is necessary for reliable bootstrap confidence intervals, so the same reasoning can be applied when using Bayesian credible intervals. For a task such as visual TOJ, the \(90\%\) level may occur at an SOA of \(\approx 40\)ms while for the audiovisual TOJ it may be \(\approx 220\)ms, so the sampling scheme for psychometric experiments must be tuned to the task.
-
-\citet{wichmann2001a} experimentally determined that the lapse rate for trained observers is between \(0\%\) and \(5\%\), and the data in this paper loosely agree with that conclusion. Any excess in lapse rate may be attributed to the perceived task difficulty and a sub-optimal sampling scheme. Since the visual TOJ task is relatively the easiest, the estimated lapse rates are more believable as true lapse rates, and fall closely within the \((0, 0.05)\) range.
-
 \hypertarget{subject-specific-inferences}{%
 \section{Subject specific inferences}\label{subject-specific-inferences}}
 
@@ -2772,7 +2782,9 @@ The subject-level model can make predictions for new individuals or for individu
 
 The results from the previous chapter provide insight into how future experiments can be designed to offer better inferences. In the visual TOJ task, the granularity in the SOA values near the PSS could be increased to get more reliable estimates of the slope and to avoid complete separation. Including a lapse rate helps, but can be unreliable if the range of SOA values is too narrow. For more difficult tasks like the sensorimotor TOJ task, larger SOA values are necessary so that the lapse rate can be accurately measured.
 
-Since the lapse rate for trained observers is estimated to be no more than \(0.05\), an experiment would need about \(20\) trials at a larger SOA in order to pick up on a single lapse. In this data, we have multiple subjects within an age group, so the repetition is spread out. As a consequence, it is possible to estimate an age group level lapse rate, but more difficult to estimate subject specific lapses.
+The results presented previously are based off of a small scale preliminary data set, so there's a lot of uncertainty in the measure of the psychometric quantities. One way to remove the uncertainty of the lapse rate could be to have some trials with very large SOA values. The reasoning is that if the difficulty of a task (given an SOA value) is lowered, than an incorrect response is more likely to be correctly attributed to a true lapse in judgment as opposed to a genuinely incorrect response. \citet{wichmann2001b} recommends at least one sample at \(\pi \ge 0.95\) is necessary for reliable bootstrap confidence intervals, so the same reasoning can be applied when using Bayesian credible intervals. For a task such as visual TOJ, the \(90\%\) level may occur at an SOA of \(\approx 40\)ms while for the audiovisual TOJ it may be \(\approx 220\)ms, so the sampling scheme for psychometric experiments must be tuned to the task.
+
+\citet{wichmann2001a} experimentally determined that the lapse rate for trained observers is between \(0\%\) and \(5\%\), and the data in this paper loosely agree with that conclusion. Any excess in lapse rate may be attributed to the perceived task difficulty and a sub-optimal sampling scheme. Since the visual TOJ task is relatively the easiest, the estimated lapse rates are more believable as true lapse rates, and fall closely within the \((0, 0.05)\) range. Since the lapse rate is estimated to be no more than \(0.05\), an experiment would need about \(20\) trials at a larger SOA in order to pick up on a single lapse. In this data, we have multiple subjects within an age group, so the repetition is spread out. As a consequence, it is possible to estimate an age group level lapse rate, but more difficult to estimate subject specific lapses.
 
 For multilevel modeling and partial pooling to have a significant benefit, five or more groups is recommended. The study could be expanded to have five or six age groups (20-30, 30-40, etc.). More age groups would also allow for finer tracking of trends in the distribution of PSS and JND values and the affect of temporal recalibration on them.
 

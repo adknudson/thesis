@@ -15,7 +15,7 @@ This paper focuses on a type of psychometric experiment called a temporal order 
 It was Charles Darwin who in his book "On the Origin of Species" developed the idea that living organisms adapt in order to better survive in their environment. Sir Francis Galton, inspired by Darwin's ideas, became interested in the differences in human beings and in how to measure those differences. Galton's works on studying and measuring human differences lead to the creation of psychometrics -- the science of measuring mental faculties. Around the same time that he was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.
 
 
-E.H. Weber built upon Herbart's work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber's Law (Equation \@ref(eq:webers-law)), which states that the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus [ekman1959weber].
+E.H. Weber built upon Herbart's work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system -- a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber's Law (Equation \@ref(eq:webers-law)), which states that the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus [@ekman1959weber].
 
 
 \begin{equation}
@@ -115,9 +115,6 @@ ggplot(tibble(x = c(-4, 4), y = c(0, 1)), aes(x, y)) +
 ```
 
 
-Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing [@fujisaki2004recalibration]. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer [@vroomen2004recalibration]. This repetition of presenting the adapter stimulus is called temporal recalibration.
-
-
 ## Temporal order judgment tasks {#toj-task}
 
 
@@ -169,7 +166,9 @@ tibble(
 ```
 
 
-After the first block of each task was completed, the participants went through an adaptation period where they were presented with the respective stimuli from each task repeatedly at fixed temporal delays, then the TOJ task was repeated. To ensure that the adaptation affect persisted, the subject was presented with the adapter stimulus at regular intervals throughout the second block. The blocks are designated as `pre` and `post1`, `post2`, etc. in the data set. In this paper we only focus on the `pre` and `post1` blocks.
+Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing [@fujisaki2004recalibration]. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer [@vroomen2004recalibration]. This repetition of presenting the adapter stimulus is called temporal recalibration.
+
+After the first block of each task was completed, the participants went through an adaptation period where they were presented with the respective stimuli from each task repeatedly at fixed temporal delays, then the TOJ task was repeated. To ensure that the adaptation affect persisted, the subject was presented with the adapter stimulus at regular intervals throughout the second block. The blocks are designated as `pre` and `post1`, `post2`, etc. in the data set. In this paper we only focus on the baseline block (`pre`) and the post-adaptation block (`post1`).
 
 
 ## Data visualization and quirks

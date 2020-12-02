@@ -639,7 +639,7 @@ p(r; \mu, \sigma, k) = \frac{1}{\sigma} \left(1 + \frac{k (r - \mu)}{\sigma}\rig
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="methods.html#cb7-1"></a>comp &lt;-<span class="st"> </span><span class="kw">loo_compare</span>(linear, quadratic, cubic, quartic)</span></code></pre></div>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-(#tab:ch030-Galaxy Itchy)LOO comparison of Polynomial equations.
+<span id="tab:ch030-Galaxy-Itchy">Table 2.3: </span>LOO comparison of Polynomial equations.
 </caption>
 <thead>
 <tr>
@@ -736,10 +736,10 @@ Linear
 <div id="a-modern-principled-bayesian-modeling-workflow" class="section level2">
 <h2><span class="header-section-number">2.7</span> A modern principled bayesian modeling workflow</h2>
 <p>A principled workflow is a method of employing domain expertise and statistical knowledge to iteratively build a statistical model that satisfies the constraints and goals set forth by the researcher. Many other workflow and model checking techniques are given without context for when they are appropriate, and according to <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span>, this leaves “practitioners to piece together their own model building workflows from potentially incomplete or even inconsistent heuristics.” For any given problem, there is not, nor should there be, a default set of steps to take to get from data exploration to predictive inferences. Rather, consideration must be given to domain expertise and the questions that one is trying to answer with the statistical model.</p>
-<p>Because everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in how consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by, summarized in table <a href="methods.html#tab:ch030-Confidential-Proton">2.3</a>.</p>
+<p>Because everyone asks different questions, the value of a model is not in how well it ticks the boxes of goodness-of-fit checks, but in how consistent it is with domain expertise and its ability to answer the unique set of questions. Betancourt suggests answering four questions to evaluate a model by, summarized in table <a href="methods.html#tab:ch030-Confidential-Proton">2.4</a>.</p>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:ch030-Confidential-Proton">Table 2.3: </span>Questions for model evaluation.
+<span id="tab:ch030-Confidential-Proton">Table 2.4: </span>Questions for model evaluation.
 </caption>
 <thead>
 <tr>
@@ -795,10 +795,10 @@ Is our model rich enough to capture the relevant structure of the true data gene
 </ol></li>
 </ol>
 <p>Much work is done before seeing the data or building a model. This includes talking with experts to gain domain knowledge or to elicit priors. A benefit of modeling in a Bayesian framework is that all prior knowledge may be incorporated into the model to be used to estimate the posterior distribution. The same prior knowledge may also be used to check the posterior to ensure that predictions remain within physical or expert-given constraints.</p>
-<p>In this section we describe a simulation-based, principled workflow proposed by <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span> and broadly adopted by many members of the Bayesian community. The workflow broadly consists of specifying the likelihood and priors, performing prior predictive checks, fitting a model, and performing posterior predictive checks. The steps of the workflow are divided into three phases: 1) pre-model, pre-data, 2) post-model, pre-data, and 3) post-model, post-data. Tables <a href="methods.html#tab:ch030-Reborn-Space">2.4</a>, <a href="methods.html#tab:ch030-Freaky-Sledgehammer">2.5</a>, and <a href="methods.html#tab:ch030-Bleeding-Liquid-Dagger">2.6</a> list the steps of each phase.</p>
+<p>In this section we describe a simulation-based, principled workflow proposed by <span class="citation">Betancourt (<a href="#ref-betancourt2020" role="doc-biblioref">2020</a>)</span> and broadly adopted by many members of the Bayesian community. The workflow broadly consists of specifying the likelihood and priors, performing prior predictive checks, fitting a model, and performing posterior predictive checks. The steps of the workflow are divided into three phases: 1) pre-model, pre-data, 2) post-model, pre-data, and 3) post-model, post-data. Tables <a href="methods.html#tab:ch030-Reborn-Space">2.5</a>, <a href="methods.html#tab:ch030-Freaky-Sledgehammer">2.6</a>, and <a href="methods.html#tab:ch030-Bleeding-Liquid-Dagger">2.7</a> list the steps of each phase.</p>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:ch030-Reborn-Space">Table 2.4: </span>Pre-Model, Pre-Data steps.
+<span id="tab:ch030-Reborn-Space">Table 2.5: </span>Pre-Model, Pre-Data steps.
 </caption>
 <thead>
 <tr>
@@ -839,7 +839,7 @@ What measurements and estimates can be used to help ensure that the inferential 
 </table>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:ch030-Freaky-Sledgehammer">Table 2.5: </span>Post-Model, Pre-Data steps.
+<span id="tab:ch030-Freaky-Sledgehammer">Table 2.6: </span>Post-Model, Pre-Data steps.
 </caption>
 <thead>
 <tr>
@@ -920,7 +920,7 @@ Are there any pathological behaviors in the model such as overfitting or non-ide
 </table>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:ch030-Bleeding-Liquid-Dagger">Table 2.6: </span>Post-Model, Post-Data steps.
+<span id="tab:ch030-Bleeding-Liquid-Dagger">Table 2.7: </span>Post-Model, Post-Data steps.
 </caption>
 <thead>
 <tr>

@@ -853,7 +853,7 @@ comp <- loo_compare(linear, quadratic, cubic, quartic)
 ```
 
 
-```{r ch030-Galaxy Itchy}
+```{r ch030-Galaxy-Itchy}
 comp %>%
   as_tibble(rownames = "Model") %>%
   mutate(Model = factor(Model, 

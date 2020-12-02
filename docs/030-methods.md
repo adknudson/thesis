@@ -684,7 +684,7 @@ comp <- loo_compare(linear, quadratic, cubic, quartic)
 
 \begin{table}[!h]
 
-\caption{(\#tab:ch030-Galaxy Itchy)LOO comparison of Polynomial equations.}
+\caption{(\#tab:ch030-Galaxy-Itchy)LOO comparison of Polynomial equations.}
 \centering
 \begin{tabular}[t]{lrrrr}
 \toprule

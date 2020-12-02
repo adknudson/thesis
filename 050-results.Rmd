@@ -470,12 +470,6 @@ multitask %>%
 ```
 
 
-One way to remove the uncertainty of the lapse rate could be to have some trials with very large SOA values. The reasoning is that if the difficulty of a task (given an SOA value) is lowered, than an incorrect response is more likely to be due to a true lapse in judgment as opposed to a genuinely incorrect response. @wichmann2001b recommends at least one sample at $\pi \ge 0.95$ is necessary for reliable bootstrap confidence intervals, so the same reasoning can be applied when using Bayesian credible intervals. For a task such as visual TOJ, the $90\%$ level may occur at an SOA of $\approx 40$ms while for the audiovisual TOJ it may be $\approx 220$ms, so the sampling scheme for psychometric experiments must be tuned to the task. 
-
-
-@wichmann2001a experimentally determined that the lapse rate for trained observers is between $0\%$ and $5\%$, and the data in this paper loosely agree with that conclusion. Any excess in lapse rate may be attributed to the perceived task difficulty and a sub-optimal sampling scheme. Since the visual TOJ task is relatively the easiest, the estimated lapse rates are more believable as true lapse rates, and fall closely within the $(0, 0.05)$ range.
-
-
 ## Subject specific inferences
 
 

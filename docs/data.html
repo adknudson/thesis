@@ -194,7 +194,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">3</span> Motivating data</h1>
 <p>This paper focuses on a type of psychometric experiment called a temporal order judgment (TOJ) experiment. If there are two distinct stimuli occurring nearly simultaneously then our brains will bind them into a single percept (perceive them as happening simultaneously). Compensation for small temporal differences is beneficial for coherent multisensory experiences, particularly in visual-speech synthesis as it is necessary to maintain an accurate representation of the sources of multisensory events.</p>
 <p>It was Charles Darwin who in his book “On the Origin of Species” developed the idea that living organisms adapt in order to better survive in their environment. Sir Francis Galton, inspired by Darwin’s ideas, became interested in the differences in human beings and in how to measure those differences. Galton’s works on studying and measuring human differences lead to the creation of psychometrics – the science of measuring mental faculties. Around the same time that he was developing his theories, Johann Friedrich Herbart was also interested in studying consciousness through the scientific method, and is responsible for creating mathematical models of the mind.</p>
-<p>E.H. Weber built upon Herbart’s work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system – a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber’s Law (Equation <a href="data.html#eq:webers-law">(3.1)</a>), which states that the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus [ekman1959weber].</p>
+<p>E.H. Weber built upon Herbart’s work, and sought out to prove the idea of a psychological threshold. A psychological threshold is a minimum stimulus intensity necessary to activate a sensory system – a liminal stimulus. He paved the way for experimental psychology and is the namesake of Weber’s Law (Equation <a href="data.html#eq:webers-law">(3.1)</a>), which states that the change in a stimulus that will be just noticeable is a constant ratio of the original stimulus <span class="citation">(Ekman <a href="#ref-ekman1959weber" role="doc-biblioref">1959</a>)</span>.</p>
 <p><span class="math display" id="eq:webers-law">\[\begin{equation}
   \frac{\Delta I}{I} = k
   \tag{3.1}
@@ -231,7 +231,6 @@ Figure 3.1: A chart of the psychometric function. The experiment in this paper p
 Figure 3.2: The PSS is defined as the point where an observer can do no better at determining temporal order than random guessing. The just noticeable difference is defined as the extra temporal delay between stimuli so that the temporal order is just able to be determined. Historically this has been defined as the difference between the 0.84 level and the PSS, though the upper level depends on domain expertise.
 </p>
 </div>
-<p>Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing <span class="citation">(Fujisaki et al. <a href="#ref-fujisaki2004recalibration" role="doc-biblioref">2004</a>)</span>. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer <span class="citation">(Vroomen et al. <a href="#ref-vroomen2004recalibration" role="doc-biblioref">2004</a>)</span>. This repetition of presenting the adapter stimulus is called temporal recalibration.</p>
 </div>
 <div id="toj-task" class="section level2">
 <h2><span class="header-section-number">3.2</span> Temporal order judgment tasks</h2>
@@ -444,7 +443,8 @@ Bottom lasted longer than top
 </tr>
 </tbody>
 </table>
-<p>After the first block of each task was completed, the participants went through an adaptation period where they were presented with the respective stimuli from each task repeatedly at fixed temporal delays, then the TOJ task was repeated. To ensure that the adaptation affect persisted, the subject was presented with the adapter stimulus at regular intervals throughout the second block. The blocks are designated as <code>pre</code> and <code>post1</code>, <code>post2</code>, etc. in the data set. In this paper we only focus on the <code>pre</code> and <code>post1</code> blocks.</p>
+<p>Perceptual synchrony and temporal sensitivity can be modified through a baseline understanding. In order to perceive physical events as simultaneous, our brains must adjust for differences in temporal delays of transmission of both psychical signals and sensory processing <span class="citation">(Fujisaki et al. <a href="#ref-fujisaki2004recalibration" role="doc-biblioref">2004</a>)</span>. In some cases such as with audiovisual stimuli, the perception of simultaneity can be modified by repeatedly presenting the audiovisual stimuli at fixed time separations (called an adapter stimulus) to an observer <span class="citation">(Vroomen et al. <a href="#ref-vroomen2004recalibration" role="doc-biblioref">2004</a>)</span>. This repetition of presenting the adapter stimulus is called temporal recalibration.</p>
+<p>After the first block of each task was completed, the participants went through an adaptation period where they were presented with the respective stimuli from each task repeatedly at fixed temporal delays, then the TOJ task was repeated. To ensure that the adaptation affect persisted, the subject was presented with the adapter stimulus at regular intervals throughout the second block. The blocks are designated as <code>pre</code> and <code>post1</code>, <code>post2</code>, etc. in the data set. In this paper we only focus on the baseline block (<code>pre</code>) and the post-adaptation block (<code>post1</code>).</p>
 </div>
 <div id="data-visualization-and-quirks" class="section level2">
 <h2><span class="header-section-number">3.3</span> Data visualization and quirks</h2>
@@ -594,6 +594,9 @@ Figure 3.5: Proportion of correct responses for negative SOA values during the p
 <div id="refs" class="references">
 <div id="ref-boring1917chart">
 <p>Boring, Edwin G. 1917. “A Chart of the Psychometric Function.” <em>The American Journal of Psychology</em> 28 (4): 465–70.</p>
+</div>
+<div id="ref-ekman1959weber">
+<p>Ekman, GÖSta. 1959. “Weber’s Law and Related Functions.” <em>The Journal of Psychology</em> 47 (2): 343–52.</p>
 </div>
 <div id="ref-fujisaki2004recalibration">
 <p>Fujisaki, Waka, Shinsuke Shimojo, Makio Kashino, and Shin’ya Nishida. 2004. “Recalibration of Audiovisual Simultaneity.” <em>Nature Neuroscience</em> 7 (7): 773–78.</p>
