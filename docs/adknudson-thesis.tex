@@ -148,20 +148,6 @@
 %==============================================================================17
 %==============================================================================18
 % Place here anything extra that you would like in the preamble
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
 %==============================================================================19
 \ifluatex
   \usepackage{selnolig}  % disable illegal ligatures
@@ -224,7 +210,7 @@ entitled
 \textbf{A Bayesian Multilevel Model for the Psychometric Function using R and Stan}
 
 \vspace{2em}
-be accepted in partial fullfilment of the \\
+be accepted in partial fulfillment of the \\
 requirements for the degree of
 
 \vspace{1em}
@@ -258,6 +244,14 @@ December, 2020
 \section*{Abstract}
 
 A common neuroscience topic is to determine the temporal order of two stimuli, and is often studied via a logistic model called a psychometric function. The data arises from repeated sampling of subjects across a variety of tasks (stimuli), blocks, and time separations. These studies are often interested in making inferences at the group level (age, gender, etc.) and at an individual level. This hierarchical nesting makes multilevel modeling a natural choice for these data. We describe a principled workflow for model development using domain expertise, regularizing priors, and posterior predictive performance to compare models. We then apply the workflow to produce a novel statistical model for temporal order judgment data by fitting a series of Bayesian models efficiently using Hamiltonian Monte Carlo (HMC) in the R programming language with Stan.
+%------------------ End
+
+
+% Begin ---------------
+\newpage
+\section*{Acknowledgments}
+
+I would like to thank my advisor and mentor Dr. Grant Schissler for his dedicated support and optimism. Grant introduced me to a new world of probability and statistics, and helped foster my growing interest in computational statistics and data science. I am also grateful to the graduate school representative, Dr. Fang Jiang, for her support and the opportunity to work with her in the Psychology department. Her work became the basis for my Masters thesis, and showed me that statistics is relevant in all corners of scientific research. To Dr. Colin Grudzien, for his great support and taking the time to make suggestions. A special thanks goes to Dr. Anna Panorska. She has played a considerable role in my academic career, first as my professor introducing me to statistics, then later by supporting my entry to the graduate program, and finally as the graduate director for the statistics and data science program. Her encouragement in no small part helped me to finish my degree. I would like to acknowledge my family's support, especially my sister, Heather, who has been very understanding during my most stressful times. Finally I am thankful to all the faculty members, graduate students, and staff in the department of Mathematics and Statistics at the University of Nevada.
 %------------------ End
 
 
@@ -444,6 +438,8 @@ Scale & Log-Likelihood\\
 \end{table}
 
 Using a weakly-informative prior for the slope instead of the non-informative uniform distribution will allow for a proper MAP estimate, but care should be taken to consider what prior is appropriate, or why the data is separable in the first place. If an experiment can be improved to avoid the situation, that should be the first action.
+
+The models in this paper rely on MCMC techniques to sample from the posterior distribution. In certain models, the posterior distribution takes on a familiar form given a specific prior distribution. These conjugate likelihood-priors exist for some exponential family models, like for the binomial-beta, Poisson-gamma, and gamma-gamma. The benefit of conjugate prior models are that they do not require computationally expensive sampling techniques to derive the posterior distribution. \citet{chen2003conjugate} discuss conjugate priors for GLMs by specifying a prior for the scale (strength of belief in the prior) and for the observed data, \(y_o\), and then relates the prior in \(y_o\) to the parameters, \(\beta\). This methodology can be convenient, but limits model flexibility.
 
 \hypertarget{multilevel-modeling}{%
 \section{Multilevel modeling}\label{multilevel-modeling}}

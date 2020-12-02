@@ -159,6 +159,9 @@ tibble(
 Using a weakly-informative prior for the slope instead of the non-informative uniform distribution will allow for a proper MAP estimate, but care should be taken to consider what prior is appropriate, or why the data is separable in the first place. If an experiment can be improved to avoid the situation, that should be the first action.
 
 
+The models in this paper rely on MCMC techniques to sample from the posterior distribution. In certain models, the posterior distribution takes on a familiar form given a specific prior distribution. These conjugate likelihood-priors exist for some exponential family models, like for the binomial-beta, Poisson-gamma, and gamma-gamma. The benefit of conjugate prior models are that they do not require computationally expensive sampling techniques to derive the posterior distribution. @chen2003conjugate discuss conjugate priors for GLMs by specifying a prior for the scale (strength of belief in the prior) and for the observed data, $y_o$, and then relates the prior in $y_o$ to the parameters, $\beta$. This methodology can be convenient, but limits model flexibility.
+
+
 ## Multilevel modeling
 
 
